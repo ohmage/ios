@@ -1,4 +1,4 @@
-ohmage-iOS-lib
+ohmage-iOS
 ==============
 
-An iOS library for interacting with an ohmage server.
+ohmage for iOS.
