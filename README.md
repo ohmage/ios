@@ -1,4 +1,1 @@
-ohmage-iOS
-==============
-
-ohmage for iOS.
+The iOs version of the ohmage mobile experience.
