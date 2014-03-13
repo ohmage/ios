@@ -7,7 +7,7 @@
 //
 
 #import "OHMAppDelegate.h"
-#import "OHMDashboardViewController.h"
+#import "OHMHomeViewController.h"
 
 @implementation OHMAppDelegate
 
@@ -16,8 +16,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    OHMDashboardViewController * dvc = [[OHMDashboardViewController alloc] init];
-    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:dvc];
+    OHMHomeViewController * hvc = [[OHMHomeViewController alloc] init];
+    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:hvc];
     self.window.rootViewController = nav;
     
     self.window.backgroundColor = [UIColor whiteColor];
