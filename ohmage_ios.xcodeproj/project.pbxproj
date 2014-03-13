@@ -28,6 +28,9 @@
 		1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */; };
 		1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */; };
 		1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558918D16C0B00B55028 /* OHMProjectStore.m */; };
+		1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558E18D26E4500B55028 /* OHMSurvey.m */; };
+		1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */; };
+		1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +76,12 @@
 		1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectDetailViewController.m; sourceTree = "<group>"; };
 		1EAD558818D16C0B00B55028 /* OHMProjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProjectStore.h; sourceTree = "<group>"; };
 		1EAD558918D16C0B00B55028 /* OHMProjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectStore.m; sourceTree = "<group>"; };
+		1EAD558D18D26E4500B55028 /* OHMSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurvey.h; sourceTree = "<group>"; };
+		1EAD558E18D26E4500B55028 /* OHMSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurvey.m; sourceTree = "<group>"; };
+		1EAD559018D26F3D00B55028 /* OHMSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveysViewController.h; sourceTree = "<group>"; };
+		1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
+		1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyPrompt.h; sourceTree = "<group>"; };
+		1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyPrompt.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				1EAD557F18D1567900B55028 /* Shared */,
+				1EAD558C18D26E2300B55028 /* Surveys */,
 				1EAD557818D14C9900B55028 /* Projects */,
 				1EAD557718D1356100B55028 /* Home */,
 				1E70099818CA7DCE00203990 /* Dashboard */,
@@ -215,6 +225,19 @@
 				1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */,
 			);
 			name = Shared;
+			sourceTree = "<group>";
+		};
+		1EAD558C18D26E2300B55028 /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				1EAD558D18D26E4500B55028 /* OHMSurvey.h */,
+				1EAD558E18D26E4500B55028 /* OHMSurvey.m */,
+				1EAD559018D26F3D00B55028 /* OHMSurveysViewController.h */,
+				1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */,
+				1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */,
+				1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */,
+			);
+			name = Surveys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,7 +341,10 @@
 				1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
+				1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */,
+				1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */,
 				1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */,
+				1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */,
 				1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */,
 				1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */,
 				1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */,

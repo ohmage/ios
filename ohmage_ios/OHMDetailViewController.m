@@ -45,6 +45,12 @@
         [[NSBundle mainBundle] loadNibNamed:@"OHMDetailHeaderView"
                                       owner:self
                                     options:nil];
+        
+//        UIEdgeInsets cap = UIEdgeInsetsMake(3, 12, 3, 12);
+//        UIImage *bg = [[UIImage imageNamed:@"entity_action_button_normal"] resizableImageWithCapInsets:cap];
+//        
+//        [self.rightButton setBackgroundImage:bg forState:UIControlStateNormal];
+//        [self.leftButton setBackgroundImage:bg forState:UIControlStateNormal];
     }
     
     return _headerView;

@@ -30,8 +30,14 @@
     self.headerTitleLabel.text = self.project.name;
     self.headerSubtitleLabel.text = self.project.urn;
     
+    [self.leftButton setImage:[UIImage imageNamed:@"pencilpaper"] forState:UIControlStateNormal];
+    [self.rightButton setImage:[UIImage imageNamed:@"trash"] forState:UIControlStateNormal];
+    
     [self.rightButton setTitle:@"Remove" forState:UIControlStateNormal];
     [self.leftButton setTitle:@"View Surveys" forState:UIControlStateNormal];
+    
+    [self.rightButton sizeToFit];
+    [self.leftButton sizeToFit];
     
 //    [self.headerView setNeedsDisplay];
 }
