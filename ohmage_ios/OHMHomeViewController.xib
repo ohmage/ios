@@ -25,6 +25,9 @@
                     <state key="normal" title="Button" image="dash_campaigns">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="projectsButtonPressed:" destination="-1" eventType="touchUpInside" id="38R-ru-qM3"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6LM-q9-MWY">
                     <rect key="frame" x="120" y="84" width="80" height="80"/>
@@ -37,6 +40,9 @@
                     <state key="normal" title="Button" image="dash_surveys">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="surveysButtonPressed:" destination="-1" eventType="touchUpInside" id="iyo-4g-1bg"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zyj-C0-f7N">
                     <rect key="frame" x="220" y="84" width="80" height="80"/>
@@ -49,6 +55,9 @@
                     <state key="normal" title="Button" image="dash_resphistory">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="responseHistoryButtonPressed:" destination="-1" eventType="touchUpInside" id="4bY-at-pWb"/>
+                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Projects" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="scM-ti-oxS">
                     <rect key="frame" x="29" y="164" width="63" height="21"/>
@@ -103,6 +112,9 @@
                     <state key="normal" title="Button" image="dash_upqueue">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="uploadQueueButtonPressed:" destination="-1" eventType="touchUpInside" id="ArO-nt-cSJ"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vgP-OY-7Y1">
                     <rect key="frame" x="120" y="220" width="80" height="80"/>
@@ -115,6 +127,9 @@
                     <state key="normal" title="Button" image="dash_profile">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="profileButtonPressed:" destination="-1" eventType="touchUpInside" id="l14-gX-Jje"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UbM-l9-sGH">
                     <rect key="frame" x="220" y="220" width="80" height="80"/>
@@ -127,6 +142,9 @@
                     <state key="normal" title="Button" image="dash_mobility">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="mobilityButtonPressed:" destination="-1" eventType="touchUpInside" id="akp-Qm-xAA"/>
+                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload Queue" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="68" translatesAutoresizingMaskIntoConstraints="NO" id="Vkq-ao-ukQ">
                     <rect key="frame" x="26" y="300" width="68" height="42"/>
@@ -181,6 +199,9 @@
                     <state key="normal" title="Button" image="dash_streams">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="streamsButtonPressed:" destination="-1" eventType="touchUpInside" id="cJK-wD-hXr"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvf-zl-ixb">
                     <rect key="frame" x="120" y="356" width="80" height="80"/>
@@ -193,6 +214,9 @@
                     <state key="normal" title="Button" image="dash_helpblue">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="helpButtonPressed:" destination="-1" eventType="touchUpInside" id="jE7-2a-Odx"/>
+                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Streams" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrr-Nt-7Ag">
                     <rect key="frame" x="29" y="436" width="64" height="21"/>

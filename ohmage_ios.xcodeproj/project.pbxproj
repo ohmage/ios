@@ -19,13 +19,15 @@
 		1E70097F18CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
 		1E70098718CA6F8700203990 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E70098518CA6F8700203990 /* InfoPlist.strings */; };
 		1E70098918CA6F8700203990 /* ohmage_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70098818CA6F8700203990 /* ohmage_iosTests.m */; };
-		1E70099418CA6FC500203990 /* OHMDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70099318CA6FC500203990 /* OHMDashboardViewController.m */; };
-		1E70099718CA701800203990 /* OHMDashboardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70099618CA701800203990 /* OHMDashboardCell.m */; };
 		1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70099A18CA7DFD00203990 /* OHMDashboardItem.m */; };
 		1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD557318D1355700B55028 /* OHMHomeViewController.m */; };
 		1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAD557418D1355700B55028 /* OHMHomeViewController.xib */; };
-		1EDF3C1118CE6B80001A7F29 /* OHMDashboardItemTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF3C1018CE6B80001A7F29 /* OHMDashboardItemTitleView.m */; };
-		1EDF3C1418CE836E001A7F29 /* OHMDashboardLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF3C1318CE836E001A7F29 /* OHMDashboardLayout.m */; };
+		1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD557A18D14CC200B55028 /* OHMProjectsViewController.m */; };
+		1EAD557E18D1500C00B55028 /* OHMProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD557D18D1500C00B55028 /* OHMProject.m */; };
+		1EAD558118D1590900B55028 /* OHMDetailHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAD558018D1590900B55028 /* OHMDetailHeaderView.xib */; };
+		1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */; };
+		1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */; };
+		1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558918D16C0B00B55028 /* OHMProjectStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,19 +57,22 @@
 		1E70098418CA6F8700203990 /* ohmage_iosTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ohmage_iosTests-Info.plist"; sourceTree = "<group>"; };
 		1E70098618CA6F8700203990 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E70098818CA6F8700203990 /* ohmage_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ohmage_iosTests.m; sourceTree = "<group>"; };
-		1E70099218CA6FC500203990 /* OHMDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDashboardViewController.h; sourceTree = "<group>"; };
-		1E70099318CA6FC500203990 /* OHMDashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardViewController.m; sourceTree = "<group>"; };
-		1E70099518CA701800203990 /* OHMDashboardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDashboardCell.h; sourceTree = "<group>"; };
-		1E70099618CA701800203990 /* OHMDashboardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardCell.m; sourceTree = "<group>"; };
 		1E70099918CA7DFD00203990 /* OHMDashboardItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDashboardItem.h; sourceTree = "<group>"; };
 		1E70099A18CA7DFD00203990 /* OHMDashboardItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardItem.m; sourceTree = "<group>"; };
 		1EAD557218D1355700B55028 /* OHMHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMHomeViewController.h; sourceTree = "<group>"; };
 		1EAD557318D1355700B55028 /* OHMHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMHomeViewController.m; sourceTree = "<group>"; };
 		1EAD557418D1355700B55028 /* OHMHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMHomeViewController.xib; sourceTree = "<group>"; };
-		1EDF3C0F18CE6B80001A7F29 /* OHMDashboardItemTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDashboardItemTitleView.h; sourceTree = "<group>"; };
-		1EDF3C1018CE6B80001A7F29 /* OHMDashboardItemTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardItemTitleView.m; sourceTree = "<group>"; };
-		1EDF3C1218CE836E001A7F29 /* OHMDashboardLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDashboardLayout.h; sourceTree = "<group>"; };
-		1EDF3C1318CE836E001A7F29 /* OHMDashboardLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardLayout.m; sourceTree = "<group>"; };
+		1EAD557918D14CC200B55028 /* OHMProjectsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProjectsViewController.h; sourceTree = "<group>"; };
+		1EAD557A18D14CC200B55028 /* OHMProjectsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectsViewController.m; sourceTree = "<group>"; };
+		1EAD557C18D1500C00B55028 /* OHMProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProject.h; sourceTree = "<group>"; };
+		1EAD557D18D1500C00B55028 /* OHMProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProject.m; sourceTree = "<group>"; };
+		1EAD558018D1590900B55028 /* OHMDetailHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMDetailHeaderView.xib; sourceTree = "<group>"; };
+		1EAD558218D15ADD00B55028 /* OHMDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMDetailViewController.h; sourceTree = "<group>"; };
+		1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDetailViewController.m; sourceTree = "<group>"; };
+		1EAD558518D1680900B55028 /* OHMProjectDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProjectDetailViewController.h; sourceTree = "<group>"; };
+		1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectDetailViewController.m; sourceTree = "<group>"; };
+		1EAD558818D16C0B00B55028 /* OHMProjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProjectStore.h; sourceTree = "<group>"; };
+		1EAD558918D16C0B00B55028 /* OHMProjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +132,8 @@
 		1E70096918CA6F8700203990 /* ohmage_ios */ = {
 			isa = PBXGroup;
 			children = (
+				1EAD557F18D1567900B55028 /* Shared */,
+				1EAD557818D14C9900B55028 /* Projects */,
 				1EAD557718D1356100B55028 /* Home */,
 				1E70099818CA7DCE00203990 /* Dashboard */,
 				1E70097218CA6F8700203990 /* OHMAppDelegate.h */,
@@ -169,15 +176,7 @@
 		1E70099818CA7DCE00203990 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				1E70099218CA6FC500203990 /* OHMDashboardViewController.h */,
-				1E70099318CA6FC500203990 /* OHMDashboardViewController.m */,
-				1EDF3C1218CE836E001A7F29 /* OHMDashboardLayout.h */,
-				1EDF3C1318CE836E001A7F29 /* OHMDashboardLayout.m */,
-				1E70099518CA701800203990 /* OHMDashboardCell.h */,
-				1E70099618CA701800203990 /* OHMDashboardCell.m */,
 				1E70099918CA7DFD00203990 /* OHMDashboardItem.h */,
-				1EDF3C0F18CE6B80001A7F29 /* OHMDashboardItemTitleView.h */,
-				1EDF3C1018CE6B80001A7F29 /* OHMDashboardItemTitleView.m */,
 				1E70099A18CA7DFD00203990 /* OHMDashboardItem.m */,
 			);
 			name = Dashboard;
@@ -191,6 +190,31 @@
 				1EAD557418D1355700B55028 /* OHMHomeViewController.xib */,
 			);
 			name = Home;
+			sourceTree = "<group>";
+		};
+		1EAD557818D14C9900B55028 /* Projects */ = {
+			isa = PBXGroup;
+			children = (
+				1EAD557918D14CC200B55028 /* OHMProjectsViewController.h */,
+				1EAD557A18D14CC200B55028 /* OHMProjectsViewController.m */,
+				1EAD558518D1680900B55028 /* OHMProjectDetailViewController.h */,
+				1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */,
+				1EAD557C18D1500C00B55028 /* OHMProject.h */,
+				1EAD557D18D1500C00B55028 /* OHMProject.m */,
+				1EAD558818D16C0B00B55028 /* OHMProjectStore.h */,
+				1EAD558918D16C0B00B55028 /* OHMProjectStore.m */,
+			);
+			name = Projects;
+			sourceTree = "<group>";
+		};
+		1EAD557F18D1567900B55028 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1EAD558018D1590900B55028 /* OHMDetailHeaderView.xib */,
+				1EAD558218D15ADD00B55028 /* OHMDetailViewController.h */,
+				1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */,
+			);
+			name = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,6 +296,7 @@
 				1E70096E18CA6F8700203990 /* InfoPlist.strings in Resources */,
 				1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */,
 				1E70097618CA6F8700203990 /* Images.xcassets in Resources */,
+				1EAD558118D1590900B55028 /* OHMDetailHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,13 +315,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EDF3C1418CE836E001A7F29 /* OHMDashboardLayout.m in Sources */,
-				1EDF3C1118CE6B80001A7F29 /* OHMDashboardItemTitleView.m in Sources */,
-				1E70099418CA6FC500203990 /* OHMDashboardViewController.m in Sources */,
-				1E70099718CA701800203990 /* OHMDashboardCell.m in Sources */,
+				1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
 				1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */,
+				1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */,
+				1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */,
+				1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */,
+				1EAD557E18D1500C00B55028 /* OHMProject.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
