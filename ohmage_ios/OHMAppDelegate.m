@@ -8,6 +8,7 @@
 
 #import "OHMAppDelegate.h"
 #import "OHMHomeViewController.h"
+#import "OHMUser.h"
 
 @implementation OHMAppDelegate
 
@@ -22,6 +23,8 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    [[OHMUser sharedUser] login];
     return YES;
 }
 

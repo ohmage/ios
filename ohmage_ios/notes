@@ -1,0 +1,46 @@
+Get Access Token
+        • All server API calls for retrieving access tokens and refresh tokens, handled in the phone app asynchronously and and synchronously
+Create User
+        • With provider, with password, with invitation
+Join ohmlet
+        • POST ohmlet/<omhlet_id>/people/<person_id>
+        • DELETE ohmlet/<omhlet_id>/people/<person_id>
+Account Synch
+        • /people/<person_id>/current — every hour
+        • If updated definitions need to be retrieved
+                • @GET("/surveys/{surveyId}/{surveyVersion}”)
+Surveys
+        • Uses synch API from above
+        • Parse survey definition into internal representation
+        • Survey list display - name and description
+        • Taking a survey
+                • prompt types
+                        • single choice
+                                • number
+                                • string
+                        • multi choice
+                                • number
+                                • string
+                        • number
+                        • text
+                        • remote activity (probably not for iOS)
+                        • timestamp
+                        • image
+                        • video
+                        • audio
+                • messages
+                • conditions
+                • skippable
+Reminders
+        • Uses synch API from above (3.1 or later?)
+        • Time
+        • Location
+
+---------------------
+
+The 3.0 server docs are here: https://github.com/ohmage/server/wiki/3.x-Documentation
+
+We are still working on the API documentation, but we have a good version of the docs for the "people" APIs:
+https://github.com/ohmage/server/wiki/3.x%20People%20APIs
+
+For the ohmlet features, we should talk through again. Basically the standard use case for 3.0 is that a user can only belong to one ohmlet at a time.

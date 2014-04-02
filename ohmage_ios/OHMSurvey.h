@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@class OHMProject;
+@class OHMOhmlet;
 
-@interface OHMSurvey : NSObject
+@interface OHMSurvey : OHMObject
 
-@property (nonatomic, readonly) OHMProject *project;
-@property (nonatomic, copy) NSString *surveyID;
+@property (nonatomic, readonly) OHMOhmlet *ohmlet;
+@property (nonatomic) NSInteger surveyVersion;
+
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSArray *prompts;
+
++ (instancetype)loadFromServerWithDefinition:(NSDictionary *)surveyDefinition;
 
 @end

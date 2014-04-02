@@ -31,6 +31,24 @@
 		1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558E18D26E4500B55028 /* OHMSurvey.m */; };
 		1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */; };
 		1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */; };
+		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
+		1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A618D27B4F00B55028 /* QuartzCore.framework */; };
+		1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA5818EB3CEF00035BDF /* AFNetworkActivityLogger.m */; };
+		1EAECA5B18EB40CC00035BDF /* notes in Resources */ = {isa = PBXBuildFile; fileRef = 1EAECA5A18EB40CC00035BDF /* notes */; };
+		1EAECA5E18EB413D00035BDF /* OHMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA5D18EB413D00035BDF /* OHMUser.m */; };
+		1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */; };
+		1EAECA6418EB80B400035BDF /* OHMOhmlet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6318EB80B400035BDF /* OHMOhmlet.m */; };
+		1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6618EB9C7700035BDF /* OHMObject.m */; };
+		1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */; };
+		1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */; };
+		1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C918EA0F670003E077 /* AFHTTPSessionManager.m */; };
+		1EF693DA18EA0F670003E077 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693CC18EA0F670003E077 /* AFNetworkReachabilityManager.m */; };
+		1EF693DB18EA0F670003E077 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693CE18EA0F670003E077 /* AFSecurityPolicy.m */; };
+		1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693D018EA0F670003E077 /* AFURLConnectionOperation.m */; };
+		1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693D218EA0F670003E077 /* AFURLRequestSerialization.m */; };
+		1EF693DE18EA0F670003E077 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693D418EA0F670003E077 /* AFURLResponseSerialization.m */; };
+		1EF693DF18EA0F670003E077 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693D618EA0F670003E077 /* AFURLSessionManager.m */; };
+		1EF693E318EA0FE20003E077 /* OHMHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693E218EA0FE20003E077 /* OHMHTTPClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +100,40 @@
 		1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
 		1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyPrompt.h; sourceTree = "<group>"; };
 		1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyPrompt.m; sourceTree = "<group>"; };
+		1EAD55A418D27B4800B55028 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		1EAD55A618D27B4F00B55028 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1EAECA5718EB3CEF00035BDF /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityLogger.h; path = "external/AFNetworkActivityLogger-master/AFNetworkActivityLogger.h"; sourceTree = SOURCE_ROOT; };
+		1EAECA5818EB3CEF00035BDF /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityLogger.m; path = "external/AFNetworkActivityLogger-master/AFNetworkActivityLogger.m"; sourceTree = SOURCE_ROOT; };
+		1EAECA5A18EB40CC00035BDF /* notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = notes; sourceTree = "<group>"; };
+		1EAECA5C18EB413D00035BDF /* OHMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMUser.h; sourceTree = "<group>"; };
+		1EAECA5D18EB413D00035BDF /* OHMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUser.m; sourceTree = "<group>"; };
+		1EAECA5F18EB518B00035BDF /* NSDictionary+Ohmage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Ohmage.h"; sourceTree = "<group>"; };
+		1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Ohmage.m"; sourceTree = "<group>"; };
+		1EAECA6218EB80B400035BDF /* OHMOhmlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMOhmlet.h; sourceTree = "<group>"; };
+		1EAECA6318EB80B400035BDF /* OHMOhmlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMOhmlet.m; sourceTree = "<group>"; };
+		1EAECA6518EB9C7700035BDF /* OHMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMObject.h; sourceTree = "<group>"; };
+		1EAECA6618EB9C7700035BDF /* OHMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMObject.m; sourceTree = "<group>"; };
+		1EF693C418EA0F670003E077 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		1EF693C618EA0F670003E077 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
+		1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
+		1EF693C818EA0F670003E077 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		1EF693C918EA0F670003E077 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		1EF693CA18EA0F670003E077 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		1EF693CB18EA0F670003E077 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		1EF693CC18EA0F670003E077 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		1EF693CD18EA0F670003E077 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		1EF693CE18EA0F670003E077 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		1EF693CF18EA0F670003E077 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		1EF693D018EA0F670003E077 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		1EF693D118EA0F670003E077 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		1EF693D218EA0F670003E077 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		1EF693D318EA0F670003E077 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		1EF693D418EA0F670003E077 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		1EF693D518EA0F670003E077 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		1EF693D618EA0F670003E077 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		1EF693E118EA0FE20003E077 /* OHMHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMHTTPClient.h; sourceTree = "<group>"; };
+		1EF693E218EA0FE20003E077 /* OHMHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMHTTPClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +141,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */,
+				1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */,
 				1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */,
 				1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */,
 				1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */,
@@ -130,6 +184,8 @@
 		1E70096218CA6F8700203990 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1EAD55A618D27B4F00B55028 /* QuartzCore.framework */,
+				1EAD55A418D27B4800B55028 /* MapKit.framework */,
 				1E70096318CA6F8700203990 /* Foundation.framework */,
 				1E70096518CA6F8700203990 /* CoreGraphics.framework */,
 				1E70096718CA6F8700203990 /* UIKit.framework */,
@@ -141,11 +197,23 @@
 		1E70096918CA6F8700203990 /* ohmage_ios */ = {
 			isa = PBXGroup;
 			children = (
+				1EAECA5A18EB40CC00035BDF /* notes */,
+				1EF693E018EA0F840003E077 /* Networking */,
 				1EAD557F18D1567900B55028 /* Shared */,
 				1EAD558C18D26E2300B55028 /* Surveys */,
 				1EAD557818D14C9900B55028 /* Projects */,
 				1EAD557718D1356100B55028 /* Home */,
 				1E70099818CA7DCE00203990 /* Dashboard */,
+				1EAECA5F18EB518B00035BDF /* NSDictionary+Ohmage.h */,
+				1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */,
+				1EAECA6518EB9C7700035BDF /* OHMObject.h */,
+				1EAECA6618EB9C7700035BDF /* OHMObject.m */,
+				1EAECA5C18EB413D00035BDF /* OHMUser.h */,
+				1EAECA5D18EB413D00035BDF /* OHMUser.m */,
+				1EAECA6218EB80B400035BDF /* OHMOhmlet.h */,
+				1EAECA6318EB80B400035BDF /* OHMOhmlet.m */,
+				1EAD558D18D26E4500B55028 /* OHMSurvey.h */,
+				1EAD558E18D26E4500B55028 /* OHMSurvey.m */,
 				1E70097218CA6F8700203990 /* OHMAppDelegate.h */,
 				1E70097318CA6F8700203990 /* OHMAppDelegate.m */,
 				1E70097518CA6F8700203990 /* Images.xcassets */,
@@ -230,14 +298,51 @@
 		1EAD558C18D26E2300B55028 /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
-				1EAD558D18D26E4500B55028 /* OHMSurvey.h */,
-				1EAD558E18D26E4500B55028 /* OHMSurvey.m */,
 				1EAD559018D26F3D00B55028 /* OHMSurveysViewController.h */,
 				1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */,
 				1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */,
 				1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */,
 			);
 			name = Surveys;
+			sourceTree = "<group>";
+		};
+		1EF693C318EA0F670003E077 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				1EAECA5718EB3CEF00035BDF /* AFNetworkActivityLogger.h */,
+				1EAECA5818EB3CEF00035BDF /* AFNetworkActivityLogger.m */,
+				1EF693C418EA0F670003E077 /* AFHTTPRequestOperation.h */,
+				1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */,
+				1EF693C618EA0F670003E077 /* AFHTTPRequestOperationManager.h */,
+				1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */,
+				1EF693C818EA0F670003E077 /* AFHTTPSessionManager.h */,
+				1EF693C918EA0F670003E077 /* AFHTTPSessionManager.m */,
+				1EF693CA18EA0F670003E077 /* AFNetworking.h */,
+				1EF693CB18EA0F670003E077 /* AFNetworkReachabilityManager.h */,
+				1EF693CC18EA0F670003E077 /* AFNetworkReachabilityManager.m */,
+				1EF693CD18EA0F670003E077 /* AFSecurityPolicy.h */,
+				1EF693CE18EA0F670003E077 /* AFSecurityPolicy.m */,
+				1EF693CF18EA0F670003E077 /* AFURLConnectionOperation.h */,
+				1EF693D018EA0F670003E077 /* AFURLConnectionOperation.m */,
+				1EF693D118EA0F670003E077 /* AFURLRequestSerialization.h */,
+				1EF693D218EA0F670003E077 /* AFURLRequestSerialization.m */,
+				1EF693D318EA0F670003E077 /* AFURLResponseSerialization.h */,
+				1EF693D418EA0F670003E077 /* AFURLResponseSerialization.m */,
+				1EF693D518EA0F670003E077 /* AFURLSessionManager.h */,
+				1EF693D618EA0F670003E077 /* AFURLSessionManager.m */,
+			);
+			name = AFNetworking;
+			path = "external/AFNetworking-master/AFNetworking";
+			sourceTree = SOURCE_ROOT;
+		};
+		1EF693E018EA0F840003E077 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				1EF693C318EA0F670003E077 /* AFNetworking */,
+				1EF693E118EA0FE20003E077 /* OHMHTTPClient.h */,
+				1EF693E218EA0FE20003E077 /* OHMHTTPClient.m */,
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,6 +423,7 @@
 			files = (
 				1E70096E18CA6F8700203990 /* InfoPlist.strings in Resources */,
 				1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */,
+				1EAECA5B18EB40CC00035BDF /* notes in Resources */,
 				1E70097618CA6F8700203990 /* Images.xcassets in Resources */,
 				1EAD558118D1590900B55028 /* OHMDetailHeaderView.xib in Resources */,
 			);
@@ -339,16 +445,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */,
+				1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
+				1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
 				1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */,
+				1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */,
+				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
 				1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */,
+				1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */,
+				1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */,
+				1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */,
 				1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */,
+				1EF693DB18EA0F670003E077 /* AFSecurityPolicy.m in Sources */,
 				1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */,
+				1EF693DA18EA0F670003E077 /* AFNetworkReachabilityManager.m in Sources */,
+				1EAECA5E18EB413D00035BDF /* OHMUser.m in Sources */,
+				1EF693DF18EA0F670003E077 /* AFURLSessionManager.m in Sources */,
 				1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */,
 				1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */,
+				1EF693E318EA0FE20003E077 /* OHMHTTPClient.m in Sources */,
+				1EAECA6418EB80B400035BDF /* OHMOhmlet.m in Sources */,
 				1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */,
 				1EAD557E18D1500C00B55028 /* OHMProject.m in Sources */,
+				1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */,
+				1EF693DE18EA0F670003E077 /* AFURLResponseSerialization.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -470,7 +591,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"external/tapkulibrary-master/src",
+				);
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -483,7 +610,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"external/tapkulibrary-master/src",
+				);
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
