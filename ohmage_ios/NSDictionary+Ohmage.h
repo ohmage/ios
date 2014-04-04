@@ -23,6 +23,7 @@
 - (NSArray *)surveyDefinitions;
 - (NSString *)surveyId;
 - (NSInteger)surveyVersion;
+- (NSString *)surveyName;
 
 
 @end

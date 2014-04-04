@@ -18,8 +18,6 @@
 @property (nonatomic, copy) NSString *refreshToken;
 @property (nonatomic, copy) NSString *fullName;
 
-@property (nonatomic, strong) OHMOhmlet *ohmlet;
-
 @end
 
 @implementation OHMUser
@@ -124,6 +122,10 @@
             }
             else {
                 weakSelf.ohmlet = [OHMOhmlet loadFromServerWithId:ohmletId];
+            }
+            
+            if ([weakSelf.delegate respondsToSelector:@selector(OHMUser:didRefreshOhmlet:)]) {
+                [weakSelf.delegate OHMUser:weakSelf didRefreshOhmlet:weakSelf.ohmlet];
             }
         }
     }];

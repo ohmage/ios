@@ -15,7 +15,7 @@
 @property (nonatomic, readonly) OHMOhmlet *ohmlet;
 @property (nonatomic) NSInteger surveyVersion;
 
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *surveyName;
 @property (nonatomic, copy) NSArray *prompts;
 
 + (instancetype)loadFromServerWithDefinition:(NSDictionary *)surveyDefinition;

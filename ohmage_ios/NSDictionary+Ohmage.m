@@ -67,8 +67,13 @@
         return [versionNumber integerValue];
     }
     else {
-        return 0;
+        return 1;
     }
+}
+
+- (NSString *)surveyName
+{
+    return self[@"name"];
 }
 
 @end

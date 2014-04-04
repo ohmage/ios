@@ -40,7 +40,8 @@
             NSLog(@"Error updating survey: %@", [error localizedDescription]);
         }
         else {
-            NSLog(@"got survey: %@", response);
+            NSLog(@"got survey: %@, version: %ld", [response surveyName], self.surveyVersion);
+            self.surveyName = [response surveyName];
         }
     }];
 }

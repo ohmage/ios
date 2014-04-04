@@ -27,6 +27,7 @@
     self = [super init];
     if (self) {
         self.ohmId = ohmletId;
+        self.surveys = [NSMutableArray array];
         [self updateFromServer];
     }
     return self;
@@ -51,6 +52,16 @@
             [weakSelf refreshSurveys:[response surveyDefinitions]];
         }
     }];
+}
+
+- (NSArray *)allSurveys
+{
+    return [self.surveys copy];
+}
+
+- (NSInteger)surveyCount
+{
+    return [self.surveys count];
 }
 
 - (void)refreshSurveys:(NSArray *)surveyDefinitions
@@ -82,12 +93,16 @@
     [self.surveys removeObjectsInArray:toRemove];
     [self createSurveys:toCreate];
     [self updateSurveys:toUpdate];
+    
+    if ([self.delegate respondsToSelector:@selector(OHMOhmletDidRefreshSurveys:)]) {
+        [self.delegate OHMOhmletDidRefreshSurveys:self];
+    }
 }
 
 - (void)createSurveys:(NSArray *)surveyDefinitions
 {
     for (NSDictionary *surveyDefinition in surveyDefinitions) {
-        [OHMSurvey loadFromServerWithDefinition:surveyDefinition];
+        [self.surveys addObject:[OHMSurvey loadFromServerWithDefinition:surveyDefinition]];
     }
 }
 

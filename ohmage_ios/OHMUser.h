@@ -10,8 +10,4 @@
 
 @interface OHMUser : OHMObject
 
-+ (OHMUser*)sharedUser;
-
-- (void)login;
-
 @end

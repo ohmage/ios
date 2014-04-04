@@ -52,10 +52,10 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
    completionBlock:(void (^)(NSDictionary *, NSError *))block
 {
     [self GET:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"GET %@ Succeeded: %@", request, responseObject);
+        NSLog(@"GET %@ Succeeded", request);
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"GET %@ Failed: %@", request, [error description]);
+        NSLog(@"GET %@ Failed", request);
         block(nil, error);
     }];
 }
