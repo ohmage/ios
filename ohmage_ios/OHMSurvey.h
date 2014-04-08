@@ -9,15 +9,25 @@
 #import <Foundation/Foundation.h>
 
 @class OHMOhmlet;
+@protocol OHMSurveyDelegate;
 
 @interface OHMSurvey : OHMObject
 
-@property (nonatomic, readonly) OHMOhmlet *ohmlet;
-@property (nonatomic) NSInteger surveyVersion;
+@property (nonatomic, weak) id<OHMSurveyDelegate> delegate;
 
+@property (nonatomic, copy) void (^surveyUpdatedBlock)(void);
+
+@property (nonatomic) NSInteger surveyVersion;
 @property (nonatomic, copy) NSString *surveyName;
-@property (nonatomic, copy) NSArray *prompts;
+@property (nonatomic, copy) NSString *surveyDescription;
+@property (nonatomic, readonly) NSArray *prompts;
+@property (nonatomic) BOOL isLoaded;
 
 + (instancetype)loadFromServerWithDefinition:(NSDictionary *)surveyDefinition;
 
+@end
+
+
+@protocol OHMSurveyDelegate <NSObject>
+- (void)OHMSurveDidUpdate:(OHMSurvey *)survey;
 @end

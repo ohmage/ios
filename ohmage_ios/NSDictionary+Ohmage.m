@@ -76,4 +76,9 @@
     return self[@"name"];
 }
 
+- (NSString *)surveyDescription
+{
+    return self[@"description"];
+}
+
 @end

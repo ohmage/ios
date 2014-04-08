@@ -1,44 +1,74 @@
 //
-//  OHMSurveysViewController.m
+//  OHMOhmletViewController.m
 //  ohmage_ios
 //
-//  Created by Charles Forkish on 3/13/14.
+//  Created by Charles Forkish on 4/2/14.
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
 #import "OHMSurveysViewController.h"
+#import "OHMSurveyTableViewCell.h"
+#import "OHMOhmage.h"
 #import "OHMSurvey.h"
 
-@interface OHMSurveysViewController ()
+@interface OHMSurveysViewController () <OHMOhmageDelegate>
+
+@property (nonatomic, strong) OHMOhmage *ohmage;
+@property (nonatomic, strong) NSArray *surveys;
 
 @end
 
 @implementation OHMSurveysViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (instancetype)init
 {
-    self = [super initWithStyle:style];
+    // Call the superclass's designated initializer
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        // Custom initialization
+        self.navigationItem.title = @"Ohmage";
+        UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc]
+                                          initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                          target:self action:@selector(refresh)];
+        
+        self.navigationItem.rightBarButtonItem = refreshButton;
+        
+//        self.restorationIdentifier = NSStringFromClass([self class]);
+//        self.restorationClass = [self class];
+        
+//        navItem.leftBarButtonItem = self.editButtonItem;
+        
+//        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+//        [nc addObserver:self
+//               selector:@selector(updateTableViewForDynamicTypeSize)
+//                   name:UIContentSizeCategoryDidChangeNotification
+//                 object:nil];
     }
     return self;
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style
+{
+    return [self init];
+}
+
+- (void)refresh
+{
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.ohmage = [OHMOhmage sharedOhmage];
+    self.ohmage.delegate = self;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self.tableView registerClass:[OHMSurveyTableViewCell class]
+           forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
+    
+    self.tableView.rowHeight = 100;
+    
+//    self.tableView.restorationIdentifier = @"PQTItemsViewControllerTableView";
 }
 
 #pragma mark - Table view data source
@@ -50,19 +80,41 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return [self.ohmage surveyCount];
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    OHMSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OHMSurveyTableViewCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
+    
+    if (survey.isLoaded) {
+        cell.textLabel.text = survey.surveyName;
+        cell.detailTextLabel.text = survey.surveyDescription;
+        cell.accessoryType = UITableViewCellAccessoryDetailButton;
+    }
+    
+    __weak UITableView *weakTableView = self.tableView;
+    __weak NSIndexPath *weakIndex = indexPath;
+    
+    survey.surveyUpdatedBlock = ^{
+        [weakTableView reloadRowsAtIndexPaths:@[weakIndex] withRowAnimation:UITableViewRowAnimationFade];
+    };
     
     return cell;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    OHMSurveyTableViewCell *cell = (OHMSurveyTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//    return [cell cellHeight];
+//}
 
 /*
 // Override to support conditional editing of the table view.
@@ -112,5 +164,14 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+#pragma mark - Ohmage Delegate
+
+- (void)OHMOhmage:(OHMOhmage *)ohmage didRefreshSurveys:(NSArray *)surveys
+{
+    self.surveys = surveys;
+    [self.tableView reloadData];
+}
 
 @end

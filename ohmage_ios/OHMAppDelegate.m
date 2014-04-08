@@ -7,8 +7,9 @@
 //
 
 #import "OHMAppDelegate.h"
-#import "OHMOhmletViewController.h"
-#import "OHMUser.h"
+#import "OHMSurveysViewController.h"
+#import "OHMOhmage.h"
+#import "OHMHomeViewController.h"
 
 @implementation OHMAppDelegate
 
@@ -17,14 +18,15 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    OHMOhmletViewController * vc = [[OHMOhmletViewController alloc] init];
+    OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] init];
+    //OHMHomeViewController *vc = [[OHMHomeViewController alloc] init];
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = nav;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [[OHMUser sharedUser] login];
+    [[OHMOhmage sharedOhmage] login];
     return YES;
 }
 

@@ -24,6 +24,7 @@
 - (NSString *)surveyId;
 - (NSInteger)surveyVersion;
 - (NSString *)surveyName;
+- (NSString *)surveyDescription;
 
 
 @end

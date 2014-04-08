@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OHMSurvey.h"
 
 @class OHMOhmlet;
 @protocol OHMOhmageDelegate;
@@ -14,11 +15,13 @@
 @interface OHMOhmage : NSObject
 
 @property (nonatomic, weak) id<OHMOhmageDelegate> delegate;
-@property (nonatomic, strong) OHMOhmlet *ohmlet;
 
 + (OHMOhmage*)sharedOhmage;
 
 - (void)login;
+- (NSArray *)ohmlets;
+- (NSArray *)surveys;
+- (NSInteger)surveyCount;
 
 @end
 

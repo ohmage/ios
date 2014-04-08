@@ -10,4 +10,10 @@
 
 @interface OHMUser : OHMObject
 
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *password;
+@property (nonatomic, copy) NSString *fullName;
+
+- (instancetype)initWithEmail:(NSString *)email password:(NSString *)password;
+
 @end

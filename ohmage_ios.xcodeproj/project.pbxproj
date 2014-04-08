@@ -29,7 +29,6 @@
 		1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */; };
 		1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558918D16C0B00B55028 /* OHMProjectStore.m */; };
 		1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558E18D26E4500B55028 /* OHMSurvey.m */; };
-		1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */; };
 		1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
 		1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A618D27B4F00B55028 /* QuartzCore.framework */; };
@@ -39,8 +38,11 @@
 		1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */; };
 		1EAECA6418EB80B400035BDF /* OHMOhmlet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6318EB80B400035BDF /* OHMOhmlet.m */; };
 		1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6618EB9C7700035BDF /* OHMObject.m */; };
-		1EAECA6A18ECB23F00035BDF /* OHMOhmletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6918ECB23F00035BDF /* OHMOhmletViewController.m */; };
+		1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */; };
 		1EAECA7018EE14A200035BDF /* OHMOhmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6F18EE14A200035BDF /* OHMOhmage.m */; };
+		1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */; };
+		1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */; };
+		1EDA0B1F18F4068400C89F91 /* OHMSurveyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */; };
 		1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */; };
 		1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */; };
 		1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C918EA0F670003E077 /* AFHTTPSessionManager.m */; };
@@ -98,8 +100,6 @@
 		1EAD558918D16C0B00B55028 /* OHMProjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectStore.m; sourceTree = "<group>"; };
 		1EAD558D18D26E4500B55028 /* OHMSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurvey.h; sourceTree = "<group>"; };
 		1EAD558E18D26E4500B55028 /* OHMSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurvey.m; sourceTree = "<group>"; };
-		1EAD559018D26F3D00B55028 /* OHMSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveysViewController.h; sourceTree = "<group>"; };
-		1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
 		1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyPrompt.h; sourceTree = "<group>"; };
 		1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyPrompt.m; sourceTree = "<group>"; };
 		1EAD55A418D27B4800B55028 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -115,10 +115,15 @@
 		1EAECA6318EB80B400035BDF /* OHMOhmlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMOhmlet.m; sourceTree = "<group>"; };
 		1EAECA6518EB9C7700035BDF /* OHMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMObject.h; sourceTree = "<group>"; };
 		1EAECA6618EB9C7700035BDF /* OHMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMObject.m; sourceTree = "<group>"; };
-		1EAECA6818ECB23F00035BDF /* OHMOhmletViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMOhmletViewController.h; sourceTree = "<group>"; };
-		1EAECA6918ECB23F00035BDF /* OHMOhmletViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMOhmletViewController.m; sourceTree = "<group>"; };
+		1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveysViewController.h; sourceTree = "<group>"; };
+		1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
 		1EAECA6E18EE14A200035BDF /* OHMOhmage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMOhmage.h; sourceTree = "<group>"; };
 		1EAECA6F18EE14A200035BDF /* OHMOhmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMOhmage.m; sourceTree = "<group>"; };
+		1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyTableViewCell.h; sourceTree = "<group>"; };
+		1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyTableViewCell.m; sourceTree = "<group>"; };
+		1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyDetailViewController.h; sourceTree = "<group>"; };
+		1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyDetailViewController.m; sourceTree = "<group>"; };
+		1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMSurveyDetailViewController.xib; sourceTree = "<group>"; };
 		1EF693C418EA0F670003E077 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		1EF693C618EA0F670003E077 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -218,14 +223,19 @@
 				1EAECA6F18EE14A200035BDF /* OHMOhmage.m */,
 				1EAECA5C18EB413D00035BDF /* OHMUser.h */,
 				1EAECA5D18EB413D00035BDF /* OHMUser.m */,
-				1EAECA6218EB80B400035BDF /* OHMOhmlet.h */,
-				1EAECA6318EB80B400035BDF /* OHMOhmlet.m */,
 				1EAD558D18D26E4500B55028 /* OHMSurvey.h */,
 				1EAD558E18D26E4500B55028 /* OHMSurvey.m */,
+				1EAECA6218EB80B400035BDF /* OHMOhmlet.h */,
+				1EAECA6318EB80B400035BDF /* OHMOhmlet.m */,
 				1E70097218CA6F8700203990 /* OHMAppDelegate.h */,
 				1E70097318CA6F8700203990 /* OHMAppDelegate.m */,
-				1EAECA6818ECB23F00035BDF /* OHMOhmletViewController.h */,
-				1EAECA6918ECB23F00035BDF /* OHMOhmletViewController.m */,
+				1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */,
+				1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */,
+				1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */,
+				1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */,
+				1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */,
+				1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */,
+				1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */,
 				1E70097518CA6F8700203990 /* Images.xcassets */,
 				1E70096A18CA6F8700203990 /* Supporting Files */,
 			);
@@ -308,8 +318,6 @@
 		1EAD558C18D26E2300B55028 /* Surveys */ = {
 			isa = PBXGroup;
 			children = (
-				1EAD559018D26F3D00B55028 /* OHMSurveysViewController.h */,
-				1EAD559118D26F3D00B55028 /* OHMSurveysViewController.m */,
 				1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */,
 				1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */,
 			);
@@ -435,6 +443,7 @@
 				1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */,
 				1EAECA5B18EB40CC00035BDF /* notes in Resources */,
 				1E70097618CA6F8700203990 /* Images.xcassets in Resources */,
+				1EDA0B1F18F4068400C89F91 /* OHMSurveyDetailViewController.xib in Resources */,
 				1EAD558118D1590900B55028 /* OHMDetailHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,11 +467,12 @@
 				1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
 				1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */,
-				1EAECA6A18ECB23F00035BDF /* OHMOhmletViewController.m in Sources */,
+				1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
-				1EAD559218D26F3D00B55028 /* OHMSurveysViewController.m in Sources */,
 				1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */,
 				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
+				1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */,
+				1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */,
 				1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */,
 				1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */,
 				1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */,

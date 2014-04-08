@@ -21,6 +21,7 @@
     if (self) {
         self.ohmId = surveyId;
         self.surveyVersion = surveyVersion;
+        self.isLoaded = NO;
         [self updateFromServer];
     }
     return self;
@@ -40,8 +41,13 @@
             NSLog(@"Error updating survey: %@", [error localizedDescription]);
         }
         else {
-            NSLog(@"got survey: %@, version: %ld", [response surveyName], self.surveyVersion);
-            self.surveyName = [response surveyName];
+            NSLog(@"got survey: %@, version: %ld", [response surveyName], weakSelf.surveyVersion);
+            weakSelf.surveyName = [response surveyName];
+            weakSelf.surveyDescription = [response surveyDescription];
+            weakSelf.isLoaded = YES;
+            if (self.surveyUpdatedBlock) {
+                self.surveyUpdatedBlock();
+            }
         }
     }];
 }
