@@ -8,6 +8,7 @@
 
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurvey.h"
+#import "OHMSurveyResponse.h"
 
 @interface OHMSurveyDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -46,6 +47,9 @@
 }
 
 - (IBAction)takeSurvey:(id)sender {
+    
+    OHMSurveyResponse *newResponse = [[OHMSurveyResponse alloc] init];
+    newResponse.survey = self.survey;
     
 }
 

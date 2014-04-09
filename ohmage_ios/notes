@@ -215,3 +215,56 @@ For the ohmlet features, we should talk through again. Basically the standard us
             "default_response": null
         }
     ],
+    
+    
+    
+    example data
+    
+    [
+    {
+        "owner": "8ccfa87e-cd17-4554-a36c-e3beb0e78773",
+        "meta_data": {
+            "id": "597ce9ba-2bc5-42fc-b8eb-fc9a9f95476d",
+            "timestamp": "2014-04-04T16:21:09.091-07:00",
+            "location": {
+                "latitude": 37.3376102,
+                "longitude": -121.9270189,
+                "accuracy": 10.107999801635742,
+                "time": 1396653667635
+            }
+        },
+        "data": {
+            "min": 5,
+            "max": -7,
+            "minDefault": 10,
+            "default": 5,
+            "basic": 0,
+            "whole_number": 1,
+            "maxDefault": 1
+        }
+    },
+    {
+        "owner": "8ccfa87e-cd17-4554-a36c-e3beb0e78773",
+        "meta_data": {
+            "id": "3f05cddf-cc92-4eed-b720-38c5246a5001",
+            "timestamp": "2014-04-09T07:59:46.954-07:00",
+            "location": {
+                "latitude": 37.3370647,
+                "longitude": -121.9271512,
+                "accuracy": 12.618000030517578,
+                "time": 1397055585787
+            }
+        },
+        "data": {
+            "min": 5,
+            "minMax": 5,
+            "max": 0,
+            "minDefault": 10,
+            "default": 5,
+            "basic": 0,
+            "minMaxDefault": 7,
+            "whole_number": 1,
+            "maxDefault": 1
+        }
+    }
+]
