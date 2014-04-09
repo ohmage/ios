@@ -81,4 +81,90 @@
     return self[@"description"];
 }
 
+- (NSArray *)surveyItems
+{
+    return self[@"survey_items"];
+}
+
+- (NSString *)surveyItemTypeKey
+{
+    return self[@"survey_item_type"];
+}
+
+- (NSString *)surveyItemId
+{
+    return self[@"survey_item_id"];
+}
+
+- (NSString *)surveyItemCondition
+{
+    return self[@"condition"];
+}
+
+- (NSString *)surveyItemText
+{
+    return self[@"text"];
+}
+
+- (NSString *)surveyItemDefaultResponse
+{
+    return self[@"default_response"];
+}
+
+- (NSString *)surveyItemDisplayType
+{
+    return self[@"display_type"];
+}
+
+- (NSString *)surveyItemDisplayLabel
+{
+    return self[@"display_label"];
+}
+
+- (NSString *)surveyItemMin
+{
+    return self[@"min"];
+}
+
+- (NSString *)surveyItemMax
+{
+    return self[@"max"];
+}
+
+- (NSString *)surveyItemMinChoices
+{
+    return self[@"min_choices"];
+}
+
+- (NSString *)surveyItemMaxChoices
+{
+    return self[@"max_choices"];
+}
+
+- (NSString *)surveyItemMaxDimension
+{
+    return self[@"max_dimension"];
+}
+
+- (NSString *)surveyItemMaxDuration
+{
+    return self[@"max_duration"];
+}
+
+- (NSArray *)surveyItemChoices
+{
+    return self[@"choices"];
+}
+
+- (BOOL)surveyItemIsSkippable
+{
+    return self[@"skippable"];
+}
+
+- (BOOL)surveyItemWholeNumbersOnly
+{
+    return self[@"whole_numbers_only"];
+}
+
+
 @end

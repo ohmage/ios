@@ -25,6 +25,24 @@
 - (NSInteger)surveyVersion;
 - (NSString *)surveyName;
 - (NSString *)surveyDescription;
+- (NSArray *)surveyItems;
+
+- (NSString *)surveyItemTypeKey;
+- (NSString *)surveyItemId;
+- (NSString *)surveyItemCondition;
+- (NSString *)surveyItemText;
+- (NSString *)surveyItemDefaultResponse;
+- (NSString *)surveyItemDisplayType;
+- (NSString *)surveyItemDisplayLabel;
+- (NSString *)surveyItemMin;
+- (NSString *)surveyItemMax;
+- (NSString *)surveyItemMinChoices;
+- (NSString *)surveyItemMaxChoices;
+- (NSString *)surveyItemMaxDimension;
+- (NSString *)surveyItemMaxDuration;
+- (NSArray *)surveyItemChoices;
+- (BOOL)surveyItemIsSkippable;
+- (BOOL)surveyItemWholeNumbersOnly;
 
 
 @end

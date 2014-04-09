@@ -10,6 +10,7 @@
 #import "OHMSurveyTableViewCell.h"
 #import "OHMOhmage.h"
 #import "OHMSurvey.h"
+#import "OHMSurveyDetailViewController.h"
 
 @interface OHMSurveysViewController () <OHMOhmageDelegate>
 
@@ -108,6 +109,8 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
+    OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

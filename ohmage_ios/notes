@@ -44,3 +44,174 @@ We are still working on the API documentation, but we have a good version of the
 https://github.com/ohmage/server/wiki/3.x%20People%20APIs
 
 For the ohmlet features, we should talk through again. Basically the standard use case for 3.0 is that a user can only belong to one ohmlet at a time.
+
+
+    "survey_items": [
+        {
+            "survey_item_type": "message",
+            "survey_item_id": "myMessage",
+            "condition": null,
+            "text": "This is a sample message."
+        },
+        {
+            "survey_item_type": "audio_prompt",
+            "survey_item_id": "myAudio",
+            "condition": null,
+            "display_type": "recorder",
+            "text": "Record an audio sample.",
+            "display_label": "Audio",
+            "skippable": false,
+            "default_response": null,
+            "max_duration": null
+        },
+        {
+            "survey_item_type": "image_prompt",
+            "survey_item_id": "myImage",
+            "condition": null,
+            "display_type": "camera",
+            "text": "Take a picture.",
+            "display_label": "Image",
+            "skippable": false,
+            "default_response": null,
+            "max_dimension": null
+        },
+        {
+            "survey_item_type": "video_prompt",
+            "survey_item_id": "myVideo",
+            "condition": null,
+            "display_type": "camera",
+            "text": "Take a video.",
+            "display_label": "Video",
+            "skippable": false,
+            "default_response": null,
+            "max_duration": null
+        },
+        {
+            "survey_item_type": "number_prompt",
+            "survey_item_id": "myNumber",
+            "condition": null,
+            "display_type": "picker",
+            "text": "Choose a number.",
+            "display_label": "Number",
+            "skippable": false,
+            "default_response": null,
+            "min": null,
+            "max": null,
+            "whole_numbers_only": false
+        },
+        {
+            "survey_item_type": "remote_activity_prompt",
+            "survey_item_id": "myRemoteActivity",
+            "condition": null,
+            "display_type": "launcher",
+            "text": "Launch the remote activity.",
+            "display_label": "Remote Activity",
+            "skippable": false,
+            "default_response": null,
+            "uri": "http://www.google.com/",
+            "definition": {
+                "type": "object",
+                "optional": false,
+                "fields": []
+            },
+            "apps": null
+        },
+        {
+            "survey_item_type": "number_single_choice_prompt",
+            "survey_item_id": "myNumberSingleChoicePrompt",
+            "condition": null,
+            "display_type": "list",
+            "text": "Choose a number.",
+            "display_label": "Number Single Choice",
+            "skippable": false,
+            "default_response": null,
+            "choices": [
+                {
+                    "text": "The text to show.",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "survey_item_type": "string_single_choice_prompt",
+            "survey_item_id": "myStringSingleChoicePrompt",
+            "condition": null,
+            "display_type": "list",
+            "text": "Choose a string.",
+            "display_label": "String Single Choice",
+            "skippable": false,
+            "default_response": null,
+            "choices": [
+                {
+                    "text": "The text to show.",
+                    "value": "foo"
+                }
+            ]
+        },
+        {
+            "survey_item_type": "number_multi_choice_prompt",
+            "survey_item_id": "myNumberMultiChoicePrompt",
+            "condition": null,
+            "display_type": "list",
+            "text": "Choose multiple numbers.",
+            "display_label": "Number Multi Choice",
+            "skippable": false,
+            "default_response": null,
+            "choices": [
+                {
+                    "text": "More text to show.",
+                    "value": 2
+                },
+                {
+                    "text": "The text to show.",
+                    "value": 1
+                }
+            ],
+            "min_choices": null,
+            "max_choices": null
+        },
+        {
+            "survey_item_type": "string_multi_choice_prompt",
+            "survey_item_id": "myStringMultiChoicePrompt",
+            "condition": null,
+            "display_type": "list",
+            "text": "Choose multiple strings.",
+            "display_label": "String Multi Choice",
+            "skippable": false,
+            "default_response": null,
+            "choices": [
+                {
+                    "text": "More text to show.",
+                    "value": "bar"
+                },
+                {
+                    "text": "The text to show.",
+                    "value": "foo"
+                }
+            ],
+            "min_choices": null,
+            "max_choices": null
+        },
+        {
+            "survey_item_type": "text_prompt",
+            "survey_item_id": "myText",
+            "condition": null,
+            "display_type": "textbox",
+            "text": "Enter some text.",
+            "display_label": "Text",
+            "skippable": false,
+            "default_response": null,
+            "min": null,
+            "max": null
+        },
+        {
+            "survey_item_type": "timestamp_prompt",
+            "survey_item_id": "myTimestamp",
+            "condition": null,
+            "display_type": "picker",
+            "text": "Choose a date and time.",
+            "display_label": "Timestamp",
+            "skippable": false,
+            "default_response": null
+        }
+    ],

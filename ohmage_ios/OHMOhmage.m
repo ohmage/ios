@@ -124,7 +124,12 @@
      }];
 }
 
-- (NSArray *)allSurveys
+- (NSArray *)ohmlets
+{
+    return nil;
+}
+
+- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
 {
     return [self.surveys copy];
 }

@@ -8,6 +8,12 @@
 
 #import "OHMSurvey.h"
 
+@interface OHMSurvey ()
+
+@property (nonatomic, strong) NSMutableArray *privateItems;
+
+@end
+
 @implementation OHMSurvey
 
 + (instancetype)loadFromServerWithDefinition:(NSDictionary *)surveyDefinition
@@ -19,6 +25,7 @@
 {
     self = [super init];
     if (self) {
+        self.privateItems = [NSMutableArray array];
         self.ohmId = surveyId;
         self.surveyVersion = surveyVersion;
         self.isLoaded = NO;
@@ -30,6 +37,11 @@
 - (NSString *)definitionRequestUrlString
 {
     return [NSString stringWithFormat:@"surveys/%@/%ld", self.ohmId, (long)self.surveyVersion];
+}
+
+- (NSArray *)surveyItems
+{
+    return self.privateItems;
 }
 
 - (void)updateFromServer
@@ -44,12 +56,24 @@
             NSLog(@"got survey: %@, version: %ld", [response surveyName], weakSelf.surveyVersion);
             weakSelf.surveyName = [response surveyName];
             weakSelf.surveyDescription = [response surveyDescription];
+            [weakSelf parseSurveyItems:[response surveyItems]];
             weakSelf.isLoaded = YES;
             if (self.surveyUpdatedBlock) {
                 self.surveyUpdatedBlock();
             }
         }
     }];
+}
+
+- (void)parseSurveyItems:(NSArray *)itemDefinitions
+{
+    for (NSDictionary * definition in itemDefinitions) {
+        OHMSurveyItem *item = [OHMSurveyItem itemWithDefinition:definition];
+        if (item) {
+            [self.privateItems addObject:item];
+        }
+        NSLog(@"Parsed item: %@", item);
+    }
 }
 
 @end

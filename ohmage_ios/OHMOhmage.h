@@ -20,7 +20,7 @@
 
 - (void)login;
 - (NSArray *)ohmlets;
-- (NSArray *)surveys;
+- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 - (NSInteger)surveyCount;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OHMSurveyItem.h"
 
 @class OHMOhmlet;
 @protocol OHMSurveyDelegate;
@@ -20,7 +21,7 @@
 @property (nonatomic) NSInteger surveyVersion;
 @property (nonatomic, copy) NSString *surveyName;
 @property (nonatomic, copy) NSString *surveyDescription;
-@property (nonatomic, readonly) NSArray *prompts;
+@property (nonatomic, readonly) NSArray *surveyItems;
 @property (nonatomic) BOOL isLoaded;
 
 + (instancetype)loadFromServerWithDefinition:(NSDictionary *)surveyDefinition;

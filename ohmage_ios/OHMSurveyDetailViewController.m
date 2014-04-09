@@ -36,7 +36,7 @@
     
     self.nameLabel.text = self.survey.surveyName;
     self.descriptionLabel.text = self.survey.surveyDescription;
-    self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.prompts count]];
+    self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.surveyItems count]];
 }
 
 - (void)didReceiveMemoryWarning
