@@ -12,6 +12,10 @@
 
 @interface OHMSurveyItemViewController : UIViewController
 
-@property (nonatomic, strong) OHMSurveyResponse *response;
++ (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
+
+@property (nonatomic, strong) OHMSurveyResponse *surveyResponse;
+
+- (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
 
 @end

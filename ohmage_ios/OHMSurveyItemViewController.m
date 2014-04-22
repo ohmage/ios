@@ -17,11 +17,16 @@
 
 @implementation OHMSurveyItemViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
++ (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    return [[OHMSurveyItemViewController alloc] initWithSurveyResponse:response atQuestionIndex:index];
+}
+
+- (id)initWithSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index
+{
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        // Custom initialization
+        self.surveyResponse = response;
     }
     return self;
 }

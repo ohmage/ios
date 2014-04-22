@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Mogenerator.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>ohmage_ios.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1E1B60B619062BD2001046E0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>1E70095F18CA6F8700203990</key>
 		<dict>
 			<key>primary</key>

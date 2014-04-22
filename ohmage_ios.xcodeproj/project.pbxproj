@@ -6,7 +6,35 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		1E1B60B619062BD2001046E0 /* Mogenerator */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 1E1B60B919062BD2001046E0 /* Build configuration list for PBXAggregateTarget "Mogenerator" */;
+			buildPhases = (
+				1E1B60BA19062BF7001046E0 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Mogenerator;
+			productName = Mogenerator;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
+		1E1B60C919063242001046E0 /* OHMOhmlet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60BC19063242001046E0 /* OHMOhmlet.m */; };
+		1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60BE19063242001046E0 /* OHMSurvey.m */; };
+		1E1B60CB19063242001046E0 /* OHMSurveyItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60C019063242001046E0 /* OHMSurveyItem.m */; };
+		1E1B60CC19063242001046E0 /* OHMSurveyPromptChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60C219063242001046E0 /* OHMSurveyPromptChoice.m */; };
+		1E1B60CD19063242001046E0 /* OHMSurveyPromptResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60C419063242001046E0 /* OHMSurveyPromptResponse.m */; };
+		1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60C619063242001046E0 /* OHMSurveyResponse.m */; };
+		1E1B60CF19063242001046E0 /* OHMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60C819063242001046E0 /* OHMUser.m */; };
+		1E1B60F519063392001046E0 /* _OHMOhmlet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60E819063392001046E0 /* _OHMOhmlet.m */; };
+		1E1B60F619063392001046E0 /* _OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60EA19063392001046E0 /* _OHMSurvey.m */; };
+		1E1B60F719063392001046E0 /* _OHMSurveyItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60EC19063392001046E0 /* _OHMSurveyItem.m */; };
+		1E1B60F819063392001046E0 /* _OHMSurveyPromptChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60EE19063392001046E0 /* _OHMSurveyPromptChoice.m */; };
+		1E1B60F919063392001046E0 /* _OHMSurveyPromptResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60F019063392001046E0 /* _OHMSurveyPromptResponse.m */; };
+		1E1B60FA19063392001046E0 /* _OHMSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60F219063392001046E0 /* _OHMSurveyResponse.m */; };
+		1E1B60FB19063392001046E0 /* _OHMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B60F419063392001046E0 /* _OHMUser.m */; };
 		1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096318CA6F8700203990 /* Foundation.framework */; };
 		1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096518CA6F8700203990 /* CoreGraphics.framework */; };
 		1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
@@ -28,25 +56,18 @@
 		1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558318D15ADD00B55028 /* OHMDetailViewController.m */; };
 		1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */; };
 		1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558918D16C0B00B55028 /* OHMProjectStore.m */; };
-		1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD558E18D26E4500B55028 /* OHMSurvey.m */; };
-		1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
 		1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A618D27B4F00B55028 /* QuartzCore.framework */; };
 		1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA5818EB3CEF00035BDF /* AFNetworkActivityLogger.m */; };
 		1EAECA5B18EB40CC00035BDF /* notes in Resources */ = {isa = PBXBuildFile; fileRef = 1EAECA5A18EB40CC00035BDF /* notes */; };
-		1EAECA5E18EB413D00035BDF /* OHMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA5D18EB413D00035BDF /* OHMUser.m */; };
 		1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */; };
-		1EAECA6418EB80B400035BDF /* OHMOhmlet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6318EB80B400035BDF /* OHMOhmlet.m */; };
 		1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6618EB9C7700035BDF /* OHMObject.m */; };
 		1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */; };
 		1EAECA7018EE14A200035BDF /* OHMOhmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6F18EE14A200035BDF /* OHMOhmage.m */; };
 		1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */; };
 		1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */; };
 		1EDA0B1F18F4068400C89F91 /* OHMSurveyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */; };
-		1EDA0B2418F484B900C89F91 /* OHMSurveyItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2318F484B900C89F91 /* OHMSurveyItem.m */; };
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
-		1EDA0B2A18F5971800C89F91 /* OHMSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2918F5971800C89F91 /* OHMSurveyResponse.m */; };
-		1EDA0B2D18F59AFF00C89F91 /* OHMSurveyPromptResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2C18F59AFF00C89F91 /* OHMSurveyPromptResponse.m */; };
 		1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */; };
 		1EDA0B3218F59C7E00C89F91 /* OHMSurveyItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */; };
 		1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */; };
@@ -73,6 +94,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E1B60BB19063242001046E0 /* OHMOhmlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMOhmlet.h; path = Model/OHMOhmlet.h; sourceTree = "<group>"; };
+		1E1B60BC19063242001046E0 /* OHMOhmlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMOhmlet.m; path = Model/OHMOhmlet.m; sourceTree = "<group>"; };
+		1E1B60BD19063242001046E0 /* OHMSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMSurvey.h; path = Model/OHMSurvey.h; sourceTree = "<group>"; };
+		1E1B60BE19063242001046E0 /* OHMSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMSurvey.m; path = Model/OHMSurvey.m; sourceTree = "<group>"; };
+		1E1B60BF19063242001046E0 /* OHMSurveyItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMSurveyItem.h; path = Model/OHMSurveyItem.h; sourceTree = "<group>"; };
+		1E1B60C019063242001046E0 /* OHMSurveyItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMSurveyItem.m; path = Model/OHMSurveyItem.m; sourceTree = "<group>"; };
+		1E1B60C119063242001046E0 /* OHMSurveyPromptChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMSurveyPromptChoice.h; path = Model/OHMSurveyPromptChoice.h; sourceTree = "<group>"; };
+		1E1B60C219063242001046E0 /* OHMSurveyPromptChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMSurveyPromptChoice.m; path = Model/OHMSurveyPromptChoice.m; sourceTree = "<group>"; };
+		1E1B60C319063242001046E0 /* OHMSurveyPromptResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMSurveyPromptResponse.h; path = Model/OHMSurveyPromptResponse.h; sourceTree = "<group>"; };
+		1E1B60C419063242001046E0 /* OHMSurveyPromptResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMSurveyPromptResponse.m; path = Model/OHMSurveyPromptResponse.m; sourceTree = "<group>"; };
+		1E1B60C519063242001046E0 /* OHMSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMSurveyResponse.h; path = Model/OHMSurveyResponse.h; sourceTree = "<group>"; };
+		1E1B60C619063242001046E0 /* OHMSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMSurveyResponse.m; path = Model/OHMSurveyResponse.m; sourceTree = "<group>"; };
+		1E1B60C719063242001046E0 /* OHMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMUser.h; path = Model/OHMUser.h; sourceTree = "<group>"; };
+		1E1B60C819063242001046E0 /* OHMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMUser.m; path = Model/OHMUser.m; sourceTree = "<group>"; };
+		1E1B60E719063392001046E0 /* _OHMOhmlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMOhmlet.h; sourceTree = "<group>"; };
+		1E1B60E819063392001046E0 /* _OHMOhmlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMOhmlet.m; sourceTree = "<group>"; };
+		1E1B60E919063392001046E0 /* _OHMSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMSurvey.h; sourceTree = "<group>"; };
+		1E1B60EA19063392001046E0 /* _OHMSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMSurvey.m; sourceTree = "<group>"; };
+		1E1B60EB19063392001046E0 /* _OHMSurveyItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMSurveyItem.h; sourceTree = "<group>"; };
+		1E1B60EC19063392001046E0 /* _OHMSurveyItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMSurveyItem.m; sourceTree = "<group>"; };
+		1E1B60ED19063392001046E0 /* _OHMSurveyPromptChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMSurveyPromptChoice.h; sourceTree = "<group>"; };
+		1E1B60EE19063392001046E0 /* _OHMSurveyPromptChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMSurveyPromptChoice.m; sourceTree = "<group>"; };
+		1E1B60EF19063392001046E0 /* _OHMSurveyPromptResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMSurveyPromptResponse.h; sourceTree = "<group>"; };
+		1E1B60F019063392001046E0 /* _OHMSurveyPromptResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMSurveyPromptResponse.m; sourceTree = "<group>"; };
+		1E1B60F119063392001046E0 /* _OHMSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMSurveyResponse.h; sourceTree = "<group>"; };
+		1E1B60F219063392001046E0 /* _OHMSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMSurveyResponse.m; sourceTree = "<group>"; };
+		1E1B60F319063392001046E0 /* _OHMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMUser.h; sourceTree = "<group>"; };
+		1E1B60F419063392001046E0 /* _OHMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMUser.m; sourceTree = "<group>"; };
 		1E70096018CA6F8700203990 /* ohmage_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ohmage_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E70096318CA6F8700203990 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E70096518CA6F8700203990 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -105,21 +154,13 @@
 		1EAD558618D1680900B55028 /* OHMProjectDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectDetailViewController.m; sourceTree = "<group>"; };
 		1EAD558818D16C0B00B55028 /* OHMProjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMProjectStore.h; sourceTree = "<group>"; };
 		1EAD558918D16C0B00B55028 /* OHMProjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMProjectStore.m; sourceTree = "<group>"; };
-		1EAD558D18D26E4500B55028 /* OHMSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurvey.h; sourceTree = "<group>"; };
-		1EAD558E18D26E4500B55028 /* OHMSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurvey.m; sourceTree = "<group>"; };
-		1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyPrompt.h; sourceTree = "<group>"; };
-		1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyPrompt.m; sourceTree = "<group>"; };
 		1EAD55A418D27B4800B55028 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		1EAD55A618D27B4F00B55028 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1EAECA5718EB3CEF00035BDF /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityLogger.h; path = "external/AFNetworkActivityLogger-master/AFNetworkActivityLogger.h"; sourceTree = SOURCE_ROOT; };
 		1EAECA5818EB3CEF00035BDF /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityLogger.m; path = "external/AFNetworkActivityLogger-master/AFNetworkActivityLogger.m"; sourceTree = SOURCE_ROOT; };
 		1EAECA5A18EB40CC00035BDF /* notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = notes; path = ohmage_ios/notes; sourceTree = "<group>"; };
-		1EAECA5C18EB413D00035BDF /* OHMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMUser.h; sourceTree = "<group>"; };
-		1EAECA5D18EB413D00035BDF /* OHMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUser.m; sourceTree = "<group>"; };
 		1EAECA5F18EB518B00035BDF /* NSDictionary+Ohmage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Ohmage.h"; sourceTree = "<group>"; };
 		1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Ohmage.m"; sourceTree = "<group>"; };
-		1EAECA6218EB80B400035BDF /* OHMOhmlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMOhmlet.h; sourceTree = "<group>"; };
-		1EAECA6318EB80B400035BDF /* OHMOhmlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMOhmlet.m; sourceTree = "<group>"; };
 		1EAECA6518EB9C7700035BDF /* OHMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMObject.h; sourceTree = "<group>"; };
 		1EAECA6618EB9C7700035BDF /* OHMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMObject.m; sourceTree = "<group>"; };
 		1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveysViewController.h; sourceTree = "<group>"; };
@@ -131,14 +172,8 @@
 		1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyDetailViewController.h; sourceTree = "<group>"; };
 		1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyDetailViewController.m; sourceTree = "<group>"; };
 		1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMSurveyDetailViewController.xib; sourceTree = "<group>"; };
-		1EDA0B2218F484B900C89F91 /* OHMSurveyItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItem.h; sourceTree = "<group>"; };
-		1EDA0B2318F484B900C89F91 /* OHMSurveyItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItem.m; sourceTree = "<group>"; };
 		1EDA0B2518F4948200C89F91 /* OHMSurveyItemTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItemTypes.h; sourceTree = "<group>"; };
 		1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemTypes.m; sourceTree = "<group>"; };
-		1EDA0B2818F5971800C89F91 /* OHMSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyResponse.h; sourceTree = "<group>"; };
-		1EDA0B2918F5971800C89F91 /* OHMSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyResponse.m; sourceTree = "<group>"; };
-		1EDA0B2B18F59AFE00C89F91 /* OHMSurveyPromptResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyPromptResponse.h; sourceTree = "<group>"; };
-		1EDA0B2C18F59AFF00C89F91 /* OHMSurveyPromptResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyPromptResponse.m; sourceTree = "<group>"; };
 		1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItemViewController.h; sourceTree = "<group>"; };
 		1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemViewController.m; sourceTree = "<group>"; };
 		1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMSurveyItemViewController.xib; sourceTree = "<group>"; };
@@ -192,10 +227,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E1B60E619063392001046E0 /* _Model */ = {
+			isa = PBXGroup;
+			children = (
+				1E1B60E719063392001046E0 /* _OHMOhmlet.h */,
+				1E1B60E819063392001046E0 /* _OHMOhmlet.m */,
+				1E1B60E919063392001046E0 /* _OHMSurvey.h */,
+				1E1B60EA19063392001046E0 /* _OHMSurvey.m */,
+				1E1B60EB19063392001046E0 /* _OHMSurveyItem.h */,
+				1E1B60EC19063392001046E0 /* _OHMSurveyItem.m */,
+				1E1B60ED19063392001046E0 /* _OHMSurveyPromptChoice.h */,
+				1E1B60EE19063392001046E0 /* _OHMSurveyPromptChoice.m */,
+				1E1B60EF19063392001046E0 /* _OHMSurveyPromptResponse.h */,
+				1E1B60F019063392001046E0 /* _OHMSurveyPromptResponse.m */,
+				1E1B60F119063392001046E0 /* _OHMSurveyResponse.h */,
+				1E1B60F219063392001046E0 /* _OHMSurveyResponse.m */,
+				1E1B60F319063392001046E0 /* _OHMUser.h */,
+				1E1B60F419063392001046E0 /* _OHMUser.m */,
+			);
+			name = _Model;
+			path = Model/_Model;
+			sourceTree = "<group>";
+		};
 		1E70095718CA6F8700203990 = {
 			isa = PBXGroup;
 			children = (
-				1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */,
 				1EAECA5A18EB40CC00035BDF /* notes */,
 				1E70096918CA6F8700203990 /* ohmage_ios */,
 				1E70098218CA6F8700203990 /* ohmage_iosTests */,
@@ -231,7 +287,6 @@
 			children = (
 				1EF693E018EA0F840003E077 /* Networking */,
 				1EAD557F18D1567900B55028 /* Shared */,
-				1EAD558C18D26E2300B55028 /* Surveys */,
 				1EAD557818D14C9900B55028 /* Projects */,
 				1EAD557718D1356100B55028 /* Home */,
 				1E70099818CA7DCE00203990 /* Dashboard */,
@@ -320,36 +375,31 @@
 			name = Shared;
 			sourceTree = "<group>";
 		};
-		1EAD558C18D26E2300B55028 /* Surveys */ = {
-			isa = PBXGroup;
-			children = (
-				1EAD559318D2758400B55028 /* OHMSurveyPrompt.h */,
-				1EAD559418D2758400B55028 /* OHMSurveyPrompt.m */,
-			);
-			name = Surveys;
-			sourceTree = "<group>";
-		};
 		1EDA0B2018F4820100C89F91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1E1B60E619063392001046E0 /* _Model */,
+				1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */,
+				1E1B60BB19063242001046E0 /* OHMOhmlet.h */,
+				1E1B60BC19063242001046E0 /* OHMOhmlet.m */,
+				1E1B60BD19063242001046E0 /* OHMSurvey.h */,
+				1E1B60BE19063242001046E0 /* OHMSurvey.m */,
+				1E1B60BF19063242001046E0 /* OHMSurveyItem.h */,
+				1E1B60C019063242001046E0 /* OHMSurveyItem.m */,
+				1E1B60C119063242001046E0 /* OHMSurveyPromptChoice.h */,
+				1E1B60C219063242001046E0 /* OHMSurveyPromptChoice.m */,
+				1E1B60C319063242001046E0 /* OHMSurveyPromptResponse.h */,
+				1E1B60C419063242001046E0 /* OHMSurveyPromptResponse.m */,
+				1E1B60C519063242001046E0 /* OHMSurveyResponse.h */,
+				1E1B60C619063242001046E0 /* OHMSurveyResponse.m */,
+				1E1B60C719063242001046E0 /* OHMUser.h */,
+				1E1B60C819063242001046E0 /* OHMUser.m */,
 				1EAECA6518EB9C7700035BDF /* OHMObject.h */,
 				1EAECA6618EB9C7700035BDF /* OHMObject.m */,
 				1EAECA6E18EE14A200035BDF /* OHMOhmage.h */,
 				1EAECA6F18EE14A200035BDF /* OHMOhmage.m */,
-				1EAECA5C18EB413D00035BDF /* OHMUser.h */,
-				1EAECA5D18EB413D00035BDF /* OHMUser.m */,
-				1EAD558D18D26E4500B55028 /* OHMSurvey.h */,
-				1EAD558E18D26E4500B55028 /* OHMSurvey.m */,
-				1EDA0B2218F484B900C89F91 /* OHMSurveyItem.h */,
-				1EDA0B2318F484B900C89F91 /* OHMSurveyItem.m */,
 				1EDA0B2518F4948200C89F91 /* OHMSurveyItemTypes.h */,
 				1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */,
-				1EDA0B2818F5971800C89F91 /* OHMSurveyResponse.h */,
-				1EDA0B2918F5971800C89F91 /* OHMSurveyResponse.m */,
-				1EDA0B2B18F59AFE00C89F91 /* OHMSurveyPromptResponse.h */,
-				1EDA0B2C18F59AFF00C89F91 /* OHMSurveyPromptResponse.m */,
-				1EAECA6218EB80B400035BDF /* OHMOhmlet.h */,
-				1EAECA6318EB80B400035BDF /* OHMOhmlet.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -357,6 +407,7 @@
 		1EDA0B2118F4821E00C89F91 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1EEC913D1906276200DC2B33 /* SurveyItems */,
 				1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */,
 				1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */,
 				1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */,
@@ -364,11 +415,18 @@
 				1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */,
 				1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */,
 				1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1EEC913D1906276200DC2B33 /* SurveyItems */ = {
+			isa = PBXGroup;
+			children = (
 				1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */,
 				1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */,
 				1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */,
 			);
-			name = "View Controllers";
+			name = SurveyItems;
 			sourceTree = "<group>";
 		};
 		1EF693C318EA0F670003E077 /* AFNetworking */ = {
@@ -455,7 +513,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = OHM;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = VPD;
 				TargetAttributes = {
 					1E70097A18CA6F8700203990 = {
@@ -477,6 +535,7 @@
 			targets = (
 				1E70095F18CA6F8700203990 /* ohmage_ios */,
 				1E70097A18CA6F8700203990 /* ohmage_iosTests */,
+				1E1B60B619062BD2001046E0 /* Mogenerator */,
 			);
 		};
 /* End PBXProject section */
@@ -506,6 +565,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1E1B60BA19062BF7001046E0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mogenerator -m ohmage_ios/ohmage_ios.xcdatamodeld/ohmage_ios.xcdatamodel -O ohmage_ios/Model --template-var arc=true --machine-dir ohmage_ios/Model/_Model";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1E70095C18CA6F8700203990 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -514,39 +589,46 @@
 				1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */,
 				1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
-				1EDA0B2A18F5971800C89F91 /* OHMSurveyResponse.m in Sources */,
+				1E1B60F519063392001046E0 /* _OHMOhmlet.m in Sources */,
+				1E1B60CF19063242001046E0 /* OHMUser.m in Sources */,
 				1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */,
+				1E1B60FA19063392001046E0 /* _OHMSurveyResponse.m in Sources */,
 				1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */,
 				1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */,
 				1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */,
+				1E1B60FB19063392001046E0 /* _OHMUser.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
+				1E1B60F719063392001046E0 /* _OHMSurveyItem.m in Sources */,
 				1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */,
 				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
 				1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */,
+				1E1B60CB19063242001046E0 /* OHMSurveyItem.m in Sources */,
 				1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */,
-				1EAD559518D2758400B55028 /* OHMSurveyPrompt.m in Sources */,
 				1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */,
 				1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */,
 				1EAECA7018EE14A200035BDF /* OHMOhmage.m in Sources */,
+				1E1B60F819063392001046E0 /* _OHMSurveyPromptChoice.m in Sources */,
 				1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */,
-				1EDA0B2D18F59AFF00C89F91 /* OHMSurveyPromptResponse.m in Sources */,
+				1E1B60CD19063242001046E0 /* OHMSurveyPromptResponse.m in Sources */,
 				1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */,
+				1E1B60C919063242001046E0 /* OHMOhmlet.m in Sources */,
 				1EF693DB18EA0F670003E077 /* AFSecurityPolicy.m in Sources */,
-				1EAD558F18D26E4500B55028 /* OHMSurvey.m in Sources */,
+				1E1B60F619063392001046E0 /* _OHMSurvey.m in Sources */,
 				1EF693DA18EA0F670003E077 /* AFNetworkReachabilityManager.m in Sources */,
-				1EAECA5E18EB413D00035BDF /* OHMUser.m in Sources */,
 				1EF693DF18EA0F670003E077 /* AFURLSessionManager.m in Sources */,
 				1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */,
 				1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */,
 				1EAD558418D15ADD00B55028 /* OHMDetailViewController.m in Sources */,
+				1E1B60CC19063242001046E0 /* OHMSurveyPromptChoice.m in Sources */,
+				1E1B60F919063392001046E0 /* _OHMSurveyPromptResponse.m in Sources */,
 				1EF693E318EA0FE20003E077 /* OHMHTTPClient.m in Sources */,
-				1EAECA6418EB80B400035BDF /* OHMOhmlet.m in Sources */,
 				1EAD558A18D16C0B00B55028 /* OHMProjectStore.m in Sources */,
 				1EAD557E18D1500C00B55028 /* OHMProject.m in Sources */,
+				1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */,
 				1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */,
 				1EF693DE18EA0F670003E077 /* AFURLResponseSerialization.m in Sources */,
-				1EDA0B2418F484B900C89F91 /* OHMSurveyItem.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
+				1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,11 +670,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1E1B60B719062BD2001046E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1E1B60B819062BD2001046E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		1E70098A18CA6F8700203990 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -624,6 +719,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "ohmage_ios/**";
 			};
 			name = Debug;
 		};
@@ -631,7 +727,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -656,6 +751,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "ohmage_ios/**";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -701,7 +797,6 @@
 		1E70099018CA6F8700203990 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ohmage_ios.app/ohmage_ios";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -724,7 +819,6 @@
 		1E70099118CA6F8700203990 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ohmage_ios.app/ohmage_ios";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -743,6 +837,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1E1B60B919062BD2001046E0 /* Build configuration list for PBXAggregateTarget "Mogenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E1B60B719062BD2001046E0 /* Debug */,
+				1E1B60B819062BD2001046E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		1E70095B18CA6F8700203990 /* Build configuration list for PBXProject "ohmage_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -779,8 +881,7 @@
 				1EDA0B3418F5A4DD00C89F91 /* ohmage_ios.xcdatamodel */,
 			);
 			currentVersion = 1EDA0B3418F5A4DD00C89F91 /* ohmage_ios.xcdatamodel */;
-			name = ohmage_ios.xcdatamodeld;
-			path = ohmage_ios/ohmage_ios.xcdatamodeld;
+			path = ohmage_ios.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

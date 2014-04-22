@@ -1,11 +1,3 @@
-//
-//  OHMSurvey.m
-//  ohmage_ios
-//
-//  Created by Charles Forkish on 3/13/14.
-//  Copyright (c) 2014 VPD. All rights reserved.
-//
-
 #import "OHMSurvey.h"
 
 @interface OHMSurvey ()
@@ -72,7 +64,7 @@
         if (item) {
             [self.privateItems addObject:item];
         }
-        NSLog(@"Parsed item: %@", item);
+        //        NSLog(@"Parsed item: %@", item);
     }
 }
 

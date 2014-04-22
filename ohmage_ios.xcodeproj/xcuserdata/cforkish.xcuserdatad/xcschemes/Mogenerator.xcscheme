@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1E70095F18CA6F8700203990"
-               BuildableName = "ohmage_ios.app"
-               BlueprintName = "ohmage_ios"
+               BlueprintIdentifier = "1E1B60B619062BD2001046E0"
+               BuildableName = "Mogenerator"
+               BlueprintName = "Mogenerator"
                ReferencedContainer = "container:ohmage_ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1E70097A18CA6F8700203990"
-               BuildableName = "ohmage_iosTests.xctest"
-               BlueprintName = "ohmage_iosTests"
-               ReferencedContainer = "container:ohmage_ios.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
-            BlueprintName = "ohmage_ios"
-            ReferencedContainer = "container:ohmage_ios.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -58,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
-            BlueprintName = "ohmage_ios"
-            ReferencedContainer = "container:ohmage_ios.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -76,15 +48,6 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
-            BlueprintName = "ohmage_ios"
-            ReferencedContainer = "container:ohmage_ios.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
