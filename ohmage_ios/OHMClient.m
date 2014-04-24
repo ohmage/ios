@@ -14,6 +14,8 @@
 #import "OHMSurveyItem.h"
 #import "OHMSurveyPromptChoice.h"
 #import "OHMSurveyItemTypes.h"
+#import "OHMSurveyResponse.h"
+#import "OHMSurveyPromptResponse.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
@@ -59,6 +61,17 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }
     
     return self;
+}
+
+- (NSSet *)ohmlets
+{
+    return self.user.ohmlets;
+}
+
+- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
+{
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
+    return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 
@@ -127,6 +140,8 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
               self.user.fullName = [response userFullName];
               
               [self refreshOhmlets:[response ohmlets]];
+              
+              [self.delegate OHMClientDidUpdate:self];
           }
       }];
 }
@@ -135,10 +150,12 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     NSMutableSet *ohmlets = [NSMutableSet setWithCapacity:[ohhmletDefinitions count]];
     for (NSDictionary *ohmletDefinition in ohhmletDefinitions) {
-        OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
-        // todo: get detailed ohmlet def from server?
-        [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
-        [ohmlets addObject:ohmlet];
+        if ([[ohmletDefinition surveyDefinitions] count]) { //todo: handle multiple ohmlets
+            OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
+            // todo: get detailed ohmlet def from server?
+            [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
+            [ohmlets addObject:ohmlet];
+        }
     }
     self.user.ohmlets = ohmlets;
 }
@@ -158,7 +175,6 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (void)loadSurveyFromServer:(OHMSurvey *)survey
 {
-    NSLog(@"load survey from survey");
     [self getRequest:[survey definitionRequestUrlString] withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
         if (error) {
             NSLog(@"Error updating survey: %@", [error localizedDescription]);
@@ -219,7 +235,6 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
                 NSAssert(0, @"Can't parse value for choice: %@", choiceDefinition);
                 break;
         }
-        NSLog(@"Created choice: %@", [promptChoice description]);
     }
 }
 
@@ -281,7 +296,27 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 }
 
 
-#pragma mark - Core Data
+#pragma mark - Core Data (public)
+
+- (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey
+{
+    OHMSurveyResponse *response = [self insertNewSurveyResponse];
+    response.survey = survey;
+    
+    for (OHMSurveyItem *item in survey.surveyItems) {
+        if (item.itemTypeValue != OHMSurveyItemTypeMessage) {
+            OHMSurveyPromptResponse *promptResponse = [self insertNewSurveyPromptResponse];
+            promptResponse.surveyItem = item;
+            promptResponse.surveyResponse = response;
+        }
+    }
+    
+    return response;
+}
+
+
+
+#pragma mark - Core Data (private)
 
 - (OHMUser *)userWithOhmID:(NSString *)ohmID
 {
@@ -290,6 +325,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (OHMOhmlet *)ohmletWithOhmID:(NSString *)ohmID
 {
+    NSLog(@"OHMLET WITH ID: %@", ohmID);
     return (OHMOhmlet *)[self fetchOrInsertObjectForEntityName:[OHMOhmlet entityName] withUniqueOhmID:ohmID];
 }
 
@@ -308,6 +344,16 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     return newItem;
 }
 
+- (OHMSurveyResponse *)insertNewSurveyResponse
+{
+    return (OHMSurveyResponse *)[self insertNewObjectForEntityForName:[OHMSurveyResponse entityName]];
+}
+
+- (OHMSurveyPromptResponse *)insertNewSurveyPromptResponse
+{
+    return (OHMSurveyPromptResponse *)[self insertNewObjectForEntityForName:[OHMSurveyPromptResponse entityName]];
+}
+
 - (OHMObject *)fetchOrInsertObjectForEntityName:(NSString *)entityName withUniqueOhmID:(NSString *)ohmID
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmID == %@", ohmID];
@@ -318,7 +364,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (NSManagedObject *)fetchOrInsertObjectForEntityName:(NSString *)entityName withUniquePredicate:(NSPredicate *)predicate
 {
-    NSLog(@"fetch or insert entity: %@ with predicate: %@", entityName, [predicate debugDescription]);
+//    NSLog(@"fetch or insert entity: %@ with predicate: %@", entityName, [predicate debugDescription]);
     NSArray *results = [self allObjectsWithEntityName:entityName sortKey:nil predicate:predicate ascending:NO];
     
     if ([results count]) {
@@ -330,27 +376,6 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         return [self insertNewObjectForEntityForName:entityName];
     }
 }
-
-//- (NSManagedObject *)fetchOrInsertObjectForEntityForName:(NSString *)entityName matchingValues:(NSDictionary *)values
-//{
-//    
-//}
-
-//- (NSManagedObject *)insertNewObjectForEntityForName:(NSString *)entityName
-//{
-//    NSManagedObject *object = [NSEntityDescription insertNewObjectForEntityForName:entityName
-//                                                            inManagedObjectContext:self.managedObjectContext];
-//    return object;
-//}
-
-//- (NSManagedObject *)fetchObjectForEntityForName:(NSString *)entityName matchingValues:(NSDictionary *)valuesDictionary
-//{
-//    NSMutableArray *predicates = [NSMutableArray arrayWithCapacity:[valuesDictionary count]];
-//    [valuesDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-//        [object setValue:[valuesDictionary valueForKey:key] forKey:key];
-//    }];
-//    
-//}
 
 /**
  *  insertNewObjectForEntityForName:withValues
@@ -406,6 +431,44 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }
     
     return fetchedObjects;
+}
+
+/**
+ *  fetchedResultsControllerWithEntityName:sortKey:cacheName
+ */
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+                                                               sortKey:(NSString *)sortKey
+                                                             predicate:(NSPredicate *)predicate
+                                                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                                                             cacheName:(NSString *)cacheName {
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+    NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setSortDescriptors:descriptors];
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Build a fetch results controller based on the above fetch request.
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:self.managedObjectContext
+                                                                                                 sectionNameKeyPath:sectionNameKeyPath
+                                                                                                          cacheName:cacheName];
+    
+    
+    NSError *error = nil;
+    BOOL success = [fetchedResultsController performFetch:&error];
+    if (success == NO) {
+        // Not sure if we should return the 'dead' controller or just return 'nil'...
+        // [fetchedResultsController setDelegate:nil];
+        // [fetchedResultsController release];
+        // fetchedResultsController = nil;
+    }
+    
+    return fetchedResultsController;
 }
 
 /**

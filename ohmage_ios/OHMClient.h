@@ -9,10 +9,16 @@
 #import "AFHTTPSessionManager.h"
 
 @class OHMOhmlet;
+@class OHMSurvey;
+@class OHMSurveyResponse;
+
+@protocol OHMClientDelegate;
 
 @interface OHMClient : AFHTTPSessionManager
 
 + (OHMClient*)sharedClient;
+
+@property (nonatomic, weak) id<OHMClientDelegate> delegate;
 
 // HTTP
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
@@ -21,8 +27,17 @@
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;
 
 // Model
-//- (NSArray *)ohmlets;
+- (NSSet *)ohmlets;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 //- (NSInteger)surveyCount;
+
+// Core Data
+- (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
+
+@end
+
+@protocol OHMClientDelegate <NSObject>
+
+- (void)OHMClientDidUpdate:(OHMClient *)client;
 
 @end

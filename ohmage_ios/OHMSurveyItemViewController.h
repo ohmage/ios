@@ -15,6 +15,7 @@
 + (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
 
 @property (nonatomic, strong) OHMSurveyResponse *surveyResponse;
+@property (nonatomic) NSInteger itemIndex;
 
 - (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
 

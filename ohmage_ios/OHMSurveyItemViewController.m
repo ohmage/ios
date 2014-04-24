@@ -7,11 +7,18 @@
 //
 
 #import "OHMSurveyItemViewController.h"
+#import "OHMSurvey.h"
+#import "OHMSurveyResponse.h"
+#import "OHMSurveyPromptResponse.h"
+#import "OHMSurveyItem.h"
 
 @interface OHMSurveyItemViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *skipButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
+
+@property (nonatomic, strong) OHMSurveyItem *item;
 
 @end
 
@@ -27,6 +34,7 @@
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.surveyResponse = response;
+        self.itemIndex = index;
     }
     return self;
 }
@@ -34,7 +42,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, [self.surveyResponse.survey.surveyItems count]];
+    
+    self.item = self.surveyResponse.survey.surveyItems[self.itemIndex];
+    self.textLabel.text = self.item.text;
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,9 +57,30 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)cancelButtonPressed:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (IBAction)backButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)skipButtonPressed:(id)sender {
+    [self pushNextItemViewController];
 }
 - (IBAction)nextButtonPressed:(id)sender {
+    [self pushNextItemViewController];
+}
+
+- (void)pushNextItemViewController
+{
+    NSInteger nextIndex = self.itemIndex + 1;
+    if (nextIndex < [self.surveyResponse.survey.surveyItems count]) {
+        OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:self.itemIndex+1];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 @end

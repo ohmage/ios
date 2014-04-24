@@ -133,7 +133,6 @@
 {
     id response = [self nonNullValueForKey:@"default_response"];
     if (response) {
-        NSLog(@"DEFAULT CHOICE VALUES: %@", response);
         if ([[response class] isSubclassOfClass:[NSArray class]]) {
             return response;
         }

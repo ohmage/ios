@@ -67,7 +67,7 @@
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="328"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="118"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="90"/>
-        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="75"/>
+        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="73"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="118"/>
     </elements>
 </model>
