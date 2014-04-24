@@ -81,10 +81,10 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 @dynamic ohmlets;
 
 	
-- (NSMutableSet*)ohmletsSet {
+- (NSMutableOrderedSet*)ohmletsSet {
 	[self willAccessValueForKey:@"ohmlets"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"ohmlets"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"ohmlets"];
   
 	[self didAccessValueForKey:@"ohmlets"];
 	return result;

@@ -20,6 +20,8 @@
 
 @property (nonatomic, weak) id<OHMClientDelegate> delegate;
 
+- (void)saveClientState;
+
 // HTTP
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
 - (void)setAuthorizationToken:(NSString *)token;
@@ -27,7 +29,7 @@
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;
 
 // Model
-- (NSSet *)ohmlets;
+- (NSOrderedSet *)ohmlets;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 //- (NSInteger)surveyCount;
 

@@ -36,9 +36,26 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.title = @"Survey Detail";
+    
+    self.takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
+    
     self.nameLabel.text = self.survey.surveyName;
     self.descriptionLabel.text = self.survey.surveyDescription;
     self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.surveyItems count]];
+    
+//    self.view.backgroundColor = [OHMAppConstants lightColorForRowIndex:self.survey.colorIndex];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{
+                                                                      NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                      NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
+    self.navigationController.navigationBar.barTintColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
 }
 
 - (void)didReceiveMemoryWarning

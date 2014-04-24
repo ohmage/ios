@@ -11,7 +11,6 @@ const struct OHMSurveyPromptChoiceAttributes OHMSurveyPromptChoiceAttributes = {
 };
 
 const struct OHMSurveyPromptChoiceRelationships OHMSurveyPromptChoiceRelationships = {
-	.survetItemWithDefaults = @"survetItemWithDefaults",
 	.surveyItem = @"surveyItem",
 };
 
@@ -126,10 +125,6 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 
 
 
-
-@dynamic survetItemWithDefaults;
-
-	
 
 @dynamic surveyItem;
 

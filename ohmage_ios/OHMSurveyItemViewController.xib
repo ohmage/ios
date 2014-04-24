@@ -10,6 +10,7 @@
                 <outlet property="nextButton" destination="Vgy-9e-CaZ" id="k7e-fR-mTq"/>
                 <outlet property="skipButton" destination="iek-Ha-JC8" id="j1w-eJ-KbL"/>
                 <outlet property="textLabel" destination="3MI-Oc-76H" id="oHZ-aY-bSo"/>
+                <outlet property="toolbar" destination="NUu-Cy-sCX" id="NjV-Mm-dhM"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

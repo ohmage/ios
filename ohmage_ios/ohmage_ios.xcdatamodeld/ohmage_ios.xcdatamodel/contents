@@ -59,7 +59,7 @@
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="ohmID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="ohmlets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMOhmlet" inverseName="user" inverseEntity="OHMOhmlet" syncable="YES"/>
+        <relationship name="ohmlets" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="OHMOhmlet" inverseName="user" inverseEntity="OHMOhmlet" syncable="YES"/>
     </entity>
     <elements>
         <element name="OHMOhmlet" positionX="52" positionY="-207" width="128" height="118"/>

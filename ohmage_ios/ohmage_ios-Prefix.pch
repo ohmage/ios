@@ -13,7 +13,9 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "OHMAppConstants.h"
     #import "OHMObject.h"
     #import "OHMClient.h"
     #import "NSDictionary+Ohmage.h"
+    #import "UIView+AutoLayoutHelpers.h"
 #endif

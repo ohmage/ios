@@ -78,9 +78,9 @@ extern const struct OHMUserFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *ohmlets;
+@property (nonatomic, strong) NSOrderedSet *ohmlets;
 
-- (NSMutableSet*)ohmletsSet;
+- (NSMutableOrderedSet*)ohmletsSet;
 
 
 
@@ -90,8 +90,8 @@ extern const struct OHMUserFetchedProperties {
 
 @interface _OHMUser (CoreDataGeneratedAccessors)
 
-- (void)addOhmlets:(NSSet*)value_;
-- (void)removeOhmlets:(NSSet*)value_;
+- (void)addOhmlets:(NSOrderedSet*)value_;
+- (void)removeOhmlets:(NSOrderedSet*)value_;
 - (void)addOhmletsObject:(OHMOhmlet*)value_;
 - (void)removeOhmletsObject:(OHMOhmlet*)value_;
 
@@ -125,8 +125,8 @@ extern const struct OHMUserFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveOhmlets;
-- (void)setPrimitiveOhmlets:(NSMutableSet*)value;
+- (NSMutableOrderedSet*)primitiveOhmlets;
+- (void)setPrimitiveOhmlets:(NSMutableOrderedSet*)value;
 
 
 @end

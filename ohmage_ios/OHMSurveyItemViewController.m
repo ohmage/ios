@@ -14,6 +14,7 @@
 
 @interface OHMSurveyItemViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *skipButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
@@ -52,10 +53,18 @@
     self.navigationItem.leftBarButtonItem = cancelButton;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{
+                                                                      NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                      NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
+    UIColor *color = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    self.navigationController.navigationBar.barTintColor = color;
+    self.toolbar.barTintColor = color;
+    self.toolbar.tintColor = [UIColor whiteColor];
 }
 
 - (void)cancelButtonPressed:(id)sender

@@ -10,4 +10,6 @@
 
 @interface OHMSurveysViewController : UITableViewController
 
+- (instancetype)initWithOhmletIndex:(NSInteger)ohmletIndex;
+
 @end

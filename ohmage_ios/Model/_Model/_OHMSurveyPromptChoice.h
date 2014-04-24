@@ -12,14 +12,12 @@ extern const struct OHMSurveyPromptChoiceAttributes {
 } OHMSurveyPromptChoiceAttributes;
 
 extern const struct OHMSurveyPromptChoiceRelationships {
-	__unsafe_unretained NSString *survetItemWithDefaults;
 	__unsafe_unretained NSString *surveyItem;
 } OHMSurveyPromptChoiceRelationships;
 
 extern const struct OHMSurveyPromptChoiceFetchedProperties {
 } OHMSurveyPromptChoiceFetchedProperties;
 
-@class OHMSurveyItem;
 @class OHMSurveyItem;
 
 
@@ -88,13 +86,6 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 
 
 
-@property (nonatomic, strong) OHMSurveyItem *survetItemWithDefaults;
-
-//- (BOOL)validateSurvetItemWithDefaults:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, strong) OHMSurveyItem *surveyItem;
 
 //- (BOOL)validateSurveyItem:(id*)value_ error:(NSError**)error_;
@@ -140,11 +131,6 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 - (void)setPrimitiveText:(NSString*)value;
 
 
-
-
-
-- (OHMSurveyItem*)primitiveSurvetItemWithDefaults;
-- (void)setPrimitiveSurvetItemWithDefaults:(OHMSurveyItem*)value;
 
 
 

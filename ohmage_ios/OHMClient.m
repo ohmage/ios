@@ -63,7 +63,12 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     return self;
 }
 
-- (NSSet *)ohmlets
+- (void)saveClientState
+{
+    [self saveManagedContext];
+}
+
+- (NSOrderedSet *)ohmlets
 {
     return self.user.ohmlets;
 }
@@ -142,22 +147,35 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
               [self refreshOhmlets:[response ohmlets]];
               
               [self.delegate OHMClientDidUpdate:self];
+              [self saveClientState];
           }
       }];
 }
 
 - (void)refreshOhmlets:(NSArray *)ohhmletDefinitions
 {
-    NSMutableSet *ohmlets = [NSMutableSet setWithCapacity:[ohhmletDefinitions count]];
+    NSMutableOrderedSet *ohmlets = [NSMutableOrderedSet orderedSetWithCapacity:[ohhmletDefinitions count]];
     for (NSDictionary *ohmletDefinition in ohhmletDefinitions) {
-        if ([[ohmletDefinition surveyDefinitions] count]) { //todo: handle multiple ohmlets
-            OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
-            // todo: get detailed ohmlet def from server?
-            [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
-            [ohmlets addObject:ohmlet];
-        }
+        OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
+        [self refreshOhmletInfo:ohmlet];
+        [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
+        [ohmlets addObject:ohmlet];
     }
     self.user.ohmlets = ohmlets;
+}
+
+- (void)refreshOhmletInfo:(OHMOhmlet *)ohmlet
+{
+    [self getRequest:[ohmlet definitionRequestUrlString] withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error updating ohmlet: %@", [error localizedDescription]);
+        }
+        else {
+            NSLog(@"got ohmlet: %@, id: %@", [response ohmletName], [response ohmletID]);
+            ohmlet.ohmletName = [response ohmletName];
+            ohmlet.ohmletDescription = [response ohmletDescription];
+        }
+    }];
 }
 
 - (void)refreshSurveys:(NSArray *)surveyDefinitions forOhmlet:(OHMOhmlet *)ohmlet
@@ -369,7 +387,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     
     if ([results count]) {
         NSAssert([results count] == 1, @"More than one object with predicate: %@", [predicate debugDescription]);
-        NSLog(@"Returning existing entity: %@ for predicate: %@", entityName, [predicate debugDescription]);
+//        NSLog(@"Returning existing entity: %@ for predicate: %@", entityName, [predicate debugDescription]);
         return [results firstObject];
     }
     else {
