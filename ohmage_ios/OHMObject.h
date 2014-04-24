@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "OHMHTTPClient.h"
+#import <CoreData/CoreData.h>
 
-@interface OHMObject : NSObject
+@protocol OHMObjectProtocol <NSObject>
 
-@property (nonatomic, copy) NSString *ohmId;
-@property (nonatomic, strong) OHMHTTPClient *httpClient;
+@property (nonatomic, strong) NSString *ohmID;
 
-- (void)updateFromServer;
 - (NSString *)definitionRequestUrlString;
 
+@end
+
+@interface OHMObject : NSManagedObject<OHMObjectProtocol>
 @end

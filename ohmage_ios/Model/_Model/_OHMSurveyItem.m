@@ -5,10 +5,10 @@
 
 const struct OHMSurveyItemAttributes OHMSurveyItemAttributes = {
 	.condition = @"condition",
-	.defaultResponse = @"defaultResponse",
+	.defaultNumberResponse = @"defaultNumberResponse",
+	.defaultStringResponse = @"defaultStringResponse",
 	.displayLabel = @"displayLabel",
 	.displayType = @"displayType",
-	.itemId = @"itemId",
 	.itemType = @"itemType",
 	.max = @"max",
 	.maxChoices = @"maxChoices",
@@ -16,6 +16,7 @@ const struct OHMSurveyItemAttributes OHMSurveyItemAttributes = {
 	.maxDuration = @"maxDuration",
 	.min = @"min",
 	.minChoices = @"minChoices",
+	.ohmID = @"ohmID",
 	.skippable = @"skippable",
 	.text = @"text",
 	.wholeNumbersOnly = @"wholeNumbersOnly",
@@ -56,8 +57,43 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"defaultNumberResponseValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"defaultNumberResponse"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"itemTypeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"itemType"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"maxValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"max"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"maxChoicesValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"maxChoices"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"maxDimensionValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"maxDimension"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"maxDurationValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"maxDuration"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"minValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"min"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"minChoicesValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"minChoices"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -85,7 +121,33 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
-@dynamic defaultResponse;
+@dynamic defaultNumberResponse;
+
+
+
+- (double)defaultNumberResponseValue {
+	NSNumber *result = [self defaultNumberResponse];
+	return [result doubleValue];
+}
+
+- (void)setDefaultNumberResponseValue:(double)value_ {
+	[self setDefaultNumberResponse:[NSNumber numberWithDouble:value_]];
+}
+
+- (double)primitiveDefaultNumberResponseValue {
+	NSNumber *result = [self primitiveDefaultNumberResponse];
+	return [result doubleValue];
+}
+
+- (void)setPrimitiveDefaultNumberResponseValue:(double)value_ {
+	[self setPrimitiveDefaultNumberResponse:[NSNumber numberWithDouble:value_]];
+}
+
+
+
+
+
+@dynamic defaultStringResponse;
 
 
 
@@ -100,13 +162,6 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 @dynamic displayType;
-
-
-
-
-
-
-@dynamic itemId;
 
 
 
@@ -143,11 +198,49 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
+- (int16_t)maxValue {
+	NSNumber *result = [self max];
+	return [result shortValue];
+}
+
+- (void)setMaxValue:(int16_t)value_ {
+	[self setMax:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveMaxValue {
+	NSNumber *result = [self primitiveMax];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveMaxValue:(int16_t)value_ {
+	[self setPrimitiveMax:[NSNumber numberWithShort:value_]];
+}
+
+
 
 
 
 @dynamic maxChoices;
 
+
+
+- (int16_t)maxChoicesValue {
+	NSNumber *result = [self maxChoices];
+	return [result shortValue];
+}
+
+- (void)setMaxChoicesValue:(int16_t)value_ {
+	[self setMaxChoices:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveMaxChoicesValue {
+	NSNumber *result = [self primitiveMaxChoices];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveMaxChoicesValue:(int16_t)value_ {
+	[self setPrimitiveMaxChoices:[NSNumber numberWithShort:value_]];
+}
 
 
 
@@ -157,11 +250,49 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
+- (int32_t)maxDimensionValue {
+	NSNumber *result = [self maxDimension];
+	return [result intValue];
+}
+
+- (void)setMaxDimensionValue:(int32_t)value_ {
+	[self setMaxDimension:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveMaxDimensionValue {
+	NSNumber *result = [self primitiveMaxDimension];
+	return [result intValue];
+}
+
+- (void)setPrimitiveMaxDimensionValue:(int32_t)value_ {
+	[self setPrimitiveMaxDimension:[NSNumber numberWithInt:value_]];
+}
+
+
 
 
 
 @dynamic maxDuration;
 
+
+
+- (int32_t)maxDurationValue {
+	NSNumber *result = [self maxDuration];
+	return [result intValue];
+}
+
+- (void)setMaxDurationValue:(int32_t)value_ {
+	[self setMaxDuration:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveMaxDurationValue {
+	NSNumber *result = [self primitiveMaxDuration];
+	return [result intValue];
+}
+
+- (void)setPrimitiveMaxDurationValue:(int32_t)value_ {
+	[self setPrimitiveMaxDuration:[NSNumber numberWithInt:value_]];
+}
 
 
 
@@ -171,10 +302,55 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
+- (int16_t)minValue {
+	NSNumber *result = [self min];
+	return [result shortValue];
+}
+
+- (void)setMinValue:(int16_t)value_ {
+	[self setMin:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveMinValue {
+	NSNumber *result = [self primitiveMin];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveMinValue:(int16_t)value_ {
+	[self setPrimitiveMin:[NSNumber numberWithShort:value_]];
+}
+
+
 
 
 
 @dynamic minChoices;
+
+
+
+- (int16_t)minChoicesValue {
+	NSNumber *result = [self minChoices];
+	return [result shortValue];
+}
+
+- (void)setMinChoicesValue:(int16_t)value_ {
+	[self setMinChoices:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveMinChoicesValue {
+	NSNumber *result = [self primitiveMinChoices];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveMinChoicesValue:(int16_t)value_ {
+	[self setPrimitiveMinChoices:[NSNumber numberWithShort:value_]];
+}
+
+
+
+
+
+@dynamic ohmID;
 
 
 
@@ -242,6 +418,15 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 @dynamic choices;
 
+	
+- (NSMutableOrderedSet*)choicesSet {
+	[self willAccessValueForKey:@"choices"];
+  
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"choices"];
+  
+	[self didAccessValueForKey:@"choices"];
+	return result;
+}
 	
 
 @dynamic responses;

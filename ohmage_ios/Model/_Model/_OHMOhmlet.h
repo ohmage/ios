@@ -2,11 +2,11 @@
 // Make changes to OHMOhmlet.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMOhmletAttributes {
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *ohmletDescription;
-	__unsafe_unretained NSString *ohmletId;
 	__unsafe_unretained NSString *ohmletName;
 } OHMOhmletAttributes;
 
@@ -28,11 +28,21 @@ extern const struct OHMOhmletFetchedProperties {
 @interface OHMOhmletID : NSManagedObjectID {}
 @end
 
-@interface _OHMOhmlet : NSManagedObject {}
+@interface _OHMOhmlet : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMOhmletID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -43,16 +53,6 @@ extern const struct OHMOhmletFetchedProperties {
 
 
 //- (BOOL)validateOhmletDescription:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* ohmletId;
-
-
-
-//- (BOOL)validateOhmletId:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -97,14 +97,14 @@ extern const struct OHMOhmletFetchedProperties {
 @interface _OHMOhmlet (CoreDataGeneratedPrimitiveAccessors)
 
 
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
+
+
+
+
 - (NSString*)primitiveOhmletDescription;
 - (void)setPrimitiveOhmletDescription:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveOhmletId;
-- (void)setPrimitiveOhmletId:(NSString*)value;
 
 
 

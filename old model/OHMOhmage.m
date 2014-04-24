@@ -7,11 +7,12 @@
 //
 
 #import "OHMOhmage.h"
+#import "OHMClient.h"
 #import "OHMUser.h"
 
 @interface OHMOhmage ()
 
-@property (nonatomic, strong) OHMHTTPClient *httpClient;
+@property (nonatomic, strong) OHMClient *httpClient;
 
 @property (nonatomic, copy) NSString *authToken;
 @property (nonatomic, copy) NSString *refreshToken;
@@ -65,8 +66,7 @@
     self = [super init];
     
     if (self) {
-        self.httpClient = [OHMHTTPClient sharedClient];
-        self.user = [[OHMUser alloc] initWithEmail:@"cforkish@gmail.com" password:@"loudfowl98"];
+        self.httpClient = [OHMClient sharedClient];
         self.surveys = [NSMutableArray array];
     }
     
@@ -75,7 +75,7 @@
 
 
 
-- (void)login
+- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password
 {
     [self.httpClient setAuthorizationToken:nil];
     
@@ -92,9 +92,9 @@
             
             weakSelf.authToken = [response authToken];
             weakSelf.refreshToken = [response refreshToken];
-            weakSelf.user.ohmId = [response userId];
-            
             [weakSelf.httpClient setAuthorizationToken:weakSelf.authToken];
+            
+            weakSelf.user = [OHMUser userWithId:([response userId])];
             
             [weakSelf refreshUserInfo];
         }

@@ -2,7 +2,7 @@
 // Make changes to OHMSurveyResponse.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMSurveyResponseAttributes {
 } OHMSurveyResponseAttributes;
@@ -22,7 +22,7 @@ extern const struct OHMSurveyResponseFetchedProperties {
 @interface OHMSurveyResponseID : NSManagedObjectID {}
 @end
 
-@interface _OHMSurveyResponse : NSManagedObject {}
+@interface _OHMSurveyResponse : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;

@@ -6,8 +6,8 @@
 const struct OHMUserAttributes OHMUserAttributes = {
 	.email = @"email",
 	.fullName = @"fullName",
+	.ohmID = @"ohmID",
 	.password = @"password",
-	.userId = @"userId",
 };
 
 const struct OHMUserRelationships OHMUserRelationships = {
@@ -64,14 +64,14 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 
 
 
+@dynamic ohmID;
+
+
+
+
+
+
 @dynamic password;
-
-
-
-
-
-
-@dynamic userId;
 
 
 

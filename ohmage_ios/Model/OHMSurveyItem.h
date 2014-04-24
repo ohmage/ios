@@ -2,6 +2,8 @@
 
 @interface OHMSurveyItem : _OHMSurveyItem
 
-+ (instancetype)itemWithDefinition:(NSDictionary *)itemDefinition;
+- (void)setValuesFromDefinition:(NSDictionary *)definition;
+
+//+ (instancetype)itemWithDefinition:(NSDictionary *)itemDefinition;
 
 @end

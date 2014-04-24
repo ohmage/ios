@@ -18,7 +18,7 @@
 
 + (OHMOhmage*)sharedOhmage;
 
-- (void)login;
+- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
 - (NSArray *)ohmlets;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 - (NSInteger)surveyCount;

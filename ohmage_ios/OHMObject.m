@@ -10,17 +10,4 @@
 
 @implementation OHMObject
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.httpClient = [OHMHTTPClient sharedClient];
-    }
-    return self;
-}
-
-- (void)updateFromServer {}
-
-- (NSString*)definitionRequestUrlString { return nil; }
-
 @end

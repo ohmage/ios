@@ -1,5 +1,6 @@
 #import "_OHMUser.h"
 
-@interface OHMUser : _OHMUser {}
-// Custom logic goes here.
+@interface OHMUser : _OHMUser
+
+
 @end

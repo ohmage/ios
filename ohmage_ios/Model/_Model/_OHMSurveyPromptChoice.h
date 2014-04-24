@@ -2,14 +2,17 @@
 // Make changes to OHMSurveyPromptChoice.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMSurveyPromptChoiceAttributes {
+	__unsafe_unretained NSString *isDefault;
+	__unsafe_unretained NSString *numberValue;
+	__unsafe_unretained NSString *stringValue;
 	__unsafe_unretained NSString *text;
-	__unsafe_unretained NSString *value;
 } OHMSurveyPromptChoiceAttributes;
 
 extern const struct OHMSurveyPromptChoiceRelationships {
+	__unsafe_unretained NSString *survetItemWithDefaults;
 	__unsafe_unretained NSString *surveyItem;
 } OHMSurveyPromptChoiceRelationships;
 
@@ -17,6 +20,9 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 } OHMSurveyPromptChoiceFetchedProperties;
 
 @class OHMSurveyItem;
+@class OHMSurveyItem;
+
+
 
 
 
@@ -24,11 +30,49 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 @interface OHMSurveyPromptChoiceID : NSManagedObjectID {}
 @end
 
-@interface _OHMSurveyPromptChoice : NSManagedObject {}
+@interface _OHMSurveyPromptChoice : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyPromptChoiceID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* isDefault;
+
+
+
+@property BOOL isDefaultValue;
+- (BOOL)isDefaultValue;
+- (void)setIsDefaultValue:(BOOL)value_;
+
+//- (BOOL)validateIsDefault:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* numberValue;
+
+
+
+@property double numberValueValue;
+- (double)numberValueValue;
+- (void)setNumberValueValue:(double)value_;
+
+//- (BOOL)validateNumberValue:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* stringValue;
+
+
+
+//- (BOOL)validateStringValue:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -44,12 +88,9 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* value;
+@property (nonatomic, strong) OHMSurveyItem *survetItemWithDefaults;
 
-
-
-//- (BOOL)validateValue:(id*)value_ error:(NSError**)error_;
-
+//- (BOOL)validateSurvetItemWithDefaults:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -71,16 +112,39 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 @interface _OHMSurveyPromptChoice (CoreDataGeneratedPrimitiveAccessors)
 
 
+- (NSNumber*)primitiveIsDefault;
+- (void)setPrimitiveIsDefault:(NSNumber*)value;
+
+- (BOOL)primitiveIsDefaultValue;
+- (void)setPrimitiveIsDefaultValue:(BOOL)value_;
+
+
+
+
+- (NSNumber*)primitiveNumberValue;
+- (void)setPrimitiveNumberValue:(NSNumber*)value;
+
+- (double)primitiveNumberValueValue;
+- (void)setPrimitiveNumberValueValue:(double)value_;
+
+
+
+
+- (NSString*)primitiveStringValue;
+- (void)setPrimitiveStringValue:(NSString*)value;
+
+
+
+
 - (NSString*)primitiveText;
 - (void)setPrimitiveText:(NSString*)value;
 
 
 
 
-- (NSString*)primitiveValue;
-- (void)setPrimitiveValue:(NSString*)value;
 
-
+- (OHMSurveyItem*)primitiveSurvetItemWithDefaults;
+- (void)setPrimitiveSurvetItemWithDefaults:(OHMSurveyItem*)value;
 
 
 

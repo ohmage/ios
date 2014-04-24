@@ -12,37 +12,43 @@
 
 - (NSString *)authToken;
 - (NSString *)refreshToken;
-- (NSString *)userId;
+- (NSString *)userID;
 - (NSString *)userFullName;
 
 - (NSArray *)ohmlets;
-- (NSString *)ohmletId;
+- (NSString *)ohmletID;
 - (NSString *)ohmletName;
 - (NSString *)ohmletDescription;
 
 - (NSArray *)surveyDefinitions;
-- (NSString *)surveyId;
+- (NSString *)surveyID;
 - (NSInteger)surveyVersion;
 - (NSString *)surveyName;
 - (NSString *)surveyDescription;
 - (NSArray *)surveyItems;
 
 - (NSString *)surveyItemTypeKey;
-- (NSString *)surveyItemId;
+- (NSString *)surveyItemID;
 - (NSString *)surveyItemCondition;
 - (NSString *)surveyItemText;
-- (NSString *)surveyItemDefaultResponse;
+- (NSString *)surveyItemDefaultStringResponse;
+- (NSNumber *)surveyItemDefaultNumberResponse;
+- (NSArray *)surveyItemDefaultChoiceValues;
 - (NSString *)surveyItemDisplayType;
 - (NSString *)surveyItemDisplayLabel;
-- (NSString *)surveyItemMin;
-- (NSString *)surveyItemMax;
-- (NSString *)surveyItemMinChoices;
-- (NSString *)surveyItemMaxChoices;
-- (NSString *)surveyItemMaxDimension;
-- (NSString *)surveyItemMaxDuration;
+- (NSNumber *)surveyItemMin;
+- (NSNumber *)surveyItemMax;
+- (NSNumber *)surveyItemMinChoices;
+- (NSNumber *)surveyItemMaxChoices;
+- (NSNumber *)surveyItemMaxDimension;
+- (NSNumber *)surveyItemMaxDuration;
 - (NSArray *)surveyItemChoices;
-- (BOOL)surveyItemIsSkippable;
-- (BOOL)surveyItemWholeNumbersOnly;
+- (NSNumber *)surveyItemIsSkippable;
+- (NSNumber *)surveyItemWholeNumbersOnly;
+
+- (NSString *)surveyPromptChoiceText;
+- (NSString *)surveyPromptChoiceStringValue;
+- (NSNumber *)surveyPromptChoiceNumberValue;
 
 
 @end

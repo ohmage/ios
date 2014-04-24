@@ -42,13 +42,5 @@
     return detailSize.height;
 }
 
-#pragma mark - Survey Delegate
-
-- (void)OHMSurveDidUpdate:(OHMSurvey *)survey
-{
-//    self.textLabel.text = survey.surveyName;
-//    self.detailTextLabel.text = survey.surveyDescription;
-//    [self setNeedsDisplay];
-}
 
 @end

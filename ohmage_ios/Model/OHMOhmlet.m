@@ -10,87 +10,9 @@
 
 @implementation OHMOhmlet
 
-
-
 - (NSString *)definitionRequestUrlString
 {
-    return [@"ohmlets/" stringByAppendingString:self.ohmletId];
+    return [@"ohmlets/" stringByAppendingString:self.ohmID];
 }
-
-- (void)updateFromServer
-{
-    __weak OHMOhmlet *weakSelf = self;
-    
-    [self.httpClient getRequest:[self definitionRequestUrlString] withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
-        if (error) {
-            NSLog(@"Error updating Ohmlet: %@", [error localizedDescription]);
-        }
-        else {
-            weakSelf.ohmletName = [response ohmletName];
-            weakSelf.ohmletDescription = [response ohmletDescription];
-            [weakSelf refreshSurveys:[response surveyDefinitions]];
-        }
-    }];
-}
-
-- (NSArray *)allSurveys
-{
-    return [self.surveys copy];
-}
-
-- (NSInteger)surveyCount
-{
-    return [self.surveys count];
-}
-
-- (void)refreshSurveys:(NSArray *)surveyDefinitions
-{
-    NSMutableArray *toCreate = [surveyDefinitions mutableCopy];
-    NSMutableArray *toUpdate = [NSMutableArray array];
-    NSMutableArray *toRemove = [NSMutableArray array];
-    
-    for (OHMSurvey *survey in self.surveys) {
-        
-        NSUInteger existingIndex = [surveyDefinitions indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            return [survey.ohmId isEqualToString:[(NSDictionary *)obj surveyId]];
-        }];
-        
-        if (existingIndex != NSNotFound) {
-            NSDictionary *existingDescription = [surveyDefinitions objectAtIndex:existingIndex];
-            if (survey.surveyVersion < [existingDescription surveyVersion]) {
-                [toUpdate addObject:survey];
-            }
-            else {
-                [toCreate removeObject:existingDescription];
-            }
-        }
-        else {
-            [toRemove addObject:survey];
-        }
-    }
-    
-    [self.surveys removeObjectsInArray:toRemove];
-    [self createSurveys:toCreate];
-    [self updateSurveys:toUpdate];
-    
-    if ([self.delegate respondsToSelector:@selector(OHMOhmletDidRefreshSurveys:)]) {
-        [self.delegate OHMOhmletDidRefreshSurveys:self];
-    }
-}
-
-- (void)createSurveys:(NSArray *)surveyDefinitions
-{
-    for (NSDictionary *surveyDefinition in surveyDefinitions) {
-        [self.surveys addObject:[OHMSurvey loadFromServerWithDefinition:surveyDefinition]];
-    }
-}
-
-- (void)updateSurveys:(NSArray *)staleSurveys
-{
-    for (OHMSurvey *survey in staleSurveys) {
-        [survey updateFromServer];
-    }
-}
-
 
 @end

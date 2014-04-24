@@ -2,13 +2,13 @@
 // Make changes to OHMUser.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMUserAttributes {
 	__unsafe_unretained NSString *email;
 	__unsafe_unretained NSString *fullName;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *password;
-	__unsafe_unretained NSString *userId;
 } OHMUserAttributes;
 
 extern const struct OHMUserRelationships {
@@ -28,7 +28,7 @@ extern const struct OHMUserFetchedProperties {
 @interface OHMUserID : NSManagedObjectID {}
 @end
 
-@interface _OHMUser : NSManagedObject {}
+@interface _OHMUser : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -58,21 +58,21 @@ extern const struct OHMUserFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSString* password;
 
 
 
 //- (BOOL)validatePassword:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* userId;
-
-
-
-//- (BOOL)validateUserId:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -112,14 +112,14 @@ extern const struct OHMUserFetchedProperties {
 
 
 
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
+
+
+
+
 - (NSString*)primitivePassword;
 - (void)setPrimitivePassword:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveUserId;
-- (void)setPrimitiveUserId:(NSString*)value;
 
 
 

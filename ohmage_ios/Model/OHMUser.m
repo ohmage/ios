@@ -1,6 +1,5 @@
 #import "OHMUser.h"
 
-
 @interface OHMUser ()
 
 // Private interface goes here.
@@ -10,6 +9,9 @@
 
 @implementation OHMUser
 
-// Custom logic goes here.
+- (NSString *)definitionRequestUrlString
+{
+    return [NSString stringWithFormat:@"people/%@/current", self.ohmID];
+}
 
 @end

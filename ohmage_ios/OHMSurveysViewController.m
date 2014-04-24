@@ -8,13 +8,13 @@
 
 #import "OHMSurveysViewController.h"
 #import "OHMSurveyTableViewCell.h"
-#import "OHMOhmage.h"
+#import "OHMClient.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyDetailViewController.h"
 
-@interface OHMSurveysViewController () <OHMOhmageDelegate>
+@interface OHMSurveysViewController ()
 
-@property (nonatomic, strong) OHMOhmage *ohmage;
+@property (nonatomic, strong) OHMClient *client;
 @property (nonatomic, strong) NSArray *surveys;
 
 @end
@@ -61,8 +61,7 @@
 {
     [super viewDidLoad];
     
-    self.ohmage = [OHMOhmage sharedOhmage];
-    self.ohmage.delegate = self;
+    self.client = [OHMClient sharedClient];
     
     [self.tableView registerClass:[OHMSurveyTableViewCell class]
            forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
@@ -81,7 +80,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.ohmage surveyCount];
+    return [self.surveys count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -167,14 +166,5 @@
     // Pass the selected object to the new view controller.
 }
 */
-
-
-#pragma mark - Ohmage Delegate
-
-- (void)OHMOhmage:(OHMOhmage *)ohmage didRefreshSurveys:(NSArray *)surveys
-{
-    self.surveys = surveys;
-    [self.tableView reloadData];
-}
 
 @end

@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OHMOhmage.h"
 
 
-@interface OHMSurveyTableViewCell : UITableViewCell <OHMSurveyDelegate>
+@interface OHMSurveyTableViewCell : UITableViewCell
 
 - (CGFloat)cellHeight;
 

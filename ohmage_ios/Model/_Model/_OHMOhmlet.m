@@ -4,8 +4,8 @@
 #import "_OHMOhmlet.h"
 
 const struct OHMOhmletAttributes OHMOhmletAttributes = {
+	.ohmID = @"ohmID",
 	.ohmletDescription = @"ohmletDescription",
-	.ohmletId = @"ohmletId",
 	.ohmletName = @"ohmletName",
 };
 
@@ -50,14 +50,14 @@ const struct OHMOhmletFetchedProperties OHMOhmletFetchedProperties = {
 
 
 
+@dynamic ohmID;
+
+
+
+
+
+
 @dynamic ohmletDescription;
-
-
-
-
-
-
-@dynamic ohmletId;
 
 
 

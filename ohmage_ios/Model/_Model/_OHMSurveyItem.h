@@ -2,14 +2,14 @@
 // Make changes to OHMSurveyItem.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMSurveyItemAttributes {
 	__unsafe_unretained NSString *condition;
-	__unsafe_unretained NSString *defaultResponse;
+	__unsafe_unretained NSString *defaultNumberResponse;
+	__unsafe_unretained NSString *defaultStringResponse;
 	__unsafe_unretained NSString *displayLabel;
 	__unsafe_unretained NSString *displayType;
-	__unsafe_unretained NSString *itemId;
 	__unsafe_unretained NSString *itemType;
 	__unsafe_unretained NSString *max;
 	__unsafe_unretained NSString *maxChoices;
@@ -17,6 +17,7 @@ extern const struct OHMSurveyItemAttributes {
 	__unsafe_unretained NSString *maxDuration;
 	__unsafe_unretained NSString *min;
 	__unsafe_unretained NSString *minChoices;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *skippable;
 	__unsafe_unretained NSString *text;
 	__unsafe_unretained NSString *wholeNumbersOnly;
@@ -51,10 +52,11 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
+
 @interface OHMSurveyItemID : NSManagedObjectID {}
 @end
 
-@interface _OHMSurveyItem : NSManagedObject {}
+@interface _OHMSurveyItem : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -74,11 +76,25 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* defaultResponse;
+@property (nonatomic, strong) NSNumber* defaultNumberResponse;
 
 
 
-//- (BOOL)validateDefaultResponse:(id*)value_ error:(NSError**)error_;
+@property double defaultNumberResponseValue;
+- (double)defaultNumberResponseValue;
+- (void)setDefaultNumberResponseValue:(double)value_;
+
+//- (BOOL)validateDefaultNumberResponse:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* defaultStringResponse;
+
+
+
+//- (BOOL)validateDefaultStringResponse:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -104,16 +120,6 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* itemId;
-
-
-
-//- (BOOL)validateItemId:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSNumber* itemType;
 
 
@@ -128,9 +134,13 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* max;
+@property (nonatomic, strong) NSNumber* max;
 
 
+
+@property int16_t maxValue;
+- (int16_t)maxValue;
+- (void)setMaxValue:(int16_t)value_;
 
 //- (BOOL)validateMax:(id*)value_ error:(NSError**)error_;
 
@@ -138,9 +148,13 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* maxChoices;
+@property (nonatomic, strong) NSNumber* maxChoices;
 
 
+
+@property int16_t maxChoicesValue;
+- (int16_t)maxChoicesValue;
+- (void)setMaxChoicesValue:(int16_t)value_;
 
 //- (BOOL)validateMaxChoices:(id*)value_ error:(NSError**)error_;
 
@@ -148,9 +162,13 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* maxDimension;
+@property (nonatomic, strong) NSNumber* maxDimension;
 
 
+
+@property int32_t maxDimensionValue;
+- (int32_t)maxDimensionValue;
+- (void)setMaxDimensionValue:(int32_t)value_;
 
 //- (BOOL)validateMaxDimension:(id*)value_ error:(NSError**)error_;
 
@@ -158,9 +176,13 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* maxDuration;
+@property (nonatomic, strong) NSNumber* maxDuration;
 
 
+
+@property int32_t maxDurationValue;
+- (int32_t)maxDurationValue;
+- (void)setMaxDurationValue:(int32_t)value_;
 
 //- (BOOL)validateMaxDuration:(id*)value_ error:(NSError**)error_;
 
@@ -168,9 +190,13 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* min;
+@property (nonatomic, strong) NSNumber* min;
 
 
+
+@property int16_t minValue;
+- (int16_t)minValue;
+- (void)setMinValue:(int16_t)value_;
 
 //- (BOOL)validateMin:(id*)value_ error:(NSError**)error_;
 
@@ -178,11 +204,25 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* minChoices;
+@property (nonatomic, strong) NSNumber* minChoices;
 
 
+
+@property int16_t minChoicesValue;
+- (int16_t)minChoicesValue;
+- (void)setMinChoicesValue:(int16_t)value_;
 
 //- (BOOL)validateMinChoices:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -226,9 +266,9 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property (nonatomic, strong) OHMSurveyPromptChoice *choices;
+@property (nonatomic, strong) NSOrderedSet *choices;
 
-//- (BOOL)validateChoices:(id*)value_ error:(NSError**)error_;
+- (NSMutableOrderedSet*)choicesSet;
 
 
 
@@ -252,6 +292,11 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 @interface _OHMSurveyItem (CoreDataGeneratedAccessors)
 
+- (void)addChoices:(NSOrderedSet*)value_;
+- (void)removeChoices:(NSOrderedSet*)value_;
+- (void)addChoicesObject:(OHMSurveyPromptChoice*)value_;
+- (void)removeChoicesObject:(OHMSurveyPromptChoice*)value_;
+
 - (void)addResponses:(NSSet*)value_;
 - (void)removeResponses:(NSSet*)value_;
 - (void)addResponsesObject:(OHMSurveyPromptResponse*)value_;
@@ -268,8 +313,17 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-- (NSString*)primitiveDefaultResponse;
-- (void)setPrimitiveDefaultResponse:(NSString*)value;
+- (NSNumber*)primitiveDefaultNumberResponse;
+- (void)setPrimitiveDefaultNumberResponse:(NSNumber*)value;
+
+- (double)primitiveDefaultNumberResponseValue;
+- (void)setPrimitiveDefaultNumberResponseValue:(double)value_;
+
+
+
+
+- (NSString*)primitiveDefaultStringResponse;
+- (void)setPrimitiveDefaultStringResponse:(NSString*)value;
 
 
 
@@ -286,12 +340,6 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-- (NSString*)primitiveItemId;
-- (void)setPrimitiveItemId:(NSString*)value;
-
-
-
-
 - (NSNumber*)primitiveItemType;
 - (void)setPrimitiveItemType:(NSNumber*)value;
 
@@ -301,38 +349,62 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-- (NSString*)primitiveMax;
-- (void)setPrimitiveMax:(NSString*)value;
+- (NSNumber*)primitiveMax;
+- (void)setPrimitiveMax:(NSNumber*)value;
+
+- (int16_t)primitiveMaxValue;
+- (void)setPrimitiveMaxValue:(int16_t)value_;
 
 
 
 
-- (NSString*)primitiveMaxChoices;
-- (void)setPrimitiveMaxChoices:(NSString*)value;
+- (NSNumber*)primitiveMaxChoices;
+- (void)setPrimitiveMaxChoices:(NSNumber*)value;
+
+- (int16_t)primitiveMaxChoicesValue;
+- (void)setPrimitiveMaxChoicesValue:(int16_t)value_;
 
 
 
 
-- (NSString*)primitiveMaxDimension;
-- (void)setPrimitiveMaxDimension:(NSString*)value;
+- (NSNumber*)primitiveMaxDimension;
+- (void)setPrimitiveMaxDimension:(NSNumber*)value;
+
+- (int32_t)primitiveMaxDimensionValue;
+- (void)setPrimitiveMaxDimensionValue:(int32_t)value_;
 
 
 
 
-- (NSString*)primitiveMaxDuration;
-- (void)setPrimitiveMaxDuration:(NSString*)value;
+- (NSNumber*)primitiveMaxDuration;
+- (void)setPrimitiveMaxDuration:(NSNumber*)value;
+
+- (int32_t)primitiveMaxDurationValue;
+- (void)setPrimitiveMaxDurationValue:(int32_t)value_;
 
 
 
 
-- (NSString*)primitiveMin;
-- (void)setPrimitiveMin:(NSString*)value;
+- (NSNumber*)primitiveMin;
+- (void)setPrimitiveMin:(NSNumber*)value;
+
+- (int16_t)primitiveMinValue;
+- (void)setPrimitiveMinValue:(int16_t)value_;
 
 
 
 
-- (NSString*)primitiveMinChoices;
-- (void)setPrimitiveMinChoices:(NSString*)value;
+- (NSNumber*)primitiveMinChoices;
+- (void)setPrimitiveMinChoices:(NSNumber*)value;
+
+- (int16_t)primitiveMinChoicesValue;
+- (void)setPrimitiveMinChoicesValue:(int16_t)value_;
+
+
+
+
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
 
 
 
@@ -362,8 +434,8 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-- (OHMSurveyPromptChoice*)primitiveChoices;
-- (void)setPrimitiveChoices:(OHMSurveyPromptChoice*)value;
+- (NSMutableOrderedSet*)primitiveChoices;
+- (void)setPrimitiveChoices:(NSMutableOrderedSet*)value;
 
 
 

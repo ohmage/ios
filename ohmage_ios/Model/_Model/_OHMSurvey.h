@@ -2,13 +2,14 @@
 // Make changes to OHMSurvey.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMSurveyAttributes {
+	__unsafe_unretained NSString *isLoaded;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *surveyDescription;
-	__unsafe_unretained NSString *surveyId;
 	__unsafe_unretained NSString *surveyName;
-	__unsafe_unretained NSString *version;
+	__unsafe_unretained NSString *surveyVersion;
 } OHMSurveyAttributes;
 
 extern const struct OHMSurveyRelationships {
@@ -29,14 +30,39 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
+
 @interface OHMSurveyID : NSManagedObjectID {}
 @end
 
-@interface _OHMSurvey : NSManagedObject {}
+@interface _OHMSurvey : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* isLoaded;
+
+
+
+@property BOOL isLoadedValue;
+- (BOOL)isLoadedValue;
+- (void)setIsLoadedValue:(BOOL)value_;
+
+//- (BOOL)validateIsLoaded:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -52,16 +78,6 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* surveyId;
-
-
-
-//- (BOOL)validateSurveyId:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSString* surveyName;
 
 
@@ -72,15 +88,15 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* version;
+@property (nonatomic, strong) NSNumber* surveyVersion;
 
 
 
-@property int16_t versionValue;
-- (int16_t)versionValue;
-- (void)setVersionValue:(int16_t)value_;
+@property int16_t surveyVersionValue;
+- (int16_t)surveyVersionValue;
+- (void)setSurveyVersionValue:(int16_t)value_;
 
-//- (BOOL)validateVersion:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateSurveyVersion:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -93,9 +109,9 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *surveyItems;
+@property (nonatomic, strong) NSOrderedSet *surveyItems;
 
-- (NSMutableSet*)surveyItemsSet;
+- (NSMutableOrderedSet*)surveyItemsSet;
 
 
 
@@ -112,8 +128,8 @@ extern const struct OHMSurveyFetchedProperties {
 
 @interface _OHMSurvey (CoreDataGeneratedAccessors)
 
-- (void)addSurveyItems:(NSSet*)value_;
-- (void)removeSurveyItems:(NSSet*)value_;
+- (void)addSurveyItems:(NSOrderedSet*)value_;
+- (void)removeSurveyItems:(NSOrderedSet*)value_;
 - (void)addSurveyItemsObject:(OHMSurveyItem*)value_;
 - (void)removeSurveyItemsObject:(OHMSurveyItem*)value_;
 
@@ -127,14 +143,23 @@ extern const struct OHMSurveyFetchedProperties {
 @interface _OHMSurvey (CoreDataGeneratedPrimitiveAccessors)
 
 
+- (NSNumber*)primitiveIsLoaded;
+- (void)setPrimitiveIsLoaded:(NSNumber*)value;
+
+- (BOOL)primitiveIsLoadedValue;
+- (void)setPrimitiveIsLoadedValue:(BOOL)value_;
+
+
+
+
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
+
+
+
+
 - (NSString*)primitiveSurveyDescription;
 - (void)setPrimitiveSurveyDescription:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveSurveyId;
-- (void)setPrimitiveSurveyId:(NSString*)value;
 
 
 
@@ -145,11 +170,11 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
-- (NSNumber*)primitiveVersion;
-- (void)setPrimitiveVersion:(NSNumber*)value;
+- (NSNumber*)primitiveSurveyVersion;
+- (void)setPrimitiveSurveyVersion:(NSNumber*)value;
 
-- (int16_t)primitiveVersionValue;
-- (void)setPrimitiveVersionValue:(int16_t)value_;
+- (int16_t)primitiveSurveyVersionValue;
+- (void)setPrimitiveSurveyVersionValue:(int16_t)value_;
 
 
 
@@ -160,8 +185,8 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveSurveyItems;
-- (void)setPrimitiveSurveyItems:(NSMutableSet*)value;
+- (NSMutableOrderedSet*)primitiveSurveyItems;
+- (void)setPrimitiveSurveyItems:(NSMutableOrderedSet*)value;
 
 
 

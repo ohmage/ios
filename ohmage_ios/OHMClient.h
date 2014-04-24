@@ -1,5 +1,5 @@
 //
-//  OHMHTTPClient.h
+//  OHMClient.h
 //  ohmage_ios
 //
 //  Created by Charles Forkish on 3/31/14.
@@ -8,21 +8,21 @@
 
 #import "AFHTTPSessionManager.h"
 
-@protocol OHMHTTPClientDelegate;
+@class OHMOhmlet;
 
-@interface OHMHTTPClient : AFHTTPSessionManager
+@interface OHMClient : AFHTTPSessionManager
 
-@property (nonatomic, weak) id<OHMHTTPClientDelegate>delegate;
++ (OHMClient*)sharedClient;
 
-+ (OHMHTTPClient*)sharedClient;
-
+// HTTP
+- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
 - (void)setAuthorizationToken:(NSString *)token;
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;
 
-@end
+// Model
+//- (NSArray *)ohmlets;
+- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
+//- (NSInteger)surveyCount;
 
-@protocol OHMHTTPClientDelegate <NSObject>
-@optional
-- (void)OHMHTTPClient:(OHMHTTPClient*)client didFailWithError:(NSError *)error;
 @end

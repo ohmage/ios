@@ -10,160 +10,211 @@
 
 @implementation NSDictionary (Ohmage)
 
+
+
+- (id)nonNullValueForKey:(NSString *)key
+{
+    id value = self[key];
+    if (value == [NSNull null]) {
+        return nil;
+    }
+    else {
+        return value;
+    }
+}
+
 -(NSString *)authToken
 {
-    return self[@"access_token"];
+    return [self nonNullValueForKey:@"access_token"];
 }
 
 - (NSString *)refreshToken
 {
-    return self[@"refresh_token"];
+    return [self nonNullValueForKey:@"refresh_token"];
 }
 
-- (NSString *)userId
+- (NSString *)userID
 {
-    return self[@"user_id"];
+    return [self nonNullValueForKey:@"user_id"];
 }
 
 - (NSString *)userFullName
 {
-    return self[@"full_name"];
+    return [self nonNullValueForKey:@"full_name"];
 }
 
 - (NSArray *)ohmlets
 {
-    return self[@"ohmlets"];
+    return [self nonNullValueForKey:@"ohmlets"];
 }
 
-- (NSString *)ohmletId
+- (NSString *)ohmletID
 {
-    return self[@"ohmlet_id"];
+    return [self nonNullValueForKey:@"ohmlet_id"];
 }
 
 - (NSString *)ohmletName
 {
-    return self[@"name"];
+    return [self nonNullValueForKey:@"name"];
 }
 
 - (NSString *)ohmletDescription
 {
-    return self[@"description"];
+    return [self nonNullValueForKey:@"description"];
 }
 
 - (NSArray *)surveyDefinitions
 {
-    return self[@"surveys"];
+    return [self nonNullValueForKey:@"surveys"];
 }
 
-- (NSString *)surveyId
+- (NSString *)surveyID
 {
-    return self[@"schema_id"];
+    return [self nonNullValueForKey:@"schema_id"];
 }
 
 - (NSInteger)surveyVersion
 {
-    NSNumber *versionNumber = self[@"schema_version"];
-    if (versionNumber != (id)[NSNull null]) {
+    NSNumber *versionNumber = [self nonNullValueForKey:@"schema_version"];
+    if (versionNumber != nil) {
         return [versionNumber integerValue];
     }
     else {
-        return 1;
+        return -1;
     }
 }
 
 - (NSString *)surveyName
 {
-    return self[@"name"];
+    return [self nonNullValueForKey:@"name"];
 }
 
 - (NSString *)surveyDescription
 {
-    return self[@"description"];
+    return [self nonNullValueForKey:@"description"];
 }
 
 - (NSArray *)surveyItems
 {
-    return self[@"survey_items"];
+    return [self nonNullValueForKey:@"survey_items"];
 }
 
 - (NSString *)surveyItemTypeKey
 {
-    return self[@"survey_item_type"];
+    return [self nonNullValueForKey:@"survey_item_type"];
 }
 
-- (NSString *)surveyItemId
+- (NSString *)surveyItemID
 {
-    return self[@"survey_item_id"];
+    return [self nonNullValueForKey:@"survey_item_id"];
 }
 
 - (NSString *)surveyItemCondition
 {
-    return self[@"condition"];
+    return [self nonNullValueForKey:@"condition"];
 }
 
 - (NSString *)surveyItemText
 {
-    return self[@"text"];
+    return [self nonNullValueForKey:@"text"];
 }
 
-- (NSString *)surveyItemDefaultResponse
+- (NSString *)surveyItemDefaultStringResponse
 {
-    return self[@"default_response"];
+    return [self nonNullValueForKey:@"default_response"];
+}
+
+- (NSNumber *)surveyItemDefaultNumberResponse
+{
+    return [self nonNullValueForKey:@"default_response"];
+}
+
+- (NSArray *)surveyItemDefaultChoiceValues
+{
+    id response = [self nonNullValueForKey:@"default_response"];
+    if (response) {
+        NSLog(@"DEFAULT CHOICE VALUES: %@", response);
+        if ([[response class] isSubclassOfClass:[NSArray class]]) {
+            return response;
+        }
+        else {
+            return @[response];
+        }
+    }
+    else {
+        return nil;
+    }
 }
 
 - (NSString *)surveyItemDisplayType
 {
-    return self[@"display_type"];
+    return [self nonNullValueForKey:@"display_type"];
 }
 
 - (NSString *)surveyItemDisplayLabel
 {
-    return self[@"display_label"];
+    return [self nonNullValueForKey:@"display_label"];
 }
 
-- (NSString *)surveyItemMin
+- (NSNumber *)surveyItemMin
 {
-    return self[@"min"];
+    return [self nonNullValueForKey:@"min"];
 }
 
-- (NSString *)surveyItemMax
+- (NSNumber *)surveyItemMax
 {
-    return self[@"max"];
+    return [self nonNullValueForKey:@"max"];
 }
 
 - (NSString *)surveyItemMinChoices
 {
-    return self[@"min_choices"];
+    return [self nonNullValueForKey:@"min_choices"];
 }
 
 - (NSString *)surveyItemMaxChoices
 {
-    return self[@"max_choices"];
+    return [self nonNullValueForKey:@"max_choices"];
 }
 
-- (NSString *)surveyItemMaxDimension
+- (NSNumber *)surveyItemMaxDimension
 {
-    return self[@"max_dimension"];
+    return [self nonNullValueForKey:@"max_dimension"];
 }
 
-- (NSString *)surveyItemMaxDuration
+- (NSNumber *)surveyItemMaxDuration
 {
-    return self[@"max_duration"];
+    return [self nonNullValueForKey:@"max_duration"];
 }
 
 - (NSArray *)surveyItemChoices
 {
-    return self[@"choices"];
+    return [self nonNullValueForKey:@"choices"];
 }
 
-- (BOOL)surveyItemIsSkippable
+- (NSNumber *)surveyItemIsSkippable
 {
-    return self[@"skippable"];
+    return [self nonNullValueForKey:@"skippable"];
 }
 
-- (BOOL)surveyItemWholeNumbersOnly
+- (NSNumber *)surveyItemWholeNumbersOnly
 {
-    return self[@"whole_numbers_only"];
+    return [self nonNullValueForKey:@"whole_numbers_only"];
+}
+
+
+- (NSString *)surveyPromptChoiceText
+{
+    return [self nonNullValueForKey:@"text"];
+}
+
+- (NSString *)surveyPromptChoiceStringValue
+{
+    return [self nonNullValueForKey:@"value"];
+}
+
+- (NSNumber *)surveyPromptChoiceNumberValue
+{
+    return [self nonNullValueForKey:@"value"];
 }
 
 

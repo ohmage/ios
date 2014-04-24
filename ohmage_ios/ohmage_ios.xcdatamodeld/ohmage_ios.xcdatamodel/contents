@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="OHMOhmlet" representedClassName="OHMOhmlet" syncable="YES">
+        <attribute name="ohmID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="ohmletDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="ohmletId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="ohmletName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="surveys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="ohmlet" inverseEntity="OHMSurvey" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMUser" inverseName="ohmlets" inverseEntity="OHMUser" syncable="YES"/>
     </entity>
     <entity name="OHMSurvey" representedClassName="OHMSurvey" syncable="YES">
+        <attribute name="isLoaded" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="ohmID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="surveyDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="surveyId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="surveyName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="version" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="surveyVersion" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="ohmlet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMOhmlet" inverseName="surveys" inverseEntity="OHMOhmlet" syncable="YES"/>
-        <relationship name="surveyItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMSurveyItem" inverseName="survey" inverseEntity="OHMSurveyItem" syncable="YES"/>
+        <relationship name="surveyItems" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="OHMSurveyItem" inverseName="survey" inverseEntity="OHMSurveyItem" syncable="YES"/>
         <relationship name="surveyResponses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMSurveyResponse" inverseName="survey" inverseEntity="OHMSurveyResponse" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyItem" representedClassName="OHMSurveyItem" syncable="YES">
         <attribute name="condition" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="defaultResponse" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="defaultNumberResponse" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="defaultStringResponse" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayLabel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="itemId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="itemType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="max" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="maxChoices" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="maxDimension" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="maxDuration" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="min" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="minChoices" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="max" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="maxChoices" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="maxDimension" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="maxDuration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="min" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="minChoices" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="ohmID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="skippable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="wholeNumbersOnly" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <relationship name="choices" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurveyPromptChoice" inverseName="surveyItem" inverseEntity="OHMSurveyPromptChoice" syncable="YES"/>
+        <relationship name="choices" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="OHMSurveyPromptChoice" inverseName="surveyItem" inverseEntity="OHMSurveyPromptChoice" syncable="YES"/>
         <relationship name="responses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMSurveyPromptResponse" inverseName="surveyItem" inverseEntity="OHMSurveyPromptResponse" syncable="YES"/>
         <relationship name="survey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="surveyItems" inverseEntity="OHMSurvey" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyPromptChoice" representedClassName="OHMSurveyPromptChoice" syncable="YES">
+        <attribute name="isDefault" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="numberValue" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="stringValue" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="surveyItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurveyItem" inverseName="choices" inverseEntity="OHMSurveyItem" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyPromptResponse" representedClassName="OHMSurveyPromptResponse" syncable="YES">
@@ -53,15 +57,15 @@
     <entity name="OHMUser" representedClassName="OHMUser" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ohmID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="ohmlets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMOhmlet" inverseName="user" inverseEntity="OHMOhmlet" syncable="YES"/>
     </entity>
     <elements>
-        <element name="OHMOhmlet" positionX="52" positionY="-207" width="128" height="120"/>
-        <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="150"/>
-        <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="315"/>
-        <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="90"/>
+        <element name="OHMOhmlet" positionX="52" positionY="-207" width="128" height="118"/>
+        <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="163"/>
+        <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="328"/>
+        <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="118"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="90"/>
         <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="75"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="118"/>

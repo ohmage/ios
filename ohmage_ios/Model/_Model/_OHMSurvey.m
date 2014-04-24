@@ -4,10 +4,11 @@
 #import "_OHMSurvey.h"
 
 const struct OHMSurveyAttributes OHMSurveyAttributes = {
+	.isLoaded = @"isLoaded",
+	.ohmID = @"ohmID",
 	.surveyDescription = @"surveyDescription",
-	.surveyId = @"surveyId",
 	.surveyName = @"surveyName",
-	.version = @"version",
+	.surveyVersion = @"surveyVersion",
 };
 
 const struct OHMSurveyRelationships OHMSurveyRelationships = {
@@ -45,8 +46,13 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"versionValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"version"];
+	if ([key isEqualToString:@"isLoadedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isLoaded"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"surveyVersionValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"surveyVersion"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -57,14 +63,40 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 
 
+@dynamic isLoaded;
+
+
+
+- (BOOL)isLoadedValue {
+	NSNumber *result = [self isLoaded];
+	return [result boolValue];
+}
+
+- (void)setIsLoadedValue:(BOOL)value_ {
+	[self setIsLoaded:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveIsLoadedValue {
+	NSNumber *result = [self primitiveIsLoaded];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveIsLoadedValue:(BOOL)value_ {
+	[self setPrimitiveIsLoaded:[NSNumber numberWithBool:value_]];
+}
+
+
+
+
+
+@dynamic ohmID;
+
+
+
+
+
+
 @dynamic surveyDescription;
-
-
-
-
-
-
-@dynamic surveyId;
 
 
 
@@ -78,26 +110,26 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 
 
-@dynamic version;
+@dynamic surveyVersion;
 
 
 
-- (int16_t)versionValue {
-	NSNumber *result = [self version];
+- (int16_t)surveyVersionValue {
+	NSNumber *result = [self surveyVersion];
 	return [result shortValue];
 }
 
-- (void)setVersionValue:(int16_t)value_ {
-	[self setVersion:[NSNumber numberWithShort:value_]];
+- (void)setSurveyVersionValue:(int16_t)value_ {
+	[self setSurveyVersion:[NSNumber numberWithShort:value_]];
 }
 
-- (int16_t)primitiveVersionValue {
-	NSNumber *result = [self primitiveVersion];
+- (int16_t)primitiveSurveyVersionValue {
+	NSNumber *result = [self primitiveSurveyVersion];
 	return [result shortValue];
 }
 
-- (void)setPrimitiveVersionValue:(int16_t)value_ {
-	[self setPrimitiveVersion:[NSNumber numberWithShort:value_]];
+- (void)setPrimitiveSurveyVersionValue:(int16_t)value_ {
+	[self setPrimitiveSurveyVersion:[NSNumber numberWithShort:value_]];
 }
 
 
@@ -111,10 +143,10 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 @dynamic surveyItems;
 
 	
-- (NSMutableSet*)surveyItemsSet {
+- (NSMutableOrderedSet*)surveyItemsSet {
 	[self willAccessValueForKey:@"surveyItems"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"surveyItems"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"surveyItems"];
   
 	[self didAccessValueForKey:@"surveyItems"];
 	return result;

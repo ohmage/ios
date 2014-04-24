@@ -8,7 +8,7 @@
 
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
-#import "OHMOhmage.h"
+#import "OHMClient.h"
 #import "OHMHomeViewController.h"
 
 @implementation OHMAppDelegate
@@ -26,7 +26,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [[OHMOhmage sharedOhmage] login];
+    [[OHMClient sharedClient] loginWithEmail:@"cforkish@gmail.com" andPassword:@"loudfowl98"];
     return YES;
 }
 

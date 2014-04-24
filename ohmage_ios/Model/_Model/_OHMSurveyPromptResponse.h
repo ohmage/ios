@@ -2,7 +2,7 @@
 // Make changes to OHMSurveyPromptResponse.h instead.
 
 #import <CoreData/CoreData.h>
-
+#import "OHMObject.h"
 
 extern const struct OHMSurveyPromptResponseAttributes {
 	__unsafe_unretained NSString *value;
@@ -24,7 +24,7 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 @interface OHMSurveyPromptResponseID : NSManagedObjectID {}
 @end
 
-@interface _OHMSurveyPromptResponse : NSManagedObject {}
+@interface _OHMSurveyPromptResponse : OHMObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
