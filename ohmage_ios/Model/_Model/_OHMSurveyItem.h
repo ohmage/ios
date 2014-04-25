@@ -138,9 +138,9 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property int16_t maxValue;
-- (int16_t)maxValue;
-- (void)setMaxValue:(int16_t)value_;
+@property double maxValue;
+- (double)maxValue;
+- (void)setMaxValue:(double)value_;
 
 //- (BOOL)validateMax:(id*)value_ error:(NSError**)error_;
 
@@ -194,9 +194,9 @@ extern const struct OHMSurveyItemFetchedProperties {
 
 
 
-@property int16_t minValue;
-- (int16_t)minValue;
-- (void)setMinValue:(int16_t)value_;
+@property double minValue;
+- (double)minValue;
+- (void)setMinValue:(double)value_;
 
 //- (BOOL)validateMin:(id*)value_ error:(NSError**)error_;
 
@@ -352,8 +352,8 @@ extern const struct OHMSurveyItemFetchedProperties {
 - (NSNumber*)primitiveMax;
 - (void)setPrimitiveMax:(NSNumber*)value;
 
-- (int16_t)primitiveMaxValue;
-- (void)setPrimitiveMaxValue:(int16_t)value_;
+- (double)primitiveMaxValue;
+- (void)setPrimitiveMaxValue:(double)value_;
 
 
 
@@ -388,8 +388,8 @@ extern const struct OHMSurveyItemFetchedProperties {
 - (NSNumber*)primitiveMin;
 - (void)setPrimitiveMin:(NSNumber*)value;
 
-- (int16_t)primitiveMinValue;
-- (void)setPrimitiveMinValue:(int16_t)value_;
+- (double)primitiveMinValue;
+- (void)setPrimitiveMinValue:(double)value_;
 
 
 

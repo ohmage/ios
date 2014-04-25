@@ -5,6 +5,8 @@
 
 - (void)setValuesFromDefinition:(NSDictionary *)definition;
 
+- (BOOL)hasDefaultResponse;
+
 //+ (instancetype)itemWithDefinition:(NSDictionary *)itemDefinition;
 
 @end

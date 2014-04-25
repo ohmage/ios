@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *promptCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *takeSurveyButton;
-
 @property (nonatomic, strong) OHMSurvey *survey;
 
 @end
@@ -43,6 +42,8 @@
     self.nameLabel.text = self.survey.surveyName;
     self.descriptionLabel.text = self.survey.surveyDescription;
     self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.surveyItems count]];
+    
+    NSLog(@"Survey: %@", self.survey.description);
     
 //    self.view.backgroundColor = [OHMAppConstants lightColorForRowIndex:self.survey.colorIndex];
 }

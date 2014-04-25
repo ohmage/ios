@@ -15,4 +15,9 @@
 + (UIColor *)ohmageColor;
 + (UIColor *)lightOhmageColor;
 
+
++ (UIFont *)textFont;
++ (UIFont *)boldTextFont;
++ (UIFont *)italicTextFont;
+
 @end

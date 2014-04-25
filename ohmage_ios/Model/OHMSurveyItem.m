@@ -1,6 +1,7 @@
 #import "OHMSurveyItem.h"
 #import "NSDictionary+Ohmage.h"
 #import "OHMSurveyItemTypes.h"
+#import "OHMSurveyPromptChoice.h"
 
 
 @interface OHMSurveyItem ()
@@ -24,9 +25,9 @@
     self.min = [definition surveyItemMin];
     self.minChoices = [definition surveyItemMinChoices];
     self.ohmID = [definition surveyItemID];
-    self.skippableValue = [definition surveyItemIsSkippable];
+    self.skippable = [definition surveyItemIsSkippable];
     self.text = [definition surveyItemText];
-    self.wholeNumbersOnlyValue = [definition surveyItemWholeNumbersOnly];
+    self.wholeNumbersOnly = [definition surveyItemWholeNumbersOnly];
     
     if (self.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
         self.defaultStringResponse = [definition surveyItemDefaultStringResponse];
@@ -35,6 +36,16 @@
         self.defaultNumberResponse = [definition surveyItemDefaultNumberResponse];
     }
 
+}
+
+- (BOOL)hasDefaultResponse
+{
+    if (self.defaultStringResponse != nil) return YES;
+    if (self.defaultNumberResponse != nil) return YES;
+    for (OHMSurveyPromptChoice *choice in self.choices) {
+        if (choice.isDefaultValue) return YES;
+    }
+    return NO;
 }
 
 //+ (NSDictionary *)valuesDictionaryFromJSONDefinition:(NSDictionary *)definition

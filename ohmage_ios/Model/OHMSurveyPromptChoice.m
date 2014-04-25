@@ -10,6 +10,8 @@
 
 @implementation OHMSurveyPromptChoice
 
+@synthesize isSelected;
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"text: %@, stringValue: %@, numberValue: %@, isDefault: %d",

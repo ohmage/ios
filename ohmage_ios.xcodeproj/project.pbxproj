@@ -72,7 +72,6 @@
 		1EDA0B1F18F4068400C89F91 /* OHMSurveyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */; };
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
 		1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */; };
-		1EDA0B3218F59C7E00C89F91 /* OHMSurveyItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */; };
 		1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */; };
 		1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */; };
 		1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */; };
@@ -185,7 +184,6 @@
 		1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemTypes.m; sourceTree = "<group>"; };
 		1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItemViewController.h; sourceTree = "<group>"; };
 		1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemViewController.m; sourceTree = "<group>"; };
-		1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMSurveyItemViewController.xib; sourceTree = "<group>"; };
 		1EDA0B3418F5A4DD00C89F91 /* ohmage_ios.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ohmage_ios.xcdatamodel; sourceTree = "<group>"; };
 		1EF693C418EA0F670003E077 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
@@ -457,7 +455,6 @@
 			children = (
 				1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */,
 				1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */,
-				1EDA0B3018F59C7E00C89F91 /* OHMSurveyItemViewController.xib */,
 			);
 			name = SurveyItems;
 			sourceTree = "<group>";
@@ -568,7 +565,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EDA0B3218F59C7E00C89F91 /* OHMSurveyItemViewController.xib in Resources */,
 				1E70096E18CA6F8700203990 /* InfoPlist.strings in Resources */,
 				1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */,
 				1EAECA5B18EB40CC00035BDF /* notes in Resources */,
@@ -870,6 +866,7 @@
 				1E1B60B819062BD2001046E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1E70095B18CA6F8700203990 /* Build configuration list for PBXProject "ohmage_ios" */ = {
 			isa = XCConfigurationList;

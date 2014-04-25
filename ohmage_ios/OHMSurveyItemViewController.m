@@ -11,13 +11,22 @@
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
 #import "OHMSurveyItem.h"
+#import "OHMUserInterface.h"
+#import "OHMSurveyPromptChoice.h"
 
-@interface OHMSurveyItemViewController ()
+@interface OHMSurveyItemViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
+@property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *skipButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
+
+@property (nonatomic) BOOL backgroundTapEnabled;
+@property (nonatomic, strong) UITapGestureRecognizer *backgroundTapGesture;
+
+// Number prompt
+@property (weak, nonatomic) UISegmentedControl *numberPlusMinusControl;
 
 @property (nonatomic, strong) OHMSurveyItem *item;
 
@@ -32,21 +41,174 @@
 
 - (id)initWithSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index
 {
-    self = [super initWithNibName:nil bundle:nil];
+//    self = [super initWithNibName:nil bundle:nil];
+    self = [super init];
     if (self) {
         self.surveyResponse = response;
         self.itemIndex = index;
+        self.item = self.surveyResponse.survey.surveyItems[self.itemIndex];
     }
     return self;
+}
+
+- (void)loadView
+{
+    [self commonSetup];
+    
+    if ([self itemNeedsTextField]) {
+        [self setupTextField];
+    }
+    
+    if ([self itemNeedsChoiceTable]) {
+        [self setupChoiceTable];
+    }
+}
+
+- (void)commonSetup
+{
+    UIView * view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor whiteColor];
+    self.view = view;
+    
+    UILabel *textLabel = [[UILabel alloc] init];
+    textLabel.numberOfLines = 0;
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.text = self.item.text;
+    [view addSubview:textLabel];
+    [view constrainChildToDefaultHorizontalInsets:textLabel];
+    self.textLabel = textLabel;
+    
+    UIToolbar *toolbar = [[UIToolbar alloc] init];
+    [view addSubview:toolbar];
+    [view constrainChild:toolbar toHorizontalInsets:UIEdgeInsetsZero];
+    self.toolbar = toolbar;
+    
+    NSMutableArray *barItems = [NSMutableArray array];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(backButtonPressed:)];
+    backButton.enabled = (self.itemIndex > 0);
+    [barItems addObject:backButton];
+    [barItems addObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
+    self.backButton = backButton;
+    
+    if (self.item.skippableValue) {
+        UIBarButtonItem *skipButton = [[UIBarButtonItem alloc] initWithTitle:@"Skip" style:UIBarButtonItemStylePlain target:self action:@selector(skipButtonPressed:)];
+        [barItems addObject:skipButton];
+        [barItems addObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
+        self.skipButton = skipButton;
+    }
+    
+    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonPressed:)];
+    nextButton.enabled = ((self.item.itemTypeValue == OHMSurveyItemTypeMessage) || self.item.hasDefaultResponse);
+    [barItems addObject:nextButton];
+    self.nextButton = nextButton;
+    
+    toolbar.items = barItems;
+}
+
+- (BOOL)itemNeedsTextField
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeNumberPrompt:
+        case OHMSurveyItemTypeTextPrompt:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (void)setupTextField
+{
+    UITextField *textField = [[UITextField alloc] init];
+    textField.delegate = self;
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField.placeholder = [self textFieldPlaceholder];
+    textField.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:textField];
+    [self.view constrainChildToDefaultHorizontalInsets:textField];
+    [textField positionBelowElementWithDefaultMargin:self.textLabel];
+    self.textField = textField;
+    
+    if (self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
+        textField.keyboardType = (self.item.wholeNumbersOnlyValue ? UIKeyboardTypeNumberPad : UIKeyboardTypeDecimalPad);
+        textField.enablesReturnKeyAutomatically = YES;
+        textField.returnKeyType = UIReturnKeyDone;
+        
+        UISegmentedControl *plusMinusControl = [[UISegmentedControl alloc] initWithItems:@[@"-", @"+"]];
+        plusMinusControl.momentary = YES;
+        [plusMinusControl addTarget:self action:@selector(numberPromptSegmentedControlPressed:) forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:plusMinusControl];
+        [self.view constrainChildToDefaultHorizontalInsets:plusMinusControl];
+        [plusMinusControl positionBelowElementWithDefaultMargin:textField];
+        self.numberPlusMinusControl = plusMinusControl;
+    }
+    
+    if (self.item.defaultNumberResponse != nil) {
+        textField.text = [NSString stringWithFormat:@"%g", [self.item.defaultNumberResponse doubleValue]];
+    }
+    else if (self.item.defaultStringResponse != nil) {
+        textField.text = self.item.defaultStringResponse;
+    }
+}
+
+- (NSString *)textFieldPlaceholder
+{
+    if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
+        return @"Enter text";
+    }
+    else if(self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
+        if (self.item.min != nil && self.item.max != nil) {
+            return [NSString stringWithFormat:@"Enter a number between %g and %g", self.item.minValue, self.item.maxValue];
+        }
+        else if (self.item.min != nil) {
+            return [NSString stringWithFormat:@"Enter a number >= %g", self.item.minValue];
+        }
+        else if (self.item.max != nil) {
+            return [NSString stringWithFormat:@"Enter a number <= %g", self.item.maxValue];
+        }
+        return @"Enter a number";
+    }
+    
+    return @"Enter something";
+}
+
+- (BOOL)itemNeedsChoiceTable
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (void)setupChoiceTable
+{
+    UITableView *choiceTable = [[UITableView alloc] init];
+    choiceTable.delegate = self;
+    choiceTable.dataSource = self;
+    [choiceTable registerClass:[UITableViewCell class]
+           forCellReuseIdentifier:@"UITableViewCell"];
+    [self.view addSubview:choiceTable];
+    [self.view constrainChildToDefaultHorizontalInsets:choiceTable];
+    [choiceTable positionBelowElementWithDefaultMargin:self.textLabel];
+    [choiceTable positionAboveElementWithDefaultMargin:self.toolbar];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    id<UILayoutSupport> topGuide = self.topLayoutGuide;
+    id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;
+    [self.textLabel positionBelowElementWithDefaultMargin:topGuide];
+    [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
+    
     self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, [self.surveyResponse.survey.surveyItems count]];
     
-    self.item = self.surveyResponse.survey.surveyItems[self.itemIndex];
     self.textLabel.text = self.item.text;
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
@@ -89,6 +251,129 @@
     if (nextIndex < [self.surveyResponse.survey.surveyItems count]) {
         OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:self.itemIndex+1];
         [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+#pragma mark - Number Prompt
+
+- (IBAction)numberPromptSegmentedControlPressed:(id)sender {
+    double value = [self.textField.text doubleValue];
+    if (value == 0 && self.item.minValue > 0) {
+        value = self.item.minValue;
+    }
+    else {
+        value += (self.numberPlusMinusControl.selectedSegmentIndex * 2) - 1;
+    }
+    if ([self validateNumberValue:value]) {
+        self.textField.text = [NSString stringWithFormat:@"%g", value];
+        self.nextButton.enabled = YES;
+    }
+}
+
+- (BOOL)validateNumberValue:(double)value
+{
+    if (self.item.min != nil && self.item.max != nil) {
+        return (value >= self.item.minValue && value <= self.item.maxValue);
+    }
+    else if (self.item.min != nil) {
+        return (value >= self.item.minValue);
+    }
+    else if (self.item.max != nil) {
+        return (value <= self.item.maxValue);
+    }
+    else {
+        return YES;
+    }
+}
+
+#pragma mark - Choice Table
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.item.choices count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
+    cell.textLabel.text = choice.text;
+    if (choice.isDefaultValue && !choice.defaultWasDeselected) {
+        choice.isSelected = YES;
+    }
+    cell.accessoryType = (choice.isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone);
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
+    choice.isSelected = !choice.isSelected;
+    choice.defaultWasDeselected = YES;
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+#pragma mark - TextField Delegate
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.backgroundTapEnabled = YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.backgroundTapEnabled = NO;
+    if ([self validateTextField]) {
+        self.nextButton.enabled = YES;
+    }
+    else {
+        self.nextButton.enabled = NO;
+        self.textField.text = nil;
+    }
+}
+
+- (BOOL)validateTextField
+{
+    if (self.textField.text.length == 0) return NO;
+    
+    if (self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
+        [self validateNumberValue:[self.textField.text doubleValue]];
+    }
+    
+    return YES;
+}
+
+- (void)backgroundTapped:(id)sender
+{
+    [self.view endEditing:YES];
+}
+
+- (void)setBackgroundTapEnabled:(BOOL)backgroundTapEnabled
+{
+    if (backgroundTapEnabled) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTapped:)];
+        tap.cancelsTouchesInView = NO;
+        [self.view addGestureRecognizer:tap];
+        self.backgroundTapGesture = tap;
+    }
+    else {
+        [self.view removeGestureRecognizer:self.backgroundTapGesture];
+        self.backgroundTapGesture = nil;
     }
 }
 

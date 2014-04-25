@@ -196,8 +196,8 @@
     [pageControl centerHorizontallyInView:headerView];
     
     [nameLabel constrainToTopInParentWithMargin:kUIViewVerticalMargin];
-    [descriptionLabel positionBelowView:nameLabel margin:kUIViewSmallTextMargin];
-    [pageControl positionBelowView:descriptionLabel margin:kUIViewSmallTextMargin];
+    [descriptionLabel positionBelowElement:nameLabel margin:kUIViewSmallTextMargin];
+    [pageControl positionBelowElement:descriptionLabel margin:kUIViewSmallTextMargin];
     
     UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeRight:)];
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeLeft:)];

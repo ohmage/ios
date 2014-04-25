@@ -56,6 +56,25 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
     
 }
 
+
+- (void)constrainChildrenToEqualWidths:(NSArray *)childViews
+{
+    
+    UIView *firstView = [childViews firstObject];
+    firstView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    for (int i = 1; i < [childViews count]; i++) {
+        UIView *view = childViews[i];
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addConstraint: [NSLayoutConstraint constraintWithItem:firstView
+                                                          attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual
+                                                             toItem:view attribute:NSLayoutAttributeWidth
+                                                         multiplier:1.0f constant:0.0f]];
+    }
+    
+}
+
+
 - (void)constrainChildToDefaultInsets:(UIView *)childView
 {
     childView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -246,14 +265,34 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
                                     views:NSDictionaryOfVariableBindings(self)]];
 }
 
-- (void)positionBelowView:(UIView *)view margin:(CGFloat)margin
+- (void)positionBelowElement:(id)layoutElement margin:(CGFloat)margin
 {
   self.translatesAutoresizingMaskIntoConstraints = NO;
   
   [self.superview addConstraints:[NSLayoutConstraint
-                                  constraintsWithVisualFormat:@"V:[view]-margin-[self]" options:0
+                                  constraintsWithVisualFormat:@"V:[layoutElement]-margin-[self]" options:0
                                   metrics:@{@"margin":@(margin)}
-                                  views:NSDictionaryOfVariableBindings(view, self)]];
+                                  views:NSDictionaryOfVariableBindings(layoutElement, self)]];
+}
+
+- (void)positionBelowElementWithDefaultMargin:(id)layoutElement
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.superview addConstraints:[NSLayoutConstraint
+                                    constraintsWithVisualFormat:@"V:[layoutElement]-[self]" options:0
+                                    metrics:nil
+                                    views:NSDictionaryOfVariableBindings(layoutElement, self)]];
+}
+
+- (void)positionAboveElementWithDefaultMargin:(id)layoutElement
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.superview addConstraints:[NSLayoutConstraint
+                                    constraintsWithVisualFormat:@"V:[self]-[layoutElement]" options:0
+                                    metrics:nil
+                                    views:NSDictionaryOfVariableBindings(layoutElement, self)]];
 }
 
 /**

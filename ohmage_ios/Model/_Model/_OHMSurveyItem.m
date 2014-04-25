@@ -198,22 +198,22 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
-- (int16_t)maxValue {
+- (double)maxValue {
 	NSNumber *result = [self max];
-	return [result shortValue];
+	return [result doubleValue];
 }
 
-- (void)setMaxValue:(int16_t)value_ {
-	[self setMax:[NSNumber numberWithShort:value_]];
+- (void)setMaxValue:(double)value_ {
+	[self setMax:[NSNumber numberWithDouble:value_]];
 }
 
-- (int16_t)primitiveMaxValue {
+- (double)primitiveMaxValue {
 	NSNumber *result = [self primitiveMax];
-	return [result shortValue];
+	return [result doubleValue];
 }
 
-- (void)setPrimitiveMaxValue:(int16_t)value_ {
-	[self setPrimitiveMax:[NSNumber numberWithShort:value_]];
+- (void)setPrimitiveMaxValue:(double)value_ {
+	[self setPrimitiveMax:[NSNumber numberWithDouble:value_]];
 }
 
 
@@ -302,22 +302,22 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 
 
-- (int16_t)minValue {
+- (double)minValue {
 	NSNumber *result = [self min];
-	return [result shortValue];
+	return [result doubleValue];
 }
 
-- (void)setMinValue:(int16_t)value_ {
-	[self setMin:[NSNumber numberWithShort:value_]];
+- (void)setMinValue:(double)value_ {
+	[self setMin:[NSNumber numberWithDouble:value_]];
 }
 
-- (int16_t)primitiveMinValue {
+- (double)primitiveMinValue {
 	NSNumber *result = [self primitiveMin];
-	return [result shortValue];
+	return [result doubleValue];
 }
 
-- (void)setPrimitiveMinValue:(int16_t)value_ {
-	[self setPrimitiveMin:[NSNumber numberWithShort:value_]];
+- (void)setPrimitiveMinValue:(double)value_ {
+	[self setPrimitiveMin:[NSNumber numberWithDouble:value_]];
 }
 
 

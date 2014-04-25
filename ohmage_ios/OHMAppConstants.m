@@ -56,4 +56,26 @@
     return [[[self ohmageColor] lightColor] lightColor];
 }
 
+
+/**
+ *  textFont
+ */
++ (UIFont *)textFont {
+    return [UIFont systemFontOfSize:15.0];
+}
+
+/**
+ *  boldTextFont
+ */
++ (UIFont *)boldTextFont {
+    return [UIFont boldSystemFontOfSize:15.0];
+}
+
+/**
+ *  italicTextFont
+ */
++ (UIFont *)italicTextFont {
+    return [UIFont italicSystemFontOfSize:15.0];
+}
+
 @end
