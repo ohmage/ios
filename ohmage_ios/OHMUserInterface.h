@@ -15,7 +15,7 @@
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView;
 
-+ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width;
++ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 
 + (void)applyRoundedBorderToView:(UIView *)view;
 

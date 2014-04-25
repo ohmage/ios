@@ -11,6 +11,7 @@
 
 CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;
+CGFloat const kUIViewSmallTextMargin = 4.0;
 
 @implementation UIView (AutoLayoutHelpers)
 

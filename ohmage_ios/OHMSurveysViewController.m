@@ -22,6 +22,10 @@
 @property (nonatomic, strong) NSArray *surveys;
 @property (nonatomic) NSInteger ohmletIndex;
 
+@property (nonatomic, weak) UIPageControl *pageControl;
+@property (nonatomic, weak) UILabel *ohmletNameLabel;
+@property (nonatomic, weak) UILabel *ohmletDescriptionLabel;
+
 @end
 
 @implementation OHMSurveysViewController
@@ -60,8 +64,9 @@
     self.navigationItem.title = @"Ohmage";
     
     self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.separatorColor = [OHMAppConstants lightOhmageColor];
-    self.tableView.backgroundColor = [OHMAppConstants lightOhmageColor];
+    self.tableView.separatorColor = [UIColor clearColor];
+//    self.tableView.separatorColor = [OHMAppConstants lightOhmageColor];
+//    self.tableView.backgroundColor = [OHMAppConstants lightOhmageColor];
     
     UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
     customButton.frame = CGRectMake(0, 0, 35, 35);
@@ -150,50 +155,83 @@
 
 - (void)setupHeader
 {
-    return;
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 150)];
-    headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    UIView *contentView = [[UIView alloc] init];
-    [headerView addSubview:contentView];
-    [headerView constrainChildToDefaultInsets:contentView];
-    
-    UILabel *nameLabel = [[UILabel alloc] init];
-    nameLabel.font = [UIFont boldSystemFontOfSize:14];
-    nameLabel.numberOfLines = 0;
-    nameLabel.textAlignment = NSTextAlignmentCenter;
+    NSString *nameText = nil;
     if (self.ohmlet) {
         NSString *name = self.ohmlet.ohmletName ? self.ohmlet.ohmletName : self.ohmlet.ohmID;
-        nameLabel.text = [@"Ohmlet: " stringByAppendingString:name];
+        nameText = [@"Ohmlet: " stringByAppendingString:name];
     }
     else {
-        nameLabel.text = @"Loading Data";
+        nameText = @"Loading Data";
     }
     
-    UILabel *descriptionLabel = [[UILabel alloc] init];
-    descriptionLabel.numberOfLines = 0;
+    CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    CGFloat contentHeight = kUIViewVerticalMargin;
+    
+    UILabel *nameLabel = [OHMUserInterface variableHeightLabelWithText:nameText width:contentWidth font:[UIFont boldSystemFontOfSize:18]];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    contentHeight += nameLabel.frame.size.height + kUIViewSmallTextMargin;
+    
+    UILabel *descriptionLabel = [OHMUserInterface variableHeightLabelWithText:self.ohmlet.ohmletDescription width:contentWidth font:[UIFont systemFontOfSize:16]];
     descriptionLabel.textAlignment = NSTextAlignmentCenter;
-    descriptionLabel.text = self.ohmlet.ohmletDescription;
+    contentHeight += descriptionLabel.frame.size.height + kUIViewSmallTextMargin;
     
     UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.numberOfPages = MIN([self.client.ohmlets count], 1);
+    pageControl.numberOfPages = MAX([self.client.ohmlets count], 1);
+    pageControl.currentPage = self.ohmletIndex;
+    [pageControl addTarget:self action:@selector(pageControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [pageControl constrainSize:CGSizeMake(contentWidth, 20)];
+    contentHeight += pageControl.frame.size.height + kUIViewSmallTextMargin;
     
-    [contentView addSubview:nameLabel];
-    [contentView addSubview:descriptionLabel];
-    [contentView addSubview:pageControl];
     
-    [contentView constrainChildToDefaultHorizontalInsets:nameLabel];
-    [contentView constrainChildToDefaultHorizontalInsets:descriptionLabel];
-    [contentView constrainChildToDefaultHorizontalInsets:pageControl];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
+    headerView.backgroundColor = [OHMAppConstants lightOhmageColor];
+//    [OHMUserInterface applyRoundedBorderToView:headerView];
+    
+    [headerView addSubview:nameLabel];
+    [headerView addSubview:descriptionLabel];
+    [headerView addSubview:pageControl];
+    
+    [nameLabel centerHorizontallyInView:headerView];
+    [descriptionLabel centerHorizontallyInView:headerView];
+    [pageControl centerHorizontallyInView:headerView];
     
     [nameLabel constrainToTopInParentWithMargin:kUIViewVerticalMargin];
-    [descriptionLabel positionBelowView:nameLabel margin:kUIViewVerticalMargin];
-    [pageControl positionBelowView:descriptionLabel margin:kUIViewVerticalMargin];
-    [pageControl constrainToBottomInParentWithMargin:kUIViewVerticalMargin];
+    [descriptionLabel positionBelowView:nameLabel margin:kUIViewSmallTextMargin];
+    [pageControl positionBelowView:descriptionLabel margin:kUIViewSmallTextMargin];
     
-    [headerView sizeToFit];
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeRight:)];
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeLeft:)];
+    leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
+    [headerView addGestureRecognizer:rightSwipe];
+    [headerView addGestureRecognizer:leftSwipe];
     
     self.tableView.tableHeaderView = headerView;
+    self.pageControl = pageControl;
+    self.ohmletNameLabel = nameLabel;
+    self.ohmletDescriptionLabel = descriptionLabel;
+    
+}
+
+- (void)pageControlValueChanged:(id)sender
+{
+    self.ohmletIndex = self.pageControl.currentPage;
+    [self OHMClientDidUpdate:[OHMClient sharedClient]];
+}
+
+- (void)headerDidSwipeRight:(id)sender
+{
+    if (self.pageControl.currentPage > 0) {
+        self.pageControl.currentPage -= 1;
+        [self pageControlValueChanged:self.pageControl];
+    }
+}
+
+- (void)headerDidSwipeLeft:(id)sender
+{
+    if (self.pageControl.currentPage < self.pageControl.numberOfPages) {
+        self.pageControl.currentPage += 1;
+        [self pageControlValueChanged:self.pageControl];
+    }
 }
 
 #pragma mark - Table view data source
@@ -220,6 +258,8 @@
         cell.detailTextLabel.text = survey.surveyDescription;
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
+        
+//        [OHMUserInterface applyRoundedBorderToView:cell];
         cell.tintColor = [UIColor darkTextColor];
         survey.colorIndex = indexPath.row;
 //        CGFloat height = [OHMUserInterface heightForSubtitleCellWithTitle:cell.textLabel.text subtitle:cell.detailTextLabel.text accessoryType:cell.accessoryType];
@@ -238,8 +278,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"content bounds: %@, label frame: %@, height: %f", NSStringFromCGRect(cell.contentView.bounds), NSStringFromCGRect(cell.textLabel.frame), [OHMUserInterface heightForSubtitleCellWithTitle:cell.textLabel.text subtitle:cell.detailTextLabel.text accessoryType:cell.accessoryType fromTableView:tableView]);
     OHMSurvey *survey = self.surveys[indexPath.row];
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
