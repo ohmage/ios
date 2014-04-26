@@ -17,6 +17,7 @@
 
 
 + (UIFont *)textFont;
++ (UIFont *)smallTextFont;
 + (UIFont *)boldTextFont;
 + (UIFont *)italicTextFont;
 

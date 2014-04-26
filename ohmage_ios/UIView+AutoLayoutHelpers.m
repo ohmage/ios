@@ -71,7 +71,28 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
                                                              toItem:view attribute:NSLayoutAttributeWidth
                                                          multiplier:1.0f constant:0.0f]];
     }
+}
+
+- (void)constrainChildrenToEqualHights:(NSArray *)childViews
+{
     
+    UIView *firstView = [childViews firstObject];
+    firstView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    for (int i = 1; i < [childViews count]; i++) {
+        UIView *view = childViews[i];
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addConstraint: [NSLayoutConstraint constraintWithItem:firstView
+                                                          attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+                                                             toItem:view attribute:NSLayoutAttributeHeight
+                                                         multiplier:1.0f constant:0.0f]];
+    }
+}
+
+- (void)constrainChildrenToEqualSizes:(NSArray *)childViews
+{
+    [self constrainChildrenToEqualWidths:childViews];
+    [self constrainChildrenToEqualHeights:childViews];
 }
 
 
@@ -244,6 +265,12 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
                          multiplier:1.0f constant:0.0f]];
     
     self.center = CGPointMake(self.center.x, aView.center.y);
+}
+
+- (void)centerInView:(UIView *)aView
+{
+    [self centerHorizontallyInView:aView];
+    [self centerVerticallyInView:aView];
 }
 
 - (void)constrainToTopInParentWithMargin:(CGFloat)margin

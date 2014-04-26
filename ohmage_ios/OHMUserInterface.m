@@ -74,24 +74,56 @@
     return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
 }
 
-+ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font
++ (UILabel *)baseLabelWithText:(NSString *)text font:(UIFont *)font size:(CGSize)size
 {
     UILabel *label = [[UILabel alloc] init];
     label.numberOfLines = 0;
     label.font = font;
     label.text = text;
-    CGSize size = [self sizeForText:text withWidth:width font:font];
+    label.backgroundColor = [UIColor clearColor];
     [label constrainSize:size];
     
     return label;
 }
 
-+ (void)applyRoundedBorderToView:(UIView *)view
++ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font
+{
+    CGSize size = [self sizeForText:text withWidth:width font:font];
+    return [self baseLabelWithText:text font:font size:size];
+}
+
++ (UILabel *)fixedSizeLabelWithText:(NSString *)text size:(CGSize)size font:(UIFont *)font
+{
+    UILabel *label = [self baseLabelWithText:text font:font size:size];
+    label.adjustsFontSizeToFitWidth = YES;
+    label.minimumScaleFactor = 0.5;
+    
+    return label;
+}
+
+
++ (UIView *)fixedSizeFramedLabelWithText:(NSString *)text size:(CGSize)size font:(UIFont *)font alignment:(NSTextAlignment)textAlignment
+{
+    UIView *frameView = [[UIView alloc] init];
+    [frameView constrainSize:size];
+    [self applyRoundedBorderToView:frameView radius:6.0];
+    
+    CGSize labelSize = CGSizeMake(size.width - kUIViewSmallTextMargin * 2, size.height - kUIViewSmallTextMargin * 2);
+    UILabel *label = [self fixedSizeLabelWithText:text size:labelSize font:font];
+    label.textAlignment = textAlignment;
+    
+    [frameView addSubview:label];
+    [label centerInView:frameView];
+    
+    return frameView;
+}
+
++ (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius
 {
 //    view.backgroundColor = [UIColor whiteColor];
 //    view.layer.borderColor = [UIColor clearColor].CGColor;// [UIColor colorWithWhite:0.72 alpha:1.0].CGColor;
 //    view.layer.borderWidth = 3.0f;
-    view.layer.cornerRadius = 12;
+    view.layer.cornerRadius = borderRadius;
     // This has to be 'NO' for shadows to work.
     view.layer.masksToBounds = YES;
 //    view.layer.shadowColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;

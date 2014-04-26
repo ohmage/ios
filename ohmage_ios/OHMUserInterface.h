@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIColor+Ohmage.h"
 
 @interface OHMUserInterface : NSObject
 
@@ -16,7 +17,12 @@
                             fromTableView:(UITableView *)tableView;
 
 + (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
++ (UILabel *)fixedSizeLabelWithText:(NSString *)text size:(CGSize)size font:(UIFont *)font;
++ (UIView *)fixedSizeFramedLabelWithText:(NSString *)text
+                                    size:(CGSize)size
+                                    font:(UIFont *)font
+                               alignment:(NSTextAlignment)textAlignment;
 
-+ (void)applyRoundedBorderToView:(UIView *)view;
++ (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
 
 @end

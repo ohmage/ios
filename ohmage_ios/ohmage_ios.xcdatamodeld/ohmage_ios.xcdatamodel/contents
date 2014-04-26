@@ -19,7 +19,7 @@
     </entity>
     <entity name="OHMSurveyItem" representedClassName="OHMSurveyItem" syncable="YES">
         <attribute name="condition" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="defaultNumberResponse" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="defaultNumberResponse" optional="YES" attributeType="Double" syncable="YES"/>
         <attribute name="defaultStringResponse" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayLabel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayType" optional="YES" attributeType="String" syncable="YES"/>

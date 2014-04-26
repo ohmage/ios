@@ -64,6 +64,10 @@
     return [UIFont systemFontOfSize:15.0];
 }
 
++ (UIFont *)smallTextFont {
+    return [UIFont systemFontOfSize:11.0];
+}
+
 /**
  *  boldTextFont
  */

@@ -19,6 +19,8 @@ extern CGFloat const kUIViewSmallTextMargin;
 - (void)constrainEqualVerticalSpacingBetweenElements:(NSArray *)layoutElements;
 - (void)constrainEqualHorizontalSpacingBetweenChildren:(NSArray *)childViews;
 - (void)constrainChildrenToEqualWidths:(NSArray *)childViews;
+- (void)constrainChildrenToEqualHeights:(NSArray *)childViews;
+- (void)constrainChildrenToEqualSizes:(NSArray *)childViews;
 
 - (void)constrainChildToDefaultInsets:(UIView *)childView;
 - (void)constrainChildToDefaultHorizontalInsets:(UIView *)childView;
@@ -34,6 +36,7 @@ extern CGFloat const kUIViewSmallTextMargin;
 
 - (void)centerHorizontallyInView:(UIView *)view;
 - (void)centerVerticallyInView:(UIView *)view;
+- (void)centerInView:(UIView *)view;
 - (void)constrainToTopInParentWithMargin:(CGFloat)margin;
 - (void)constrainToBottomInParentWithMargin:(CGFloat)margin;
 - (void)positionBelowElement:(id)layoutElement margin:(CGFloat)margin;

@@ -24,6 +24,7 @@
 
 @property (nonatomic) BOOL backgroundTapEnabled;
 @property (nonatomic, strong) UITapGestureRecognizer *backgroundTapGesture;
+@property (nonatomic, strong) UIView *validationMessageView;
 
 // Number prompt
 @property (weak, nonatomic) UISegmentedControl *numberPlusMinusControl;
@@ -63,6 +64,42 @@
         [self setupChoiceTable];
     }
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    NSLog(@"view did load with item: %@", self.item.description);
+    
+    id<UILayoutSupport> topGuide = self.topLayoutGuide;
+    id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;
+    [self.textLabel positionBelowElementWithDefaultMargin:topGuide];
+    [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, [self.surveyResponse.survey.surveyItems count]];
+    
+    self.textLabel.text = self.item.text;
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{
+                                                                      NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                      NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
+    UIColor *color = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    self.navigationController.navigationBar.barTintColor = color;
+    self.toolbar.barTintColor = color;
+    self.toolbar.tintColor = [UIColor whiteColor];
+}
+
+
+#pragma mark - Setup
 
 - (void)commonSetup
 {
@@ -198,37 +235,6 @@
     [choiceTable positionAboveElementWithDefaultMargin:self.toolbar];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    id<UILayoutSupport> topGuide = self.topLayoutGuide;
-    id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;
-    [self.textLabel positionBelowElementWithDefaultMargin:topGuide];
-    [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
-    
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, [self.surveyResponse.survey.surveyItems count]];
-    
-    self.textLabel.text = self.item.text;
-    
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{
-                                                                      NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                                      NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
-    UIColor *color = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
-    self.navigationController.navigationBar.barTintColor = color;
-    self.toolbar.barTintColor = color;
-    self.toolbar.tintColor = [UIColor whiteColor];
-}
-
 - (void)cancelButtonPressed:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -344,7 +350,50 @@
     else {
         self.nextButton.enabled = NO;
         self.textField.text = nil;
+        [self presentValidationMessage];
     }
+}
+
+- (void)presentValidationMessage
+{
+    NSString *message = nil;
+    if (self.item.min != nil && self.item.max != nil) {
+        message = [NSString stringWithFormat:@"Response must be between %d and %d", [self.item.min intValue], [self.item.max intValue]];
+    }
+    else if (self.item.min != nil) {
+        message = [NSString stringWithFormat:@"Response must be at least %d", [self.item.min intValue]];
+    }
+    else if (self.item.max != nil) {
+        message = [NSString stringWithFormat:@"Response must be no more than %d", [self.item.max intValue]];
+    }
+    else {
+        return;
+    }
+    
+    if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
+        message = [message stringByAppendingString:@" characters long"];
+    }
+    
+    CGRect messageFrame = CGRectInset(self.textField.frame, kUIViewSmallTextMargin, kUIViewSmallTextMargin);
+    UIView *messageView = [OHMUserInterface fixedSizeFramedLabelWithText:message
+                                                                    size:messageFrame.size
+                                                                    font:[OHMAppConstants textFont]
+                                                               alignment:NSTextAlignmentCenter];
+    
+    [messageView moveOriginToPoint:messageFrame.origin];
+    messageView.backgroundColor = [[UIColor redColor] lightColor];
+    [self.view insertSubview:messageView belowSubview:self.textField];
+    self.validationMessageView = messageView;
+    
+    [UIView animateWithDuration:1.0
+                          delay:0.0
+         usingSpringWithDamping:0.3
+          initialSpringVelocity:0.0
+                        options:0
+                     animations:^{
+                         messageView.frame = CGRectOffset(messageView.frame, 0.0, self.textField.frame.size.height + kUIViewSmallTextMargin);
+                     }
+                     completion:NULL];
 }
 
 - (BOOL)validateTextField
@@ -352,10 +401,18 @@
     if (self.textField.text.length == 0) return NO;
     
     if (self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
-        [self validateNumberValue:[self.textField.text doubleValue]];
+        return [self validateNumberValue:[self.textField.text doubleValue]];
+    }
+    else if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
+        return [self validateTextValue:self.textField.text];
     }
     
     return YES;
+}
+
+- (BOOL)validateTextValue:(NSString *)text
+{
+    return [self validateNumberValue:[text length]];
 }
 
 - (void)backgroundTapped:(id)sender
