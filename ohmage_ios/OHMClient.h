@@ -11,6 +11,7 @@
 @class OHMOhmlet;
 @class OHMSurvey;
 @class OHMSurveyResponse;
+@class OHMSurveyPromptResponse;
 
 @protocol OHMClientDelegate;
 
@@ -31,7 +32,9 @@
 // Model
 - (NSOrderedSet *)ohmlets;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
-//- (NSInteger)surveyCount;
+
+- (void)setImage:(UIImage *)image forPromptResponse:(OHMSurveyPromptResponse *)promptResponse;
+- (UIImage *)imageForPromptResponse:(OHMSurveyPromptResponse *)promptResponse;
 
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;

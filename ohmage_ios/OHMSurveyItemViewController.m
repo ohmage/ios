@@ -29,8 +29,8 @@
 @property (nonatomic, strong) UIView *validationMessageView;
 @property (nonatomic) NSInteger selectedCount;
 
-// Number prompt
-@property (weak, nonatomic) UISegmentedControl *numberPlusMinusControl;
+@property (nonatomic, strong) UISegmentedControl *numberPlusMinusControl;
+@property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, strong) OHMSurveyItem *item;
 @property (nonatomic, strong) OHMSurveyPromptResponse *promptResponse;
@@ -70,7 +70,7 @@
     }
     
     if ([self itemNeedsActionButton]) {
-        
+        [self setupActionButton];
     }
 }
 
@@ -297,28 +297,12 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
     [button setTitle:[self actionButtonTitleText] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [button sizeToFit];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.textLabel];
     self.actionButton = button;
-}
-
-- (void)setupImagePicker
-{
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    
-    // If the device has a camera, take a picture, otherwise,
-    // just pick from photo library
-    if ([UIImagePickerController
-         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else {
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    
-    imagePicker.delegate = self;
-    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (void)cancelButtonPressed:(id)sender
@@ -344,13 +328,16 @@
 {
     switch (self.item.itemTypeValue) {
         case OHMSurveyItemTypeImagePrompt:
-            return @"Take Picture";
+            [self takePicture];
+            break;
         case OHMSurveyItemTypeAudioPrompt:
-            return @"Record Audio";
+            [self recordAudio];
+            break;
         case OHMSurveyItemTypeVideoPrompt:
-            return @"Record Video";
+            [self recordVideo];
+            break;
         default:
-            return nil;
+            break;
     }
 }
 
@@ -559,6 +546,54 @@
 #pragma - mark Image Prompt
 
 - (void)takePicture
+{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    // If the device has a camera, take a picture, otherwise,
+    // just pick from photo library
+    if ([UIImagePickerController
+         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    self.promptResponse.imageValue = image;
+    
+    if (self.imageView == nil) {
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:imageView];
+        [imageView positionBelowElementWithDefaultMargin:self.actionButton];
+        [imageView positionAboveElementWithDefaultMargin:self.toolbar];
+        [self.view constrainChildToDefaultHorizontalInsets:imageView];
+        self.imageView = imageView;
+    }
+    
+    self.imageView.image = image;
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma - mark Video Prompt
+
+- (void)recordVideo
+{
+    
+}
+
+
+#pragma - mark Audio Prompt
+
+- (void)recordAudio
 {
     
 }

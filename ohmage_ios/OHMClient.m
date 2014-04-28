@@ -16,6 +16,7 @@
 #import "OHMSurveyItemTypes.h"
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
+#import "OHMImageStore.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
@@ -77,6 +78,30 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
     return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
+}
+
+
+- (void)setImage:(UIImage *)image forPromptResponse:(OHMSurveyPromptResponse *)promptResponse
+{
+    NSManagedObjectID *responseID = promptResponse.objectID;
+    if (responseID.isTemporaryID) {
+        @throw [NSException exceptionWithName:@"TemporaryI ID"
+                                       reason:@"Cannot save image for prompt response with temporary ID"
+                                     userInfo:nil];
+    }
+    
+    [[OHMImageStore sharedStore] setImage:image forKey:[[responseID URIRepresentation] absoluteString]];
+}
+
+- (UIImage *)imageForPromptResponse:(OHMSurveyPromptResponse *)promptResponse
+{
+    NSManagedObjectID *responseID = promptResponse.objectID;
+    if (responseID.isTemporaryID) {
+        @throw [NSException exceptionWithName:@"TemporaryI ID"
+                                       reason:@"Cannot fetch image for prompt response with temporary ID"
+                                     userInfo:nil];
+    }
+    return [[OHMImageStore sharedStore] imageForKey:[[responseID URIRepresentation] absoluteString]];
 }
 
 

@@ -319,7 +319,7 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
     [self.superview addConstraints:[NSLayoutConstraint
                                     constraintsWithVisualFormat:@"V:[self]-[layoutElement]" options:0
                                     metrics:nil
-                                    views:NSDictionaryOfVariableBindings(layoutElement, self)]];
+                                    views:NSDictionaryOfVariableBindings(self, layoutElement)]];
 }
 
 /**

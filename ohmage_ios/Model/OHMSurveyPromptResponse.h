@@ -1,7 +1,8 @@
 #import "_OHMSurveyPromptResponse.h"
 
 @interface OHMSurveyPromptResponse : _OHMSurveyPromptResponse {}
-// Custom logic goes here.
+
+@property (nonatomic, strong) UIImage *imageValue;
 
 - (void)initializeDefaultResonse;
 

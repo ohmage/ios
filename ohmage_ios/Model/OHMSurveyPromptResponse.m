@@ -12,6 +12,8 @@
 
 @implementation OHMSurveyPromptResponse
 
+@synthesize imageValue;
+
 - (void)initializeDefaultResonse
 {
     OHMSurveyItem *item = self.surveyItem;
