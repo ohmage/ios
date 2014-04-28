@@ -322,10 +322,11 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     response.survey = survey;
     
     for (OHMSurveyItem *item in survey.surveyItems) {
-        if (item.itemTypeValue != OHMSurveyItemTypeMessage) {
-            OHMSurveyPromptResponse *promptResponse = [self insertNewSurveyPromptResponse];
-            promptResponse.surveyItem = item;
-            promptResponse.surveyResponse = response;
+        OHMSurveyPromptResponse *promptResponse = [self insertNewSurveyPromptResponse];
+        promptResponse.surveyItem = item;
+        promptResponse.surveyResponse = response;
+        if (item.hasDefaultResponse) {
+            [promptResponse initializeDefaultResonse];
         }
     }
     

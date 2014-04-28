@@ -43,7 +43,7 @@
     self.descriptionLabel.text = self.survey.surveyDescription;
     self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.surveyItems count]];
     
-    NSLog(@"Survey: %@", self.survey.description);
+    NSLog(@"Survey: %@", self.survey);
     
 //    self.view.backgroundColor = [OHMAppConstants lightColorForRowIndex:self.survey.colorIndex];
 }

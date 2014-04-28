@@ -11,6 +11,7 @@
 @implementation OHMSurveyPromptChoice
 
 @synthesize isSelected;
+@synthesize defaultWasDeselected;
 
 - (NSString *)description
 {

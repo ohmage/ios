@@ -1,4 +1,6 @@
 #import "OHMSurveyResponse.h"
+#import "OHMSurvey.h"
+#import "OHMSurveyItem.h"
 
 
 @interface OHMSurveyResponse ()
@@ -10,6 +12,13 @@
 
 @implementation OHMSurveyResponse
 
-// Custom logic goes here.
+- (BOOL)shouldShowItemAtIndex:(NSInteger)itemIndex
+{
+    if (itemIndex >= [self.survey.surveyItems count]) return NO;
+    
+    OHMSurveyItem *item = self.survey.surveyItems[itemIndex];
+    
+    return YES;
+}
 
 @end

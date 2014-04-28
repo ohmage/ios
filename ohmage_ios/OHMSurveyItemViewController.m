@@ -14,22 +14,26 @@
 #import "OHMUserInterface.h"
 #import "OHMSurveyPromptChoice.h"
 
-@interface OHMSurveyItemViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *textLabel;
-@property (weak, nonatomic) IBOutlet UITextField *textField;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *skipButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
+@interface OHMSurveyItemViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIButton *actionButton;
+@property (nonatomic, strong) UIToolbar *toolbar;
+@property (nonatomic, strong) UIBarButtonItem *backButton;
+@property (nonatomic, strong) UIBarButtonItem *skipButton;
+@property (nonatomic, strong) UIBarButtonItem *nextButton;
 
 @property (nonatomic) BOOL backgroundTapEnabled;
 @property (nonatomic, strong) UITapGestureRecognizer *backgroundTapGesture;
 @property (nonatomic, strong) UIView *validationMessageView;
+@property (nonatomic) NSInteger selectedCount;
 
 // Number prompt
 @property (weak, nonatomic) UISegmentedControl *numberPlusMinusControl;
 
 @property (nonatomic, strong) OHMSurveyItem *item;
+@property (nonatomic, strong) OHMSurveyPromptResponse *promptResponse;
 
 @end
 
@@ -47,7 +51,8 @@
     if (self) {
         self.surveyResponse = response;
         self.itemIndex = index;
-        self.item = self.surveyResponse.survey.surveyItems[self.itemIndex];
+        self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
+        self.item = self.promptResponse.surveyItem;
     }
     return self;
 }
@@ -62,6 +67,10 @@
     
     if ([self itemNeedsChoiceTable]) {
         [self setupChoiceTable];
+    }
+    
+    if ([self itemNeedsActionButton]) {
+        
     }
 }
 
@@ -96,6 +105,64 @@
     self.navigationController.navigationBar.barTintColor = color;
     self.toolbar.barTintColor = color;
     self.toolbar.tintColor = [UIColor whiteColor];
+    
+    [self updateNextButtonEnabledState];
+}
+
+- (void)updateNextButtonEnabledState
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+            self.nextButton.enabled = [self validateChoices];
+            break;
+        case OHMSurveyItemTypeNumberPrompt:
+        case OHMSurveyItemTypeTextPrompt:
+            self.nextButton.enabled = [self validateTextField];
+            break;
+        case OHMSurveyItemTypeMessage:
+        default:
+            self.nextButton.enabled = YES;
+            break;
+    }
+}
+
+- (BOOL)itemNeedsTextField
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeNumberPrompt:
+        case OHMSurveyItemTypeTextPrompt:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (BOOL)itemNeedsChoiceTable
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (BOOL)itemNeedsActionButton
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+        case OHMSurveyItemTypeAudioPrompt:
+        case OHMSurveyItemTypeVideoPrompt:
+            return YES;
+        default:
+            return NO;
+    }
 }
 
 
@@ -135,22 +202,10 @@
     }
     
     UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonPressed:)];
-    nextButton.enabled = ((self.item.itemTypeValue == OHMSurveyItemTypeMessage) || self.item.hasDefaultResponse);
     [barItems addObject:nextButton];
     self.nextButton = nextButton;
     
     toolbar.items = barItems;
-}
-
-- (BOOL)itemNeedsTextField
-{
-    switch (self.item.itemTypeValue) {
-        case OHMSurveyItemTypeNumberPrompt:
-        case OHMSurveyItemTypeTextPrompt:
-            return YES;
-        default:
-            return NO;
-    }
 }
 
 - (void)setupTextField
@@ -209,19 +264,6 @@
     return @"Enter something";
 }
 
-- (BOOL)itemNeedsChoiceTable
-{
-    switch (self.item.itemTypeValue) {
-        case OHMSurveyItemTypeStringSingleChoicePrompt:
-        case OHMSurveyItemTypeStringMultiChoicePrompt:
-        case OHMSurveyItemTypeNumberSingleChoicePrompt:
-        case OHMSurveyItemTypeNumberMultiChoicePrompt:
-            return YES;
-        default:
-            return NO;
-    }
-}
-
 - (void)setupChoiceTable
 {
     UITableView *choiceTable = [[UITableView alloc] init];
@@ -235,20 +277,81 @@
     [choiceTable positionAboveElementWithDefaultMargin:self.toolbar];
 }
 
+- (NSString *)actionButtonTitleText
+{
+    
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+            return @"Take Picture";
+        case OHMSurveyItemTypeAudioPrompt:
+            return @"Record Audio";
+        case OHMSurveyItemTypeVideoPrompt:
+            return @"Record Video";
+        default:
+            return nil;
+    }
+}
+
+- (void)setupActionButton
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    [button setTitle:[self actionButtonTitleText] forState:UIControlStateNormal];
+    [button sizeToFit];
+    [self.view addSubview:button];
+    [button centerHorizontallyInView:self.view];
+    [button positionBelowElementWithDefaultMargin:self.textLabel];
+    self.actionButton = button;
+}
+
+- (void)setupImagePicker
+{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    // If the device has a camera, take a picture, otherwise,
+    // just pick from photo library
+    if ([UIImagePickerController
+         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
 - (void)cancelButtonPressed:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (IBAction)backButtonPressed:(id)sender {
+- (void)backButtonPressed:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)skipButtonPressed:(id)sender {
+- (void)skipButtonPressed:(id)sender
+{
     [self pushNextItemViewController];
 }
-- (IBAction)nextButtonPressed:(id)sender {
+
+- (void)nextButtonPressed:(id)sender {
     [self pushNextItemViewController];
+}
+
+- (void)actionButtonPressed:(id)sender
+{
+    switch (self.item.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+            return @"Take Picture";
+        case OHMSurveyItemTypeAudioPrompt:
+            return @"Record Audio";
+        case OHMSurveyItemTypeVideoPrompt:
+            return @"Record Video";
+        default:
+            return nil;
+    }
 }
 
 - (void)pushNextItemViewController
@@ -311,10 +414,7 @@
     
     OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
     cell.textLabel.text = choice.text;
-    if (choice.isDefaultValue && !choice.defaultWasDeselected) {
-        choice.isSelected = YES;
-    }
-    cell.accessoryType = (choice.isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone);
+    cell.accessoryType = ([self.promptResponse.selectedChoices containsObject:choice] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone);
     
     return cell;
 }
@@ -322,9 +422,31 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
-    choice.isSelected = !choice.isSelected;
-    choice.defaultWasDeselected = YES;
+    if ([self.promptResponse.selectedChoices containsObject:choice]) {
+        [self.promptResponse removeSelectedChoicesObject:choice];
+    }
+    else {
+        [self.promptResponse addSelectedChoicesObject:choice];
+    }
+    self.nextButton.enabled = [self validateChoices];
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (BOOL)validateChoices
+{
+    NSInteger choiceCount = [self.promptResponse.selectedChoices count];
+    if (self.item.minChoices != nil && self.item.maxChoices != nil) {
+        return (choiceCount >= self.item.minChoicesValue && choiceCount <= self.item.maxChoicesValue);
+    }
+    else if (self.item.minChoices != nil) {
+        return (choiceCount >= self.item.minChoicesValue);
+    }
+    else if (self.item.maxChoices != nil) {
+        return (choiceCount <= self.item.maxChoicesValue);
+    }
+    else {
+        return (choiceCount > 0);
+    }
 }
 
 #pragma mark - TextField Delegate
@@ -354,47 +476,6 @@
     }
 }
 
-- (void)presentValidationMessage
-{
-    NSString *message = nil;
-    if (self.item.min != nil && self.item.max != nil) {
-        message = [NSString stringWithFormat:@"Response must be between %d and %d", [self.item.min intValue], [self.item.max intValue]];
-    }
-    else if (self.item.min != nil) {
-        message = [NSString stringWithFormat:@"Response must be at least %d", [self.item.min intValue]];
-    }
-    else if (self.item.max != nil) {
-        message = [NSString stringWithFormat:@"Response must be no more than %d", [self.item.max intValue]];
-    }
-    else {
-        return;
-    }
-    
-    if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
-        message = [message stringByAppendingString:@" characters long"];
-    }
-    
-    CGRect messageFrame = CGRectInset(self.textField.frame, kUIViewSmallTextMargin, kUIViewSmallTextMargin);
-    UIView *messageView = [OHMUserInterface fixedSizeFramedLabelWithText:message
-                                                                    size:messageFrame.size
-                                                                    font:[OHMAppConstants textFont]
-                                                               alignment:NSTextAlignmentCenter];
-    
-    [messageView moveOriginToPoint:messageFrame.origin];
-    messageView.backgroundColor = [[UIColor redColor] lightColor];
-    [self.view insertSubview:messageView belowSubview:self.textField];
-    self.validationMessageView = messageView;
-    
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-         usingSpringWithDamping:0.3
-          initialSpringVelocity:0.0
-                        options:0
-                     animations:^{
-                         messageView.frame = CGRectOffset(messageView.frame, 0.0, self.textField.frame.size.height + kUIViewSmallTextMargin);
-                     }
-                     completion:NULL];
-}
 
 - (BOOL)validateTextField
 {
@@ -432,6 +513,54 @@
         [self.view removeGestureRecognizer:self.backgroundTapGesture];
         self.backgroundTapGesture = nil;
     }
+}
+- (void)presentValidationMessage
+{
+    NSString *message = nil;
+    if (self.item.min != nil && self.item.max != nil) {
+        message = [NSString stringWithFormat:@"Response must be between %d and %d", [self.item.min intValue], [self.item.max intValue]];
+    }
+    else if (self.item.min != nil) {
+        message = [NSString stringWithFormat:@"Response must be at least %d", [self.item.min intValue]];
+    }
+    else if (self.item.max != nil) {
+        message = [NSString stringWithFormat:@"Response must be no more than %d", [self.item.max intValue]];
+    }
+    else {
+        return;
+    }
+    
+    if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
+        message = [message stringByAppendingString:@" characters long"];
+    }
+    
+    CGRect messageFrame = CGRectInset(self.textField.frame, kUIViewSmallTextMargin, kUIViewSmallTextMargin);
+    UIView *messageView = [OHMUserInterface fixedSizeFramedLabelWithText:message
+                                                                    size:messageFrame.size
+                                                                    font:[OHMAppConstants textFont]
+                                                               alignment:NSTextAlignmentCenter];
+    
+    [messageView moveOriginToPoint:messageFrame.origin];
+    messageView.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    [self.view insertSubview:messageView belowSubview:self.textField];
+    self.validationMessageView = messageView;
+    
+    [UIView animateWithDuration:1.0
+                          delay:0.0
+         usingSpringWithDamping:0.3
+          initialSpringVelocity:0.0
+                        options:0
+                     animations:^{
+                         messageView.frame = CGRectOffset(messageView.frame, 0.0, self.textField.frame.size.height + kUIViewSmallTextMargin);
+                     }
+                     completion:NULL];
+}
+
+#pragma - mark Image Prompt
+
+- (void)takePicture
+{
+    
 }
 
 @end

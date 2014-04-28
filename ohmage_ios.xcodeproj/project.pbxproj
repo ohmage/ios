@@ -68,6 +68,7 @@
 		1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6618EB9C7700035BDF /* OHMObject.m */; };
 		1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */; };
 		1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */; };
+		1ECA87EB190DBB8D00429D5D /* OHMPromptCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ECA87EA190DBB8D00429D5D /* OHMPromptCondition.m */; };
 		1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */; };
 		1EDA0B1F18F4068400C89F91 /* OHMSurveyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */; };
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
@@ -177,6 +178,8 @@
 		1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
 		1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyTableViewCell.h; sourceTree = "<group>"; };
 		1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyTableViewCell.m; sourceTree = "<group>"; };
+		1ECA87E9190DBB8D00429D5D /* OHMPromptCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMPromptCondition.h; sourceTree = "<group>"; };
+		1ECA87EA190DBB8D00429D5D /* OHMPromptCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMPromptCondition.m; sourceTree = "<group>"; };
 		1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyDetailViewController.h; sourceTree = "<group>"; };
 		1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyDetailViewController.m; sourceTree = "<group>"; };
 		1EDA0B1D18F4068400C89F91 /* OHMSurveyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMSurveyDetailViewController.xib; sourceTree = "<group>"; };
@@ -431,6 +434,8 @@
 				1E1B60C619063242001046E0 /* OHMSurveyResponse.m */,
 				1EDA0B2518F4948200C89F91 /* OHMSurveyItemTypes.h */,
 				1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */,
+				1ECA87E9190DBB8D00429D5D /* OHMPromptCondition.h */,
+				1ECA87EA190DBB8D00429D5D /* OHMPromptCondition.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -647,6 +652,7 @@
 				1EAD557E18D1500C00B55028 /* OHMProject.m in Sources */,
 				1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */,
 				1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */,
+				1ECA87EB190DBB8D00429D5D /* OHMPromptCondition.m in Sources */,
 				1EF693DE18EA0F670003E077 /* AFURLResponseSerialization.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
 				1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */,

@@ -5,10 +5,12 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyPromptResponseAttributes {
-	__unsafe_unretained NSString *value;
+	__unsafe_unretained NSString *numberValue;
+	__unsafe_unretained NSString *stringValue;
 } OHMSurveyPromptResponseAttributes;
 
 extern const struct OHMSurveyPromptResponseRelationships {
+	__unsafe_unretained NSString *selectedChoices;
 	__unsafe_unretained NSString *surveyItem;
 	__unsafe_unretained NSString *surveyResponse;
 } OHMSurveyPromptResponseRelationships;
@@ -16,8 +18,10 @@ extern const struct OHMSurveyPromptResponseRelationships {
 extern const struct OHMSurveyPromptResponseFetchedProperties {
 } OHMSurveyPromptResponseFetchedProperties;
 
+@class OHMSurveyPromptChoice;
 @class OHMSurveyItem;
 @class OHMSurveyResponse;
+
 
 
 
@@ -34,12 +38,33 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* value;
+@property (nonatomic, strong) NSNumber* numberValue;
 
 
 
-//- (BOOL)validateValue:(id*)value_ error:(NSError**)error_;
+@property double numberValueValue;
+- (double)numberValueValue;
+- (void)setNumberValueValue:(double)value_;
 
+//- (BOOL)validateNumberValue:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* stringValue;
+
+
+
+//- (BOOL)validateStringValue:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSSet *selectedChoices;
+
+- (NSMutableSet*)selectedChoicesSet;
 
 
 
@@ -63,15 +88,34 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 @interface _OHMSurveyPromptResponse (CoreDataGeneratedAccessors)
 
+- (void)addSelectedChoices:(NSSet*)value_;
+- (void)removeSelectedChoices:(NSSet*)value_;
+- (void)addSelectedChoicesObject:(OHMSurveyPromptChoice*)value_;
+- (void)removeSelectedChoicesObject:(OHMSurveyPromptChoice*)value_;
+
 @end
 
 @interface _OHMSurveyPromptResponse (CoreDataGeneratedPrimitiveAccessors)
 
 
-- (NSString*)primitiveValue;
-- (void)setPrimitiveValue:(NSString*)value;
+- (NSNumber*)primitiveNumberValue;
+- (void)setPrimitiveNumberValue:(NSNumber*)value;
+
+- (double)primitiveNumberValueValue;
+- (void)setPrimitiveNumberValueValue:(double)value_;
 
 
+
+
+- (NSString*)primitiveStringValue;
+- (void)setPrimitiveStringValue:(NSString*)value;
+
+
+
+
+
+- (NSMutableSet*)primitiveSelectedChoices;
+- (void)setPrimitiveSelectedChoices:(NSMutableSet*)value;
 
 
 

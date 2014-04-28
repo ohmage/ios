@@ -11,6 +11,7 @@ const struct OHMSurveyPromptChoiceAttributes OHMSurveyPromptChoiceAttributes = {
 };
 
 const struct OHMSurveyPromptChoiceRelationships OHMSurveyPromptChoiceRelationships = {
+	.promptResponses = @"promptResponses",
 	.surveyItem = @"surveyItem",
 };
 
@@ -125,6 +126,19 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 
 
 
+
+@dynamic promptResponses;
+
+	
+- (NSMutableSet*)promptResponsesSet {
+	[self willAccessValueForKey:@"promptResponses"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"promptResponses"];
+  
+	[self didAccessValueForKey:@"promptResponses"];
+	return result;
+}
+	
 
 @dynamic surveyItem;
 

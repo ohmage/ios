@@ -12,12 +12,14 @@ extern const struct OHMSurveyPromptChoiceAttributes {
 } OHMSurveyPromptChoiceAttributes;
 
 extern const struct OHMSurveyPromptChoiceRelationships {
+	__unsafe_unretained NSString *promptResponses;
 	__unsafe_unretained NSString *surveyItem;
 } OHMSurveyPromptChoiceRelationships;
 
 extern const struct OHMSurveyPromptChoiceFetchedProperties {
 } OHMSurveyPromptChoiceFetchedProperties;
 
+@class OHMSurveyPromptResponse;
 @class OHMSurveyItem;
 
 
@@ -86,6 +88,13 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *promptResponses;
+
+- (NSMutableSet*)promptResponsesSet;
+
+
+
+
 @property (nonatomic, strong) OHMSurveyItem *surveyItem;
 
 //- (BOOL)validateSurveyItem:(id*)value_ error:(NSError**)error_;
@@ -97,6 +106,11 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 @end
 
 @interface _OHMSurveyPromptChoice (CoreDataGeneratedAccessors)
+
+- (void)addPromptResponses:(NSSet*)value_;
+- (void)removePromptResponses:(NSSet*)value_;
+- (void)addPromptResponsesObject:(OHMSurveyPromptResponse*)value_;
+- (void)removePromptResponsesObject:(OHMSurveyPromptResponse*)value_;
 
 @end
 
@@ -131,6 +145,11 @@ extern const struct OHMSurveyPromptChoiceFetchedProperties {
 - (void)setPrimitiveText:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitivePromptResponses;
+- (void)setPrimitivePromptResponses:(NSMutableSet*)value;
 
 
 

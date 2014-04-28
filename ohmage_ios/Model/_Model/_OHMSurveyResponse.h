@@ -32,9 +32,9 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *promptResponses;
+@property (nonatomic, strong) NSOrderedSet *promptResponses;
 
-- (NSMutableSet*)promptResponsesSet;
+- (NSMutableOrderedSet*)promptResponsesSet;
 
 
 
@@ -51,8 +51,8 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 @interface _OHMSurveyResponse (CoreDataGeneratedAccessors)
 
-- (void)addPromptResponses:(NSSet*)value_;
-- (void)removePromptResponses:(NSSet*)value_;
+- (void)addPromptResponses:(NSOrderedSet*)value_;
+- (void)removePromptResponses:(NSOrderedSet*)value_;
 - (void)addPromptResponsesObject:(OHMSurveyPromptResponse*)value_;
 - (void)removePromptResponsesObject:(OHMSurveyPromptResponse*)value_;
 
@@ -62,8 +62,8 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
-- (NSMutableSet*)primitivePromptResponses;
-- (void)setPrimitivePromptResponses:(NSMutableSet*)value;
+- (NSMutableOrderedSet*)primitivePromptResponses;
+- (void)setPrimitivePromptResponses:(NSMutableOrderedSet*)value;
 
 
 

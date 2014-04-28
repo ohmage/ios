@@ -50,10 +50,10 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 @dynamic promptResponses;
 
 	
-- (NSMutableSet*)promptResponsesSet {
+- (NSMutableOrderedSet*)promptResponsesSet {
 	[self willAccessValueForKey:@"promptResponses"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"promptResponses"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"promptResponses"];
   
 	[self didAccessValueForKey:@"promptResponses"];
 	return result;
