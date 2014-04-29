@@ -4,6 +4,7 @@
 #import "_OHMSurveyResponse.h"
 
 const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
+	.timestamp = @"timestamp",
 };
 
 const struct OHMSurveyResponseRelationships OHMSurveyResponseRelationships = {
@@ -43,6 +44,13 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic timestamp;
+
+
 
 
 

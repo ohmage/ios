@@ -144,13 +144,19 @@
     return frameView;
 }
 
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector
++ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    button.titleEdgeInsets = kUIButtonTitleInsets;
-    [button sizeToFit];
+    UIEdgeInsets insets = kUIButtonTitleInsets;
+    button.titleEdgeInsets = insets;
+    button.titleLabel.numberOfLines = 0;
+    CGFloat titleWidth = maxWidth - (insets.left + insets.right);
+    CGSize titleSize = [self sizeForText:title withWidth:titleWidth font:button.titleLabel.font];
+    NSLog(@"title size: %@", NSStringFromCGSize(titleSize));
+    CGSize buttonSize = CGSizeMake(titleSize.width + (insets.left + insets.right), titleSize.height + (insets.top + insets.bottom));
+    [button constrainSize:buttonSize];
     return button;
 }
 
@@ -166,6 +172,21 @@
 //    view.layer.shadowOffset = CGSizeMake(0.0, 1.0);
 //    view.layer.shadowRadius = 0;
 //    view.layer.shadowOpacity = 1.0;
+}
+
++ (NSString *)formattedDate:(NSDate *)date
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m" options:0
+                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:formatString];
+//        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+//        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    }
+    
+    return [dateFormatter stringFromDate:date];
 }
 
 @end

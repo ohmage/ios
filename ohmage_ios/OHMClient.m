@@ -460,7 +460,8 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
                                                                sortKey:(NSString *)sortKey
                                                              predicate:(NSPredicate *)predicate
                                                     sectionNameKeyPath:(NSString *)sectionNameKeyPath
-                                                             cacheName:(NSString *)cacheName {
+                                                             cacheName:(NSString *)cacheName
+{
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
     NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     

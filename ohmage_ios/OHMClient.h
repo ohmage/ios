@@ -36,6 +36,11 @@
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
 - (void)deleteObject:(NSManagedObject *)object;
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+                                                               sortKey:(NSString *)sortKey
+                                                             predicate:(NSPredicate *)predicate
+                                                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                                                             cacheName:(NSString *)cacheName;
 
 @end
 

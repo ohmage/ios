@@ -8,6 +8,7 @@
 
 #import "OHMSurveyItemViewController.h"
 #import "OHMSurveyCompleteViewController.h"
+#import "OHMSurveyDetailViewController.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
@@ -297,7 +298,9 @@
 
 - (void)setupActionButton
 {
-    UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText] target:self action:@selector(actionButtonPressed:)];
+    
+    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText] target:self action:@selector(actionButtonPressed:) maxWidth:buttonWidth];
     button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
@@ -308,7 +311,13 @@
 - (void)cancelButtonPressed:(id)sender
 {
     [[OHMClient sharedClient] deleteObject:self.surveyResponse];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+    if ([vc isMemberOfClass:[OHMSurveyDetailViewController class]]) {
+        [self.navigationController popToViewController:vc animated:YES];
+    }
+    else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void)backButtonPressed:(id)sender

@@ -14,4 +14,6 @@
 
 - (instancetype)initWithSurvey:(OHMSurvey *)survey;
 
+- (void)popToNavigationRootAnimated;
+
 @end

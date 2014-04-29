@@ -26,8 +26,10 @@
                                     font:(UIFont *)font
                                alignment:(NSTextAlignment)textAlignment;
 
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector;
++ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
 
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
+
++ (NSString *)formattedDate:(NSDate *)date;
 
 @end

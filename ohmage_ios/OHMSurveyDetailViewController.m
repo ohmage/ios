@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *takeSurveyButton;
 @property (nonatomic, strong) OHMSurvey *survey;
 
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
 @end
 
 @implementation OHMSurveyDetailViewController
@@ -37,12 +39,16 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"Survey Detail";
+    NSLog(@"navItem left button: %@", self.navigationItem.leftBarButtonItem.title);
     
     
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"UITableViewCell"];
     
     [self setupHeaderView];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
+    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:predicate sectionNameKeyPath:nil cacheName:nil];
     
     NSLog(@"Survey: %@", self.survey);
 }
@@ -66,7 +72,8 @@
     UILabel *promptCountLabel = [OHMUserInterface headerDetailLabelWithText:promptCountText width:contentWidth];
     contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
     
-    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:)];
+    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:) maxWidth:buttonWidth];
     takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
     contentHeight += takeSurveyButton.frame.size.height + kUIViewVerticalMargin;
     
@@ -118,6 +125,12 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+
+- (void)popToNavigationRootAnimated
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -127,7 +140,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;// MAX([self.survey.surveyResponses count], 1);
+    return MAX([[self.fetchedResultsController fetchedObjects] count], 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -135,9 +148,20 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    cell.textLabel.text = @"No responses logged yet.";
+    if ([[self.fetchedResultsController fetchedObjects] count]) {
+        OHMSurveyResponse *response = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        cell.textLabel.text = [OHMUserInterface formattedDate:response.timestamp];
+    }
+    else {
+        cell.textLabel.text = @"No responses logged yet.";
+    }
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"Survey Responses:";
 }
 
 //- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -7,18 +7,26 @@
 //
 
 #import "OHMSurveyCompleteViewController.h"
+#import "OHMSurveyDetailViewController.h"
+#import "OHMSurveyResponse.h"
+#import "OHMSurvey.h"
+#import "OHMUserInterface.h"
+#import "OHMMediaStore.h"
 
 @interface OHMSurveyCompleteViewController ()
+
+@property (nonatomic, strong) UIButton *submitButton;
 
 @end
 
 @implementation OHMSurveyCompleteViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
-        // Custom initialization
+        self.surveyResponse = response;
+        self.itemIndex = [response.survey.surveyItems count]; // to enable back button
     }
     return self;
 }
@@ -26,7 +34,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.navigationItem.title = @"Survey Complete";
+    
+    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    UIButton *button = [OHMUserInterface buttonWithTitle:@"Submit" target:self action:@selector(submitButtonPressed:) maxWidth:buttonWidth];
+    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    [self.view addSubview:button];
+    [button centerHorizontallyInView:self.view];
+    [button positionBelowElementWithDefaultMargin:self.topLayoutGuide];
+    self.submitButton = button;
 }
 
 - (void)didReceiveMemoryWarning
@@ -35,15 +52,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)submitButtonPressed:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    self.surveyResponse.timestamp = [NSDate date];
+    [[OHMClient sharedClient] saveClientState];
+    OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:self.surveyResponse.survey];
+    
+    UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:vc
+                                                                      action:@selector(popToNavigationRootAnimated)];
+    vc.navigationItem.leftBarButtonItem = doneButtonItem;
+    [self.navigationController pushViewController:vc animated:YES];
 }
-*/
 
 @end

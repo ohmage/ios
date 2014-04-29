@@ -10,4 +10,6 @@
 
 @interface OHMSurveyCompleteViewController : OHMSurveyItemViewController
 
+- (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response;
+
 @end

@@ -5,6 +5,7 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyResponseAttributes {
+	__unsafe_unretained NSString *timestamp;
 } OHMSurveyResponseAttributes;
 
 extern const struct OHMSurveyResponseRelationships {
@@ -19,6 +20,7 @@ extern const struct OHMSurveyResponseFetchedProperties {
 @class OHMSurvey;
 
 
+
 @interface OHMSurveyResponseID : NSManagedObjectID {}
 @end
 
@@ -27,6 +29,16 @@ extern const struct OHMSurveyResponseFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyResponseID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* timestamp;
+
+
+
+//- (BOOL)validateTimestamp:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -59,6 +71,12 @@ extern const struct OHMSurveyResponseFetchedProperties {
 @end
 
 @interface _OHMSurveyResponse (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSDate*)primitiveTimestamp;
+- (void)setPrimitiveTimestamp:(NSDate*)value;
+
+
 
 
 

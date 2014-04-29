@@ -38,6 +38,8 @@
 {
     NSLog(@"prompt response did save: %@", [self description]);
     
+    if (self.skippedValue) return;
+    
     if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
         [[OHMMediaStore sharedStore] setImage:self.imageValue forKey:[[self.objectID URIRepresentation] absoluteString]];
     }
