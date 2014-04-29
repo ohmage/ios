@@ -266,11 +266,11 @@
 //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
     }
     
-    __weak UITableView *weakTableView = self.tableView;
-    __weak NSIndexPath *weakIndex = indexPath;
+//    __weak UITableView *weakTableView = self.tableView;
+//    __weak NSIndexPath *weakIndex = indexPath;
     
     survey.surveyUpdatedBlock = ^{
-        [weakTableView reloadRowsAtIndexPaths:@[weakIndex] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     
     return cell;

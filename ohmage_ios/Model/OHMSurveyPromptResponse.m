@@ -13,6 +13,7 @@
 @implementation OHMSurveyPromptResponse
 
 @synthesize imageValue;
+@synthesize videoURL;
 
 - (void)initializeDefaultResonse
 {

@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) UISegmentedControl *numberPlusMinusControl;
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) UIImagePickerController *videoPicker;
 
 @property (nonatomic, strong) OHMSurveyItem *item;
 @property (nonatomic, strong) OHMSurveyPromptResponse *promptResponse;
@@ -559,25 +561,44 @@
     }
     
     imagePicker.delegate = self;
+    self.imagePicker = imagePicker;
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
-    self.promptResponse.imageValue = image;
-    
-    if (self.imageView == nil) {
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:imageView];
-        [imageView positionBelowElementWithDefaultMargin:self.actionButton];
-        [imageView positionAboveElementWithDefaultMargin:self.toolbar];
-        [self.view constrainChildToDefaultHorizontalInsets:imageView];
-        self.imageView = imageView;
+    if ([picker isEqual:self.imagePicker]) {
+        UIImage *image = info[UIImagePickerControllerOriginalImage];
+        self.promptResponse.imageValue = image;
+        
+        if (self.imageView == nil) {
+            UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            [self.view addSubview:imageView];
+            [imageView positionBelowElementWithDefaultMargin:self.actionButton];
+            [imageView positionAboveElementWithDefaultMargin:self.toolbar];
+            [self.view constrainChildToDefaultHorizontalInsets:imageView];
+            self.imageView = imageView;
+        }
+        
+        self.imageView.image = image;
     }
-    
-    self.imageView.image = image;
+    else if ([picker isEqual:self.videoPicker]) {
+        NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
+        if (mediaURL) {
+            self.promptResponse.videoURL = mediaURL;
+//            // Make sure this device supports videos in its photo album
+//            if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([mediaURL path])) {
+//                
+//                // Save the video to the photos album
+//                UISaveVideoAtPathToSavedPhotosAlbum([mediaURL path], nil, nil, nil);
+//                
+//                // Remove the video from the temporary directory
+//                [[NSFileManager defaultManager] removeItemAtPath:[mediaURL path]
+//                                                           error:nil];
+//            }
+        }
+    }
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -587,7 +608,30 @@
 
 - (void)recordVideo
 {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     
+    if ([UIImagePickerController
+         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        NSArray *availableTypes = [UIImagePickerController
+                                   availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        
+        if ([availableTypes containsObject:(__bridge NSString *)kUTTypeMovie]) {
+            [imagePicker setMediaTypes:@[(__bridge NSString *)kUTTypeMovie]];
+            if (self.promptResponse.surveyItem.maxDuration != nil) {
+                imagePicker.videoMaximumDuration = self.promptResponse.surveyItem.maxDurationValue;
+            }
+        }
+        else {
+            return;
+        }
+    } else {
+        return;
+    }
+    
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 
