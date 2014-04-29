@@ -33,11 +33,9 @@
 - (NSOrderedSet *)ohmlets;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 
-- (void)setImage:(UIImage *)image forPromptResponse:(OHMSurveyPromptResponse *)promptResponse;
-- (UIImage *)imageForPromptResponse:(OHMSurveyPromptResponse *)promptResponse;
-
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
+- (void)deleteObject:(NSManagedObject *)object;
 
 @end
 

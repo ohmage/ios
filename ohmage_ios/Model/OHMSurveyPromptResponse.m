@@ -1,6 +1,7 @@
 #import "OHMSurveyPromptResponse.h"
 #import "OHMSurveyItem.h"
 #import "OHMSurveyPromptChoice.h"
+#import "OHMMediaStore.h"
 
 
 @interface OHMSurveyPromptResponse ()
@@ -12,8 +13,8 @@
 
 @implementation OHMSurveyPromptResponse
 
-@synthesize imageValue;
-@synthesize videoURL;
+@synthesize imageValue=_imageValue;
+@synthesize videoURL=_videoURL;
 
 - (void)initializeDefaultResonse
 {
@@ -31,6 +32,34 @@
             [self addSelectedChoicesObject:choice];
         }
     }
+}
+
+- (void)didSave
+{
+    NSLog(@"prompt response did save: %@", [self description]);
+    
+    if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
+        [[OHMMediaStore sharedStore] setImage:self.imageValue forKey:[[self.objectID URIRepresentation] absoluteString]];
+    }
+    else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) {
+        [[OHMMediaStore sharedStore] setVideoWithURL:self.videoURL forKey:[[self.objectID URIRepresentation] absoluteString]];
+    }
+}
+
+- (NSURL *)videoURL
+{
+    if (_videoURL == nil) {
+        _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:[[self.objectID URIRepresentation] absoluteString]];
+    }
+    return _videoURL;
+}
+
+- (UIImage *)imageValue
+{
+    if (_imageValue == nil) {
+        _imageValue = [[OHMMediaStore sharedStore] imageForKey:[[self.objectID URIRepresentation] absoluteString]];
+    }
+    return _imageValue;
 }
 
 @end

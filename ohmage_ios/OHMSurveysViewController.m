@@ -167,12 +167,10 @@
     CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
     CGFloat contentHeight = kUIViewVerticalMargin;
     
-    UILabel *nameLabel = [OHMUserInterface variableHeightLabelWithText:nameText width:contentWidth font:[UIFont boldSystemFontOfSize:18]];
-    nameLabel.textAlignment = NSTextAlignmentCenter;
+    UILabel *nameLabel = [OHMUserInterface headerTitleLabelWithText:nameText width:contentWidth];
     contentHeight += nameLabel.frame.size.height + kUIViewSmallTextMargin;
     
-    UILabel *descriptionLabel = [OHMUserInterface variableHeightLabelWithText:self.ohmlet.ohmletDescription width:contentWidth font:[UIFont systemFontOfSize:16]];
-    descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    UILabel *descriptionLabel = [OHMUserInterface headerDescriptionLabelWithText:self.ohmlet.ohmletDescription width:contentWidth];
     contentHeight += descriptionLabel.frame.size.height + kUIViewSmallTextMargin;
     
     UIPageControl *pageControl = [[UIPageControl alloc] init];

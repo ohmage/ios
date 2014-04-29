@@ -9,6 +9,12 @@
 #import "OHMAppConstants.h"
 #import "UIColor+Ohmage.h"
 
+CGFloat const kUIViewVerticalMargin = 15.0;
+CGFloat const kUIViewHorizontalMargin = 15.0;
+CGFloat const kUIViewSmallTextMargin = 4.0;
+
+UIEdgeInsets const kUIButtonTitleInsets = {kUIViewSmallTextMargin, kUIViewHorizontalMargin, kUIViewSmallTextMargin, kUIViewHorizontalMargin};
+
 @implementation OHMAppConstants
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex
@@ -56,6 +62,21 @@
     return [[[self ohmageColor] lightColor] lightColor];
 }
 
++ (UIColor *)headerTitleColor
+{
+    return [UIColor blackColor];
+}
+
++ (UIColor *)headerDescriptionColor
+{
+    return [UIColor darkTextColor];
+}
+
++ (UIColor *)headerDetailColor
+{
+    return [UIColor darkGrayColor];
+}
+
 
 /**
  *  textFont
@@ -80,6 +101,21 @@
  */
 + (UIFont *)italicTextFont {
     return [UIFont italicSystemFontOfSize:15.0];
+}
+
++ (UIFont *)headerTitleFont
+{
+    return [UIFont boldSystemFontOfSize:18.0];
+}
+
++ (UIFont *)headerDescriptionFont
+{
+    return [UIFont systemFontOfSize:16.0];
+}
+
++ (UIFont *)headerDetailFont
+{
+    return [UIFont systemFontOfSize:14.0];
 }
 
 @end

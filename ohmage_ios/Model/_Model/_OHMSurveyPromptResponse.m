@@ -5,6 +5,7 @@
 
 const struct OHMSurveyPromptResponseAttributes OHMSurveyPromptResponseAttributes = {
 	.numberValue = @"numberValue",
+	.skipped = @"skipped",
 	.stringValue = @"stringValue",
 };
 
@@ -48,6 +49,11 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
+	if ([key isEqualToString:@"skippedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"skipped"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
@@ -75,6 +81,32 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 
 - (void)setPrimitiveNumberValueValue:(double)value_ {
 	[self setPrimitiveNumberValue:[NSNumber numberWithDouble:value_]];
+}
+
+
+
+
+
+@dynamic skipped;
+
+
+
+- (BOOL)skippedValue {
+	NSNumber *result = [self skipped];
+	return [result boolValue];
+}
+
+- (void)setSkippedValue:(BOOL)value_ {
+	[self setSkipped:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveSkippedValue {
+	NSNumber *result = [self primitiveSkipped];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveSkippedValue:(BOOL)value_ {
+	[self setPrimitiveSkipped:[NSNumber numberWithBool:value_]];
 }
 
 

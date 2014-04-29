@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-extern CGFloat const kUIViewVerticalMargin;
-extern CGFloat const kUIViewHorizontalMargin;
-extern CGFloat const kUIViewSmallTextMargin;
-
 @interface UIView (AutoLayoutHelpers)
 
 + (CGFloat)heightForString:(NSAttributedString *)aString withWidth:(CGFloat)width;

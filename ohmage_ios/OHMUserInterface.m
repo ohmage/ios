@@ -74,6 +74,32 @@
     return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
 }
 
+
++ (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width
+{
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerTitleFont]];
+    label.textColor = [OHMAppConstants headerTitleColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
+}
+
++ (UILabel *)headerDescriptionLabelWithText:(NSString *)text width:(CGFloat)width
+{
+    
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDescriptionFont]];
+    label.textColor = [OHMAppConstants headerDescriptionColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
+}
+
++ (UILabel *)headerDetailLabelWithText:(NSString *)text width:(CGFloat)width
+{
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDetailFont]];
+    label.textColor = [OHMAppConstants headerDetailColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
+}
+
 + (UILabel *)baseLabelWithText:(NSString *)text font:(UIFont *)font size:(CGSize)size
 {
     UILabel *label = [[UILabel alloc] init];
@@ -116,6 +142,16 @@
     [label centerInView:frameView];
     
     return frameView;
+}
+
++ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    button.titleEdgeInsets = kUIButtonTitleInsets;
+    [button sizeToFit];
+    return button;
 }
 
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius

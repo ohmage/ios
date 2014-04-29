@@ -8,17 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
+extern CGFloat const kUIViewVerticalMargin;
+extern CGFloat const kUIViewHorizontalMargin;
+extern CGFloat const kUIViewSmallTextMargin;
+
+extern UIEdgeInsets const kUIButtonTitleInsets;
+
 @interface OHMAppConstants : NSObject
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex;
 + (UIColor *)lightColorForRowIndex:(NSInteger)rowIndex;
 + (UIColor *)ohmageColor;
 + (UIColor *)lightOhmageColor;
++ (UIColor *)headerTitleColor;
++ (UIColor *)headerDescriptionColor;
++ (UIColor *)headerDetailColor;
 
 
 + (UIFont *)textFont;
 + (UIFont *)smallTextFont;
 + (UIFont *)boldTextFont;
 + (UIFont *)italicTextFont;
++ (UIFont *)headerTitleFont;
++ (UIFont *)headerDescriptionFont;
++ (UIFont *)headerDetailFont;
 
 @end

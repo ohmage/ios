@@ -8,12 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OHMImageStore : NSObject
+@interface OHMMediaStore : NSObject
 
 + (instancetype)sharedStore;
 
 - (void)setImage:(UIImage *)image forKey:(NSString *)key;
 - (UIImage *)imageForKey:(NSString *)key;
 - (void)deleteImageForKey:(NSString *)key;
+
+- (void)setVideoWithURL:(NSURL *)tempVideoURL forKey:(NSString *)key;
+- (NSURL *)videoURLForKey:(NSString *)key;
+- (void)deleteVideoForKey:(NSString *)key;
 
 @end

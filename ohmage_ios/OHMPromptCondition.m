@@ -18,6 +18,14 @@ NSString *const test2 = @"(somePreviousPromptId == 3) AND anotherPreviousPromptI
 
 NSString *const test3 = @"(somePreviousPromptId == 3 AND somePreviousPromptId == \"Hello, world.\")";
 
+
+NSString *const kFragmentParserRegex = @" \
+    ^\\s*(!?)\\s*                   # negation \
+    (?| ([^()]+?)                   # single fragment \
+    | \\(((?>[^()]|(?1))+)\\) )     # recursive fragment \
+    (?:\\s* (AND|OR) \\s*+          # conjunction \
+    (.*))?$                         # remaining fragment";
+
 static const NSRange kRangeNotFound = {NSNotFound, 0};
 
 
@@ -81,21 +89,36 @@ static const NSRange kRangeNotFound = {NSNotFound, 0};
 
 - (BOOL)recursivelyEvaluateFragment:(NSString *)fragment
 {
-    if ([self fragmentIsNegated:fragment]) {
-        return [self evaluateTerminalFragment:fragment];
-    }
-    else if ([self fragmentIsTerminal:fragment]) {
-        return [self evaluateTerminalFragment:fragment];
-    }
-    else if ([self fragmentIsComparison:fragment]) {
-        return [self evaluateComparisonFragment:fragment];
-    }
-    else if ([self fragmentIsConjunction:fragment]) {
-        return [self evaluateConjunctionFragment:fragment];
-    }
-    else {
-        NSAssert(0, @"failed to parse fragment: %@", fragment);
-    }
+//    if ([self fragmentIsNegated:fragment]) {
+//        return [self evaluateTerminalFragment:fragment];
+//    }
+//    else if ([self fragmentIsTerminal:fragment]) {
+//        return [self evaluateTerminalFragment:fragment];
+//    }
+//    else if ([self fragmentIsComparison:fragment]) {
+//        return [self evaluateComparisonFragment:fragment];
+//    }
+//    else if ([self fragmentIsConjunction:fragment]) {
+//        return [self evaluateConjunctionFragment:fragment];
+//    }
+//    else {
+//        NSAssert(0, @"failed to parse fragment: %@", fragment);
+//    }
+    
+    BOOL negated = NO;
+    NSString *firstPart = nil;
+    NSString *conjunction = nil;
+    NSString *secondPart = nil;
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@" \
+                                                        ^\h*(!?)\h*                 # negation \
+                                                        (?| ([^()\n]+?)                 # single fragment \
+                                                        | \(((?>[^()]|(?1))+)\) )     # recursive fragment \
+                                                        (?:\s* (AND|OR) \s*+            # conjunction \
+                                                        (.*))?$                         # remaining fragment"
+                                                                           options:NSRegularExpressionAllowCommentsAndWhitespace
+                                                                             error:&error];
     
     return  NO;
 }

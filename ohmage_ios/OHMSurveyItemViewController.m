@@ -7,6 +7,7 @@
 //
 
 #import "OHMSurveyItemViewController.h"
+#import "OHMSurveyCompleteViewController.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
@@ -296,11 +297,8 @@
 
 - (void)setupActionButton
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText] target:self action:@selector(actionButtonPressed:)];
     button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
-    [button setTitle:[self actionButtonTitleText] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [button sizeToFit];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.textLabel];
@@ -309,6 +307,7 @@
 
 - (void)cancelButtonPressed:(id)sender
 {
+    [[OHMClient sharedClient] deleteObject:self.surveyResponse];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -319,10 +318,13 @@
 
 - (void)skipButtonPressed:(id)sender
 {
+    self.promptResponse.skippedValue = YES;
     [self pushNextItemViewController];
 }
 
-- (void)nextButtonPressed:(id)sender {
+- (void)nextButtonPressed:(id)sender
+{
+    self.promptResponse.skippedValue = NO;
     [self pushNextItemViewController];
 }
 
@@ -348,6 +350,10 @@
     NSInteger nextIndex = self.itemIndex + 1;
     if (nextIndex < [self.surveyResponse.survey.surveyItems count]) {
         OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:self.itemIndex+1];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else {
+        OHMSurveyCompleteViewController *vc = [[OHMSurveyCompleteViewController alloc] initWithSurveyResponse:self.surveyResponse];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -456,6 +462,7 @@
 {
     self.backgroundTapEnabled = NO;
     if ([self validateTextField]) {
+        [self setResponseValueFromTextField];
         self.nextButton.enabled = YES;
     }
     else {
@@ -483,6 +490,17 @@
 - (BOOL)validateTextValue:(NSString *)text
 {
     return [self validateNumberValue:[text length]];
+}
+
+- (void)setResponseValueFromTextField
+{
+    if (self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
+        self.promptResponse.numberValueValue = (self.item.wholeNumbersOnlyValue ? [self.textField.text integerValue]
+                                                : [self.textField.text doubleValue]);
+    }
+    else if (self.item.itemTypeValue == OHMSurveyItemTypeTextPrompt) {
+        self.promptResponse.stringValue = self.textField.text;
+    }
 }
 
 - (void)backgroundTapped:(id)sender

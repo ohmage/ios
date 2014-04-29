@@ -10,6 +10,7 @@
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyItemViewController.h"
+#import "OHMUserInterface.h"
 
 @interface OHMSurveyDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -24,7 +25,7 @@
 
 - (id)initWithSurvey:(OHMSurvey *)survey
 {
-    self = [super initWithNibName:nil bundle:nil];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.survey = survey;
     }
@@ -37,15 +38,60 @@
     
     self.navigationItem.title = @"Survey Detail";
     
-    self.takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
     
-    self.nameLabel.text = self.survey.surveyName;
-    self.descriptionLabel.text = self.survey.surveyDescription;
-    self.promptCountLabel.text = [NSString stringWithFormat:@"%lu Prompts", (unsigned long)[self.survey.surveyItems count]];
+    [self.tableView registerClass:[UITableViewCell class]
+           forCellReuseIdentifier:@"UITableViewCell"];
+    
+    [self setupHeaderView];
     
     NSLog(@"Survey: %@", self.survey);
+}
+
+- (void)setupHeaderView
+{
+    NSString *nameText = self.survey.surveyName;
+    NSString *descriptionText = self.survey.surveyDescription;
+    NSString *plural = ([self.survey.surveyItems count] == 1 ? @"Prompt" : @"Prompts");
+    NSString *promptCountText = [NSString stringWithFormat:@"%lu %@", (unsigned long)[self.survey.surveyItems count], plural];
     
-//    self.view.backgroundColor = [OHMAppConstants lightColorForRowIndex:self.survey.colorIndex];
+    CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    CGFloat contentHeight = kUIViewVerticalMargin;
+    
+    UILabel *nameLabel = [OHMUserInterface headerTitleLabelWithText:nameText width:contentWidth];
+    contentHeight += nameLabel.frame.size.height + kUIViewSmallTextMargin;
+    
+    UILabel *descriptionLabel = [OHMUserInterface headerDescriptionLabelWithText:descriptionText width:contentWidth];
+    contentHeight += descriptionLabel.frame.size.height + kUIViewSmallTextMargin;
+    
+    UILabel *promptCountLabel = [OHMUserInterface headerDetailLabelWithText:promptCountText width:contentWidth];
+    contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
+    
+    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:)];
+    takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
+    contentHeight += takeSurveyButton.frame.size.height + kUIViewVerticalMargin;
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
+    
+    [headerView addSubview:nameLabel];
+    [headerView addSubview:descriptionLabel];
+    [headerView addSubview:promptCountLabel];
+    [headerView addSubview:takeSurveyButton];
+    
+    [nameLabel centerHorizontallyInView:headerView];
+    [descriptionLabel centerHorizontallyInView:headerView];
+    [promptCountLabel centerHorizontallyInView:headerView];
+    [takeSurveyButton centerHorizontallyInView:headerView];
+    
+    [nameLabel constrainToTopInParentWithMargin:kUIViewVerticalMargin];
+    [descriptionLabel positionBelowElement:nameLabel margin:kUIViewSmallTextMargin];
+    [promptCountLabel positionBelowElement:descriptionLabel margin:kUIViewSmallTextMargin];
+    [takeSurveyButton positionBelowElement:promptCountLabel margin:kUIViewVerticalMargin];
+    
+    self.tableView.tableHeaderView = headerView;
+    self.nameLabel = nameLabel;
+    self.descriptionLabel = descriptionLabel;
+    self.promptCountLabel = promptCountLabel;
+    self.takeSurveyButton = takeSurveyButton;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,5 +117,52 @@
     OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;// MAX([self.survey.surveyResponses count], 1);
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    cell.textLabel.text = @"No responses logged yet.";
+    
+    return cell;
+}
+
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    OHMSurvey *survey = self.surveys[indexPath.row];
+//    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
+//    OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
+//
+//- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+//{
+//    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
+//    OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    OHMSurvey *survey = self.surveys[indexPath.row];
+//    return [OHMUserInterface heightForSubtitleCellWithTitle:survey.surveyName
+//                                                   subtitle:survey.surveyDescription
+//                                              accessoryType:UITableViewCellAccessoryDetailDisclosureButton
+//                                              fromTableView:tableView];
+//}
+
 
 @end

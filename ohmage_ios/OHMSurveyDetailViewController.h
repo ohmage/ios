@@ -10,7 +10,7 @@
 
 @class OHMSurvey;
 
-@interface OHMSurveyDetailViewController : UIViewController
+@interface OHMSurveyDetailViewController : UITableViewController
 
 - (instancetype)initWithSurvey:(OHMSurvey *)survey;
 
