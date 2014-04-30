@@ -15,16 +15,17 @@
 #import "OHMSurveyItemViewController.h"
 #import "OHMUserInterface.h"
 
-@interface OHMSurveysViewController () <OHMClientDelegate>
+@interface OHMSurveysViewController () <OHMClientDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) OHMClient *client;
 @property (nonatomic, strong) OHMOhmlet *ohmlet;
-@property (nonatomic, strong) NSArray *surveys;
 @property (nonatomic) NSInteger ohmletIndex;
 
 @property (nonatomic, weak) UIPageControl *pageControl;
 @property (nonatomic, weak) UILabel *ohmletNameLabel;
 @property (nonatomic, weak) UILabel *ohmletDescriptionLabel;
+
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -43,12 +44,6 @@
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
     return [self init];
-}
-
-- (void)refresh
-{
-    [self setupHeader];
-    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -81,25 +76,21 @@
     self.navigationItem.rightBarButtonItem = helpButton;
     
     
-//    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc]
-//                                      initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-//                                      target:self action:@selector(refresh)];
-//    
-//    self.navigationItem.rightBarButtonItem = refreshButton;
-    
     self.client = [OHMClient sharedClient];
     self.client.delegate = self;
     
     [self.tableView registerClass:[OHMSurveyTableViewCell class]
            forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
     
-//    self.tableView.rowHeight = 100;
-    
     if ([[self.client ohmlets] count] > self.ohmletIndex) {
         self.ohmlet = [self.client ohmlets][self.ohmletIndex];
     }
     
     [self setupHeader];
+    
+    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:nil sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedResultsController.delegate = self;
+    [self updateFetchedResultsController];
     
 //    self.tableView.restorationIdentifier = @"PQTItemsViewControllerTableView";
 }
@@ -157,8 +148,7 @@
 {
     NSString *nameText = nil;
     if (self.ohmlet) {
-        NSString *name = self.ohmlet.ohmletName ? self.ohmlet.ohmletName : self.ohmlet.ohmID;
-        nameText = [@"Ohmlet: " stringByAppendingString:name];
+        nameText = self.ohmlet.ohmletName ? self.ohmlet.ohmletName : self.ohmlet.ohmID;
     }
     else {
         nameText = @"Loading Data";
@@ -193,9 +183,9 @@
     [descriptionLabel centerHorizontallyInView:headerView];
     [pageControl centerHorizontallyInView:headerView];
     
-    [nameLabel constrainToTopInParentWithMargin:kUIViewVerticalMargin];
+    [pageControl constrainToTopInParentWithMargin:kUIViewSmallTextMargin];
+    [nameLabel positionBelowElement:pageControl margin:kUIViewSmallTextMargin];
     [descriptionLabel positionBelowElement:nameLabel margin:kUIViewSmallTextMargin];
-    [pageControl positionBelowElement:descriptionLabel margin:kUIViewSmallTextMargin];
     
     UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeRight:)];
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeLeft:)];
@@ -212,8 +202,11 @@
 
 - (void)pageControlValueChanged:(id)sender
 {
+    NSInteger oldIndex = self.ohmletIndex;
     self.ohmletIndex = self.pageControl.currentPage;
     [self OHMClientDidUpdate:[OHMClient sharedClient]];
+    UITableViewRowAnimation animation = (oldIndex < self.ohmletIndex ? UITableViewRowAnimationLeft : UITableViewRowAnimationRight);
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 }
 
 - (void)headerDidSwipeRight:(id)sender
@@ -232,51 +225,74 @@
     }
 }
 
+- (void)updateFetchedResultsController
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@", self.ohmlet];
+    self.fetchedResultsController.fetchRequest.predicate = predicate;
+    
+    NSError *error;
+    BOOL success = [self.fetchedResultsController performFetch:&error];
+    if (!success) {
+        NSLog(@"Error fetching surveys for ohmlet. Error: %@, Ohmlet: %@", [error localizedDescription], self.ohmlet);
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return MAX([[self.fetchedResultsController sections] count], 1);
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
-    return [self.surveys count];
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+    } else
+        return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OHMSurveyTableViewCell" forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
-    
-    if (survey.isLoaded) {
-        cell.textLabel.text = survey.surveyName;
-        cell.detailTextLabel.text = survey.surveyDescription;
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
-        
-//        [OHMUserInterface applyRoundedBorderToView:cell];
-        cell.tintColor = [UIColor darkTextColor];
-        survey.colorIndex = indexPath.row;
-//        CGFloat height = [OHMUserInterface heightForSubtitleCellWithTitle:cell.textLabel.text subtitle:cell.detailTextLabel.text accessoryType:cell.accessoryType];
-//        NSLog(@"height for cell %ld: %f", indexPath.row, height);
-    }
-    
-//    __weak UITableView *weakTableView = self.tableView;
-//    __weak NSIndexPath *weakIndex = indexPath;
-    
-    survey.surveyUpdatedBlock = ^{
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    };
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
 
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if (indexPath.row >= [[self.fetchedResultsController fetchedObjects] count]) {
+        NSLog(@"no survey for row: %d", indexPath.row);
+        return;
+    }
+    
+    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if (survey.isLoaded) {
+        cell.textLabel.text = survey.surveyName;
+        //        cell.detailTextLabel.text = survey.surveyDescription;
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
+        
+        //        [OHMUserInterface applyRoundedBorderToView:cell];
+        cell.tintColor = [UIColor darkTextColor];
+        survey.colorIndex = indexPath.row;
+        //        CGFloat height = [OHMUserInterface heightForSubtitleCellWithTitle:cell.textLabel.text subtitle:cell.detailTextLabel.text accessoryType:cell.accessoryType];
+        //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
+    }
+    
+    //    survey.surveyUpdatedBlock = ^{
+    //        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    //    };
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OHMSurvey *survey = self.surveys[indexPath.row];
+    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
@@ -284,16 +300,16 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
+    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OHMSurvey *survey = self.surveys[indexPath.row];
+    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return [OHMUserInterface heightForSubtitleCellWithTitle:survey.surveyName
-                                                   subtitle:survey.surveyDescription
+                                                   subtitle:nil//survey.surveyDescription
                                               accessoryType:UITableViewCellAccessoryDetailDisclosureButton
                                               fromTableView:tableView];
 }
@@ -308,9 +324,84 @@
     }
     if (self.ohmletIndex >= 0) {
         self.ohmlet = [client ohmlets][self.ohmletIndex];
-        self.surveys = [client surveysForOhmlet:self.ohmlet];
+        
+        [self updateFetchedResultsController];
         [self setupHeader];
-        [self.tableView reloadData];
+//        [self.tableView reloadData];
+    }
+}
+
+
+#pragma mark - NSFetchedResultsController Delegate
+
+- (void)controllerWillChangeContent:
+(NSFetchedResultsController *)controller
+{
+    NSLog(@"controller will change content");
+    [self.tableView beginUpdates];
+}
+
+- (void)controllerDidChangeContent:
+(NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex
+     forChangeType:(NSFetchedResultsChangeType)type
+{
+    NSLog(@"controller did change section info type: %d", type);
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath
+     forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"controller did change oject, type: %d", type);
+    UITableView *tableView = self.tableView;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [tableView insertRowsAtIndexPaths:@[newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+                    atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [tableView
+             deleteRowsAtIndexPaths:@[indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [tableView
+             insertRowsAtIndexPaths:@[newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
     }
 }
 

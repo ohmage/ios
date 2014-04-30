@@ -89,7 +89,7 @@
     [self.textLabel positionBelowElementWithDefaultMargin:topGuide];
     [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, [self.surveyResponse.survey.surveyItems count]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%d of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
     
     self.textLabel.text = self.item.text;
     

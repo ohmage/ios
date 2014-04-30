@@ -13,6 +13,7 @@ const struct OHMSurveyAttributes OHMSurveyAttributes = {
 
 const struct OHMSurveyRelationships OHMSurveyRelationships = {
 	.ohmlet = @"ohmlet",
+	.reminders = @"reminders",
 	.surveyItems = @"surveyItems",
 	.surveyResponses = @"surveyResponses",
 };
@@ -138,6 +139,19 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 @dynamic ohmlet;
 
+	
+
+@dynamic reminders;
+
+	
+- (NSMutableSet*)remindersSet {
+	[self willAccessValueForKey:@"reminders"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
+  
+	[self didAccessValueForKey:@"reminders"];
+	return result;
+}
 	
 
 @dynamic surveyItems;

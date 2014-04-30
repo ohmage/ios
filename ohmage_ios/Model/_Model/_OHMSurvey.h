@@ -14,6 +14,7 @@ extern const struct OHMSurveyAttributes {
 
 extern const struct OHMSurveyRelationships {
 	__unsafe_unretained NSString *ohmlet;
+	__unsafe_unretained NSString *reminders;
 	__unsafe_unretained NSString *surveyItems;
 	__unsafe_unretained NSString *surveyResponses;
 } OHMSurveyRelationships;
@@ -22,6 +23,7 @@ extern const struct OHMSurveyFetchedProperties {
 } OHMSurveyFetchedProperties;
 
 @class OHMOhmlet;
+@class OHMReminder;
 @class OHMSurveyItem;
 @class OHMSurveyResponse;
 
@@ -109,6 +111,13 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *reminders;
+
+- (NSMutableSet*)remindersSet;
+
+
+
+
 @property (nonatomic, strong) NSOrderedSet *surveyItems;
 
 - (NSMutableOrderedSet*)surveyItemsSet;
@@ -127,6 +136,11 @@ extern const struct OHMSurveyFetchedProperties {
 @end
 
 @interface _OHMSurvey (CoreDataGeneratedAccessors)
+
+- (void)addReminders:(NSSet*)value_;
+- (void)removeReminders:(NSSet*)value_;
+- (void)addRemindersObject:(OHMReminder*)value_;
+- (void)removeRemindersObject:(OHMReminder*)value_;
 
 - (void)addSurveyItems:(NSOrderedSet*)value_;
 - (void)removeSurveyItems:(NSOrderedSet*)value_;
@@ -182,6 +196,11 @@ extern const struct OHMSurveyFetchedProperties {
 
 - (OHMOhmlet*)primitiveOhmlet;
 - (void)setPrimitiveOhmlet:(OHMOhmlet*)value;
+
+
+
+- (NSMutableSet*)primitiveReminders;
+- (void)setPrimitiveReminders:(NSMutableSet*)value;
 
 
 

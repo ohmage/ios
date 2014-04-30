@@ -58,6 +58,11 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         [[AFNetworkActivityLogger sharedLogger] startLogging];
+        
+        NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
+        if (userID != nil) {
+            self.user = [self userWithOhmID:userID];
+        }
     }
     
     return self;
@@ -104,6 +109,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             self.user = [self userWithOhmID:([response userID])];
             self.user.email = email;
             self.user.password = password;
+            [self setPersistentStoreMetadataText:[response userID] forKey:@"loggedInUserID"];
             
             [self refreshUserInfo];
         }
@@ -153,10 +159,10 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
       }];
 }
 
-- (void)refreshOhmlets:(NSArray *)ohhmletDefinitions
+- (void)refreshOhmlets:(NSArray *)ohmletDefinitions
 {
-    NSMutableOrderedSet *ohmlets = [NSMutableOrderedSet orderedSetWithCapacity:[ohhmletDefinitions count]];
-    for (NSDictionary *ohmletDefinition in ohhmletDefinitions) {
+    NSMutableOrderedSet *ohmlets = [NSMutableOrderedSet orderedSetWithCapacity:[ohmletDefinitions count]];
+    for (NSDictionary *ohmletDefinition in ohmletDefinitions) {
         OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
         [self refreshOhmletInfo:ohmlet];
         [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
@@ -199,7 +205,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             NSLog(@"Error updating survey: %@", [error localizedDescription]);
         }
         else {
-            NSLog(@"got survey: %@, version: %ld", [response surveyName], [response surveyVersion]);
+            NSLog(@"got survey: %@, version: %ld", [response surveyName], (long)[response surveyVersion]);
             survey.surveyName = [response surveyName];
             survey.surveyDescription = [response surveyDescription];
             [self createSurveyItems:[response surveyItems] forSurvey:survey];
@@ -312,6 +318,21 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }
     
     return _persistentStoreCoordinator;
+}
+
+- (NSString *)persistentStoreMetadataTextForKey:(NSString *)key
+{
+    NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
+    NSDictionary *metadata = [self.persistentStoreCoordinator metadataForPersistentStore:store];
+    return metadata[key];
+}
+
+- (void)setPersistentStoreMetadataText:(NSString *)text forKey:(NSString *)key
+{
+    NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
+    NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
+    metadata[key] = text;
+    [self.persistentStoreCoordinator setMetadata:metadata forPersistentStore:store];
 }
 
 

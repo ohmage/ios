@@ -40,6 +40,8 @@
 		1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */; };
 		1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B610B1909B736001046E0 /* OHMUserInterface.m */; };
 		1E3C80EC190F66510088D2D0 /* OHMSurveyCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */; };
+		1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */; };
+		1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80F1191083DA0088D2D0 /* OHMReminder.m */; };
 		1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096318CA6F8700203990 /* Foundation.framework */; };
 		1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096518CA6F8700203990 /* CoreGraphics.framework */; };
 		1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
@@ -136,6 +138,10 @@
 		1E1B610B1909B736001046E0 /* OHMUserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUserInterface.m; sourceTree = "<group>"; };
 		1E3C80EA190F66510088D2D0 /* OHMSurveyCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyCompleteViewController.h; sourceTree = "<group>"; };
 		1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyCompleteViewController.m; sourceTree = "<group>"; };
+		1E3C80ED191083BB0088D2D0 /* _OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMReminder.h; sourceTree = "<group>"; };
+		1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMReminder.m; sourceTree = "<group>"; };
+		1E3C80F0191083DA0088D2D0 /* OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMReminder.h; path = Model/OHMReminder.h; sourceTree = "<group>"; };
+		1E3C80F1191083DA0088D2D0 /* OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMReminder.m; path = Model/OHMReminder.m; sourceTree = "<group>"; };
 		1E70096018CA6F8700203990 /* ohmage_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ohmage_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E70096318CA6F8700203990 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E70096518CA6F8700203990 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -258,6 +264,8 @@
 				1E1B60F219063392001046E0 /* _OHMSurveyResponse.m */,
 				1E1B60F319063392001046E0 /* _OHMUser.h */,
 				1E1B60F419063392001046E0 /* _OHMUser.m */,
+				1E3C80ED191083BB0088D2D0 /* _OHMReminder.h */,
+				1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */,
 			);
 			name = _Model;
 			path = Model/_Model;
@@ -442,6 +450,8 @@
 				1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */,
 				1ECA87E9190DBB8D00429D5D /* OHMPromptCondition.h */,
 				1ECA87EA190DBB8D00429D5D /* OHMPromptCondition.m */,
+				1E3C80F0191083DA0088D2D0 /* OHMReminder.h */,
+				1E3C80F1191083DA0088D2D0 /* OHMReminder.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -609,6 +619,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */,
+				1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */,
 				1EAD558718D1680900B55028 /* OHMProjectDetailViewController.m in Sources */,
 				1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
@@ -624,6 +635,7 @@
 				1E1B60FB19063392001046E0 /* _OHMUser.m in Sources */,
 				1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */,
 				1E1B60F719063392001046E0 /* _OHMSurveyItem.m in Sources */,
+				1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */,
 				1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */,
 				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
 				1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */,

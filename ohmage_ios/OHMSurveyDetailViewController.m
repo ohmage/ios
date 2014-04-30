@@ -11,6 +11,7 @@
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyItemViewController.h"
 #import "OHMUserInterface.h"
+#import "OHMReminder.h"
 
 @interface OHMSurveyDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
