@@ -1,5 +1,8 @@
 #import "_OHMReminder.h"
 
 @interface OHMReminder : _OHMReminder {}
-// Custom logic goes here.
+
+- (NSString *)labelText;
+- (NSString *)repeatLabelText;
+
 @end

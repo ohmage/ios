@@ -16,6 +16,7 @@
 #import "OHMSurveyItemTypes.h"
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
+#import "OHMReminder.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
@@ -353,6 +354,13 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }
     
     return response;
+}
+
+- (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey
+{
+    OHMReminder *reminder = (OHMReminder *)[self insertNewObjectForEntityForName:[OHMReminder entityName]];
+    reminder.survey = survey;
+    return reminder;
 }
 
 

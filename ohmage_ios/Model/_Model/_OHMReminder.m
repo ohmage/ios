@@ -7,12 +7,15 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 	.alwaysShow = @"alwaysShow",
 	.enabled = @"enabled",
 	.endTime = @"endTime",
+	.isLocationReminder = @"isLocationReminder",
+	.isTimeReminder = @"isTimeReminder",
 	.locationLatitude = @"locationLatitude",
 	.locationLongitude = @"locationLongitude",
 	.locationRadius = @"locationRadius",
 	.minimumReentryInterval = @"minimumReentryInterval",
 	.specificTime = @"specificTime",
 	.startTime = @"startTime",
+	.usesTimeRange = @"usesTimeRange",
 	.weekdaysMask = @"weekdaysMask",
 };
 
@@ -59,6 +62,16 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
+	if ([key isEqualToString:@"isLocationReminderValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isLocationReminder"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"isTimeReminderValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isTimeReminder"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"locationLatitudeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"locationLatitude"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -76,6 +89,11 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 	}
 	if ([key isEqualToString:@"minimumReentryIntervalValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"minimumReentryInterval"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"usesTimeRangeValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"usesTimeRange"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -145,6 +163,58 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 @dynamic endTime;
 
+
+
+
+
+
+@dynamic isLocationReminder;
+
+
+
+- (BOOL)isLocationReminderValue {
+	NSNumber *result = [self isLocationReminder];
+	return [result boolValue];
+}
+
+- (void)setIsLocationReminderValue:(BOOL)value_ {
+	[self setIsLocationReminder:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveIsLocationReminderValue {
+	NSNumber *result = [self primitiveIsLocationReminder];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveIsLocationReminderValue:(BOOL)value_ {
+	[self setPrimitiveIsLocationReminder:[NSNumber numberWithBool:value_]];
+}
+
+
+
+
+
+@dynamic isTimeReminder;
+
+
+
+- (BOOL)isTimeReminderValue {
+	NSNumber *result = [self isTimeReminder];
+	return [result boolValue];
+}
+
+- (void)setIsTimeReminderValue:(BOOL)value_ {
+	[self setIsTimeReminder:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveIsTimeReminderValue {
+	NSNumber *result = [self primitiveIsTimeReminder];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveIsTimeReminderValue:(BOOL)value_ {
+	[self setPrimitiveIsTimeReminder:[NSNumber numberWithBool:value_]];
+}
 
 
 
@@ -263,6 +333,32 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 @dynamic startTime;
 
+
+
+
+
+
+@dynamic usesTimeRange;
+
+
+
+- (BOOL)usesTimeRangeValue {
+	NSNumber *result = [self usesTimeRange];
+	return [result boolValue];
+}
+
+- (void)setUsesTimeRangeValue:(BOOL)value_ {
+	[self setUsesTimeRange:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveUsesTimeRangeValue {
+	NSNumber *result = [self primitiveUsesTimeRange];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveUsesTimeRangeValue:(BOOL)value_ {
+	[self setPrimitiveUsesTimeRange:[NSNumber numberWithBool:value_]];
+}
 
 
 

@@ -10,6 +10,14 @@
 
 @implementation OHMReminder
 
-// Custom logic goes here.
+- (NSString *)labelText
+{
+    return @"Reminder";
+}
+
+- (NSString *)repeatLabelText
+{
+    return @"Everyday";
+}
 
 @end

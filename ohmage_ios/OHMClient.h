@@ -12,6 +12,7 @@
 @class OHMSurvey;
 @class OHMSurveyResponse;
 @class OHMSurveyPromptResponse;
+@class OHMReminder;
 
 @protocol OHMClientDelegate;
 
@@ -35,6 +36,7 @@
 
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
+- (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey;
 - (void)deleteObject:(NSManagedObject *)object;
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
                                                                sortKey:(NSString *)sortKey

@@ -74,6 +74,62 @@
     return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
 }
 
++ (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView
+{
+    static NSString *sCellIdentifier = @"DefaultCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    return cell;
+}
+
++ (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView {
+    static NSString *sCellIdentifier = @"DetailCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    return cell;
+}
+
++ (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *))swBlock
+{
+    UITableViewCell *cell = [self cellWithDefaultStyleFromTableView:tableView];
+    UISwitch *sw = [[UISwitch alloc] init];
+    cell.accessoryView = sw;
+    if (swBlock) {
+        swBlock(sw);
+    }
+    return cell;
+}
+
++ (UITableViewCell *)cellWithTimePickerFromTableView:(UITableView *)tableView setupBlock:(void (^)(UIDatePicker *dp))dpBlock
+{
+    static NSString *sCellIdentifier = @"PickerCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+        datePicker.datePickerMode = UIDatePickerModeTime;
+        [cell.contentView addSubview:datePicker];
+        if (dpBlock) {
+            dpBlock(datePicker);
+        }
+    }
+    
+    return cell;
+}
+
 
 + (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width
 {

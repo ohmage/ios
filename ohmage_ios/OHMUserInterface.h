@@ -15,6 +15,10 @@
                                  subtitle:(NSString *)subtitle
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView;
++ (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView;
++ (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView;
++ (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *sw))swBlock;
++ (UITableViewCell *)cellWithTimePickerFromTableView:(UITableView *)tableView setupBlock:(void (^)(UIDatePicker *dp))dpBlock;
 
 + (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width;
 + (UILabel *)headerDescriptionLabelWithText:(NSString *)text width:(CGFloat)width;

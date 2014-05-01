@@ -7,11 +7,15 @@
 //
 
 #import "OHMSurveyDetailViewController.h"
+#import "OHMSurveyItemViewController.h"
+#import "OHMReminderViewController.h"
+#import "OHMUserInterface.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
-#import "OHMSurveyItemViewController.h"
-#import "OHMUserInterface.h"
 #import "OHMReminder.h"
+
+static const NSInteger kRemindersSectionIndex = 0;
+static const NSInteger kSurveyResponsesSectionIndex = 1;
 
 @interface OHMSurveyDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -20,7 +24,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *takeSurveyButton;
 @property (nonatomic, strong) OHMSurvey *survey;
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedSurveyResponsesController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedRemindersController;
 
 @end
 
@@ -42,14 +47,23 @@
     self.navigationItem.title = @"Survey Detail";
     NSLog(@"navItem left button: %@", self.navigationItem.leftBarButtonItem.title);
     
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:nil
+                                                                      action:nil];
+    self.navigationItem.backBarButtonItem = backButtonItem;
+    
     
     [self.tableView registerClass:[UITableViewCell class]
            forCellReuseIdentifier:@"UITableViewCell"];
     
     [self setupHeaderView];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
-    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:predicate sectionNameKeyPath:nil cacheName:nil];
+    NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
+    self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
+    
+    NSPredicate *remindersPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
+    self.fetchedRemindersController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName] sortKey:@"isTimeReminder" predicate:remindersPredicate sectionNameKeyPath:nil cacheName:nil];
     
     NSLog(@"Survey: %@", self.survey);
 }
@@ -136,12 +150,44 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return MAX([[self.fetchedResultsController fetchedObjects] count], 1);
+    switch (section) {
+        case kRemindersSectionIndex:
+            return MAX([[self.fetchedRemindersController fetchedObjects] count], 1);
+        case kSurveyResponsesSectionIndex:
+            return MAX([[self.fetchedSurveyResponsesController fetchedObjects] count], 1);
+        default:
+            return 0;
+    }
+    
+}
+
+- (void)configureReminderCell:(UITableViewCell *)cell forRow:(NSInteger)row
+{
+    if (row == 0) {
+        cell.textLabel.text = @"Add reminder";
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    else if ([[self.fetchedSurveyResponsesController fetchedObjects] count] >= row) {
+        OHMReminder *reminder = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
+        cell.textLabel.text = [reminder labelText];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+}
+
+- (void)configureSurveyResponseCell:(UITableViewCell *)cell forRow:(NSInteger)row
+{
+    if ([[self.fetchedSurveyResponsesController fetchedObjects] count]) {
+        OHMSurveyResponse *response = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+        cell.textLabel.text = [OHMUserInterface formattedDate:response.timestamp];
+    }
+    else {
+        cell.textLabel.text = @"No responses logged yet.";
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -149,12 +195,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if ([[self.fetchedResultsController fetchedObjects] count]) {
-        OHMSurveyResponse *response = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        cell.textLabel.text = [OHMUserInterface formattedDate:response.timestamp];
-    }
-    else {
-        cell.textLabel.text = @"No responses logged yet.";
+    switch (indexPath.section) {
+        case kRemindersSectionIndex:
+            [self configureReminderCell:cell forRow:indexPath.row];
+            break;
+        case kSurveyResponsesSectionIndex:
+            [self configureSurveyResponseCell:cell forRow:indexPath.row];
+            break;
+        default:
+            break;
     }
     
     return cell;
@@ -162,16 +211,49 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Survey Responses:";
+    switch (section) {
+        case kRemindersSectionIndex:
+            return @"Reminders";
+        case kSurveyResponsesSectionIndex:
+            return @"Survey Responses";
+        default:
+            return nil;
+            break;
+    }
 }
 
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    OHMSurvey *survey = self.surveys[indexPath.row];
-//    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
-//    OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
-//    [self.navigationController pushViewController:vc animated:YES];
-//}
+- (void)didSelectReminderCellAtRow:(NSInteger)row
+{
+    OHMReminder *reminder = nil;
+    if (row == 0) {
+        reminder = [[OHMClient sharedClient] buildNewReminderForSurvey:self.survey];
+    }
+    else if ([[self.fetchedSurveyResponsesController fetchedObjects] count] >= row) {
+        reminder = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
+    }
+    
+    OHMReminderViewController *vc = [[OHMReminderViewController alloc] initWithReminder:reminder];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)didSelectSurveyResponseCellAtRow:(NSInteger)row
+{
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case kRemindersSectionIndex:
+            [self didSelectReminderCellAtRow:indexPath.row];
+            break;
+        case kSurveyResponsesSectionIndex:
+            [self didSelectSurveyResponseCellAtRow:indexPath.row];
+            break;
+        default:
+            break;
+    }
+}
 //
 //- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 //{

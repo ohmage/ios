@@ -90,7 +90,6 @@
     
     self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:nil sectionNameKeyPath:nil cacheName:nil];
     self.fetchedResultsController.delegate = self;
-    [self updateFetchedResultsController];
     
 //    self.tableView.restorationIdentifier = @"PQTItemsViewControllerTableView";
 }
@@ -111,6 +110,7 @@
     [super viewDidAppear:animated];
     
     NSLog(@"did appear nav bounds: %@", NSStringFromCGRect(self.navigationController.navigationBar.bounds));
+    [self updateFetchedResultsController];
 }
 
 - (void)setupTitleView
@@ -344,6 +344,7 @@
 - (void)controllerDidChangeContent:
 (NSFetchedResultsController *)controller
 {
+    NSLog(@"controller did change content");
     [self.tableView endUpdates];
 }
 

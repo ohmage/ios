@@ -8,12 +8,15 @@ extern const struct OHMReminderAttributes {
 	__unsafe_unretained NSString *alwaysShow;
 	__unsafe_unretained NSString *enabled;
 	__unsafe_unretained NSString *endTime;
+	__unsafe_unretained NSString *isLocationReminder;
+	__unsafe_unretained NSString *isTimeReminder;
 	__unsafe_unretained NSString *locationLatitude;
 	__unsafe_unretained NSString *locationLongitude;
 	__unsafe_unretained NSString *locationRadius;
 	__unsafe_unretained NSString *minimumReentryInterval;
 	__unsafe_unretained NSString *specificTime;
 	__unsafe_unretained NSString *startTime;
+	__unsafe_unretained NSString *usesTimeRange;
 	__unsafe_unretained NSString *weekdaysMask;
 } OHMReminderAttributes;
 
@@ -25,6 +28,9 @@ extern const struct OHMReminderFetchedProperties {
 } OHMReminderFetchedProperties;
 
 @class OHMSurvey;
+
+
+
 
 
 
@@ -83,6 +89,34 @@ extern const struct OHMReminderFetchedProperties {
 
 
 //- (BOOL)validateEndTime:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* isLocationReminder;
+
+
+
+@property BOOL isLocationReminderValue;
+- (BOOL)isLocationReminderValue;
+- (void)setIsLocationReminderValue:(BOOL)value_;
+
+//- (BOOL)validateIsLocationReminder:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* isTimeReminder;
+
+
+
+@property BOOL isTimeReminderValue;
+- (BOOL)isTimeReminderValue;
+- (void)setIsTimeReminderValue:(BOOL)value_;
+
+//- (BOOL)validateIsTimeReminder:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -164,6 +198,20 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSNumber* usesTimeRange;
+
+
+
+@property BOOL usesTimeRangeValue;
+- (BOOL)usesTimeRangeValue;
+- (void)setUsesTimeRangeValue:(BOOL)value_;
+
+//- (BOOL)validateUsesTimeRange:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* weekdaysMask;
 
 
@@ -219,6 +267,24 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+- (NSNumber*)primitiveIsLocationReminder;
+- (void)setPrimitiveIsLocationReminder:(NSNumber*)value;
+
+- (BOOL)primitiveIsLocationReminderValue;
+- (void)setPrimitiveIsLocationReminderValue:(BOOL)value_;
+
+
+
+
+- (NSNumber*)primitiveIsTimeReminder;
+- (void)setPrimitiveIsTimeReminder:(NSNumber*)value;
+
+- (BOOL)primitiveIsTimeReminderValue;
+- (void)setPrimitiveIsTimeReminderValue:(BOOL)value_;
+
+
+
+
 - (NSNumber*)primitiveLocationLatitude;
 - (void)setPrimitiveLocationLatitude:(NSNumber*)value;
 
@@ -263,6 +329,15 @@ extern const struct OHMReminderFetchedProperties {
 
 - (NSDate*)primitiveStartTime;
 - (void)setPrimitiveStartTime:(NSDate*)value;
+
+
+
+
+- (NSNumber*)primitiveUsesTimeRange;
+- (void)setPrimitiveUsesTimeRange:(NSNumber*)value;
+
+- (BOOL)primitiveUsesTimeRangeValue;
+- (void)setPrimitiveUsesTimeRangeValue:(BOOL)value_;
 
 
 
