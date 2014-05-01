@@ -28,10 +28,6 @@
     [super viewDidLoad];
     
     [self commonSetup];
-    
-    [self.view insertSubview:self.backgroundView atIndex:0];
-    [self.view constrainChildToEqualSize:self.backgroundView];
-    
 }
 
 

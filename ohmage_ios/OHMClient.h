@@ -28,7 +28,7 @@
 - (BOOL)hasLoggedInUser;
 
 // HTTP
-- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)setAuthorizationToken:(NSString *)token;
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;

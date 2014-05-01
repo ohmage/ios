@@ -33,8 +33,6 @@
     [super viewDidLoad];
     
     [self commonSetup];
-    
-    self.tableView.backgroundView = self.backgroundView;
 }
 
 

@@ -97,7 +97,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 #pragma mark - HTTP
 
-- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock
 {
     [self setAuthorizationToken:nil];
     
@@ -121,6 +121,11 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             [self setPersistentStoreMetadataText:[response userID] forKey:@"loggedInUserID"];
             
             [self refreshUserInfo];
+            
+        }
+        
+        if (completionBlock) {
+            completionBlock(error == nil);
         }
     }];
 }
