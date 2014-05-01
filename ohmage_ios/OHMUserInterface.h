@@ -11,6 +11,8 @@
 
 @interface OHMUserInterface : NSObject
 
++ (CGSize)sizeForText:(NSString *)text withWidth:(CGFloat)width font:(UIFont *)font;
++ (CGFloat)heightForText:(NSString *)text withWidth:(CGFloat)width font:(UIFont *)font;
 + (CGFloat)heightForSubtitleCellWithTitle:(NSString *)title
                                  subtitle:(NSString *)subtitle
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
@@ -29,8 +31,10 @@
                                     size:(CGSize)size
                                     font:(UIFont *)font
                                alignment:(NSTextAlignment)textAlignment;
++ (UIView *)textFieldWithLabelText:(NSString *)text setupBlock:(void (^)(UITextField *tf))tfBlock;
 
 + (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
++ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector size:(CGSize)size;
 
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
 

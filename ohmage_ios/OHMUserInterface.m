@@ -41,11 +41,14 @@
 
 + (CGSize)sizeForText:(NSString *)text withWidth:(CGFloat)width font:(UIFont *)font
 {
+    if (text == nil) return CGSizeZero;
+    
     CGSize constraintSize = CGSizeMake(width, CGFLOAT_MAX);
     CGRect rect = [text boundingRectWithSize:constraintSize
                                            options:NSStringDrawingUsesLineFragmentOrigin
                                         attributes:@{NSFontAttributeName:font}
                                            context:nil];
+    rect.size.width = width;
     return [self ceilSize:rect.size];
 }
 
@@ -200,6 +203,32 @@
     return frameView;
 }
 
++ (UIView *)textFieldWithLabelText:(NSString *)text setupBlock:(void (^)(UITextField *tf))tfBlock
+{
+    UIView *contentView = [[UIView alloc] init];
+    
+    UILabel *label = [[UILabel alloc] init];
+    label.text = text;
+    label.font = [OHMAppConstants boldTextFont];
+    [contentView addSubview:label];
+    [label constrainToTopInParentWithMargin:0];
+    [contentView constrainChild:label toHorizontalInsets:UIEdgeInsetsZero];
+    
+    UITextField *textField = [[UITextField alloc] init];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    [contentView addSubview:textField];
+    [textField constrainHeight:kUITextFieldDefaultHeight];
+    [textField positionBelowElement:label margin:kUIViewSmallTextMargin];
+    [contentView constrainChild:textField toHorizontalInsets:UIEdgeInsetsZero];
+    [textField constrainToBottomInParentWithMargin:0];
+    
+    if (tfBlock) {
+        tfBlock(textField);
+    }
+    
+    return contentView;
+}
+
 + (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -210,9 +239,21 @@
     button.titleLabel.numberOfLines = 0;
     CGFloat titleWidth = maxWidth - (insets.left + insets.right);
     CGSize titleSize = [self sizeForText:title withWidth:titleWidth font:button.titleLabel.font];
-    NSLog(@"title size: %@", NSStringFromCGSize(titleSize));
     CGSize buttonSize = CGSizeMake(titleSize.width + (insets.left + insets.right), titleSize.height + (insets.top + insets.bottom));
     [button constrainSize:buttonSize];
+    return button;
+}
+
++ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector size:(CGSize)size
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    button.titleEdgeInsets = kUIButtonTitleInsets;
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
+    button.titleLabel.minimumScaleFactor = 0.5;
+//    button.titleLabel.numberOfLines = 0;
+    [button constrainSize:size];
     return button;
 }
 

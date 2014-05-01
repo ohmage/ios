@@ -9,7 +9,7 @@
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
 #import "OHMClient.h"
-#import "OHMHomeViewController.h"
+#import "OHMLoginViewController.h"
 
 @implementation OHMAppDelegate
 
@@ -26,7 +26,12 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [[OHMClient sharedClient] loginWithEmail:@"cforkish@gmail.com" andPassword:@"loudfowl98"];
+//    [[OHMClient sharedClient] loginWithEmail:@"cforkish@gmail.com" andPassword:@"loudfowl98"];
+    
+    if (![[OHMClient sharedClient] hasLoggedInUser]) {
+        [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
+    }
+    
     return YES;
 }
 

@@ -10,6 +10,8 @@
 
 @implementation OHMOhmlet
 
+@synthesize ohmletUpdatedBlock;
+
 - (NSString *)definitionRequestUrlString
 {
     return [@"ohmlets/" stringByAppendingString:self.ohmID];

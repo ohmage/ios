@@ -11,8 +11,12 @@
 extern CGFloat const kUIViewVerticalMargin;
 extern CGFloat const kUIViewHorizontalMargin;
 extern CGFloat const kUIViewSmallTextMargin;
+extern CGFloat const kUIViewSmallMargin;
+extern UIEdgeInsets const kUIViewDefaultInsets;
 
 extern UIEdgeInsets const kUIButtonTitleInsets;
+extern CGFloat const kUIButtonDefaultHeight;
+extern CGFloat const kUITextFieldDefaultHeight;
 
 @interface OHMAppConstants : NSObject
 

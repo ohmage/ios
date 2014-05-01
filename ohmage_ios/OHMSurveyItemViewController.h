@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OHMBaseViewController.h"
 
 @class OHMSurveyResponse;
 
-@interface OHMSurveyItemViewController : UIViewController
+@interface OHMSurveyItemViewController : OHMBaseViewController
 
 + (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
 

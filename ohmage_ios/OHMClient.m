@@ -87,6 +87,14 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 }
 
 
+#pragma mark - Auth
+
+- (BOOL)hasLoggedInUser
+{
+    return self.user != nil;
+}
+
+
 #pragma mark - HTTP
 
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password
@@ -182,6 +190,9 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             NSLog(@"got ohmlet: %@, id: %@", [response ohmletName], [response ohmletID]);
             ohmlet.ohmletName = [response ohmletName];
             ohmlet.ohmletDescription = [response ohmletDescription];
+            if (ohmlet.ohmletUpdatedBlock) {
+                ohmlet.ohmletUpdatedBlock();
+            }
         }
     }];
 }

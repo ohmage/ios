@@ -60,36 +60,27 @@
     
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [UIColor clearColor];
-//    self.tableView.separatorColor = [OHMAppConstants lightOhmageColor];
-//    self.tableView.backgroundColor = [OHMAppConstants lightOhmageColor];
     
-    UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    customButton.frame = CGRectMake(0, 0, 35, 35);
-    [customButton setImage:[UIImage imageNamed:@"icon"] forState:UIControlStateNormal];
-    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithCustomView:customButton];
+    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"] style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.leftBarButtonItem = ohmButton;
     
-    UIButton *customHelpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    customHelpButton.frame = CGRectMake(0, 0, 35, 35);
-    [customHelpButton setImage:[UIImage imageNamed:@"dash_helpblue"] forState:UIControlStateNormal];
-    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithCustomView:customHelpButton];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"] style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.rightBarButtonItem = helpButton;
     
     
+    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:nil sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedResultsController.delegate = self;
+    
     self.client = [OHMClient sharedClient];
     self.client.delegate = self;
+    [self updateOhmletAnimated:NO];
     
     [self.tableView registerClass:[OHMSurveyTableViewCell class]
            forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
     
-    if ([[self.client ohmlets] count] > self.ohmletIndex) {
-        self.ohmlet = [self.client ohmlets][self.ohmletIndex];
-    }
+    
     
     [self setupHeader];
-    
-    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:nil sectionNameKeyPath:nil cacheName:nil];
-    self.fetchedResultsController.delegate = self;
     
 //    self.tableView.restorationIdentifier = @"PQTItemsViewControllerTableView";
 }
@@ -113,67 +104,39 @@
     [self updateFetchedResultsController];
 }
 
-- (void)setupTitleView
-{
-    NSLog(@"nav bounds: %@", NSStringFromCGRect(self.navigationController.navigationBar.bounds));
-    CGRect titleFrame = self.navigationController.navigationBar.bounds;
-    UIView *titleView = [[UIView alloc] initWithFrame:titleFrame];
-    titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon"]];
-    [iconView constrainEqualWidthAndHeight];
-    
-    UILabel *titleLabel = [[UILabel alloc] init];
-    titleLabel.text = @"Ohmage";
-    
-    [titleView addSubview:iconView];
-    [titleView addSubview:titleLabel];
-    
-    [titleLabel centerHorizontallyInView:titleView];
-    
-    UIEdgeInsets insets = UIEdgeInsetsMake(4, 0, 4, 0);
-    [titleView  constrainChild:iconView toVerticalInsets:insets];
-    [titleView  constrainChild:titleLabel toVerticalInsets:insets];
-    
-    [titleView addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"H:[iconView]-[titleLabel]"
-                               options:0
-                               metrics:nil
-                               views:NSDictionaryOfVariableBindings(iconView, titleLabel)]];
-    
-    self.navigationItem.titleView = titleView;
-}
 
 - (void)setupHeader
 {
+//    if (self.tableView.tableHeaderView != nil) // go back to using setup header instead of update header and check for old header height to animate transition
+    
     NSString *nameText = nil;
+    NSString *descriptionText = nil;
     if (self.ohmlet) {
         nameText = self.ohmlet.ohmletName ? self.ohmlet.ohmletName : self.ohmlet.ohmID;
+        descriptionText = self.ohmlet.ohmletDescription ? self.ohmlet.ohmletDescription : @"...";
     }
     else {
         nameText = @"Loading Data";
+        descriptionText = @"...";
     }
     
     CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    CGFloat contentHeight = kUIViewVerticalMargin;
-    
-    UILabel *nameLabel = [OHMUserInterface headerTitleLabelWithText:nameText width:contentWidth];
-    contentHeight += nameLabel.frame.size.height + kUIViewSmallTextMargin;
-    
-    UILabel *descriptionLabel = [OHMUserInterface headerDescriptionLabelWithText:self.ohmlet.ohmletDescription width:contentWidth];
-    contentHeight += descriptionLabel.frame.size.height + kUIViewSmallTextMargin;
     
     UIPageControl *pageControl = [[UIPageControl alloc] init];
     pageControl.numberOfPages = MAX([self.client.ohmlets count], 1);
     pageControl.currentPage = self.ohmletIndex;
     [pageControl addTarget:self action:@selector(pageControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [pageControl constrainSize:CGSizeMake(contentWidth, 20)];
-    contentHeight += pageControl.frame.size.height + kUIViewSmallTextMargin;
+    self.pageControl = pageControl;
     
+    UILabel *nameLabel = [OHMUserInterface headerTitleLabelWithText:nameText width:contentWidth];
+    self.ohmletNameLabel = nameLabel;
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
+    UILabel *descriptionLabel = [OHMUserInterface headerDescriptionLabelWithText:descriptionText width:contentWidth];
+    self.ohmletDescriptionLabel = descriptionLabel;
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, [self headerHeight])];
     headerView.backgroundColor = [OHMAppConstants lightOhmageColor];
-//    [OHMUserInterface applyRoundedBorderToView:headerView];
     
     [headerView addSubview:nameLabel];
     [headerView addSubview:descriptionLabel];
@@ -194,10 +157,72 @@
     [headerView addGestureRecognizer:leftSwipe];
     
     self.tableView.tableHeaderView = headerView;
-    self.pageControl = pageControl;
-    self.ohmletNameLabel = nameLabel;
-    self.ohmletDescriptionLabel = descriptionLabel;
+}
+
+- (void)updateOhmletAnimated:(BOOL)animated
+{
+    if (self.client.ohmlets.count > 0) {
+        self.ohmletIndex = MAX(self.ohmletIndex, MIN(self.client.ohmlets.count - 1, 0) );
+        self.ohmlet = self.client.ohmlets[self.ohmletIndex];
+        __weak __typeof(self) weakSelf = self;
+        self.ohmlet.ohmletUpdatedBlock = ^{
+            [weakSelf updateHeaderAnimated:YES];
+        };
+    }
+    else {
+        self.ohmletIndex = 0;
+        self.ohmlet = nil;
+    }
+        
+    [self updateFetchedResultsController];
+    [self updateHeaderAnimated:animated];
     
+    if (animated) {
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    else {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)updateHeaderAnimated:(BOOL)animated
+{
+    if (self.tableView.tableHeaderView == nil) return;
+    
+    self.pageControl.numberOfPages = [self.client.ohmlets count];
+    self.ohmletNameLabel.text = self.ohmlet.ohmletName;
+    self.ohmletDescriptionLabel.text = self.ohmlet.ohmletDescription;
+    
+//    CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
+//    CGFloat nameHeight = [OHMUserInterface heightForText:self.ohmletNameLabel.text withWidth:contentWidth font:self.ohmletNameLabel.font];
+//    CGFloat descriptionHeight = [OHMUserInterface heightForText:self.ohmletDescriptionLabel.text withWidth:contentWidth font:self.ohmletDescriptionLabel.font];
+//    [self.ohmletNameLabel constrainSize:CGSizeMake(contentWidth, nameHeight)];
+//    [self.ohmletNameLabel constrainSize:CGSizeMake(contentWidth, descriptionHeight)];
+//    
+//    CGFloat newHeight = [self headerHeight];
+//    
+//    if (self.tableView.tableHeaderView.frame.size.height != newHeight) {
+//        CGRect newFrame = self.tableView.tableHeaderView.frame;
+//        newFrame.size.height = newHeight;
+//        
+//        if (animated) {
+//            [UIView animateWithDuration:0.35 animations:^{
+//                self.tableView.tableHeaderView.frame = newFrame;
+//            }];
+//        }
+//        else {
+//            self.tableView.tableHeaderView.frame = newFrame;
+//        }
+//    }
+}
+
+- (CGFloat)headerHeight
+{
+    CGFloat contentHeight = kUIViewVerticalMargin;
+    contentHeight += self.pageControl.frame.size.height + kUIViewSmallTextMargin;
+    contentHeight += self.ohmletNameLabel.frame.size.height + kUIViewSmallTextMargin;
+    contentHeight += self.ohmletDescriptionLabel.frame.size.height + kUIViewSmallTextMargin;
+    return contentHeight;
 }
 
 - (void)pageControlValueChanged:(id)sender
@@ -205,8 +230,8 @@
     NSInteger oldIndex = self.ohmletIndex;
     self.ohmletIndex = self.pageControl.currentPage;
     [self OHMClientDidUpdate:[OHMClient sharedClient]];
-    UITableViewRowAnimation animation = (oldIndex < self.ohmletIndex ? UITableViewRowAnimationLeft : UITableViewRowAnimationRight);
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
+//    UITableViewRowAnimation animation = (oldIndex < self.ohmletIndex ? UITableViewRowAnimationLeft : UITableViewRowAnimationRight);
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 }
 
 - (void)headerDidSwipeRight:(id)sender
@@ -266,7 +291,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (indexPath.row >= [[self.fetchedResultsController fetchedObjects] count]) {
-        NSLog(@"no survey for row: %d", indexPath.row);
+        NSLog(@"no survey for row: %ld", (long)indexPath.row);
         return;
     }
     
@@ -285,9 +310,9 @@
         //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
     }
     
-    //    survey.surveyUpdatedBlock = ^{
-    //        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    //    };
+    survey.surveyUpdatedBlock = ^{
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    };
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -319,16 +344,7 @@
 
 - (void)OHMClientDidUpdate:(OHMClient *)client
 {
-    if (self.ohmletIndex >= [client.ohmlets count]) {
-        self.ohmletIndex = [client.ohmlets count] - 1;
-    }
-    if (self.ohmletIndex >= 0) {
-        self.ohmlet = [client ohmlets][self.ohmletIndex];
-        
-        [self updateFetchedResultsController];
-        [self setupHeader];
-//        [self.tableView reloadData];
-    }
+    [self updateOhmletAnimated:YES];
 }
 
 
@@ -353,7 +369,7 @@
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type
 {
-    NSLog(@"controller did change section info type: %d", type);
+    NSLog(@"controller did change section info type: %lu", (unsigned long)type);
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
@@ -374,7 +390,7 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"controller did change oject, type: %d", type);
+    NSLog(@"controller did change object, type: %lu, indexRow: %lu, newRow: %lu", (unsigned long)type, indexPath.row, newIndexPath.row);
     UITableView *tableView = self.tableView;
     
     switch(type)

@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OHMBaseViewController.h"
 
 @class OHMSurvey;
 
-@interface OHMSurveyDetailViewController : UITableViewController
+@interface OHMSurveyDetailViewController : OHMBaseViewController
 
 - (instancetype)initWithSurvey:(OHMSurvey *)survey;
 

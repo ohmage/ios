@@ -10,7 +10,7 @@
 
 @interface UIView (AutoLayoutHelpers)
 
-+ (CGFloat)heightForString:(NSAttributedString *)aString withWidth:(CGFloat)width;
+- (void)layoutChildrenHorizontallyWithDefaultMargins:(NSArray *)childViews;
 
 - (void)constrainEqualVerticalSpacingBetweenElements:(NSArray *)layoutElements;
 - (void)constrainEqualHorizontalSpacingBetweenChildren:(NSArray *)childViews;
@@ -26,6 +26,8 @@
 - (void)constrainChildToEqualSize:(UIView *)childView;
 - (void)constrainChild:(UIView *)childView toMargins:(UIEdgeInsets)margins;
 
+- (void)constrainWidth:(CGFloat)aWidth;
+- (void)constrainHeight:(CGFloat)aHeight;
 - (void)constrainSize:(CGSize)aSize;
 - (void)constrainPosition:(CGPoint)aPoint;
 - (void)constrainEqualWidthAndHeight;

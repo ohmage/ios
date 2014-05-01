@@ -24,6 +24,9 @@
 
 - (void)saveClientState;
 
+// Auth
+- (BOOL)hasLoggedInUser;
+
 // HTTP
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password;
 - (void)setAuthorizationToken:(NSString *)token;

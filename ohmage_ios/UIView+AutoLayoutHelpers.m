@@ -12,6 +12,35 @@
 
 @implementation UIView (AutoLayoutHelpers)
 
+
+- (void)layoutChildrenHorizontallyWithDefaultMargins:(NSArray *)childViews
+{
+    UIView *leftView = [childViews firstObject];
+    leftView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:|-[leftView]" options:0 metrics:nil
+                          views:NSDictionaryOfVariableBindings(leftView)]];
+    
+    UIView *previousView = leftView;
+    UIView *nextView = nil;
+    for (int i = 1; i < childViews.count - 1; i++) {
+        nextView = childViews[i];
+        nextView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addConstraints:[NSLayoutConstraint
+                              constraintsWithVisualFormat:@"H[previousView]-[nextView]" options:0 metrics:nil
+                              views:NSDictionaryOfVariableBindings(previousView, nextView)]];
+        previousView = nextView;
+    }
+    
+    UIView *rightView = [childViews lastObject];
+    rightView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:[rightView]-|" options:0 metrics:nil
+                          views:NSDictionaryOfVariableBindings(rightView)]];
+}
+
 - (UIView *)newVerticalSpacer
 {
     UIView *spacer = [[UIView alloc] init];
@@ -70,7 +99,7 @@
     }
 }
 
-- (void)constrainChildrenToEqualHights:(NSArray *)childViews
+- (void)constrainChildrenToEqualHeights:(NSArray *)childViews
 {
     
     UIView *firstView = [childViews firstObject];
@@ -178,6 +207,30 @@
                         options:0
                         metrics:@{@"top" : @(margins.top), @"bottom" : @(margins.bottom)}
                         views:NSDictionaryOfVariableBindings(childView)]];
+}
+
+- (void)constrainWidth:(CGFloat)aWidth
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:[self(theWidth@750)]"
+                          options:0 metrics:@{@"theWidth":@(aWidth)}
+                          views:NSDictionaryOfVariableBindings(self)]];
+    
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, aWidth, self.frame.size.height);
+}
+
+- (void)constrainHeight:(CGFloat)aHeight
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"V:[self(theHeight@750)]"
+                          options:0 metrics:@{@"theHeight":@(aHeight)}
+                          views:NSDictionaryOfVariableBindings(self)]];
+    
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, aHeight);
 }
 
 - (void)constrainSize:(CGSize)aSize
@@ -350,16 +403,6 @@
  */
 - (void)centerFrameVerticallyInView:(UIView *)reference {
   [self moveOriginToPoint:CGPointMake(self.frame.origin.x, ceil((reference.frame.size.height - self.frame.size.height) / 2))];
-}
-
-
-
-+ (CGFloat)heightForString:(NSAttributedString *)aString withWidth:(CGFloat)width
-{
-    CGRect r = [aString boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX)
-                                     options:NSStringDrawingUsesLineFragmentOrigin
-                                     context:nil];
-    return r.size.height;
 }
 
 @end

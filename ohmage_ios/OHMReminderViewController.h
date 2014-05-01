@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OHMBaseTableViewController.h"
 
-@interface OHMReminderViewController : UITableViewController
+@interface OHMReminderViewController : OHMBaseTableViewController
 
 - (instancetype)initWithReminder:(OHMReminder *)reminder;
 

@@ -42,6 +42,10 @@
 		1E3C80EC190F66510088D2D0 /* OHMSurveyCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */; };
 		1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */; };
 		1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80F1191083DA0088D2D0 /* OHMReminder.m */; };
+		1E56A3251912D80100384AE9 /* OHMEmailLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */; };
+		1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A327191302F500384AE9 /* OHMBaseViewController.m */; };
+		1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32A191303BC00384AE9 /* OHMViewControllerComposite.m */; };
+		1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */; };
 		1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096318CA6F8700203990 /* Foundation.framework */; };
 		1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096518CA6F8700203990 /* CoreGraphics.framework */; };
 		1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
@@ -56,6 +60,7 @@
 		1E70098918CA6F8700203990 /* ohmage_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70098818CA6F8700203990 /* ohmage_iosTests.m */; };
 		1E70099B18CA7DFD00203990 /* OHMDashboardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70099A18CA7DFD00203990 /* OHMDashboardItem.m */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
+		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD557318D1355700B55028 /* OHMHomeViewController.m */; };
 		1EAD557618D1355700B55028 /* OHMHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAD557418D1355700B55028 /* OHMHomeViewController.xib */; };
 		1EAD557B18D14CC200B55028 /* OHMProjectsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD557A18D14CC200B55028 /* OHMProjectsViewController.m */; };
@@ -143,6 +148,15 @@
 		1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMReminder.m; sourceTree = "<group>"; };
 		1E3C80F0191083DA0088D2D0 /* OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMReminder.h; path = Model/OHMReminder.h; sourceTree = "<group>"; };
 		1E3C80F1191083DA0088D2D0 /* OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMReminder.m; path = Model/OHMReminder.m; sourceTree = "<group>"; };
+		1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMEmailLoginViewController.h; sourceTree = "<group>"; };
+		1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMEmailLoginViewController.m; sourceTree = "<group>"; };
+		1E56A326191302F500384AE9 /* OHMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMBaseViewController.h; sourceTree = "<group>"; };
+		1E56A327191302F500384AE9 /* OHMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMBaseViewController.m; sourceTree = "<group>"; };
+		1E56A329191303BC00384AE9 /* OHMViewControllerComposite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMViewControllerComposite.h; sourceTree = "<group>"; };
+		1E56A32A191303BC00384AE9 /* OHMViewControllerComposite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMViewControllerComposite.m; sourceTree = "<group>"; };
+		1E56A32C1913041400384AE9 /* OHMViewControllerCompositeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMViewControllerCompositeProtocol.h; sourceTree = "<group>"; };
+		1E56A32D1913043B00384AE9 /* OHMBaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMBaseTableViewController.h; sourceTree = "<group>"; };
+		1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMBaseTableViewController.m; sourceTree = "<group>"; };
 		1E70096018CA6F8700203990 /* ohmage_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ohmage_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E70096318CA6F8700203990 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E70096518CA6F8700203990 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -163,6 +177,8 @@
 		1E70099A18CA7DFD00203990 /* OHMDashboardItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMDashboardItem.m; sourceTree = "<group>"; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
+		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
+		1EA764571912C941007768EF /* OHMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMLoginViewController.m; sourceTree = "<group>"; };
 		1EAD557218D1355700B55028 /* OHMHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMHomeViewController.h; sourceTree = "<group>"; };
 		1EAD557318D1355700B55028 /* OHMHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMHomeViewController.m; sourceTree = "<group>"; };
 		1EAD557418D1355700B55028 /* OHMHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OHMHomeViewController.xib; sourceTree = "<group>"; };
@@ -296,6 +312,20 @@
 				1E1B610419099B07001046E0 /* OHMAppConstants.m */,
 			);
 			name = Application;
+			sourceTree = "<group>";
+		};
+		1E56A3301913065900384AE9 /* Base View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1E56A32C1913041400384AE9 /* OHMViewControllerCompositeProtocol.h */,
+				1E56A329191303BC00384AE9 /* OHMViewControllerComposite.h */,
+				1E56A32A191303BC00384AE9 /* OHMViewControllerComposite.m */,
+				1E56A326191302F500384AE9 /* OHMBaseViewController.h */,
+				1E56A327191302F500384AE9 /* OHMBaseViewController.m */,
+				1E56A32D1913043B00384AE9 /* OHMBaseTableViewController.h */,
+				1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */,
+			);
+			name = "Base View Controllers";
 			sourceTree = "<group>";
 		};
 		1E70095718CA6F8700203990 = {
@@ -462,8 +492,13 @@
 		1EDA0B2118F4821E00C89F91 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1E56A3301913065900384AE9 /* Base View Controllers */,
 				1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */,
 				1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */,
+				1EA764561912C941007768EF /* OHMLoginViewController.h */,
+				1EA764571912C941007768EF /* OHMLoginViewController.m */,
+				1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */,
+				1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */,
 				1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */,
 				1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */,
 				1EA7645319118699007768EF /* OHMReminderViewController.h */,
@@ -654,8 +689,10 @@
 				1E1B61021908BC31001046E0 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1B60CD19063242001046E0 /* OHMSurveyPromptResponse.m in Sources */,
 				1EAD557518D1355700B55028 /* OHMHomeViewController.m in Sources */,
+				1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */,
 				1E1B60C919063242001046E0 /* OHMOhmlet.m in Sources */,
 				1EF693DB18EA0F670003E077 /* AFSecurityPolicy.m in Sources */,
+				1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */,
 				1E1B60F619063392001046E0 /* _OHMSurvey.m in Sources */,
 				1EF693DA18EA0F670003E077 /* AFNetworkReachabilityManager.m in Sources */,
 				1EF693DF18EA0F670003E077 /* AFURLSessionManager.m in Sources */,
@@ -670,9 +707,12 @@
 				1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */,
 				1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */,
 				1ECA87EB190DBB8D00429D5D /* OHMPromptCondition.m in Sources */,
+				1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */,
 				1EF693DE18EA0F670003E077 /* AFURLResponseSerialization.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
+				1E56A3251912D80100384AE9 /* OHMEmailLoginViewController.m in Sources */,
 				1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */,
+				1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */,
 				1ECA87EE190DDE4A00429D5D /* OHMMediaStore.m in Sources */,
 				1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */,
 			);
