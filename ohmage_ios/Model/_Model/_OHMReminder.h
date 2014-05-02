@@ -22,12 +22,14 @@ extern const struct OHMReminderAttributes {
 
 extern const struct OHMReminderRelationships {
 	__unsafe_unretained NSString *survey;
+	__unsafe_unretained NSString *user;
 } OHMReminderRelationships;
 
 extern const struct OHMReminderFetchedProperties {
 } OHMReminderFetchedProperties;
 
 @class OHMSurvey;
+@class OHMUser;
 
 
 
@@ -233,6 +235,13 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+@property (nonatomic, strong) OHMUser *user;
+
+//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 @end
 
@@ -354,6 +363,11 @@ extern const struct OHMReminderFetchedProperties {
 
 - (OHMSurvey*)primitiveSurvey;
 - (void)setPrimitiveSurvey:(OHMSurvey*)value;
+
+
+
+- (OHMUser*)primitiveUser;
+- (void)setPrimitiveUser:(OHMUser*)value;
 
 
 @end

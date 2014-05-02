@@ -21,6 +21,7 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 
 const struct OHMReminderRelationships OHMReminderRelationships = {
 	.survey = @"survey",
+	.user = @"user",
 };
 
 const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
@@ -391,6 +392,10 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 
 @dynamic survey;
+
+	
+
+@dynamic user;
 
 	
 

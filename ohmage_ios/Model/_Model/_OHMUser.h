@@ -13,12 +13,14 @@ extern const struct OHMUserAttributes {
 
 extern const struct OHMUserRelationships {
 	__unsafe_unretained NSString *ohmlets;
+	__unsafe_unretained NSString *reminders;
 } OHMUserRelationships;
 
 extern const struct OHMUserFetchedProperties {
 } OHMUserFetchedProperties;
 
 @class OHMOhmlet;
+@class OHMReminder;
 
 
 
@@ -85,6 +87,13 @@ extern const struct OHMUserFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *reminders;
+
+- (NSMutableSet*)remindersSet;
+
+
+
+
 
 @end
 
@@ -94,6 +103,11 @@ extern const struct OHMUserFetchedProperties {
 - (void)removeOhmlets:(NSOrderedSet*)value_;
 - (void)addOhmletsObject:(OHMOhmlet*)value_;
 - (void)removeOhmletsObject:(OHMOhmlet*)value_;
+
+- (void)addReminders:(NSSet*)value_;
+- (void)removeReminders:(NSSet*)value_;
+- (void)addRemindersObject:(OHMReminder*)value_;
+- (void)removeRemindersObject:(OHMReminder*)value_;
 
 @end
 
@@ -127,6 +141,11 @@ extern const struct OHMUserFetchedProperties {
 
 - (NSMutableOrderedSet*)primitiveOhmlets;
 - (void)setPrimitiveOhmlets:(NSMutableOrderedSet*)value;
+
+
+
+- (NSMutableSet*)primitiveReminders;
+- (void)setPrimitiveReminders:(NSMutableSet*)value;
 
 
 @end

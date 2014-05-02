@@ -134,7 +134,7 @@ CGFloat const kUITextFieldDefaultHeight = 30.0;
 }
 
 + (UIFont *)buttonFont {
-    return [UIFont systemFontOfSize:15.0];
+    return [UIFont systemFontOfSize:17.0];
 }
 
 @end

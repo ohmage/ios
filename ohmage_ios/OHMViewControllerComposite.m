@@ -16,7 +16,7 @@
 
 @implementation OHMViewControllerComposite
 
-- (instancetype)initWithViewController:(UIViewController *)viewController
+- (instancetype)initWithViewController:(UIViewController<OHMViewControllerCompositeProtocol> *)viewController
 {
     self = [self init];
     if (self) {

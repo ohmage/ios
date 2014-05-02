@@ -82,7 +82,7 @@
     
     id<UILayoutSupport> topGuide = self.topLayoutGuide;
     id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;
-    [self.textLabel positionBelowElementWithDefaultMargin:topGuide];
+    [self.textLabel positionBelowElement:topGuide margin:2 * kUIViewVerticalMargin];
     [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
     
     self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];

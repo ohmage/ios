@@ -58,7 +58,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     if (self) {
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-        [[AFNetworkActivityLogger sharedLogger] startLogging];
+//        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
@@ -162,7 +162,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
    completionBlock:(void (^)(NSDictionary *, NSError *))block
 {
     [self GET:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"GET %@ Succeeded", request);
+//        NSLog(@"GET %@ Succeeded", request);
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"GET %@ Failed", request);
@@ -401,6 +401,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     OHMReminder *reminder = (OHMReminder *)[self insertNewObjectForEntityForName:[OHMReminder entityName]];
     reminder.survey = survey;
+    reminder.user = self.user;
     reminder.weekdaysMaskValue = OHMRepeatDayEveryday;
     reminder.enabledValue = YES;
     return reminder;

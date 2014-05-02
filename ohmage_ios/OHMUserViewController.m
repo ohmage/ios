@@ -7,12 +7,24 @@
 //
 
 #import "OHMUserViewController.h"
-#import "OHMUser.h"
 #import "OHMLoginViewController.h"
+#import "OHMReminderViewController.h"
+#import "OHMUser.h"
+#import "OHMReminder.h"
+#import "OHMSurvey.h"
+
+static NSInteger const kSettingsSectionIndex = 0;
+static NSInteger const kRemindersSectionIndex = 1;
+
+static NSInteger const kSettingsRowCellularData = 0;
+static NSInteger const kSettingsRowSyncNow = 1;
+static NSInteger const kSettingsRowClearUserData = 2;
+static NSInteger const kSettingsRowCount = 3;
 
 @interface OHMUserViewController ()
 
 @property (nonatomic, strong) OHMUser *user;
+@property (nonatomic, strong) NSArray *reminders;
 
 @end
 
@@ -27,6 +39,11 @@
     
     self.user = [[OHMClient sharedClient] loggedInUser];
     [self setupHeader];
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"survey.surveyName" ascending:YES];
+    self.reminders = [self.user.reminders sortedArrayUsingDescriptors:@[sort]];
+    
+//    self.tableView.backgroundColor = [[OHMAppConstants lightOhmageColor] lightColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,7 +91,7 @@
     contentHeight += button.frame.size.height + kUIViewVerticalMargin;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
-    headerView.backgroundColor = [OHMAppConstants lightOhmageColor];
+//    headerView.backgroundColor = [[OHMAppConstants lightOhmageColor] lightColor];
     
     [headerView addSubview:nameLabel];
     [headerView addSubview:emailLabel];
@@ -89,6 +106,96 @@
     [button positionBelowElement:emailLabel margin:kUIViewVerticalMargin];
     
     self.tableView.tableHeaderView = headerView;
+}
+
+- (void)confirmationAlertDidConfirm:(UIAlertView *)alert
+{
+    
+}
+
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section) {
+        case kSettingsSectionIndex:
+            return kSettingsRowCount;
+        case kRemindersSectionIndex:
+            return self.reminders.count;
+            
+        default:
+            return 0;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = nil;
+    
+    if (indexPath.section == kSettingsSectionIndex) {
+        switch (indexPath.row) {
+            case kSettingsRowCellularData:
+                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
+                    sw.on = YES;
+                }];
+                cell.textLabel.text = @"Use cellular data";
+                break;
+            case kSettingsRowSyncNow:
+                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+                cell.textLabel.text = @"Sync data";
+//                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+            case kSettingsRowClearUserData:
+                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+                cell.textLabel.text = @"Clear user data";
+                //                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else if (indexPath.section == kRemindersSectionIndex) {
+        OHMReminder *reminder = self.reminders[indexPath.row];
+        cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
+            sw.on = reminder.enabledValue;
+        }];
+        cell.textLabel.text = reminder.survey.surveyName;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", [reminder labelText], [reminder detailLabelText]];
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kSettingsSectionIndex && indexPath.row == kSettingsRowClearUserData) {
+        [self presentConfirmationAlertWithTitle:@"Clear user data?" message:@"Are you sure you want to clear all data for this user? This action cannot be undone." confirmTitle:@"Clear data"];
+    }
+    else if (indexPath.section == kRemindersSectionIndex) {
+        OHMReminder *reminder = self.reminders[indexPath.row];
+        OHMReminderViewController *vc = [[OHMReminderViewController alloc] initWithReminder:reminder];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case kSettingsSectionIndex:
+            return @"";
+        case kRemindersSectionIndex:
+            return @"Reminders";
+            
+        default:
+            return nil;
+    }
 }
 
 

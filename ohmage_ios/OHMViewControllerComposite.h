@@ -19,7 +19,7 @@
 @property (nonatomic, readonly) CGFloat topLength;
 @property (nonatomic) BOOL backgroundTapEnabled;
 
-- (id)initWithViewController:(UIViewController *)viewController;
+- (id)initWithViewController:(UIViewController<OHMViewControllerCompositeProtocol> *)viewController;
 
 - (void)commonSetup;
 

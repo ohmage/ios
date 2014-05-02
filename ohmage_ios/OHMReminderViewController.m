@@ -215,7 +215,9 @@ static const NSInteger kLocationRowIndexLocation = 1;
         [self deleteRowsAtIndexPaths:@[locationPath]];
     }
     
-    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
+    if (self.reminder.isTimeReminderValue) {
+        [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
+    }
     
     [self updateSaveButtonState];
 }

@@ -132,6 +132,7 @@
     UIPageControl *pageControl = [[UIPageControl alloc] init];
     pageControl.numberOfPages = MAX([self.client.ohmlets count], 1);
     pageControl.currentPage = self.ohmletIndex;
+    pageControl.hidesForSinglePage = YES;
     [pageControl addTarget:self action:@selector(pageControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [pageControl constrainSize:CGSizeMake(contentWidth, 20)];
     self.pageControl = pageControl;
@@ -303,7 +304,7 @@
     }
     
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    NSLog(@"configureCell for survey: %@, row: %ld", survey.surveyName, (long)indexPath.row);
+//    NSLog(@"configureCell for survey: %@, row: %ld", survey.surveyName, (long)indexPath.row);
     
     if (survey.isLoaded) {
         cell.textLabel.text = survey.surveyName;
@@ -318,11 +319,19 @@
         //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
     }
     
-    __weak OHMSurvey *weakSurvey = survey;
+//    __weak OHMSurvey *weakSurvey = survey;
     survey.surveyUpdatedBlock = ^{
-        NSLog(@"executing update block for survey: %@, row: %ld", weakSurvey.surveyName, (long)indexPath.row);
+//        NSLog(@"executing update block for survey: %@, row: %ld", weakSurvey.surveyName, (long)indexPath.row);
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    NSLog(@"will display survey: %@, at row: %ld", survey.surveyName, indexPath.row);
+    survey.colorIndex = indexPath.row;
+    cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -400,36 +409,38 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"controller did change object, type: %lu, indexRow: %lu, newRow: %lu", (unsigned long)type, indexPath.row, newIndexPath.row);
+    OHMSurvey *survey = (OHMSurvey *)anObject;
+    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
     UITableView *tableView = self.tableView;
     
-    switch(type)
-    {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
-                    atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView
-             deleteRowsAtIndexPaths:@[indexPath]
-             withRowAnimation:UITableViewRowAnimationFade];
-            
-            [tableView
-             insertRowsAtIndexPaths:@[newIndexPath]
-             withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
+    [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+//    switch(type)
+//    {
+//        case NSFetchedResultsChangeInsert:
+//            [tableView insertRowsAtIndexPaths:@[newIndexPath]
+//                             withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeDelete:
+//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+//                             withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeUpdate:
+//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+//                    atIndexPath:indexPath];
+//            break;
+//            
+//        case NSFetchedResultsChangeMove:
+//            [tableView
+//             deleteRowsAtIndexPaths:@[indexPath]
+//             withRowAnimation:UITableViewRowAnimationFade];
+//            
+//            [tableView
+//             insertRowsAtIndexPaths:@[newIndexPath]
+//             withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//    }
 }
 
 @end

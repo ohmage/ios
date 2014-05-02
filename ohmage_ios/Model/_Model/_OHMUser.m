@@ -12,6 +12,7 @@ const struct OHMUserAttributes OHMUserAttributes = {
 
 const struct OHMUserRelationships OHMUserRelationships = {
 	.ohmlets = @"ohmlets",
+	.reminders = @"reminders",
 };
 
 const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
@@ -87,6 +88,19 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"ohmlets"];
   
 	[self didAccessValueForKey:@"ohmlets"];
+	return result;
+}
+	
+
+@dynamic reminders;
+
+	
+- (NSMutableSet*)remindersSet {
+	[self willAccessValueForKey:@"reminders"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
+  
+	[self didAccessValueForKey:@"reminders"];
 	return result;
 }
 	
