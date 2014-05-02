@@ -15,7 +15,7 @@
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
-                          saturation:s * 0.6
+                          saturation:s * 0.5
                           brightness:MIN(b * 1.2, 1.0)
                                alpha:a];
     return nil;

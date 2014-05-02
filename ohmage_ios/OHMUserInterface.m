@@ -167,7 +167,7 @@
 
 + (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width
 {
-    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerTitleFont]];
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerTitleFont] fixedWidth:YES];
     label.textColor = [OHMAppConstants headerTitleColor];
     label.textAlignment = NSTextAlignmentCenter;
     return label;
@@ -175,8 +175,7 @@
 
 + (UILabel *)headerDescriptionLabelWithText:(NSString *)text width:(CGFloat)width
 {
-    
-    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDescriptionFont]];
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDescriptionFont] fixedWidth:YES];
     label.textColor = [OHMAppConstants headerDescriptionColor];
     label.textAlignment = NSTextAlignmentCenter;
     return label;
@@ -184,7 +183,7 @@
 
 + (UILabel *)headerDetailLabelWithText:(NSString *)text width:(CGFloat)width
 {
-    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDetailFont]];
+    UILabel *label = [self variableHeightLabelWithText:text width:width font:[OHMAppConstants headerDetailFont] fixedWidth:YES];
     label.textColor = [OHMAppConstants headerDetailColor];
     label.textAlignment = NSTextAlignmentCenter;
     return label;
@@ -202,10 +201,18 @@
     return label;
 }
 
-+ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font
++ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font fixedWidth:(BOOL)fixedWidth
 {
     CGSize size = [self sizeForText:text withWidth:width font:font];
+    if (fixedWidth) {
+        size.width = width;
+    }
     return [self baseLabelWithText:text font:font size:size];
+}
+
++ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font
+{
+    return [self variableHeightLabelWithText:text width:width font:font fixedWidth:NO];
 }
 
 + (UILabel *)fixedSizeLabelWithText:(NSString *)text size:(CGSize)size font:(UIFont *)font
@@ -306,9 +313,9 @@
     
     button.titleLabel.font = [OHMAppConstants buttonFont];
     
-    [button setTitleColor:[OHMAppConstants primaryTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[OHMAppConstants buttonTextColor] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [button setTitleColor:[color lightColor] forState:UIControlStateHighlighted];
     
     button.backgroundColor = color;
     

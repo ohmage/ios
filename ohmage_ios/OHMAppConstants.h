@@ -29,6 +29,7 @@ extern CGFloat const kUITextFieldDefaultHeight;
 + (UIColor *)headerTitleColor;
 + (UIColor *)headerDescriptionColor;
 + (UIColor *)headerDetailColor;
++ (UIColor *)buttonTextColor;
 
 
 + (UIFont *)textFont;

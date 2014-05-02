@@ -142,6 +142,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     self.user = nil;
     [self.delegate OHMClientDidUpdate:self];
+    [self saveClientState];
 }
 
 

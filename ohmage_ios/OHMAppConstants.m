@@ -87,6 +87,11 @@ CGFloat const kUITextFieldDefaultHeight = 30.0;
     return [UIColor darkGrayColor];
 }
 
++ (UIColor *)buttonTextColor
+{
+    return [UIColor whiteColor];
+}
+
 
 /**
  *  textFont
@@ -129,7 +134,7 @@ CGFloat const kUITextFieldDefaultHeight = 30.0;
 }
 
 + (UIFont *)buttonFont {
-    return [UIFont boldSystemFontOfSize:17.0];
+    return [UIFont systemFontOfSize:15.0];
 }
 
 @end

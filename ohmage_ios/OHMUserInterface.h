@@ -26,6 +26,7 @@
 + (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width;
 + (UILabel *)headerDescriptionLabelWithText:(NSString *)text width:(CGFloat)width;
 + (UILabel *)headerDetailLabelWithText:(NSString *)text width:(CGFloat)width;
++ (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font fixedWidth:(BOOL)fixedWidth;
 + (UILabel *)variableHeightLabelWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (UILabel *)fixedSizeLabelWithText:(NSString *)text size:(CGSize)size font:(UIFont *)font;
 + (UIView *)fixedSizeFramedLabelWithText:(NSString *)text
