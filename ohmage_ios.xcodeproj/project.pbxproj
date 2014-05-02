@@ -47,6 +47,8 @@
 		1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32A191303BC00384AE9 /* OHMViewControllerComposite.m */; };
 		1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */; };
 		1E56A3341913104D00384AE9 /* OHMUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A3331913104D00384AE9 /* OHMUserViewController.m */; };
+		1E56A337191334EC00384AE9 /* OHMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A336191334EC00384AE9 /* OHMLocationManager.m */; };
+		1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E56A3381913354200384AE9 /* CoreLocation.framework */; };
 		1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096318CA6F8700203990 /* Foundation.framework */; };
 		1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096518CA6F8700203990 /* CoreGraphics.framework */; };
 		1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
@@ -151,6 +153,9 @@
 		1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMBaseTableViewController.m; sourceTree = "<group>"; };
 		1E56A3321913104D00384AE9 /* OHMUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMUserViewController.h; sourceTree = "<group>"; };
 		1E56A3331913104D00384AE9 /* OHMUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUserViewController.m; sourceTree = "<group>"; };
+		1E56A335191334EC00384AE9 /* OHMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLocationManager.h; sourceTree = "<group>"; };
+		1E56A336191334EC00384AE9 /* OHMLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMLocationManager.m; sourceTree = "<group>"; };
+		1E56A3381913354200384AE9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1E70096018CA6F8700203990 /* ohmage_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ohmage_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E70096318CA6F8700203990 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E70096518CA6F8700203990 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -223,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */,
 				1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */,
 				1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */,
 				1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */,
@@ -340,6 +346,7 @@
 		1E70096218CA6F8700203990 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E56A3381913354200384AE9 /* CoreLocation.framework */,
 				1EAD55A618D27B4F00B55028 /* QuartzCore.framework */,
 				1EAD55A418D27B4800B55028 /* MapKit.framework */,
 				1E70096318CA6F8700203990 /* Foundation.framework */,
@@ -399,6 +406,8 @@
 			children = (
 				1E1B610A1909B736001046E0 /* OHMUserInterface.h */,
 				1E1B610B1909B736001046E0 /* OHMUserInterface.m */,
+				1E56A335191334EC00384AE9 /* OHMLocationManager.h */,
+				1E56A336191334EC00384AE9 /* OHMLocationManager.m */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -655,6 +664,7 @@
 				1ECA87EE190DDE4A00429D5D /* OHMMediaStore.m in Sources */,
 				1E56A3341913104D00384AE9 /* OHMUserViewController.m in Sources */,
 				1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */,
+				1E56A337191334EC00384AE9 /* OHMLocationManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

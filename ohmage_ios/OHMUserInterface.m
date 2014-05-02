@@ -286,4 +286,19 @@
     return [dateFormatter stringFromDate:date];
 }
 
++ (NSString *)formattedTime:(NSDate *)time
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+//        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m" options:0
+//                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:formatString];
+        dateFormatter.dateStyle = NSDateFormatterNoStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    }
+    
+    return [dateFormatter stringFromDate:time];
+}
+
 @end

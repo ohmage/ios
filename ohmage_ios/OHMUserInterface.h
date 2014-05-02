@@ -39,5 +39,6 @@
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
 
 + (NSString *)formattedDate:(NSDate *)date;
++ (NSString *)formattedTime:(NSDate *)time;
 
 @end

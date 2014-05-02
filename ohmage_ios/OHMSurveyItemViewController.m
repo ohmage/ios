@@ -21,10 +21,6 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *actionButton;
-@property (nonatomic, strong) UIToolbar *toolbar;
-@property (nonatomic, strong) UIBarButtonItem *backButton;
-@property (nonatomic, strong) UIBarButtonItem *skipButton;
-@property (nonatomic, strong) UIBarButtonItem *nextButton;
 
 @property (nonatomic) BOOL backgroundTapEnabled;
 @property (nonatomic, strong) UITapGestureRecognizer *backgroundTapGesture;

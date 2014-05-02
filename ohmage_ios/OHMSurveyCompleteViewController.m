@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         self.surveyResponse = response;
-        self.itemIndex = [response.survey.surveyItems count]; // to enable back button
+//        self.itemIndex = [response.survey.surveyItems count]; // to enable back button
     }
     return self;
 }
@@ -44,6 +44,9 @@
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.topLayoutGuide];
     self.submitButton = button;
+    
+    self.toolbar.items = @[self.backButton];
+    self.backButton.enabled = YES;
 }
 
 - (void)didReceiveMemoryWarning

@@ -61,9 +61,9 @@ static const NSInteger kLocationRowIndexLocation = 1;
     self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"Create Reminder" : @"Edit Reminder");
     
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonPressed:)];
-    saveButton.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveButton;
     self.saveButton = saveButton;
+    [self updateSaveButtonState];
     
     [self setupTimePickers];
 }
@@ -71,16 +71,33 @@ static const NSInteger kLocationRowIndexLocation = 1;
 - (void)setupTimePickers
 {
     self.alarmTimePickerCell = [OHMUserInterface cellWithTimePickerFromTableView:self.tableView setupBlock:^(UIDatePicker *dp) {
+        [dp addTarget:self action:@selector(timePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        if (self.reminder.specificTime != nil) {
+            dp.date = self.reminder.specificTime;
+        }
         self.alarmTimePicker = dp;
     }];
     
     self.startTimePickerCell = [OHMUserInterface cellWithTimePickerFromTableView:self.tableView setupBlock:^(UIDatePicker *dp) {
+        [dp addTarget:self action:@selector(timePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        if (self.reminder.startTime != nil) {
+            dp.date = self.reminder.startTime;
+        }
         self.startTimePicker = dp;
     }];
     
     self.endTimePickerCell = [OHMUserInterface cellWithTimePickerFromTableView:self.tableView setupBlock:^(UIDatePicker *dp) {
+        [dp addTarget:self action:@selector(timePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        if (self.reminder.endTime != nil) {
+            dp.date = self.reminder.endTime;
+        }
         self.endTimePicker = dp;
     }];
+}
+
+- (void)updateSaveButtonState
+{
+    self.saveButton.enabled = (self.reminder.isTimeReminderValue || self.reminder.isLocationReminderValue);
 }
 
 - (void)timeReminderSwitchToggled:(id)sender
@@ -108,6 +125,7 @@ static const NSInteger kLocationRowIndexLocation = 1;
     else {
         [self deleteRowsAtIndexPaths:paths];
     }
+    
 }
 
 - (void)timeRangeEnableSwitchToggled:(id)sender
@@ -122,6 +140,8 @@ static const NSInteger kLocationRowIndexLocation = 1;
     else {
         [self deleteRowsAtIndexPaths:paths];
     }
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)locationReminderSwitchToggled:(id)sender
@@ -136,6 +156,8 @@ static const NSInteger kLocationRowIndexLocation = 1;
     else {
         [self deleteRowsAtIndexPaths:@[locationPath]];
     }
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)toggleTimePickerForIndexPath:(NSIndexPath *)indexPath
@@ -176,7 +198,32 @@ static const NSInteger kLocationRowIndexLocation = 1;
 
 - (void)saveButtonPressed:(id)sender
 {
+    if (self.reminder.usesTimeRangeValue) {
+        self.reminder.startTime = self.startTimePicker.date;
+        self.reminder.endTime = self.endTimePicker.date;
+    }
+    else {
+        self.reminder.specificTime = self.alarmTimePicker.date;
+    }
     
+}
+
+- (void)timePickerValueChanged:(UIDatePicker *)sender
+{
+    NSIndexPath *path = nil;
+    if ([sender isEqual:self.alarmTimePicker]) {
+        path = [self indexPathForTimeRow:kTimeRowIndexAlarm];
+    }
+    else if ([sender isEqual:self.startTimePicker]) {
+        path = [self indexPathForTimeRow:kTimeRowIndexRangeStart];
+    }
+    else if ([sender isEqual:self.endTimePicker]) {
+        path = [self indexPathForTimeRow:kTimeRowIndexRangeEnd];
+    }
+    else {
+        return;
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - Table view
@@ -328,8 +375,14 @@ static const NSInteger kLocationRowIndexLocation = 1;
             break;
         }
         case kTimeRowIndexAlarm:
-            cell = [OHMUserInterface cellWithDefaultStyleFromTableView:self.tableView];
+            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
             cell.textLabel.text = @"Alarm";
+            if (self.reminder.usesTimeRangeValue) {
+                cell.detailTextLabel.text = (self.reminder.isLocationReminderValue ? @"Location triggered" : @"Random");
+            }
+            else {
+                cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.alarmTimePicker.date];
+            }
             break;
         case kTimeRowIndexRangeEnable:
         {
@@ -341,12 +394,14 @@ static const NSInteger kLocationRowIndexLocation = 1;
             break;
         }
         case kTimeRowIndexRangeStart:
-            cell = [OHMUserInterface cellWithDefaultStyleFromTableView:self.tableView];
+            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
             cell.textLabel.text = @"Start time";
+            cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.startTimePicker.date];
             break;
         case kTimeRowIndexRangeEnd:
-            cell = [OHMUserInterface cellWithDefaultStyleFromTableView:self.tableView];
+            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
             cell.textLabel.text = @"End time";
+            cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.endTimePicker.date];
             break;
             
         default:

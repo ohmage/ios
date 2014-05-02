@@ -59,11 +59,11 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     
     [self setupHeaderView];
     
-    NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
-    self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
-    
     NSPredicate *remindersPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedRemindersController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName] sortKey:@"isTimeReminder" predicate:remindersPredicate sectionNameKeyPath:nil cacheName:nil];
+    
+    NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
+    self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
     
     NSLog(@"Survey: %@", self.survey);
 }
@@ -172,8 +172,8 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
         cell.textLabel.text = @"Add reminder";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    else if ([[self.fetchedSurveyResponsesController fetchedObjects] count] >= row) {
-        OHMReminder *reminder = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
+    else if ([[self.fetchedRemindersController fetchedObjects] count] >= row) {
+        OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
         cell.textLabel.text = [reminder labelText];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }

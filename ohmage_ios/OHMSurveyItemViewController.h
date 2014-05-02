@@ -14,6 +14,11 @@
 
 + (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
 
+@property (nonatomic, strong) UIToolbar *toolbar;
+@property (nonatomic, strong) UIBarButtonItem *backButton;
+@property (nonatomic, strong) UIBarButtonItem *skipButton;
+@property (nonatomic, strong) UIBarButtonItem *nextButton;
+
 @property (nonatomic, strong) OHMSurveyResponse *surveyResponse;
 @property (nonatomic) NSInteger itemIndex;
 @property (nonatomic, strong) UIViewController *startingViewController;
