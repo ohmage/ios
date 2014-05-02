@@ -38,8 +38,12 @@
     self.navigationItem.title = @"Survey Complete";
     
     CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    UIButton *button = [OHMUserInterface buttonWithTitle:@"Submit" target:self action:@selector(submitButtonPressed:) maxWidth:buttonWidth];
-    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    UIButton *button = [OHMUserInterface buttonWithTitle:@"Submit"
+                                                   color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                  target:self
+                                                  action:@selector(submitButtonPressed:)
+                                                maxWidth:buttonWidth];
+//    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.topLayoutGuide];

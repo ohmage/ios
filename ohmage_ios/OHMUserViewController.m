@@ -23,11 +23,7 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"User Info";
-    
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                target:self
-                                                                                action:@selector(cancelModalPresentationButtonPressed:)];
-    self.navigationItem.rightBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem = self.doneButton;
     
     self.user = [[OHMClient sharedClient] loggedInUser];
     [self setupHeader];
@@ -69,8 +65,12 @@
     UILabel *emailLabel = [OHMUserInterface headerDescriptionLabelWithText:self.user.email width:contentWidth];
     contentHeight += emailLabel.frame.size.height + kUIViewVerticalMargin;
     
-    UIButton *button = [OHMUserInterface buttonWithTitle:@"Sign Out" target:self action:@selector(logoutButtonPressed:) maxWidth:contentWidth];
-    button.backgroundColor = [OHMAppConstants ohmageColor];
+    UIButton *button = [OHMUserInterface buttonWithTitle:@"Sign Out"
+                                                   color:[OHMAppConstants ohmageColor]
+                                                  target:self
+                                                  action:@selector(logoutButtonPressed:)
+                                                maxWidth:contentWidth];
+//    button.backgroundColor = [OHMAppConstants ohmageColor];
     contentHeight += button.frame.size.height + kUIViewVerticalMargin;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];

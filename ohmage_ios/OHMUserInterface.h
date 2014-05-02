@@ -17,6 +17,7 @@
                                  subtitle:(NSString *)subtitle
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView;
++ (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock;
 + (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *sw))swBlock;
@@ -33,8 +34,8 @@
                                alignment:(NSTextAlignment)textAlignment;
 + (UIView *)textFieldWithLabelText:(NSString *)text setupBlock:(void (^)(UITextField *tf))tfBlock;
 
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector size:(CGSize)size;
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color  target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color  target:(id)target action:(SEL)selector size:(CGSize)size;
 
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
 

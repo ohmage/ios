@@ -25,6 +25,7 @@ extern CGFloat const kUITextFieldDefaultHeight;
 + (UIColor *)lightColorForRowIndex:(NSInteger)rowIndex;
 + (UIColor *)ohmageColor;
 + (UIColor *)lightOhmageColor;
++ (UIColor *)primaryTextColor;
 + (UIColor *)headerTitleColor;
 + (UIColor *)headerDescriptionColor;
 + (UIColor *)headerDetailColor;
@@ -37,5 +38,6 @@ extern CGFloat const kUITextFieldDefaultHeight;
 + (UIFont *)headerTitleFont;
 + (UIFont *)headerDescriptionFont;
 + (UIFont *)headerDetailFont;
++ (UIFont *)buttonFont;
 
 @end

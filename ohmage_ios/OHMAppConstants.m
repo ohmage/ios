@@ -67,6 +67,11 @@ CGFloat const kUITextFieldDefaultHeight = 30.0;
     return [[[self ohmageColor] lightColor] lightColor];
 }
 
++ (UIColor *)primaryTextColor
+{
+    return [UIColor colorWithRed:28.0/255.0 green:39.0/255.0 blue:57.0/255.0 alpha:1.0];
+}
+
 + (UIColor *)headerTitleColor
 {
     return [UIColor blackColor];
@@ -121,6 +126,10 @@ CGFloat const kUITextFieldDefaultHeight = 30.0;
 + (UIFont *)headerDetailFont
 {
     return [UIFont systemFontOfSize:14.0];
+}
+
++ (UIFont *)buttonFont {
+    return [UIFont boldSystemFontOfSize:17.0];
 }
 
 @end

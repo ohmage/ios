@@ -8,7 +8,7 @@
 
 #import "OHMViewControllerComposite.h"
 
-@interface OHMViewControllerComposite ()
+@interface OHMViewControllerComposite () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITapGestureRecognizer *backgroundTapGesture;
 
@@ -54,6 +54,21 @@
     self.viewController.navigationItem.rightBarButtonItem = nil;
 }
 
+- (void)presentConfirmationAlertWithTitle:(NSString *)title message:(NSString *)message confirmTitle:(NSString *)confirmTitle
+{
+    UIAlertView *confirmAlert = [[UIAlertView alloc] initWithTitle:title
+                                                           message:message
+                                                          delegate:self
+                                                 cancelButtonTitle:@"Cancel"
+                                                 otherButtonTitles:confirmTitle, nil];
+    [confirmAlert show];
+}
+
+- (void)confirmationAlertDidConfirm:(UIAlertView *)alert
+{
+    NSLog(@"Alert did confirm");
+}
+
 - (UIBarButtonItem *)cancelModalPresentationButton
 {
     if (_cancelModalPresentationButton == nil) {
@@ -66,6 +81,17 @@
     return _cancelModalPresentationButton;
 }
 
+- (UIBarButtonItem *)doneButton
+{
+    if (_doneButton == nil) {
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                    target:self
+                                                                                    action:@selector(doneButtonPressed:)];
+        _doneButton = doneButton;
+    }
+    return _doneButton;
+}
+
 - (void)setBackButtonTitle:(NSString *)title
 {
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:title
@@ -75,9 +101,9 @@
     self.viewController.navigationItem.backBarButtonItem = backButtonItem;
 }
 
-- (void)helpButtonPressed:(id)sender
+- (void)doneButtonPressed:(id)sender
 {
-    
+    [self cancelModalPresentationButtonPressed:self];
 }
 
 - (void)cancelModalPresentationButtonPressed:(id)sender
@@ -138,6 +164,17 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     self.backgroundTapEnabled = NO;
+}
+
+
+#pragma mark - AlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"alert view clicked button at index: %ld", buttonIndex);
+    if (buttonIndex == 1) {
+        [self.viewController confirmationAlertDidConfirm:alertView];
+    }
 }
 
 @end

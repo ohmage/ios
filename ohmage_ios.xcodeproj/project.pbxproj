@@ -49,6 +49,7 @@
 		1E56A3341913104D00384AE9 /* OHMUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A3331913104D00384AE9 /* OHMUserViewController.m */; };
 		1E56A337191334EC00384AE9 /* OHMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A336191334EC00384AE9 /* OHMLocationManager.m */; };
 		1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E56A3381913354200384AE9 /* CoreLocation.framework */; };
+		1E56A33C1913643E00384AE9 /* OHMReminderDaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A33B1913643E00384AE9 /* OHMReminderDaysViewController.m */; };
 		1E70096418CA6F8700203990 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096318CA6F8700203990 /* Foundation.framework */; };
 		1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096518CA6F8700203990 /* CoreGraphics.framework */; };
 		1E70096818CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
@@ -156,6 +157,8 @@
 		1E56A335191334EC00384AE9 /* OHMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLocationManager.h; sourceTree = "<group>"; };
 		1E56A336191334EC00384AE9 /* OHMLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMLocationManager.m; sourceTree = "<group>"; };
 		1E56A3381913354200384AE9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1E56A33A1913643E00384AE9 /* OHMReminderDaysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderDaysViewController.h; sourceTree = "<group>"; };
+		1E56A33B1913643E00384AE9 /* OHMReminderDaysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderDaysViewController.m; sourceTree = "<group>"; };
 		1E70096018CA6F8700203990 /* ohmage_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ohmage_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E70096318CA6F8700203990 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E70096518CA6F8700203990 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -312,15 +315,45 @@
 			name = "Base View Controllers";
 			sourceTree = "<group>";
 		};
-		1E56A3311913101000384AE9 /* Login */ = {
+		1E56A3311913101000384AE9 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				1E56A3321913104D00384AE9 /* OHMUserViewController.h */,
+				1E56A3331913104D00384AE9 /* OHMUserViewController.m */,
 				1EA764561912C941007768EF /* OHMLoginViewController.h */,
 				1EA764571912C941007768EF /* OHMLoginViewController.m */,
 				1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */,
 				1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */,
 			);
-			name = Login;
+			name = User;
+			sourceTree = "<group>";
+		};
+		1E56A33D1913644500384AE9 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				1EA7645319118699007768EF /* OHMReminderViewController.h */,
+				1EA7645419118699007768EF /* OHMReminderViewController.m */,
+				1E56A33A1913643E00384AE9 /* OHMReminderDaysViewController.h */,
+				1E56A33B1913643E00384AE9 /* OHMReminderDaysViewController.m */,
+			);
+			name = Reminders;
+			sourceTree = "<group>";
+		};
+		1E56A33E1913645500384AE9 /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */,
+				1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */,
+				1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */,
+				1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */,
+				1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */,
+				1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */,
+				1E3C80EA190F66510088D2D0 /* OHMSurveyCompleteViewController.h */,
+				1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */,
+				1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */,
+				1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */,
+			);
+			name = Surveys;
 			sourceTree = "<group>";
 		};
 		1E70095718CA6F8700203990 = {
@@ -451,21 +484,9 @@
 			isa = PBXGroup;
 			children = (
 				1E56A3301913065900384AE9 /* Base View Controllers */,
-				1E56A3311913101000384AE9 /* Login */,
-				1E56A3321913104D00384AE9 /* OHMUserViewController.h */,
-				1E56A3331913104D00384AE9 /* OHMUserViewController.m */,
-				1EAECA6818ECB23F00035BDF /* OHMSurveysViewController.h */,
-				1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */,
-				1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */,
-				1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */,
-				1EA7645319118699007768EF /* OHMReminderViewController.h */,
-				1EA7645419118699007768EF /* OHMReminderViewController.m */,
-				1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */,
-				1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */,
-				1E3C80EA190F66510088D2D0 /* OHMSurveyCompleteViewController.h */,
-				1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */,
-				1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */,
-				1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */,
+				1E56A3311913101000384AE9 /* User */,
+				1E56A33E1913645500384AE9 /* Surveys */,
+				1E56A33D1913644500384AE9 /* Reminders */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -649,6 +670,7 @@
 				1EF693DA18EA0F670003E077 /* AFNetworkReachabilityManager.m in Sources */,
 				1EF693DF18EA0F670003E077 /* AFURLSessionManager.m in Sources */,
 				1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */,
+				1E56A33C1913643E00384AE9 /* OHMReminderDaysViewController.m in Sources */,
 				1E1B60CC19063242001046E0 /* OHMSurveyPromptChoice.m in Sources */,
 				1E1B60F919063392001046E0 /* _OHMSurveyPromptResponse.m in Sources */,
 				1EF693E318EA0FE20003E077 /* OHMClient.m in Sources */,
@@ -797,6 +819,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -807,6 +830,7 @@
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -816,6 +840,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Charles Forkish (N6LPGP6RYT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -826,6 +851,7 @@
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -30,13 +30,21 @@
     CGFloat buttonWidth = (screenBounds.size.width - 3 * buttonMargin) / 2.0;
     CGSize buttonSize = CGSizeMake(buttonWidth, kUIButtonDefaultHeight);
     
-    UIButton *emailButton = [OHMUserInterface buttonWithTitle:@"Sign in with E-mail" target:self action:@selector(emailLoginButtonPressed:) size:buttonSize];
+    UIButton *emailButton = [OHMUserInterface buttonWithTitle:@"Sign in with E-mail"
+                                                        color:[UIColor whiteColor]
+                                                       target:self
+                                                       action:@selector(emailLoginButtonPressed:)
+                                                         size:buttonSize];
     emailButton.backgroundColor = [UIColor whiteColor];
     emailButton.titleLabel.font = [OHMAppConstants boldTextFont];
     [emailButton setTitleColor:[OHMAppConstants ohmageColor] forState:UIControlStateNormal];
     [view addSubview:emailButton];
     
-    UIButton *createButton = [OHMUserInterface buttonWithTitle:@"Create Account" target:nil action:nil size:buttonSize];
+    UIButton *createButton = [OHMUserInterface buttonWithTitle:@"Create Account"
+                                                         color:[UIColor whiteColor]
+                                                        target:nil
+                                                        action:nil
+                                                          size:buttonSize];
     createButton.titleEdgeInsets = kUIButtonTitleSmallInsets;
     createButton.backgroundColor = [UIColor whiteColor];
     createButton.titleLabel.font = [OHMAppConstants boldTextFont];

@@ -11,5 +11,6 @@
 @interface UIColor (Ohmage)
 
 - (UIColor *)lightColor;
+- (UIColor *)buttonPressedColor;
 
 @end

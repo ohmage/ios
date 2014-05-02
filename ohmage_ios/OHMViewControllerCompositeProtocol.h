@@ -12,8 +12,7 @@
 
 @optional
 
-@property (nonatomic, strong) UIBarButtonItem *homeButton;
-@property (nonatomic, strong) UIBarButtonItem *helpButton;
+@property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) UIBarButtonItem *cancelModalPresentationButton;
 @property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, readonly) CGFloat topLength;
@@ -25,10 +24,14 @@
 - (void)setBackButtonTitle:(NSString *)title;
 - (void)setupForTextEntry;
 
-- (void)homeButtonPressed:(id)sender;
-- (void)helpButtonPressed:(id)sender;
+- (void)doneButtonPressed:(id)sender;
 - (void)cancelModalPresentationButtonPressed:(id)sender;
 
 - (void)prepareForModalPresentation;
+
+- (void)presentConfirmationAlertWithTitle:(NSString *)title
+                                  message:(NSString *)message
+                             confirmTitle:(NSString *)confirmTitle;
+- (void)confirmationAlertDidConfirm:(UIAlertView *)alert;
 
 @end

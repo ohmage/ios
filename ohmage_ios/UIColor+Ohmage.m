@@ -21,4 +21,15 @@
     return nil;
 }
 
+- (UIColor *)buttonPressedColor
+{
+    CGFloat h, s, b, a;
+    if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:MIN(s * 1.1, 1.0)
+                          brightness:b * 0.9
+                               alpha:a];
+    return nil;
+}
+
 @end

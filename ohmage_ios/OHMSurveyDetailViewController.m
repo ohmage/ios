@@ -88,8 +88,12 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
     
 //    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:) maxWidth:contentWidth];
-    takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
+    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey"
+                                                             color:[OHMAppConstants colorForRowIndex:self.survey.colorIndex]
+                                                            target:self
+                                                            action:@selector(takeSurvey:)
+                                                          maxWidth:contentWidth];
+//    takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
     contentHeight += takeSurveyButton.frame.size.height + kUIViewVerticalMargin;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
@@ -125,6 +129,10 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
+    
+    [self.fetchedRemindersController performFetch:nil];
+    [self.fetchedSurveyResponsesController performFetch:nil];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -170,12 +178,12 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 {
     if (row == 0) {
         cell.textLabel.text = @"Add reminder";
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.detailTextLabel.text = nil;
     }
     else if ([[self.fetchedRemindersController fetchedObjects] count] >= row) {
         OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
         cell.textLabel.text = [reminder labelText];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.detailTextLabel.text = [reminder repeatLabelText];
     }
 }
 
@@ -192,20 +200,34 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    UITableViewCell *cell = nil;
     
     switch (indexPath.section) {
         case kRemindersSectionIndex:
-            [self configureReminderCell:cell forRow:indexPath.row];
+            if (indexPath.row == 0) {
+                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+                cell.textLabel.text = @"Add reminder";
+            }
+            else {
+                OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:0]];
+                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
+                    sw.on = YES;
+                }];
+                cell.textLabel.text = [reminder labelText];
+                cell.detailTextLabel.text = [reminder detailLabelText];
+            }
+//            cell = [OHMUserInterface cellWithDetailStyleFromTableView:tableView];
+//            [self configureReminderCell:cell forRow:indexPath.row];
             break;
         case kSurveyResponsesSectionIndex:
+            cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
             [self configureSurveyResponseCell:cell forRow:indexPath.row];
             break;
         default:
             break;
     }
     
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
@@ -228,8 +250,8 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     if (row == 0) {
         reminder = [[OHMClient sharedClient] buildNewReminderForSurvey:self.survey];
     }
-    else if ([[self.fetchedSurveyResponsesController fetchedObjects] count] >= row) {
-        reminder = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
+    else if ([[self.fetchedRemindersController fetchedObjects] count] >= row) {
+        reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
     }
     
     OHMReminderViewController *vc = [[OHMReminderViewController alloc] initWithReminder:reminder];

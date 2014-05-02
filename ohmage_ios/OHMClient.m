@@ -400,6 +400,8 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     OHMReminder *reminder = (OHMReminder *)[self insertNewObjectForEntityForName:[OHMReminder entityName]];
     reminder.survey = survey;
+    reminder.weekdaysMaskValue = OHMRepeatDayEveryday;
+    reminder.enabledValue = YES;
     return reminder;
 }
 

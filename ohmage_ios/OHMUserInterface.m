@@ -104,12 +104,23 @@
 
 + (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *))swBlock
 {
-    UITableViewCell *cell = [self cellWithDefaultStyleFromTableView:tableView];
-    UISwitch *sw = [[UISwitch alloc] init];
-    cell.accessoryView = sw;
-    if (swBlock) {
-        swBlock(sw);
+    static NSString *sCellIdentifier = @"SwitchCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
+        cell.textLabel.minimumScaleFactor = 0.75;
+        
+        
+        UISwitch *sw = [[UISwitch alloc] init];
+        cell.accessoryView = sw;
+        if (swBlock) {
+            swBlock(sw);
+        }
     }
+
     return cell;
 }
 
@@ -131,6 +142,26 @@
     }
     
     return cell;
+}
+
++ (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock
+{
+    CGSize buttonSize = CGSizeMake(tableView.frame.size.width - 2 * kUIViewHorizontalMargin, kUIButtonDefaultHeight);
+    UIButton *button = [self buttonWithTitle:title color:[OHMAppConstants ohmageColor] target:nil action:nil size:buttonSize];
+    CGRect buttonFrame = button.frame;
+    
+    CGRect footerFrame = CGRectMake(0, 0, tableView.frame.size.width, buttonFrame.size.height + (kUIViewVerticalMargin * 2));
+    UIView *footerView = [[UIView alloc] initWithFrame:footerFrame];
+    
+    [footerView addSubview:button];
+    [button centerHorizontallyInView:footerView];
+    [button centerVerticallyInView:footerView];
+    
+    if (buttonBlock) {
+        buttonBlock(button);
+    }
+    
+    return footerView;
 }
 
 
@@ -229,32 +260,69 @@
     return contentView;
 }
 
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    UIEdgeInsets insets = kUIButtonTitleDefaultInsets;
-    button.titleEdgeInsets = insets;
-    button.titleLabel.numberOfLines = 0;
-    CGFloat titleWidth = maxWidth - (insets.left + insets.right);
-    CGSize titleSize = [self sizeForText:title withWidth:titleWidth font:button.titleLabel.font];
-    CGSize buttonSize = CGSizeMake(titleSize.width + (insets.left + insets.right), titleSize.height + (insets.top + insets.bottom));
-    [button constrainSize:buttonSize];
-    return button;
-}
 
-+ (UIButton *)buttonWithTitle:(NSString *)title target:(id)target action:(SEL)selector size:(CGSize)size
+//+ (UIButton *)buttonWithTitle:(NSString *)title {
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    
+//    button.titleLabel.font = [AppConstants buttonFont];
+//    button.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+//    
+//    CGSize titleSize = [title sizeWithAttributes:
+//                        @{NSFontAttributeName:
+//                              button.titleLabel.font}];
+//    CGFloat buttonWidth = MIN(titleSize.width + (kUIViewHorizontalMargin * 2), 320.0 - (kUIViewHorizontalMargin * 2));
+//    CGFloat buttonImageCapWidth = 10.0;
+//    CGFloat buttonImageCapHeight = 0.0;
+//    
+//    // There's an assumption here that the button height is equal to kUIHeightButton.
+//    UIImage *normalImage = [[UIImage imageNamed:@"buttonBackgroundGrayNormal"] stretchableImageWithLeftCapWidth:buttonImageCapWidth
+//                                                                                                   topCapHeight:buttonImageCapHeight];
+//    
+//    [button setBackgroundImage:normalImage forState:UIControlStateNormal];
+//    [button setTitle:title forState:UIControlStateNormal];
+//    
+//    [button setTitleColor:[AppConstants primaryTextColor] forState:UIControlStateNormal];
+//    [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+//    
+//    [button setTitleShadowColor:[UIColor colorWithWhite:0.9 alpha:1.0] forState:UIControlStateNormal];
+//    [button setTitleShadowColor:[UIColor colorWithWhite:0.3 alpha:1.0] forState:UIControlStateHighlighted];
+//    
+//    [button setFrame:CGRectMake(0.0, 0.0, buttonWidth, kUIHeightButton)];
+//    
+//    return button;
+//}
+
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector size:(CGSize)size
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    
     button.titleEdgeInsets = kUIButtonTitleDefaultInsets;
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleLabel.minimumScaleFactor = 0.5;
-//    button.titleLabel.numberOfLines = 0;
     [button constrainSize:size];
+    
+    button.titleLabel.font = [OHMAppConstants buttonFont];
+    
+    [button setTitleColor:[OHMAppConstants primaryTextColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    
+    button.backgroundColor = color;
+    
     return button;
+}
+
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth
+{
+    UIEdgeInsets insets = kUIButtonTitleDefaultInsets;
+    CGFloat titleWidth = maxWidth - (insets.left + insets.right);
+    CGSize titleSize = [self sizeForText:title withWidth:titleWidth font:[OHMAppConstants buttonFont]];
+    CGSize buttonSize = CGSizeMake(titleSize.width + (insets.left + insets.right), titleSize.height + (insets.top + insets.bottom));
+    
+    return [self buttonWithTitle:title color:color target:target action:selector size:buttonSize];
 }
 
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius

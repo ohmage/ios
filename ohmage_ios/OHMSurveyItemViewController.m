@@ -287,8 +287,12 @@
 {
     
     CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText] target:self action:@selector(actionButtonPressed:) maxWidth:buttonWidth];
-    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText]
+                                                   color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                  target:self
+                                                  action:@selector(actionButtonPressed:)
+                                                maxWidth:buttonWidth];
+//    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.textLabel];
