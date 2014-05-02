@@ -48,7 +48,7 @@
                                            options:NSStringDrawingUsesLineFragmentOrigin
                                         attributes:@{NSFontAttributeName:font}
                                            context:nil];
-    rect.size.width = width;
+//    rect.size.width = width;
     return [self ceilSize:rect.size];
 }
 
@@ -234,7 +234,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    UIEdgeInsets insets = kUIButtonTitleInsets;
+    UIEdgeInsets insets = kUIButtonTitleDefaultInsets;
     button.titleEdgeInsets = insets;
     button.titleLabel.numberOfLines = 0;
     CGFloat titleWidth = maxWidth - (insets.left + insets.right);
@@ -249,7 +249,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    button.titleEdgeInsets = kUIButtonTitleInsets;
+    button.titleEdgeInsets = kUIButtonTitleDefaultInsets;
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleLabel.minimumScaleFactor = 0.5;
 //    button.titleLabel.numberOfLines = 0;

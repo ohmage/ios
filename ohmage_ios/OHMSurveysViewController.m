@@ -13,7 +13,7 @@
 #import "OHMSurvey.h"
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurveyItemViewController.h"
-#import "OHMUserInterface.h"
+#import "OHMUserViewController.h"
 
 @interface OHMSurveysViewController () <OHMClientDelegate, NSFetchedResultsControllerDelegate>
 
@@ -61,7 +61,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.separatorColor = [UIColor clearColor];
     
-    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"] style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(userButtonPressed:)];
     self.navigationItem.leftBarButtonItem = ohmButton;
     
     UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"] style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -102,6 +102,13 @@
     
     NSLog(@"did appear nav bounds: %@", NSStringFromCGRect(self.navigationController.navigationBar.bounds));
     [self updateFetchedResultsController];
+}
+
+- (void)userButtonPressed:(id)sender
+{
+    OHMUserViewController *vc = [[OHMUserViewController alloc] init];
+    UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:navCon animated:YES completion:nil];
 }
 
 
@@ -227,7 +234,7 @@
 
 - (void)pageControlValueChanged:(id)sender
 {
-    NSInteger oldIndex = self.ohmletIndex;
+//    NSInteger oldIndex = self.ohmletIndex;
     self.ohmletIndex = self.pageControl.currentPage;
     [self OHMClientDidUpdate:[OHMClient sharedClient]];
 //    UITableViewRowAnimation animation = (oldIndex < self.ohmletIndex ? UITableViewRowAnimationLeft : UITableViewRowAnimationRight);
@@ -252,7 +259,7 @@
 
 - (void)updateFetchedResultsController
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@", self.ohmlet];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
     self.fetchedResultsController.fetchRequest.predicate = predicate;
     
     NSError *error;
@@ -296,6 +303,7 @@
     }
     
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSLog(@"configureCell for survey: %@, row: %ld", survey.surveyName, (long)indexPath.row);
     
     if (survey.isLoaded) {
         cell.textLabel.text = survey.surveyName;
@@ -310,7 +318,9 @@
         //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
     }
     
+    __weak OHMSurvey *weakSurvey = survey;
     survey.surveyUpdatedBlock = ^{
+        NSLog(@"executing update block for survey: %@, row: %ld", weakSurvey.surveyName, (long)indexPath.row);
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
 }

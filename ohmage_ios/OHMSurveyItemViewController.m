@@ -63,7 +63,7 @@
 
 - (void)loadView
 {
-    [self commonSetup];
+    [self basicSetup];
     
     if ([self itemNeedsTextField]) {
         [self setupTextField];
@@ -172,7 +172,7 @@
 
 #pragma mark - Setup
 
-- (void)commonSetup
+- (void)basicSetup
 {
     UIView * view = [[UIView alloc] init];
     view.backgroundColor = [UIColor whiteColor];
@@ -253,15 +253,6 @@
         return @"Enter text";
     }
     else if(self.item.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
-        if (self.item.min != nil && self.item.max != nil) {
-            return [NSString stringWithFormat:@"Enter a number between %g and %g", self.item.minValue, self.item.maxValue];
-        }
-        else if (self.item.min != nil) {
-            return [NSString stringWithFormat:@"Enter a number >= %g", self.item.minValue];
-        }
-        else if (self.item.max != nil) {
-            return [NSString stringWithFormat:@"Enter a number <= %g", self.item.maxValue];
-        }
         return @"Enter a number";
     }
     
@@ -550,7 +541,8 @@
         message = [message stringByAppendingString:@" characters long"];
     }
     
-    CGRect messageFrame = CGRectInset(self.textField.frame, kUIViewSmallTextMargin, kUIViewSmallTextMargin);
+    UIView *presenter = self.numberPlusMinusControl ? self.numberPlusMinusControl : self.textField;
+    CGRect messageFrame = CGRectInset(presenter.frame, kUIViewSmallTextMargin, kUIViewSmallTextMargin);
     UIView *messageView = [OHMUserInterface fixedSizeFramedLabelWithText:message
                                                                     size:messageFrame.size
                                                                     font:[OHMAppConstants textFont]
@@ -558,7 +550,7 @@
     
     [messageView moveOriginToPoint:messageFrame.origin];
     messageView.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
-    [self.view insertSubview:messageView belowSubview:self.textField];
+    [self.view insertSubview:messageView belowSubview:presenter];
     self.validationMessageView = messageView;
     
     [UIView animateWithDuration:1.0
@@ -567,7 +559,7 @@
           initialSpringVelocity:0.0
                         options:0
                      animations:^{
-                         messageView.frame = CGRectOffset(messageView.frame, 0.0, self.textField.frame.size.height + kUIViewSmallTextMargin);
+                         messageView.frame = CGRectOffset(messageView.frame, 0.0, presenter.frame.size.height + kUIViewSmallTextMargin);
                      }
                      completion:NULL];
 }

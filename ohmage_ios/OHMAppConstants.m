@@ -15,7 +15,8 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
 CGFloat const kUIViewSmallMargin = 8.0;
 UIEdgeInsets const kUIViewDefaultInsets = {kUIViewVerticalMargin, kUIViewHorizontalMargin, kUIViewVerticalMargin, kUIViewHorizontalMargin};
 
-UIEdgeInsets const kUIButtonTitleInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
+UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIViewSmallTextMargin, kUIViewSmallMargin, kUIViewSmallTextMargin, kUIViewSmallMargin};
+UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 CGFloat const kUIButtonDefaultHeight = 44.0;
 CGFloat const kUITextFieldDefaultHeight = 30.0;
 

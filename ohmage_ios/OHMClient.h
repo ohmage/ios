@@ -8,6 +8,7 @@
 
 #import "AFHTTPSessionManager.h"
 
+@class OHMUser;
 @class OHMOhmlet;
 @class OHMSurvey;
 @class OHMSurveyResponse;
@@ -26,9 +27,11 @@
 
 // Auth
 - (BOOL)hasLoggedInUser;
+- (OHMUser *)loggedInUser;
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock;
+- (void)logout;
 
 // HTTP
-- (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)setAuthorizationToken:(NSString *)token;
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;

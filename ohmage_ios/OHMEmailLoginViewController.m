@@ -109,11 +109,21 @@
     [self.contentBox positionBelowElement:self.topLayoutGuide margin:kUIViewVerticalMargin];
 }
 
+- (void)dismissRecursive
+{
+    UIViewController *presenter = self.presentingViewController;
+    while (presenter.presentingViewController) {
+        presenter = presenter.presentingViewController;
+    }
+    [presenter dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)signInButtonPressed:(id)sender
 {
     [[OHMClient sharedClient] loginWithEmail:self.emailTextField.text password:self.passwordTextField.text completionBlock:^(BOOL success) {
         if (success) {
-            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            [self dismissRecursive];
+//            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         }
         else {
             [self.activityIndicator stopAnimating];

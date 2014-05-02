@@ -37,6 +37,7 @@
     [view addSubview:emailButton];
     
     UIButton *createButton = [OHMUserInterface buttonWithTitle:@"Create Account" target:nil action:nil size:buttonSize];
+    createButton.titleEdgeInsets = kUIButtonTitleSmallInsets;
     createButton.backgroundColor = [UIColor whiteColor];
     createButton.titleLabel.font = [OHMAppConstants boldTextFont];
     [createButton setTitleColor:[OHMAppConstants ohmageColor] forState:UIControlStateNormal];

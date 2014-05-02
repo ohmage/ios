@@ -89,13 +89,22 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 #pragma mark - Auth
 
+- (void)setUser:(OHMUser *)user
+{
+    _user = user;
+    [self setPersistentStoreMetadataText:user.ohmID forKey:@"loggedInUserID"];
+    NSLog(@"storing user id for logged in user: %@", user.ohmID);
+}
+
 - (BOOL)hasLoggedInUser
 {
     return self.user != nil;
 }
 
-
-#pragma mark - HTTP
+- (OHMUser *)loggedInUser
+{
+    return self.user;
+}
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock
 {
@@ -118,7 +127,6 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             self.user = [self userWithOhmID:([response userID])];
             self.user.email = email;
             self.user.password = password;
-            [self setPersistentStoreMetadataText:[response userID] forKey:@"loggedInUserID"];
             
             [self refreshUserInfo];
             
@@ -129,6 +137,15 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         }
     }];
 }
+
+- (void)logout
+{
+    self.user = nil;
+    [self.delegate OHMClientDidUpdate:self];
+}
+
+
+#pragma mark - HTTP
 
 - (void)setAuthorizationToken:(NSString *)token
 {
@@ -195,6 +212,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             NSLog(@"got ohmlet: %@, id: %@", [response ohmletName], [response ohmletID]);
             ohmlet.ohmletName = [response ohmletName];
             ohmlet.ohmletDescription = [response ohmletDescription];
+            [self saveClientState];
             if (ohmlet.ohmletUpdatedBlock) {
                 ohmlet.ohmletUpdatedBlock();
             }
@@ -227,6 +245,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             survey.surveyDescription = [response surveyDescription];
             [self createSurveyItems:[response surveyItems] forSurvey:survey];
             survey.isLoadedValue = YES;
+            [self saveClientState];
             if (survey.surveyUpdatedBlock) {
                 survey.surveyUpdatedBlock();
             }
@@ -348,7 +367,12 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
     NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
-    metadata[key] = text;
+    if (text) {
+        metadata[key] = text;
+    }
+    else {
+        [metadata removeObjectForKey:key];
+    }
     [self.persistentStoreCoordinator setMetadata:metadata forPersistentStore:store];
 }
 

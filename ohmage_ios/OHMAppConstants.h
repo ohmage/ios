@@ -14,7 +14,8 @@ extern CGFloat const kUIViewSmallTextMargin;
 extern CGFloat const kUIViewSmallMargin;
 extern UIEdgeInsets const kUIViewDefaultInsets;
 
-extern UIEdgeInsets const kUIButtonTitleInsets;
+extern UIEdgeInsets const kUIButtonTitleDefaultInsets;
+extern UIEdgeInsets const kUIButtonTitleSmallInsets;
 extern CGFloat const kUIButtonDefaultHeight;
 extern CGFloat const kUITextFieldDefaultHeight;
 

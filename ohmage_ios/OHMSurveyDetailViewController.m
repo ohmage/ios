@@ -87,8 +87,8 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     UILabel *promptCountLabel = [OHMUserInterface headerDetailLabelWithText:promptCountText width:contentWidth];
     contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
     
-    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:) maxWidth:buttonWidth];
+//    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
+    UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey" target:self action:@selector(takeSurvey:) maxWidth:contentWidth];
     takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
     contentHeight += takeSurveyButton.frame.size.height + kUIViewVerticalMargin;
     

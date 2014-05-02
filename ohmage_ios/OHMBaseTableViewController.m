@@ -25,7 +25,7 @@
 
 - (instancetype)init
 {
-    return [self initWithStyle:UITableViewStylePlain];
+    return [self initWithStyle:UITableViewStyleGrouped];
 }
 
 - (void)viewDidLoad
