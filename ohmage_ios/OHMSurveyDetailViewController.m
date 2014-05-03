@@ -45,7 +45,6 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     [super viewDidLoad];
     
     self.navigationItem.title = @"Survey Detail";
-    NSLog(@"navItem left button: %@", self.navigationItem.leftBarButtonItem.title);
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
                                                                        style:UIBarButtonItemStylePlain
@@ -65,6 +64,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
     
+    NSLog(@"color index: %ld", self.survey.colorIndex);
     NSLog(@"Survey: %@", self.survey);
 }
 

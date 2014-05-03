@@ -62,19 +62,19 @@
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView
 {
-    static UIFont *titleFont = nil;
-    static UIFont *subtitleFont = nil;
-    if (titleFont == nil) {
-        UITableViewCell *dummyCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-        titleFont = dummyCell.textLabel.font;
-        subtitleFont = dummyCell.detailTextLabel.font;
-    }
-    
     CGFloat width = [self cellContentWidthForAccessoryType:accessoryType] - kUIViewHorizontalMargin;
-    CGFloat titleHeight = [self heightForText:title withWidth:width font:titleFont];
-    CGFloat subtitleHeight = [self heightForText:subtitle withWidth:width font:subtitleFont];
+    CGFloat titleHeight = [self heightForText:title withWidth:width font:[OHMAppConstants cellTextFont]];
+    CGFloat subtitleHeight = [self heightForText:subtitle withWidth:width font:[OHMAppConstants cellSubtitleTextFont]];
     
     return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
+}
+
++ (CGFloat)heightForImageCellWithText:(NSString *)text fromTableView:(UITableView *)tableView
+{
+    UIEdgeInsets insets = kUILabelDefaultInsets;
+    CGFloat labelWidth = tableView.frame.size.width - (insets.left + insets.right);
+    CGFloat labelHeight = [self heightForText:text withWidth:labelWidth font:[OHMAppConstants cellTextFont]];
+    return labelHeight + insets.top + insets.bottom + kUICellImageHeight + kUIViewSmallMargin;
 }
 
 + (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView
@@ -85,6 +85,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [OHMAppConstants cellTextFont];
     }
     
     return cell;
@@ -98,6 +99,8 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [OHMAppConstants cellTextFont];
+        cell.detailTextLabel.font = [OHMAppConstants cellDetailTextFont];
     }
     
     return cell;
@@ -111,6 +114,8 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [OHMAppConstants cellTextFont];
+        cell.detailTextLabel.font = [OHMAppConstants cellSubtitleTextFont];
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
     }
@@ -118,7 +123,7 @@
     return cell;
 }
 
-+ (UITableViewCell *)cellWithImage:(UIImage *)image fromTableView:(UITableView *)tableView
++ (UITableViewCell *)cellWithImage:(UIImage *)image text:(NSString *)text fromTableView:(UITableView *)tableView
 {
     static NSString *sCellIdentifier = @"ImageCell";
     
@@ -126,12 +131,25 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        UIEdgeInsets insets = kUILabelDefaultInsets;
+        CGFloat labelWidth = tableView.frame.size.width - (insets.left + insets.right);
+        UILabel *label = [self variableHeightLabelWithText:text width:labelWidth font:[OHMAppConstants cellTextFont] fixedWidth:YES];
+//        label.backgroundColor = [UIColor greenColor];
+        [cell.contentView addSubview:label];
+        [label constrainPosition:CGPointMake(insets.left, insets.top)];
+//        [label constrainToTopInParentWithMargin:insets.top];
+//        [cell.contentView constrainChild:label toHorizontalInsets:insets];
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
+//        imageView.backgroundColor = [UIColor redColor];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         [cell.contentView addSubview:imageView];
         [imageView constrainSize:CGSizeMake(tableView.frame.size.width, kUICellImageHeight)];
-        [imageView constrainToBottomInParentWithMargin:0];
+        [imageView constrainPosition:CGPointMake(0, label.frame.size.height + insets.top + insets.bottom)];
+//        [imageView positionBelowElement:label margin:insets.bottom];
+//        [imageView centerInView:cell.contentView];
 //        [cell.contentView constrainChildToEqualSize:imageView];
     }
     
@@ -146,6 +164,8 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = [OHMAppConstants cellTextFont];
+        cell.detailTextLabel.font = [OHMAppConstants cellSubtitleTextFont];
         cell.textLabel.adjustsFontSizeToFitWidth = YES;
         cell.textLabel.minimumScaleFactor = 0.75;
         

@@ -87,7 +87,8 @@
     
     for (OHMSurveyPromptChoice *choice in promptResponse.selectedChoices) {
         [text appendFormat:@"%@: ", choice.text];
-        if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberMultiChoicePrompt) {
+        if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberMultiChoicePrompt
+            || promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberSingleChoicePrompt) {
             [text appendFormat:@"%g\n", choice.numberValueValue];
         }
         else {
@@ -109,13 +110,13 @@
             return nil;
         case OHMSurveyItemTypeImagePrompt:
             return nil;
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
         case OHMSurveyItemTypeNumberMultiChoicePrompt:
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
         case OHMSurveyItemTypeStringMultiChoicePrompt:
             return [self detailTextForMultiChoiceResponse:promptResponse];
-        case OHMSurveyItemTypeStringSingleChoicePrompt:
         case OHMSurveyItemTypeTextPrompt:
             return promptResponse.stringValue;
-        case OHMSurveyItemTypeNumberSingleChoicePrompt:
         case OHMSurveyItemTypeNumberPrompt:
             return [NSString stringWithFormat:@"%g", promptResponse.numberValueValue];
         default:
@@ -123,20 +124,22 @@
     }
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = nil;
     
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
+    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
-    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
-        cell = [OHMUserInterface cellWithImage:promptResponse.imageValue fromTableView:tableView];
+    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt && !promptResponse.skippedValue) {
+        cell = [OHMUserInterface cellWithImage:promptResponse.imageValue text:promptText fromTableView:tableView];
     }
     else {
         cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
+        cell.textLabel.text = promptText;
     }
     
-    cell.textLabel.text = promptResponse.surveyItem.text;
     cell.detailTextLabel.text = [self detailTextForPromptResponse:promptResponse];
 //    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -146,17 +149,17 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
+    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
-    CGFloat height = [OHMUserInterface heightForSubtitleCellWithTitle:promptResponse.surveyItem.text
+    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt && !promptResponse.skippedValue) {
+        return [OHMUserInterface heightForImageCellWithText:promptText fromTableView:tableView];
+    }
+    else {
+        return [OHMUserInterface heightForSubtitleCellWithTitle:promptText
                                                    subtitle:[self detailTextForPromptResponse:promptResponse]
                                               accessoryType:UITableViewCellAccessoryNone
                                               fromTableView:tableView];
-    
-    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
-        height += kUICellImageHeight;
     }
-    
-    return height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

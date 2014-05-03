@@ -15,6 +15,7 @@ CGFloat const kUIViewSmallTextMargin = 4.0;
 CGFloat const kUIViewSmallMargin = 8.0;
 UIEdgeInsets const kUIViewDefaultInsets = {kUIViewVerticalMargin, kUIViewHorizontalMargin, kUIViewVerticalMargin, kUIViewHorizontalMargin};
 
+UIEdgeInsets const kUILabelDefaultInsets = {kUIViewSmallTextMargin, kUIViewHorizontalMargin, kUIViewSmallTextMargin, kUIViewHorizontalMargin};
 UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIViewSmallTextMargin, kUIViewSmallMargin, kUIViewSmallTextMargin, kUIViewSmallMargin};
 UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 CGFloat const kUIButtonDefaultHeight = 44.0;
@@ -135,8 +136,24 @@ CGFloat const kUICellImageHeight = 100;
     return [UIFont systemFontOfSize:14.0];
 }
 
-+ (UIFont *)buttonFont {
++ (UIFont *)buttonFont
+{
     return [UIFont systemFontOfSize:17.0];
+}
+
++ (UIFont *)cellTextFont
+{
+    return [UIFont systemFontOfSize:17.0];
+}
+
++ (UIFont *)cellDetailTextFont
+{
+    return [UIFont systemFontOfSize:14.0];
+}
+
++ (UIFont *)cellSubtitleTextFont
+{
+    return [UIFont systemFontOfSize:14.0];
 }
 
 @end

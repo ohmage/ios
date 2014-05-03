@@ -71,7 +71,8 @@
     NSData *data = UIImageJPEGRepresentation(image, 0.5);
     
     // Write it to full path
-    [data writeToFile:imagePath atomically:YES];
+    BOOL success = [data writeToFile:imagePath atomically:YES];
+    NSLog(@"write image to path: %@, success: %d", imagePath, success);
 }
 
 - (UIImage *)imageForKey:(NSString *)key
@@ -110,6 +111,20 @@
 
 - (NSString *)imagePathForKey:(NSString *)key
 {
+    
+//    NSArray *documentsUrls = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+//    NSURL *documentDirectory = [documentsUrls firstObject];
+//    //    NSArray *documentDirectories =
+//    //    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+//    //                                        NSUserDomainMask,
+//    //                                        YES);
+//    //
+//    //    NSString *documentDirectory = [documentDirectories firstObject];
+//    NSURL *imagesDirectory = [documentDirectory URLByAppendingPathComponent:@"images"];
+//    //    NSString *imagesDirectory = [documentDirectory stringByAppendingPathComponent:@"images"];
+//    
+//    return [imagesDirectory URLByAppendingPathComponent:key];
+    
     NSArray *documentDirectories =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                         NSUserDomainMask,
@@ -117,6 +132,11 @@
     
     NSString *documentDirectory = [documentDirectories firstObject];
     NSString *imagesDirectory = [documentDirectory stringByAppendingPathComponent:@"images"];
+    
+    BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:imagesDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    if (!success) {
+        NSLog(@"Error creating images directory");
+    }
     
     return [imagesDirectory stringByAppendingPathComponent:key];
 }

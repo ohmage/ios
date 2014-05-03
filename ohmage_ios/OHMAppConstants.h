@@ -14,6 +14,7 @@ extern CGFloat const kUIViewSmallTextMargin;
 extern CGFloat const kUIViewSmallMargin;
 extern UIEdgeInsets const kUIViewDefaultInsets;
 
+extern UIEdgeInsets const kUILabelDefaultInsets;
 extern UIEdgeInsets const kUIButtonTitleDefaultInsets;
 extern UIEdgeInsets const kUIButtonTitleSmallInsets;
 extern CGFloat const kUIButtonDefaultHeight;
@@ -42,5 +43,8 @@ extern CGFloat const kUICellImageHeight;
 + (UIFont *)headerDescriptionFont;
 + (UIFont *)headerDetailFont;
 + (UIFont *)buttonFont;
++ (UIFont *)cellTextFont;
++ (UIFont *)cellDetailTextFont;
++ (UIFont *)cellSubtitleTextFont;
 
 @end

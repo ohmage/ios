@@ -5,6 +5,7 @@
 
 const struct OHMSurveyPromptResponseAttributes OHMSurveyPromptResponseAttributes = {
 	.numberValue = @"numberValue",
+	.promptResponseKey = @"promptResponseKey",
 	.skipped = @"skipped",
 	.stringValue = @"stringValue",
 };
@@ -82,6 +83,13 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 - (void)setPrimitiveNumberValueValue:(double)value_ {
 	[self setPrimitiveNumberValue:[NSNumber numberWithDouble:value_]];
 }
+
+
+
+
+
+@dynamic promptResponseKey;
+
 
 
 

@@ -387,6 +387,7 @@
     if ([self validateNumberValue:value]) {
         self.textField.text = [NSString stringWithFormat:@"%g", value];
         self.nextButton.enabled = YES;
+        [self setResponseValueFromTextField];
     }
 }
 

@@ -17,11 +17,12 @@
                                  subtitle:(NSString *)subtitle
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView;
++ (CGFloat)heightForImageCellWithText:(NSString *)text fromTableView:(UITableView *)tableView;
 + (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock;
 + (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithSubtitleStyleFromTableView:(UITableView *)tableView;
-+ (UITableViewCell *)cellWithImage:(UIImage *)image fromTableView:(UITableView *)tableView;
++ (UITableViewCell *)cellWithImage:(UIImage *)image text:(NSString *)text fromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *sw))swBlock;
 + (UITableViewCell *)cellWithTimePickerFromTableView:(UITableView *)tableView setupBlock:(void (^)(UIDatePicker *dp))dpBlock;
 

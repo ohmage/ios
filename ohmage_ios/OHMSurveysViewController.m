@@ -337,6 +337,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
@@ -345,6 +346,8 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSLog(@"accessory tapped for row: %ld, color index: %ld", indexPath.row, survey.colorIndex);
+    survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -372,14 +375,14 @@
 - (void)controllerWillChangeContent:
 (NSFetchedResultsController *)controller
 {
-    NSLog(@"controller will change content");
+//    NSLog(@"controller will change content");
     [self.tableView beginUpdates];
 }
 
 - (void)controllerDidChangeContent:
 (NSFetchedResultsController *)controller
 {
-    NSLog(@"controller did change content");
+//    NSLog(@"controller did change content");
     [self.tableView endUpdates];
 }
 
@@ -388,7 +391,7 @@
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type
 {
-    NSLog(@"controller did change section info type: %lu", (unsigned long)type);
+//    NSLog(@"controller did change section info type: %lu", (unsigned long)type);
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
@@ -410,7 +413,7 @@
       newIndexPath:(NSIndexPath *)newIndexPath
 {
     OHMSurvey *survey = (OHMSurvey *)anObject;
-    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
+//    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
     UITableView *tableView = self.tableView;
     
     [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];

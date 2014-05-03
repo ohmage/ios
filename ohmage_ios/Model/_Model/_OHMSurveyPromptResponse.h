@@ -6,6 +6,7 @@
 
 extern const struct OHMSurveyPromptResponseAttributes {
 	__unsafe_unretained NSString *numberValue;
+	__unsafe_unretained NSString *promptResponseKey;
 	__unsafe_unretained NSString *skipped;
 	__unsafe_unretained NSString *stringValue;
 } OHMSurveyPromptResponseAttributes;
@@ -22,6 +23,7 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 @class OHMSurveyPromptChoice;
 @class OHMSurveyItem;
 @class OHMSurveyResponse;
+
 
 
 
@@ -49,6 +51,16 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 - (void)setNumberValueValue:(double)value_;
 
 //- (BOOL)validateNumberValue:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* promptResponseKey;
+
+
+
+//- (BOOL)validatePromptResponseKey:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -119,6 +131,12 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 - (double)primitiveNumberValueValue;
 - (void)setPrimitiveNumberValueValue:(double)value_;
+
+
+
+
+- (NSString*)primitivePromptResponseKey;
+- (void)setPrimitivePromptResponseKey:(NSString*)value;
 
 
 
