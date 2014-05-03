@@ -20,6 +20,8 @@ UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewS
 CGFloat const kUIButtonDefaultHeight = 44.0;
 CGFloat const kUITextFieldDefaultHeight = 30.0;
 
+CGFloat const kUICellImageHeight = 100;
+
 @implementation OHMAppConstants
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex

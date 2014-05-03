@@ -19,6 +19,8 @@ extern UIEdgeInsets const kUIButtonTitleSmallInsets;
 extern CGFloat const kUIButtonDefaultHeight;
 extern CGFloat const kUITextFieldDefaultHeight;
 
+extern CGFloat const kUICellImageHeight;
+
 @interface OHMAppConstants : NSObject
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex;

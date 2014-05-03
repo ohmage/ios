@@ -7,7 +7,7 @@
 //
 
 #import "OHMSurveyItemViewController.h"
-#import "OHMSurveyCompleteViewController.h"
+#import "OHMSurveyResponseViewController.h"
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
@@ -89,7 +89,7 @@
     
     self.textLabel.text = self.item.text;
     
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelSurveyButtonPressed:)];
     self.navigationItem.leftBarButtonItem = cancelButton;
 }
 
@@ -107,6 +107,21 @@
     self.toolbar.tintColor = [UIColor whiteColor];
     
     [self updateNextButtonEnabledState];
+    
+    if (self.presentingViewController != nil) {
+        [self setupForModalPresentation];
+    }
+}
+
+- (void)setupForModalPresentation
+{
+    if (self.itemIndex > 0 && [[self.navigationController.viewControllers firstObject] isEqual:self]) {
+        OHMSurveyItemViewController *previous = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:self.surveyResponse atQuestionIndex:self.itemIndex - 1];
+        self.navigationController.viewControllers = [@[previous] arrayByAddingObjectsFromArray:self.navigationController.viewControllers];
+    }
+    
+    self.navigationItem.leftBarButtonItem = self.doneButton;
+    self.nextButton.title = @"Next";
 }
 
 - (void)updateNextButtonEnabledState
@@ -299,7 +314,7 @@
     self.actionButton = button;
 }
 
-- (void)cancelButtonPressed:(id)sender
+- (void)cancelSurveyButtonPressed:(id)sender
 {
     [[OHMClient sharedClient] deleteObject:self.surveyResponse];
     UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
@@ -353,7 +368,8 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
-        OHMSurveyCompleteViewController *vc = [[OHMSurveyCompleteViewController alloc] initWithSurveyResponse:self.surveyResponse];
+        OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:self.surveyResponse];
+        [vc setupSubmitHeader];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -446,20 +462,11 @@
 
 #pragma mark - TextField Delegate
 
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    self.backgroundTapEnabled = YES;
-}
-
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    // call to "super"
+    [self.viewControllerComposite textFieldDidEndEditing:textField];
+    
     self.backgroundTapEnabled = NO;
     if ([self validateTextField]) {
         [self setResponseValueFromTextField];

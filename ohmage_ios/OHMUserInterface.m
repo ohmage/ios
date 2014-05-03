@@ -90,13 +90,49 @@
     return cell;
 }
 
-+ (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView {
++ (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView
+{
     static NSString *sCellIdentifier = @"DetailCell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    return cell;
+}
+
++ (UITableViewCell *)cellWithSubtitleStyleFromTableView:(UITableView *)tableView
+{
+    static NSString *sCellIdentifier = @"SubtitleCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
+    }
+    
+    return cell;
+}
+
++ (UITableViewCell *)cellWithImage:(UIImage *)image fromTableView:(UITableView *)tableView
+{
+    static NSString *sCellIdentifier = @"ImageCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [cell.contentView addSubview:imageView];
+        [imageView constrainSize:CGSizeMake(tableView.frame.size.width, kUICellImageHeight)];
+        [imageView constrainToBottomInParentWithMargin:0];
+//        [cell.contentView constrainChildToEqualSize:imageView];
     }
     
     return cell;

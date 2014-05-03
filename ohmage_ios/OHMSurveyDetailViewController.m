@@ -9,7 +9,7 @@
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurveyItemViewController.h"
 #import "OHMReminderViewController.h"
-#import "OHMUserInterface.h"
+#import "OHMSurveyResponseViewController.h"
 #import "OHMSurvey.h"
 #import "OHMSurveyResponse.h"
 #import "OHMReminder.h"
@@ -260,7 +260,9 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 
 - (void)didSelectSurveyResponseCellAtRow:(NSInteger)row
 {
-    
+    OHMSurveyResponse *response = [self.fetchedSurveyResponsesController objectAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+    OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:response];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

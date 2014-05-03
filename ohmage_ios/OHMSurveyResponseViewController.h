@@ -8,6 +8,12 @@
 
 #import "OHMBaseTableViewController.h"
 
+@class OHMSurveyResponse;
+
 @interface OHMSurveyResponseViewController : OHMBaseTableViewController
+
+- (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response;
+
+- (void)setupSubmitHeader;
 
 @end
