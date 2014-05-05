@@ -35,6 +35,7 @@
 - (void)setAuthorizationToken:(NSString *)token;
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *response, NSError *error))block;
+- (void)submitSurveyResponse:(OHMSurveyResponse *)response;
 
 // Model
 - (NSOrderedSet *)ohmlets;

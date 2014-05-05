@@ -64,7 +64,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
     
-    NSLog(@"color index: %ld", self.survey.colorIndex);
+    NSLog(@"color index: %ld", (long)self.survey.colorIndex);
     NSLog(@"Survey: %@", self.survey);
 }
 
@@ -165,7 +165,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 {
     switch (section) {
         case kRemindersSectionIndex:
-            return MAX([[self.fetchedRemindersController fetchedObjects] count], 1);
+            return [[self.fetchedRemindersController fetchedObjects] count] + 1;
         case kSurveyResponsesSectionIndex:
             return MAX([[self.fetchedSurveyResponsesController fetchedObjects] count], 1);
         default:
@@ -174,18 +174,18 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     
 }
 
-- (void)configureReminderCell:(UITableViewCell *)cell forRow:(NSInteger)row
-{
-    if (row == 0) {
-        cell.textLabel.text = @"Add reminder";
-        cell.detailTextLabel.text = nil;
-    }
-    else if ([[self.fetchedRemindersController fetchedObjects] count] >= row) {
-        OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
-        cell.textLabel.text = [reminder labelText];
-        cell.detailTextLabel.text = [reminder repeatLabelText];
-    }
-}
+//- (void)configureReminderCell:(UITableViewCell *)cell forRow:(NSInteger)row
+//{
+//    if (row == 0) {
+//        cell.textLabel.text = @"Add reminder";
+//        cell.detailTextLabel.text = nil;
+//    }
+//    else if ([[self.fetchedRemindersController fetchedObjects] count] >= row - 1) {
+//        OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
+//        cell.textLabel.text = [reminder labelText];
+//        cell.detailTextLabel.text = [reminder repeatLabelText];
+//    }
+//}
 
 - (void)configureSurveyResponseCell:(UITableViewCell *)cell forRow:(NSInteger)row
 {

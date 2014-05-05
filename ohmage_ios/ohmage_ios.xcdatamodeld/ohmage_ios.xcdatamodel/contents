@@ -74,6 +74,7 @@
         <relationship name="surveyResponse" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurveyResponse" inverseName="promptResponses" inverseEntity="OHMSurveyResponse" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyResponse" representedClassName="OHMSurveyResponse" syncable="YES">
+        <attribute name="submitted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timestamp" attributeType="Date" syncable="YES"/>
         <relationship name="promptResponses" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OHMSurveyPromptResponse" inverseName="surveyResponse" inverseEntity="OHMSurveyPromptResponse" syncable="YES"/>
         <relationship name="survey" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="surveyResponses" inverseEntity="OHMSurvey" syncable="YES"/>
@@ -93,7 +94,7 @@
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="330"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="150"/>
-        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="88"/>
+        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="105"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="133"/>
     </elements>
 </model>

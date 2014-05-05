@@ -4,4 +4,6 @@
 
 - (BOOL)shouldShowItemAtIndex:(NSInteger)itemIndex;
 
+- (NSDictionary *)JSON;
+
 @end

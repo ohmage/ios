@@ -4,6 +4,7 @@
 #import "_OHMSurveyResponse.h"
 
 const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
+	.submitted = @"submitted",
 	.timestamp = @"timestamp",
 };
 
@@ -41,9 +42,40 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"submittedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"submitted"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic submitted;
+
+
+
+- (BOOL)submittedValue {
+	NSNumber *result = [self submitted];
+	return [result boolValue];
+}
+
+- (void)setSubmittedValue:(BOOL)value_ {
+	[self setSubmitted:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveSubmittedValue {
+	NSNumber *result = [self primitiveSubmitted];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveSubmittedValue:(BOOL)value_ {
+	[self setPrimitiveSubmitted:[NSNumber numberWithBool:value_]];
+}
+
 
 
 

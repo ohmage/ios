@@ -40,6 +40,9 @@
     
     self.navigationItem.title = @"Survey Response";
 
+    if (!self.response.submittedValue) {
+        [self setupSubmitHeader];
+    }
 }
 
 - (void)setupSubmitHeader

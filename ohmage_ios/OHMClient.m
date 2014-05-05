@@ -170,6 +170,57 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }];
 }
 
+- (void)submitSurveyResponse:(OHMSurveyResponse *)response
+{
+    NSDictionary *responseJSON = @[
+    {
+        "meta_data": {
+            "id":"uid1",
+            "timestamp": null,
+            "timestamp_millis":"1399320427000",
+            "location" :  null
+        },
+        "data" : {
+            "min": [
+                    2,
+                    1
+                    ],
+            "minMax": [
+                       3,
+                       2
+                       ],
+            "defaultSingle": [
+                              2
+                              ],
+            "max": [
+                    3,
+                    2
+                    ],
+            "minDefault": [
+                           2,
+                           1
+                           ],
+            "basicMultiple": [
+                              2
+                              ],
+            "minMaxDefault": [
+                              3,
+                              1
+                              ],
+            "defaultMultiple": [
+                                2
+                                ],
+            "basicSingle": [
+                            1
+                            ],
+            "maxDefault": [
+                           2
+                           ]
+        }
+    }
+                                  ]
+}
+
 - (void)refreshUserInfo
 {
     [self getRequest:[self.user definitionRequestUrlString]

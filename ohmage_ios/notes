@@ -268,3 +268,115 @@ For the ohmlet features, we should talk through again. Basically the standard us
         }
     }
 ]
+
+// multi choice number
+
+[
+    {
+        "response_metadata": {
+            "id": "e4a84713-1d3a-4135-b2b9-d05f198a1663",
+            "timestamp": "2014-03-30T12:05:09.246-04:00",
+            "location": {
+                "latitude": 40.7084679,
+                "longitude": -73.9215924,
+                "accuracy": 15.746999740600586,
+                "time": 1396195508653
+            }
+        },
+        "response_data": {
+            "min": [
+                2,
+                1
+            ],
+            "minMax": [
+                3,
+                2
+            ],
+            "defaultSingle": [
+                2
+            ],
+            "max": [
+                3,
+                2
+            ],
+            "minDefault": [
+                2,
+                1
+            ],
+            "basicMultiple": [
+                2
+            ],
+            "minMaxDefault": [
+                3,
+                1
+            ],
+            "defaultMultiple": [
+                2
+            ],
+            "basicSingle": [
+                1
+            ],
+            "maxDefault": [
+                2
+            ]
+        }
+    }
+]
+
+Here is some quick documentation for uploading surveys.
+
+The request is a POST to the following URL https://dev.ohmage.org/ohmage/<survey_id>/<survey_version>/data.
+
+The body is similar to the ohmlet creation POST body. https://github.com/ohmage/server/wiki/3.x%20Ohmlet%20APIs#example-request-with-an-icon
+
+The first part is the survey response JSON must be called "data". The second and any other following media part must be called "media". The Content-Disposition for each media file part must contain a filename string where the string value is the ID of a media prompt response.
+
+The JSON data is an array of responses where each response has a metadata and a data object. (The meta_data key is incorrect and needs to be renamed to metadata. The location object is optional. Either timestamp or timestamp_millis should be present.)
+
+[
+{
+    "meta_data": {
+    "id":"uid1",
+    "timestamp": null,
+    "timestamp_millis":"1399320427000",
+    "location" :  null
+},
+"data" : {
+            "min": [
+                2,
+                1
+            ],
+            "minMax": [
+                3,
+                2
+            ],
+            "defaultSingle": [
+                2
+            ],
+            "max": [
+                3,
+                2
+            ],
+            "minDefault": [
+                2,
+                1
+            ],
+            "basicMultiple": [
+                2
+            ],
+            "minMaxDefault": [
+                3,
+                1
+            ],
+            "defaultMultiple": [
+                2
+            ],
+            "basicSingle": [
+                1
+            ],
+            "maxDefault": [
+                2
+            ]
+        }
+}
+]

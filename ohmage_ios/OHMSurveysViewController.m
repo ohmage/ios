@@ -346,7 +346,7 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    NSLog(@"accessory tapped for row: %ld, color index: %ld", indexPath.row, survey.colorIndex);
+    NSLog(@"accessory tapped for row: %ld, color index: %ld", (long)indexPath.row, (long)survey.colorIndex);
     survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
     [self.navigationController pushViewController:vc animated:YES];
@@ -412,7 +412,7 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    OHMSurvey *survey = (OHMSurvey *)anObject;
+//    OHMSurvey *survey = (OHMSurvey *)anObject;
 //    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
     UITableView *tableView = self.tableView;
     
