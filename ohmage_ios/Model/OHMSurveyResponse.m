@@ -18,9 +18,7 @@
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID
 {
     for (OHMSurveyPromptResponse *response in self.promptResponses) {
-        NSLog(@"prompt response itemID: %@$$$$$", response.surveyItem.ohmID);
         if ([response.surveyItem.ohmID isEqualToString:itemID]) {
-            NSLog(@"found response for itemID: %@$$$$", itemID);
             return response;
         }
     }
@@ -35,6 +33,7 @@
     OHMSurveyItem *item = self.survey.surveyItems[itemIndex];
     NSString *condition = item.condition;
     NSLog(@"should show item at index: %ld, condition: %@", itemIndex, condition);
+    if (condition == nil) return YES;
     
     OHMConditionParser *parser = [[OHMConditionParser alloc] initWithDelegate:self];
     
@@ -56,31 +55,87 @@
     return YES;
 }
 
+- (BOOL)evaluateToken:(id)token
+{
+    if ([token isKindOfClass:[OHMSurveyPromptResponse class]]) {
+        return [(OHMSurveyPromptResponse *)token compareToConditionValue:nil withComparison:nil isRHS:NO];
+    }
+    else if([token isKindOfClass:[NSNumber class]]) {
+        return ([(NSNumber *)token doubleValue] != 0);
+    }
+    else if ([token isKindOfClass:[NSString class]]) {
+        if ([(NSString *)token isEqualToString:@"NOT_DISPLAYED"]) {
+            return NO;
+        }
+        else if ([(NSString *)token isEqualToString:@"SKIPPED"]) {
+            return NO;
+        }
+        else {
+            return YES;
+        }
+    }
+    else {
+        return NO;
+    }
+}
+
 - (void)parser:(OHMConditionParser *)parser didMatchOrExpr:(PKAssembly *)match
 {
 //    NSLog(@"did match ORExpr with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
     
-    BOOL result = NO;
-	id tok = [match pop]; // pop the terminal token
-    if ([tok isKindOfClass:[OHMSurveyPromptResponse class]]) {
-        result = [(OHMSurveyPromptResponse *)tok compareToConditionValue:nil withComparison:nil isRHS:NO];
-    }
-    else if([tok isKindOfClass:[NSNumber class]]) {
-        result = ([(NSNumber *)tok doubleValue] != 0);
-    }
-    else if ([tok isKindOfClass:[NSString class]]) {
-        if ([(NSString *)tok isEqualToString:@"NOT_DISPLAYED"]) {
-            result = NO;
-        }
-        else if ([(NSString *)tok isEqualToString:@"SKIPPED"]) {
-            result = NO;
-        }
-        else {
-            result = YES;
-        }
-    }
+	id tok = [match pop];
+    BOOL result = [self evaluateToken:tok];
     
     NSLog(@"did match OrExpr with result: %d, match: %@", result, match);
+    [match push:[NSNumber numberWithBool:result]];
+}
+
+- (void)parser:(OHMConditionParser *)parser didMatchAndExpr:(PKAssembly *)match
+{
+    //    NSLog(@"did match ORExpr with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+    
+	id tok = [match pop];
+    BOOL result = [self evaluateToken:tok];
+    
+    NSLog(@"did match AndExpr with result: %d, match: %@", result, match);
+    [match push:[NSNumber numberWithBool:result]];
+}
+
+- (void)parser:(OHMConditionParser *)parser didMatchOrTerm:(PKAssembly *)match
+{
+    NSLog(@"did match ORterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+    
+	id rhs = [match pop];
+    id lhs = [match pop];
+    
+    BOOL result = NO;
+    if (lhs != nil) {
+        result = [self evaluateToken:lhs] || [self evaluateToken:rhs];
+    }
+    else {
+        result = [self evaluateToken:rhs];
+    }
+    
+    NSLog(@"did match ORterm with result: %d, match: %@", result, match);
+    [match push:[NSNumber numberWithBool:result]];
+}
+
+- (void)parser:(OHMConditionParser *)parser didMatchAndTerm:(PKAssembly *)match
+{
+    NSLog(@"did match ANDterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+    
+	id rhs = [match pop];
+    id lhs = [match pop];
+    
+    BOOL result = NO;
+    if (lhs != nil) {
+        result = [self evaluateToken:lhs] && [self evaluateToken:rhs];
+    }
+    else {
+        result = [self evaluateToken:rhs];
+    }
+    
+    NSLog(@"did match ANDterm with result: %d, match: %@", result, match);
     [match push:[NSNumber numberWithBool:result]];
 }
 

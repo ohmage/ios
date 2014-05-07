@@ -10,30 +10,23 @@
 #import "OHMSurveysViewController.h"
 #import "OHMClient.h"
 #import "OHMLoginViewController.h"
-#import "OHMPromptCondition.h"
 
 @implementation OHMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     
     OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] initWithOhmletIndex:0];
-    //OHMHomeViewController *vc = [[OHMHomeViewController alloc] init];
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = nav;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-//    [[OHMClient sharedClient] loginWithEmail:@"cforkish@gmail.com" andPassword:@"loudfowl98"];
-    
     if (![[OHMClient sharedClient] hasLoggedInUser]) {
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
     }
-    
-    [[OHMPromptCondition alloc] initWithConditionString:nil];
     
     return YES;
 }

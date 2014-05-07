@@ -6,22 +6,19 @@
 
 @property (nonatomic, retain) NSMutableDictionary *expr_memo;
 @property (nonatomic, retain) NSMutableDictionary *negExpr_memo;
-@property (nonatomic, retain) NSMutableDictionary *terminalExpr_memo;
 @property (nonatomic, retain) NSMutableDictionary *orExpr_memo;
 @property (nonatomic, retain) NSMutableDictionary *orTerm_memo;
 @property (nonatomic, retain) NSMutableDictionary *andExpr_memo;
 @property (nonatomic, retain) NSMutableDictionary *andTerm_memo;
 @property (nonatomic, retain) NSMutableDictionary *relExpr_memo;
-@property (nonatomic, retain) NSMutableDictionary *relOp_memo;
 @property (nonatomic, retain) NSMutableDictionary *relOpTerm_memo;
+@property (nonatomic, retain) NSMutableDictionary *relOp_memo;
 @property (nonatomic, retain) NSMutableDictionary *callExpr_memo;
 @property (nonatomic, retain) NSMutableDictionary *argList_memo;
 @property (nonatomic, retain) NSMutableDictionary *primary_memo;
 @property (nonatomic, retain) NSMutableDictionary *atom_memo;
 @property (nonatomic, retain) NSMutableDictionary *ohmID_memo;
 @property (nonatomic, retain) NSMutableDictionary *literal_memo;
-@property (nonatomic, retain) NSMutableDictionary *compOp_memo;
-@property (nonatomic, retain) NSMutableDictionary *conjOp_memo;
 @property (nonatomic, retain) NSMutableDictionary *lt_memo;
 @property (nonatomic, retain) NSMutableDictionary *gt_memo;
 @property (nonatomic, retain) NSMutableDictionary *eq_memo;
@@ -45,54 +42,51 @@
     if (self) {
         
         self.startRuleName = @"expr";
-        self.tokenKindTab[@">="] = @(OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM);
-        self.tokenKindTab[@"=="] = @(OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS);
+        self.tokenKindTab[@">="] = @(OHMCONDITIONPARSER_TOKEN_KIND_GE);
+        self.tokenKindTab[@"=="] = @(OHMCONDITIONPARSER_TOKEN_KIND_EQ);
         self.tokenKindTab[@","] = @(OHMCONDITIONPARSER_TOKEN_KIND_COMMA);
-        self.tokenKindTab[@"<"] = @(OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM);
-        self.tokenKindTab[@"<="] = @(OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM);
-        self.tokenKindTab[@"OR"] = @(OHMCONDITIONPARSER_TOKEN_KIND_OR_UPPER);
-        self.tokenKindTab[@">"] = @(OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM);
+        self.tokenKindTab[@"<"] = @(OHMCONDITIONPARSER_TOKEN_KIND_LT);
+        self.tokenKindTab[@"<="] = @(OHMCONDITIONPARSER_TOKEN_KIND_LE);
+        self.tokenKindTab[@"OR"] = @(OHMCONDITIONPARSER_TOKEN_KIND_OR);
+        self.tokenKindTab[@">"] = @(OHMCONDITIONPARSER_TOKEN_KIND_GT);
         self.tokenKindTab[@"NOT_DISPLAYED"] = @(OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED);
         self.tokenKindTab[@"("] = @(OHMCONDITIONPARSER_TOKEN_KIND_OPENPAREN);
-        self.tokenKindTab[@"AND"] = @(OHMCONDITIONPARSER_TOKEN_KIND_AND_UPPER);
-        self.tokenKindTab[@"!"] = @(OHMCONDITIONPARSER_TOKEN_KIND_BANG);
+        self.tokenKindTab[@"AND"] = @(OHMCONDITIONPARSER_TOKEN_KIND_AND);
+        self.tokenKindTab[@"!"] = @(OHMCONDITIONPARSER_TOKEN_KIND_NOT);
         self.tokenKindTab[@")"] = @(OHMCONDITIONPARSER_TOKEN_KIND_CLOSEPAREN);
-        self.tokenKindTab[@"!="] = @(OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL);
+        self.tokenKindTab[@"!="] = @(OHMCONDITIONPARSER_TOKEN_KIND_NE);
         self.tokenKindTab[@"SKIPPED"] = @(OHMCONDITIONPARSER_TOKEN_KIND_SKIPPED);
 
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM] = @">=";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS] = @"==";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_GE] = @">=";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_EQ] = @"==";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_COMMA] = @",";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM] = @"<";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM] = @"<=";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_OR_UPPER] = @"OR";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM] = @">";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LT] = @"<";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LE] = @"<=";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_OR] = @"OR";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_GT] = @">";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED] = @"NOT_DISPLAYED";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_OPENPAREN] = @"(";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_AND_UPPER] = @"AND";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_BANG] = @"!";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_AND] = @"AND";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_NOT] = @"!";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_CLOSEPAREN] = @")";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL] = @"!=";
+        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_NE] = @"!=";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_SKIPPED] = @"SKIPPED";
 
         self.expr_memo = [NSMutableDictionary dictionary];
         self.negExpr_memo = [NSMutableDictionary dictionary];
-        self.terminalExpr_memo = [NSMutableDictionary dictionary];
         self.orExpr_memo = [NSMutableDictionary dictionary];
         self.orTerm_memo = [NSMutableDictionary dictionary];
         self.andExpr_memo = [NSMutableDictionary dictionary];
         self.andTerm_memo = [NSMutableDictionary dictionary];
         self.relExpr_memo = [NSMutableDictionary dictionary];
-        self.relOp_memo = [NSMutableDictionary dictionary];
         self.relOpTerm_memo = [NSMutableDictionary dictionary];
+        self.relOp_memo = [NSMutableDictionary dictionary];
         self.callExpr_memo = [NSMutableDictionary dictionary];
         self.argList_memo = [NSMutableDictionary dictionary];
         self.primary_memo = [NSMutableDictionary dictionary];
         self.atom_memo = [NSMutableDictionary dictionary];
         self.ohmID_memo = [NSMutableDictionary dictionary];
         self.literal_memo = [NSMutableDictionary dictionary];
-        self.compOp_memo = [NSMutableDictionary dictionary];
-        self.conjOp_memo = [NSMutableDictionary dictionary];
         self.lt_memo = [NSMutableDictionary dictionary];
         self.gt_memo = [NSMutableDictionary dictionary];
         self.eq_memo = [NSMutableDictionary dictionary];
@@ -114,22 +108,19 @@
 - (void)clearMemo {
     [_expr_memo removeAllObjects];
     [_negExpr_memo removeAllObjects];
-    [_terminalExpr_memo removeAllObjects];
     [_orExpr_memo removeAllObjects];
     [_orTerm_memo removeAllObjects];
     [_andExpr_memo removeAllObjects];
     [_andTerm_memo removeAllObjects];
     [_relExpr_memo removeAllObjects];
-    [_relOp_memo removeAllObjects];
     [_relOpTerm_memo removeAllObjects];
+    [_relOp_memo removeAllObjects];
     [_callExpr_memo removeAllObjects];
     [_argList_memo removeAllObjects];
     [_primary_memo removeAllObjects];
     [_atom_memo removeAllObjects];
     [_ohmID_memo removeAllObjects];
     [_literal_memo removeAllObjects];
-    [_compOp_memo removeAllObjects];
-    [_conjOp_memo removeAllObjects];
     [_lt_memo removeAllObjects];
     [_gt_memo removeAllObjects];
     [_eq_memo removeAllObjects];
@@ -163,12 +154,10 @@
     [t.symbolState add:@">="];
 
     }];
-    if ([self speculate:^{ [self orExpr_]; }]) {
+    if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED, OHMCONDITIONPARSER_TOKEN_KIND_OPENPAREN, OHMCONDITIONPARSER_TOKEN_KIND_SKIPPED, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, TOKEN_KIND_BUILTIN_WORD, 0]) {
         [self orExpr_]; 
-    } else if ([self speculate:^{ [self negExpr_]; }]) {
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOT, 0]) {
         [self negExpr_]; 
-    } else if ([self speculate:^{ [self terminalExpr_]; }]) {
-        [self terminalExpr_]; 
     } else {
         [self raise:@"No viable alternative found in rule 'expr'."];
     }
@@ -182,7 +171,7 @@
 
 - (void)__negExpr {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_BANG discard:YES]; 
+    [self not_]; 
     [self orExpr_]; 
     [self execute:^{
     
@@ -199,33 +188,12 @@
     [self parseRule:@selector(__negExpr) withMemo:_negExpr_memo];
 }
 
-- (void)__terminalExpr {
-    
-    [self atom_]; 
-    [self execute:^{
-    
-    NSLog(@"TERMINALexpr");
-
-    }];
-
-    [self fireDelegateSelector:@selector(parser:didMatchTerminalExpr:)];
-}
-
-- (void)terminalExpr_ {
-    [self parseRule:@selector(__terminalExpr) withMemo:_terminalExpr_memo];
-}
-
 - (void)__orExpr {
     
     [self andExpr_]; 
     while ([self speculate:^{ [self orTerm_]; }]) {
         [self orTerm_]; 
     }
-    [self execute:^{
-    
-    NSLog(@"ORexpr");
-
-    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchOrExpr:)];
 }
@@ -236,16 +204,8 @@
 
 - (void)__orTerm {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_OR_UPPER discard:YES]; 
+    [self or_]; 
     [self andExpr_]; 
-    [self execute:^{
-    
-        NSLog(@"ORterm: %@", self.assembly);
-	BOOL rhs = POP_BOOL();
-	BOOL lhs = POP_BOOL();
-	PUSH_BOOL(lhs || rhs);
-
-    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchOrTerm:)];
 }
@@ -260,11 +220,6 @@
     while ([self speculate:^{ [self andTerm_]; }]) {
         [self andTerm_]; 
     }
-    [self execute:^{
-    
-    NSLog(@"ANDexpr");
-
-    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchAndExpr:)];
 }
@@ -275,16 +230,8 @@
 
 - (void)__andTerm {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_AND_UPPER discard:YES]; 
+    [self and_]; 
     [self relExpr_]; 
-    [self execute:^{
-    
-        NSLog(@"ANDterm: %@", self.assembly);
-	BOOL rhs = POP_BOOL();
-	BOOL lhs = POP_BOOL();
-	PUSH_BOOL(lhs && rhs);
-
-    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchAndTerm:)];
 }
@@ -312,31 +259,6 @@
     [self parseRule:@selector(__relExpr) withMemo:_relExpr_memo];
 }
 
-- (void)__relOp {
-    
-    if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM discard:NO]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM discard:NO]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS discard:NO]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL discard:NO]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM discard:NO]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM, 0]) {
-        [self match:OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM discard:NO]; 
-    } else {
-        [self raise:@"No viable alternative found in rule 'relOp'."];
-    }
-
-    [self fireDelegateSelector:@selector(parser:didMatchRelOp:)];
-}
-
-- (void)relOp_ {
-    [self parseRule:@selector(__relOp) withMemo:_relOp_memo];
-}
-
 - (void)__relOpTerm {
     
     [self relOp_]; 
@@ -352,6 +274,31 @@
 
 - (void)relOpTerm_ {
     [self parseRule:@selector(__relOpTerm) withMemo:_relOpTerm_memo];
+}
+
+- (void)__relOp {
+    
+    if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LT, 0]) {
+        [self lt_]; 
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GT, 0]) {
+        [self gt_]; 
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_EQ, 0]) {
+        [self eq_]; 
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NE, 0]) {
+        [self ne_]; 
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LE, 0]) {
+        [self le_]; 
+    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GE, 0]) {
+        [self ge_]; 
+    } else {
+        [self raise:@"No viable alternative found in rule 'relOp'."];
+    }
+
+    [self fireDelegateSelector:@selector(parser:didMatchRelOp:)];
+}
+
+- (void)relOp_ {
+    [self parseRule:@selector(__relOp) withMemo:_relOp_memo];
 }
 
 - (void)__callExpr {
@@ -466,51 +413,9 @@
     [self parseRule:@selector(__literal) withMemo:_literal_memo];
 }
 
-- (void)__compOp {
-    
-    if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM, 0]) {
-        [self lt_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM, 0]) {
-        [self gt_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS, 0]) {
-        [self eq_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL, 0]) {
-        [self ne_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM, 0]) {
-        [self le_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM, 0]) {
-        [self ge_]; 
-    } else {
-        [self raise:@"No viable alternative found in rule 'compOp'."];
-    }
-
-    [self fireDelegateSelector:@selector(parser:didMatchCompOp:)];
-}
-
-- (void)compOp_ {
-    [self parseRule:@selector(__compOp) withMemo:_compOp_memo];
-}
-
-- (void)__conjOp {
-    
-    if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_AND_UPPER, 0]) {
-        [self and_]; 
-    } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_OR_UPPER, 0]) {
-        [self or_]; 
-    } else {
-        [self raise:@"No viable alternative found in rule 'conjOp'."];
-    }
-
-    [self fireDelegateSelector:@selector(parser:didMatchConjOp:)];
-}
-
-- (void)conjOp_ {
-    [self parseRule:@selector(__conjOp) withMemo:_conjOp_memo];
-}
-
 - (void)__lt {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_LT_SYM discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_LT discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchLt:)];
 }
@@ -521,7 +426,7 @@
 
 - (void)__gt {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_GT_SYM discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_GT discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchGt:)];
 }
@@ -532,7 +437,7 @@
 
 - (void)__eq {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_DOUBLE_EQUALS discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_EQ discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchEq:)];
 }
@@ -543,7 +448,7 @@
 
 - (void)__ne {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_NOT_EQUAL discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_NE discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchNe:)];
 }
@@ -554,7 +459,7 @@
 
 - (void)__le {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_LE_SYM discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_LE discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchLe:)];
 }
@@ -565,7 +470,7 @@
 
 - (void)__ge {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_GE_SYM discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_GE discard:NO]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchGe:)];
 }
@@ -609,7 +514,7 @@
 
 - (void)__or {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_OR_UPPER discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_OR discard:YES]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchOr:)];
 }
@@ -620,7 +525,7 @@
 
 - (void)__and {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_AND_UPPER discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_AND discard:YES]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchAnd:)];
 }
@@ -631,7 +536,7 @@
 
 - (void)__not {
     
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_BANG discard:NO]; 
+    [self match:OHMCONDITIONPARSER_TOKEN_KIND_NOT discard:YES]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchNot:)];
 }

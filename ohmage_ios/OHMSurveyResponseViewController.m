@@ -107,6 +107,9 @@
     if (promptResponse.skippedValue) {
         return @"<Skipped>";
     }
+    else if (promptResponse.notDisplayedValue) {
+        return @"<Not displayed>";
+    }
     
     switch (promptResponse.surveyItem.itemTypeValue) {
         case OHMSurveyItemTypeMessage:

@@ -50,16 +50,19 @@
     self = [super init];
     if (self) {
         self.surveyResponse = response;
+        if (![response shouldShowItemAtIndex:index]) {
+            
+        }
         self.itemIndex = index;
         self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
         self.item = self.promptResponse.surveyItem;
         NSLog(@"controller for itemID: %@", self.item.ohmID);
         
-        if (self.item.condition) {
-            BOOL displayed = [response shouldShowItemAtIndex:index];
-            NSLog(@"should show prompt: %d, at index: %ld", displayed, index);
-            self.promptResponse.notDisplayedValue = !displayed;
-        }
+//        if (self.item.condition) {
+//            BOOL displayed = [response shouldShowItemAtIndex:index];
+//            NSLog(@"should show prompt: %d, at index: %ld", displayed, index);
+//            self.promptResponse.notDisplayedValue = !displayed;
+//        }
     }
     return self;
 }
@@ -92,7 +95,7 @@
     [self.textLabel positionBelowElement:topGuide margin:2 * kUIViewVerticalMargin];
     [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%d of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
     
     self.textLabel.text = self.item.text;
     
@@ -370,8 +373,13 @@
 - (void)pushNextItemViewController
 {
     NSInteger nextIndex = self.itemIndex + 1;
+    
+    while (nextIndex < self.surveyResponse.promptResponses.count && ![self.surveyResponse shouldShowItemAtIndex:nextIndex]) {
+        ((OHMSurveyPromptResponse* )self.surveyResponse.promptResponses[nextIndex]).notDisplayedValue = YES;
+        nextIndex++;
+    }
     if (nextIndex < [self.surveyResponse.survey.surveyItems count]) {
-        OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:self.itemIndex+1];
+        OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:nextIndex];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
