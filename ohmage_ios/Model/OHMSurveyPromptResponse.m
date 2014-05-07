@@ -117,57 +117,114 @@
 //    }
 //}
 
-- (BOOL)compareToNumber:(NSNumber *)number withComparison:(NSString *)comparison
+- (BOOL)compareLHNumber:(NSNumber *)lhNumber toRHNumber:(NSNumber *)rhNumber withComparison:(NSString *)comparison
 {
-    double val = [number doubleValue];
-    if ([comparison isEqualToString:@"<"]) {
-        
-    }
-    return NO;
-}
-
-- (BOOL)compareToString:(NSString *)string withComparison:(NSString *)comparison
-{
+    double rhs = rhNumber.doubleValue;
+    double lhs = lhNumber.doubleValue;
+    BOOL result = NO;
+    if ([comparison isEqualToString:@"<"])  result = (lhs < rhs);
+    else if ([comparison isEqualToString:@">"])  result = (lhs > rhs);
+    else if ([comparison isEqualToString:@"=="]) result = (lhs == rhs);
+    else if ([comparison isEqualToString:@"!="]) result = (lhs != rhs);
+    else if ([comparison isEqualToString:@"<="]) result = (lhs <= rhs);
+    else if ([comparison isEqualToString:@">="]) result = (lhs >= rhs);
     
-    return NO;
+    return result;
 }
 
-- (BOOL)compareToConditionValue:(id)value withComparison:(NSString *)comparison
+- (BOOL)compareToNumber:(NSNumber *)number withComparison:(NSString *)comparison isRHS:(BOOL)isRHS
 {
+    NSNumber *lhNumber = nil;
+    NSNumber *rhNumber = nil;
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeNumberPrompt:
+            lhNumber = isRHS ? number : self.numberValue;
+            rhNumber = isRHS ? self.numberValue : number;
+            return [self compareLHNumber:lhNumber toRHNumber:rhNumber withComparison:comparison];
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+            for (OHMSurveyPromptChoice *choice in self.selectedChoices) {
+                lhNumber = isRHS ? number : choice.numberValue;
+                rhNumber = isRHS ? choice.numberValue : number;
+                if ([self compareLHNumber:lhNumber toRHNumber:rhNumber withComparison:comparison]) {
+                    return YES;
+                }
+            }
+            return NO;
+        default:
+            return NO;
+    }
+}
+
+- (BOOL)compareLHString:(NSString *)lhString toRHString:(NSString *)rhString withComparison:(NSString *)comparison
+{
+    BOOL result = NO;
+    if ([comparison isEqualToString:@"<"])  result = ([lhString compare:rhString] == NSOrderedAscending);
+    else if ([comparison isEqualToString:@">"])  result = ([lhString compare:rhString] == NSOrderedDescending);
+    else if ([comparison isEqualToString:@"=="]) result = [lhString isEqualToString:rhString];
+    else if ([comparison isEqualToString:@"!="]) result = ![lhString isEqualToString:rhString];
+    else if ([comparison isEqualToString:@"<="]) result = ( ([lhString compare:rhString] == NSOrderedAscending)
+                                      || ([lhString compare:rhString] == NSOrderedSame) );
+    else if ([comparison isEqualToString:@">="]) result = ( ([lhString compare:rhString] == NSOrderedDescending)
+                                      || ([lhString compare:rhString] == NSOrderedSame) );
+    return result;
+}
+
+- (BOOL)compareFlagValue:(BOOL)flagValue withComparison:(NSString *)comparison
+{
+    if ([comparison isEqualToString:@"=="]) return flagValue;
+    else if ([comparison isEqualToString:@"!="]) return !flagValue;
+    else return NO;
+}
+
+- (BOOL)compareToString:(NSString *)string withComparison:(NSString *)comparison isRHS:(BOOL)isRHS
+{
+    if ([string isEqualToString:@"SKIPPED"]) {
+        return [self compareFlagValue:self.skippedValue withComparison:comparison];
+    }
+    else if ([string isEqualToString:@"NOT_DISPLAYED"]) {
+        return [self compareFlagValue:self.notDisplayedValue withComparison:comparison];
+    }
+    
+    NSString *lhString = nil;
+    NSString *rhString = nil;
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeTextPrompt:
+            lhString = isRHS ? string : self.stringValue;
+            rhString = isRHS ? self.stringValue : string;
+            return [self compareLHString:lhString toRHString:rhString withComparison:comparison];
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+            for (OHMSurveyPromptChoice *choice in self.selectedChoices) {
+                lhString = isRHS ? string : choice.stringValue;
+                rhString = isRHS ? choice.stringValue : string;
+                if ([self compareLHString:lhString toRHString:rhString withComparison:comparison]) {
+                    return YES;
+                }
+            }
+            return NO;
+        default:
+            return NO;
+    }
+}
+
+- (BOOL)compareToConditionValue:(id)value withComparison:(NSString *)comparison isRHS:(BOOL)isRHS
+{
+    if (value == nil) {
+        return !self.skippedValue && !self.notDisplayedValue;
+    }
+    
     if ([value isKindOfClass:[NSString class]]) {
-        
+        return [self compareToString:value withComparison:comparison isRHS:isRHS];
     }
     else if ([value isKindOfClass:[NSNumber class]]) {
-        if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
-            return [self compareToNumber:value withComparison:comparison];
-        }
+        return [self compareToNumber:value withComparison:comparison isRHS:isRHS];
     }
     else if ([value isKindOfClass:[self class]]) {
         return [((OHMSurveyPromptResponse *)value).promptResponseKey isEqualToString:self.promptResponseKey];
     }
     else {
         return NO;
-    }
-    
-    return NO;
-}
-
-- (id)conditionValue
-{
-    switch (self.surveyItem.itemTypeValue) {
-        case OHMSurveyItemTypeMessage:
-            return self.surveyItem.text;
-        case OHMSurveyItemTypeNumberPrompt:
-            return self.numberValue;
-        case OHMSurveyItemTypeTextPrompt:
-            return self.stringValue;
-        case OHMSurveyItemTypeNumberSingleChoicePrompt:
-        case OHMSurveyItemTypeNumberMultiChoicePrompt:
-        case OHMSurveyItemTypeStringSingleChoicePrompt:
-        case OHMSurveyItemTypeStringMultiChoicePrompt:
-            return nil;//[self choiceConditionValue];
-        default:
-            return nil;
     }
 }
 

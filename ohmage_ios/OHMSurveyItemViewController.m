@@ -53,6 +53,13 @@
         self.itemIndex = index;
         self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
         self.item = self.promptResponse.surveyItem;
+        NSLog(@"controller for itemID: %@", self.item.ohmID);
+        
+        if (self.item.condition) {
+            BOOL displayed = [response shouldShowItemAtIndex:index];
+            NSLog(@"should show prompt: %d, at index: %ld", displayed, index);
+            self.promptResponse.notDisplayedValue = !displayed;
+        }
     }
     return self;
 }
@@ -78,7 +85,7 @@
 {
     [super viewDidLoad];
     
-    NSLog(@"view did load with item: %@", self.item.description);
+//    NSLog(@"view did load with itemID: %@", self.item.description);
     
     id<UILayoutSupport> topGuide = self.topLayoutGuide;
     id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;

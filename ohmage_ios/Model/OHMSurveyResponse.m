@@ -17,16 +17,15 @@
 
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"surveyItem.ohmID == %@", itemID];
-    NSOrderedSet *results = [self.promptResponses filteredOrderedSetUsingPredicate:predicate];
-    if ([results count] > 0) {
-        NSLog(@"found %lu responses. first: %@", (unsigned long)[results count], [results firstObject]);
-        return [results firstObject];
+    for (OHMSurveyPromptResponse *response in self.promptResponses) {
+        NSLog(@"prompt response itemID: %@$$$$$", response.surveyItem.ohmID);
+        if ([response.surveyItem.ohmID isEqualToString:itemID]) {
+            NSLog(@"found response for itemID: %@$$$$", itemID);
+            return response;
+        }
     }
-    else {
-        NSLog(@"failed to find response for item id: %@", itemID);
-        return nil;
-    }
+    NSLog(@"failed to find response for item id: %@$$$", itemID);
+    return nil;
 }
 
 - (BOOL)shouldShowItemAtIndex:(NSInteger)itemIndex
@@ -57,17 +56,54 @@
     return YES;
 }
 
+- (void)parser:(OHMConditionParser *)parser didMatchOrExpr:(PKAssembly *)match
+{
+//    NSLog(@"did match ORExpr with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+    
+    BOOL result = NO;
+	id tok = [match pop]; // pop the terminal token
+    if ([tok isKindOfClass:[OHMSurveyPromptResponse class]]) {
+        result = [(OHMSurveyPromptResponse *)tok compareToConditionValue:nil withComparison:nil isRHS:NO];
+    }
+    else if([tok isKindOfClass:[NSNumber class]]) {
+        result = ([(NSNumber *)tok doubleValue] != 0);
+    }
+    else if ([tok isKindOfClass:[NSString class]]) {
+        if ([(NSString *)tok isEqualToString:@"NOT_DISPLAYED"]) {
+            result = NO;
+        }
+        else if ([(NSString *)tok isEqualToString:@"SKIPPED"]) {
+            result = NO;
+        }
+        else {
+            result = YES;
+        }
+    }
+    
+    NSLog(@"did match OrExpr with result: %d, match: %@", result, match);
+    [match push:[NSNumber numberWithBool:result]];
+}
+
 - (void)parser:(OHMConditionParser *)parser didMatchRelOpTerm:(PKAssembly *)match
 {
     id rhs = [match pop];
-    NSString  *op = [match pop];
+    NSString  *op = [[match pop] stringValue];
     id lhs = [match pop];
+    
+    if (lhs == nil) {
+        NSLog(@"pushing rhs: %@ for single term RelOp", rhs);
+        [match push:rhs];
+        return;
+    }
     
     BOOL result = NO;
     if ([lhs isKindOfClass:[OHMSurveyPromptResponse class]]) {
-        [(OHMSurveyPromptResponse *)lhs]
+        result = [(OHMSurveyPromptResponse *)lhs compareToConditionValue:rhs withComparison:op isRHS:NO];
     }
-    if ([rhs isKindOfClass:[NSString class]] && [lhs isKindOfClass:[NSString class]]) {
+    else if ([rhs isKindOfClass:[OHMSurveyPromptResponse class]]) {
+        result = [(OHMSurveyPromptResponse *)rhs compareToConditionValue:lhs withComparison:op isRHS:YES];
+    }
+    else if ([rhs isKindOfClass:[NSString class]] && [lhs isKindOfClass:[NSString class]]) {
         NSString *rhString = (NSString *)rhs;
         NSString *lhString = (NSString *)lhs;
         if (EQ(op, @"<"))  result = ([lhString compare:rhString] == NSOrderedAscending);
@@ -89,19 +125,19 @@
         else if (EQ(op, @"<=")) result = (lhNumber <= rhNumber);
         else if (EQ(op, @">=")) result = (lhNumber >= rhNumber);
     }
-    NSLog(@"lhs: %@, rhs: %@, result: %d", lhs, rhs, result);
-    PUSH_BOOL(result);
+    NSLog(@"lhs: %@, rhs: %@, op: %@ result: %d", lhs, rhs, op, result);
+    [match push:[NSNumber numberWithBool:result]];
 }
 
 
 - (void)parser:(OHMConditionParser *)parser didMatchOhmID:(PKAssembly *)result
 {
     NSLog(@"did match ID: %@", result);
-    NSString *promptID = [result pop];
-    OHMSurveyPromptResponse *matchedResponse = [self promptResponseForItemID:promptID];
-    NSLog(@"promptID: %@, match: %@", promptID, matchedResponse);
+    PKToken *promptIDToken = [result pop];
+    OHMSurveyPromptResponse *matchedResponse = [self promptResponseForItemID:[promptIDToken stringValue]];
+//    NSLog(@"promptID: %@, match: %@", promptIDToken, matchedResponse);
     [result push:matchedResponse];
-    
+//    NSLog(@"pushed prompt response onto result: %@", result);
 }
 
 @end

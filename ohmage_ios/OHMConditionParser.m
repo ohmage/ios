@@ -204,12 +204,7 @@
     [self atom_]; 
     [self execute:^{
     
-	PKToken *tok = [self.assembly pop]; // pop the terminal token
-    	 if(tok.isNumber)                      PUSH_BOOL(tok.doubleValue != 0);
-	else if(EQ(tok.stringValue, @"NOT_DISPLAYED")) PUSH_BOOL(false);
-	else if(EQ(tok.stringValue, @"SKIPPED"))      PUSH_BOOL(false);
-	else if(tok.isQuotedString)					PUSH_BOOL(true);
-
+    NSLog(@"TERMINALexpr");
 
     }];
 
@@ -226,6 +221,11 @@
     while ([self speculate:^{ [self orTerm_]; }]) {
         [self orTerm_]; 
     }
+    [self execute:^{
+    
+    NSLog(@"ORexpr");
+
+    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchOrExpr:)];
 }
@@ -260,6 +260,11 @@
     while ([self speculate:^{ [self andTerm_]; }]) {
         [self andTerm_]; 
     }
+    [self execute:^{
+    
+    NSLog(@"ANDexpr");
+
+    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchAndExpr:)];
 }
@@ -294,6 +299,11 @@
     while ([self speculate:^{ [self relOpTerm_]; }]) {
         [self relOpTerm_]; 
     }
+    [self execute:^{
+    
+    NSLog(@"RELexpr");
+
+    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchRelExpr:)];
 }
@@ -333,35 +343,7 @@
     [self callExpr_]; 
     [self execute:^{
     
-        id rhs = POP();
-        NSString  *op = POP_STR();
-        id lhs = POP();
-        
-        BOOL result = NO;
-        if ([rhs isKindOfClass:[NSString class]] && [lhs isKindOfClass:[NSString class]]) {
-            NSString *rhString = (NSString *)rhs;
-            NSString *lhString = (NSString *)lhs;
-                 if (EQ(op, @"<"))  result = ([lhString compare:rhString] == NSOrderedAscending);
-            else if (EQ(op, @">"))  result = ([lhString compare:rhString] == NSOrderedDescending);
-            else if (EQ(op, @"==")) result = [lhString isEqualToString:rhString];
-            else if (EQ(op, @"!=")) result = ![lhString isEqualToString:rhString];
-            else if (EQ(op, @"<=")) result = ( ([lhString compare:rhString] == NSOrderedAscending)
-                                              || ([lhString compare:rhString] == NSOrderedSame) );
-            else if (EQ(op, @">=")) result = ( ([lhString compare:rhString] == NSOrderedDescending)
-                                              || ([lhString compare:rhString] == NSOrderedSame) );
-        }
-        else if ([rhs isKindOfClass:[NSNumber class]] && [lhs isKindOfClass:[NSNumber class]]) {
-            double rhNumber = ((NSNumber *)rhs).doubleValue;
-            double lhNumber = ((NSNumber *)lhs).doubleValue;
-                 if (EQ(op, @"<"))  result = (lhNumber <  rhNumber);
-            else if (EQ(op, @">"))  result = (lhNumber >  rhNumber);
-            else if (EQ(op, @"==")) result = (lhNumber == rhNumber);
-            else if (EQ(op, @"!=")) result = (lhNumber != rhNumber);
-            else if (EQ(op, @"<=")) result = (lhNumber <= rhNumber);
-            else if (EQ(op, @">=")) result = (lhNumber >= rhNumber);
-        }
-        NSLog(@"lhs: %@, rhs: %@, result: %d", lhs, rhs, result);
-        PUSH_BOOL(result);
+    NSLog(@"RELopTerm");
 
     }];
 
@@ -434,6 +416,11 @@
         [self skipped_]; 
     } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED, 0]) {
         [self notDisplayed_]; 
+        [self execute:^{
+        
+    NSLog(@"ATOM");
+
+        }];
     } else {
         [self raise:@"No viable alternative found in rule 'atom'."];
     }
@@ -656,6 +643,9 @@
 - (void)__notDisplayed {
     
     [self match:OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED discard:NO]; 
+    [self execute:^{
+     PUSH(POP_STR()); 
+    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchNotDisplayed:)];
 }
@@ -667,6 +657,9 @@
 - (void)__skipped {
     
     [self match:OHMCONDITIONPARSER_TOKEN_KIND_SKIPPED discard:NO]; 
+    [self execute:^{
+     PUSH(POP_STR()); 
+    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchSkipped:)];
 }
