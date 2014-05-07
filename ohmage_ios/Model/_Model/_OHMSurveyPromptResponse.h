@@ -5,6 +5,7 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyPromptResponseAttributes {
+	__unsafe_unretained NSString *notDisplayed;
 	__unsafe_unretained NSString *numberValue;
 	__unsafe_unretained NSString *promptResponseKey;
 	__unsafe_unretained NSString *skipped;
@@ -29,6 +30,7 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 
 
+
 @interface OHMSurveyPromptResponseID : NSManagedObjectID {}
 @end
 
@@ -37,6 +39,20 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyPromptResponseID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* notDisplayed;
+
+
+
+@property BOOL notDisplayedValue;
+- (BOOL)notDisplayedValue;
+- (void)setNotDisplayedValue:(BOOL)value_;
+
+//- (BOOL)validateNotDisplayed:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -124,6 +140,15 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 @end
 
 @interface _OHMSurveyPromptResponse (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveNotDisplayed;
+- (void)setPrimitiveNotDisplayed:(NSNumber*)value;
+
+- (BOOL)primitiveNotDisplayedValue;
+- (void)setPrimitiveNotDisplayedValue:(BOOL)value_;
+
+
 
 
 - (NSNumber*)primitiveNumberValue;

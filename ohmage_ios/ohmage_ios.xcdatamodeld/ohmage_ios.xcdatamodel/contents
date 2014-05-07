@@ -65,6 +65,7 @@
         <relationship name="surveyItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurveyItem" inverseName="choices" inverseEntity="OHMSurveyItem" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyPromptResponse" representedClassName="OHMSurveyPromptResponse" syncable="YES">
+        <attribute name="notDisplayed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="numberValue" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="promptResponseKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="skipped" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -93,7 +94,7 @@
         <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="180"/>
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="330"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
-        <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="150"/>
+        <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="163"/>
         <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="105"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="133"/>
     </elements>

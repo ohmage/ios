@@ -10,6 +10,7 @@
 #import "OHMSurveysViewController.h"
 #import "OHMClient.h"
 #import "OHMLoginViewController.h"
+#import "OHMPromptCondition.h"
 
 @implementation OHMAppDelegate
 
@@ -31,6 +32,8 @@
     if (![[OHMClient sharedClient] hasLoggedInUser]) {
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
     }
+    
+    [OHMPromptCondition test];
     
     return YES;
 }

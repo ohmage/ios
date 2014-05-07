@@ -4,6 +4,7 @@
 #import "_OHMSurveyPromptResponse.h"
 
 const struct OHMSurveyPromptResponseAttributes OHMSurveyPromptResponseAttributes = {
+	.notDisplayed = @"notDisplayed",
 	.numberValue = @"numberValue",
 	.promptResponseKey = @"promptResponseKey",
 	.skipped = @"skipped",
@@ -45,6 +46,11 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"notDisplayedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"notDisplayed"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"numberValueValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"numberValue"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -58,6 +64,32 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic notDisplayed;
+
+
+
+- (BOOL)notDisplayedValue {
+	NSNumber *result = [self notDisplayed];
+	return [result boolValue];
+}
+
+- (void)setNotDisplayedValue:(BOOL)value_ {
+	[self setNotDisplayed:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveNotDisplayedValue {
+	NSNumber *result = [self primitiveNotDisplayed];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveNotDisplayedValue:(BOOL)value_ {
+	[self setPrimitiveNotDisplayed:[NSNumber numberWithBool:value_]];
+}
+
 
 
 
