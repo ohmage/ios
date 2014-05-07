@@ -109,5 +109,66 @@
         [[OHMMediaStore sharedStore] deleteImageForKey:self.promptResponseKey];
     }
 }
+//
+//- (id)choiceConditionValue
+//{
+//    for (OHMSurveyPromptChoice *choice in self.selectedChoices) {
+//        if (choice.stringValue != nil) {};
+//    }
+//}
+
+- (BOOL)compareToNumber:(NSNumber *)number withComparison:(NSString *)comparison
+{
+    double val = [number doubleValue];
+    if ([comparison isEqualToString:@"<"]) {
+        
+    }
+    return NO;
+}
+
+- (BOOL)compareToString:(NSString *)string withComparison:(NSString *)comparison
+{
+    
+    return NO;
+}
+
+- (BOOL)compareToConditionValue:(id)value withComparison:(NSString *)comparison
+{
+    if ([value isKindOfClass:[NSString class]]) {
+        
+    }
+    else if ([value isKindOfClass:[NSNumber class]]) {
+        if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberPrompt) {
+            return [self compareToNumber:value withComparison:comparison];
+        }
+    }
+    else if ([value isKindOfClass:[self class]]) {
+        return [((OHMSurveyPromptResponse *)value).promptResponseKey isEqualToString:self.promptResponseKey];
+    }
+    else {
+        return NO;
+    }
+    
+    return NO;
+}
+
+- (id)conditionValue
+{
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeMessage:
+            return self.surveyItem.text;
+        case OHMSurveyItemTypeNumberPrompt:
+            return self.numberValue;
+        case OHMSurveyItemTypeTextPrompt:
+            return self.stringValue;
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+            return nil;//[self choiceConditionValue];
+        default:
+            return nil;
+    }
+}
 
 @end

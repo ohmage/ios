@@ -63,6 +63,8 @@
 		1E70097F18CA6F8700203990 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E70096718CA6F8700203990 /* UIKit.framework */; };
 		1E70098718CA6F8700203990 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E70098518CA6F8700203990 /* InfoPlist.strings */; };
 		1E70098918CA6F8700203990 /* ohmage_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70098818CA6F8700203990 /* ohmage_iosTests.m */; };
+		1E88257A1919C4C90034D231 /* libPEGKitIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8825711919C3960034D231 /* libPEGKitIOS.a */; };
+		1E88257D1919CC0F0034D231 /* OHMConditionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88257C1919CC0F0034D231 /* OHMConditionParser.m */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -98,6 +100,48 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1E70095F18CA6F8700203990;
 			remoteInfo = ohmage_ios;
+		};
+		1E88256C1919C3960034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D3F8A48D175817DF00056188;
+			remoteInfo = PEGKit;
+		};
+		1E88256E1919C3960034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D366C55418D1F29D00AF3EFB;
+			remoteInfo = libPEGKitOSX;
+		};
+		1E8825701919C3960034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D317C12B18D1F5EB0036BE75;
+			remoteInfo = libPEGKitIOS;
+		};
+		1E8825721919C3960034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D37D8DC61571A4F700CDB822;
+			remoteInfo = PEGKitTests;
+		};
+		1E8825741919C3960034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D338302F171C923700CCE513;
+			remoteInfo = ParserGenApp;
+		};
+		1E8825771919C4660034D231 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D317C12A18D1F5EB0036BE75;
+			remoteInfo = libPEGKitIOS;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -178,6 +222,11 @@
 		1E70098418CA6F8700203990 /* ohmage_iosTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ohmage_iosTests-Info.plist"; sourceTree = "<group>"; };
 		1E70098618CA6F8700203990 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E70098818CA6F8700203990 /* ohmage_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ohmage_iosTests.m; sourceTree = "<group>"; };
+		1E8824F51919BEA30034D231 /* PEGKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PEGKit.framework; path = external/PEGKit.framework; sourceTree = "<group>"; };
+		1E8824F71919BF0B0034D231 /* libPEGKitIOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPEGKitIOS.a; path = external/libPEGKitIOS.a; sourceTree = "<group>"; };
+		1E8825641919C3960034D231 /* PEGKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PEGKit.xcodeproj; path = external/pegkit/PEGKit.xcodeproj; sourceTree = "<group>"; };
+		1E88257B1919CC0F0034D231 /* OHMConditionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMConditionParser.h; sourceTree = "<group>"; };
+		1E88257C1919CC0F0034D231 /* OHMConditionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMConditionParser.m; sourceTree = "<group>"; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -234,6 +283,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E88257A1919C4C90034D231 /* libPEGKitIOS.a in Frameworks */,
 				1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */,
 				1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */,
 				1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */,
@@ -364,6 +414,7 @@
 		1E70095718CA6F8700203990 = {
 			isa = PBXGroup;
 			children = (
+				1E8825641919C3960034D231 /* PEGKit.xcodeproj */,
 				1EAECA5A18EB40CC00035BDF /* notes */,
 				1E70096918CA6F8700203990 /* ohmage_ios */,
 				1E70098218CA6F8700203990 /* ohmage_iosTests */,
@@ -384,6 +435,8 @@
 		1E70096218CA6F8700203990 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E8824F71919BF0B0034D231 /* libPEGKitIOS.a */,
+				1E8824F51919BEA30034D231 /* PEGKit.framework */,
 				1E56A3381913354200384AE9 /* CoreLocation.framework */,
 				1EAD55A618D27B4F00B55028 /* QuartzCore.framework */,
 				1EAD55A418D27B4800B55028 /* MapKit.framework */,
@@ -439,6 +492,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1E8825651919C3960034D231 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E88256D1919C3960034D231 /* PEGKit.framework */,
+				1E88256F1919C3960034D231 /* libPEGKitOSX.a */,
+				1E8825711919C3960034D231 /* libPEGKitIOS.a */,
+				1E8825731919C3960034D231 /* PEGKitTests.xctest */,
+				1E8825751919C3960034D231 /* ParserGenApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		1EAD557F18D1567900B55028 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -481,6 +546,8 @@
 				1ECA87EA190DBB8D00429D5D /* OHMPromptCondition.m */,
 				1E3C80F0191083DA0088D2D0 /* OHMReminder.h */,
 				1E3C80F1191083DA0088D2D0 /* OHMReminder.m */,
+				1E88257B1919CC0F0034D231 /* OHMConditionParser.h */,
+				1E88257C1919CC0F0034D231 /* OHMConditionParser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -539,6 +606,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1E8825781919C4660034D231 /* PBXTargetDependency */,
 			);
 			name = ohmage_ios;
 			productName = ohmage_ios;
@@ -588,6 +656,12 @@
 			mainGroup = 1E70095718CA6F8700203990;
 			productRefGroup = 1E70096118CA6F8700203990 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1E8825651919C3960034D231 /* Products */;
+					ProjectRef = 1E8825641919C3960034D231 /* PEGKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1E70095F18CA6F8700203990 /* ohmage_ios */,
@@ -596,6 +670,44 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1E88256D1919C3960034D231 /* PEGKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PEGKit.framework;
+			remoteRef = 1E88256C1919C3960034D231 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1E88256F1919C3960034D231 /* libPEGKitOSX.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPEGKitOSX.a;
+			remoteRef = 1E88256E1919C3960034D231 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1E8825711919C3960034D231 /* libPEGKitIOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPEGKitIOS.a;
+			remoteRef = 1E8825701919C3960034D231 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1E8825731919C3960034D231 /* PEGKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PEGKitTests.xctest;
+			remoteRef = 1E8825721919C3960034D231 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1E8825751919C3960034D231 /* ParserGenApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = ParserGenApp.app;
+			remoteRef = 1E8825741919C3960034D231 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1E70095E18CA6F8700203990 /* Resources */ = {
@@ -645,6 +757,7 @@
 				1E70097018CA6F8700203990 /* main.m in Sources */,
 				1E1B60F519063392001046E0 /* _OHMOhmlet.m in Sources */,
 				1E1B60CF19063242001046E0 /* OHMUser.m in Sources */,
+				1E88257D1919CC0F0034D231 /* OHMConditionParser.m in Sources */,
 				1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */,
 				1E1B610519099B07001046E0 /* OHMAppConstants.m in Sources */,
 				1E1B60FA19063392001046E0 /* _OHMSurveyResponse.m in Sources */,
@@ -711,6 +824,11 @@
 			isa = PBXTargetDependency;
 			target = 1E70095F18CA6F8700203990 /* ohmage_ios */;
 			targetProxy = 1E70098018CA6F8700203990 /* PBXContainerItemProxy */;
+		};
+		1E8825781919C4660034D231 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libPEGKitIOS;
+			targetProxy = 1E8825771919C4660034D231 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -826,14 +944,23 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/external/pegkit/include",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"external/tapkulibrary-master/src",
 				);
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";
@@ -847,14 +974,23 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Charles Forkish (N6LPGP6RYT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/external/pegkit/include",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"external/tapkulibrary-master/src",
 				);
 				INFOPLIST_FILE = "ohmage_ios/ohmage_ios-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";

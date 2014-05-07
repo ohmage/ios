@@ -33,7 +33,7 @@
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
     }
     
-    [OHMPromptCondition test];
+    [[OHMPromptCondition alloc] initWithConditionString:nil];
     
     return YES;
 }

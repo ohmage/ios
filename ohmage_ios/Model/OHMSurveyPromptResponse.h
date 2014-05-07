@@ -7,4 +7,6 @@
 
 - (void)initializeDefaultResonse;
 
+- (BOOL)compareToConditionValue:(id)value withComparison:(NSString *)comparison;
+
 @end

@@ -10,8 +10,6 @@
 
 @interface OHMPromptCondition : NSObject
 
-+ (void)test;
-
 - (instancetype)initWithConditionString:(NSString *)conditionString;
 
 @end
