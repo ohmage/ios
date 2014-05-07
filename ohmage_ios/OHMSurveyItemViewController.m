@@ -123,6 +123,15 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // in case item originally failed condition
+    // but this time passed condiction, clear notDisplayed flag
+    self.promptResponse.notDisplayedValue = NO;
+}
+
 - (void)setupForModalPresentation
 {
     if (self.itemIndex > 0 && [[self.navigationController.viewControllers firstObject] isEqual:self]) {
@@ -453,10 +462,15 @@
         [self.promptResponse removeSelectedChoicesObject:choice];
     }
     else {
+        if (self.item.itemTypeValue == OHMSurveyItemTypeNumberSingleChoicePrompt
+            || self.item.itemTypeValue == OHMSurveyItemTypeStringSingleChoicePrompt) {
+            [self.promptResponse.selectedChoicesSet removeAllObjects];
+        }
         [self.promptResponse addSelectedChoicesObject:choice];
     }
     self.nextButton.enabled = [self validateChoices];
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (BOOL)validateChoices

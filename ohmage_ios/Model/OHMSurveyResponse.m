@@ -86,7 +86,7 @@
 	id tok = [match pop];
     BOOL result = [self evaluateToken:tok];
     
-    NSLog(@"did match OrExpr with result: %d, match: %@", result, match);
+//    NSLog(@"did match OrExpr with result: %d, match: %@", result, match);
     [match push:[NSNumber numberWithBool:result]];
 }
 
@@ -97,13 +97,13 @@
 	id tok = [match pop];
     BOOL result = [self evaluateToken:tok];
     
-    NSLog(@"did match AndExpr with result: %d, match: %@", result, match);
+//    NSLog(@"did match AndExpr with result: %d, match: %@", result, match);
     [match push:[NSNumber numberWithBool:result]];
 }
 
 - (void)parser:(OHMConditionParser *)parser didMatchOrTerm:(PKAssembly *)match
 {
-    NSLog(@"did match ORterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+//    NSLog(@"did match ORterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
     
 	id rhs = [match pop];
     id lhs = [match pop];
@@ -116,13 +116,13 @@
         result = [self evaluateToken:rhs];
     }
     
-    NSLog(@"did match ORterm with result: %d, match: %@", result, match);
+//    NSLog(@"did match ORterm with result: %d, match: %@", result, match);
     [match push:[NSNumber numberWithBool:result]];
 }
 
 - (void)parser:(OHMConditionParser *)parser didMatchAndTerm:(PKAssembly *)match
 {
-    NSLog(@"did match ANDterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
+//    NSLog(@"did match ANDterm with stack size: %lu, match: %@", (unsigned long)[match.stack count], match);
     
 	id rhs = [match pop];
     id lhs = [match pop];
@@ -135,7 +135,7 @@
         result = [self evaluateToken:rhs];
     }
     
-    NSLog(@"did match ANDterm with result: %d, match: %@", result, match);
+//    NSLog(@"did match ANDterm with result: %d, match: %@", result, match);
     [match push:[NSNumber numberWithBool:result]];
 }
 
@@ -180,14 +180,14 @@
         else if (EQ(op, @"<=")) result = (lhNumber <= rhNumber);
         else if (EQ(op, @">=")) result = (lhNumber >= rhNumber);
     }
-    NSLog(@"lhs: %@, rhs: %@, op: %@ result: %d", lhs, rhs, op, result);
+//    NSLog(@"lhs: %@, rhs: %@, op: %@ result: %d", lhs, rhs, op, result);
     [match push:[NSNumber numberWithBool:result]];
 }
 
 
 - (void)parser:(OHMConditionParser *)parser didMatchOhmID:(PKAssembly *)result
 {
-    NSLog(@"did match ID: %@", result);
+//    NSLog(@"did match ID: %@", result);
     PKToken *promptIDToken = [result pop];
     OHMSurveyPromptResponse *matchedResponse = [self promptResponseForItemID:[promptIDToken stringValue]];
 //    NSLog(@"promptID: %@, match: %@", promptIDToken, matchedResponse);
