@@ -15,23 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "338"
             endingLineNumber = "338"
-            landmarkName = "-__primary"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ohmage_ios/Model/OHMSurveyResponse.m"
-            timestampString = "421189700.34041"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "-parser:didMatchRelOpTerm:"
+            landmarkName = "-__literal"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,22 +32,6 @@
             startingLineNumber = "385"
             endingLineNumber = "385"
             landmarkName = "-pushNextItemViewController"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ohmage_ios/Model/OHMSurveyResponse.m"
-            timestampString = "421189700.34041"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "-parser:didMatchAndTerm:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

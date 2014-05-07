@@ -13,8 +13,6 @@
 @property (nonatomic, retain) NSMutableDictionary *relExpr_memo;
 @property (nonatomic, retain) NSMutableDictionary *relOpTerm_memo;
 @property (nonatomic, retain) NSMutableDictionary *relOp_memo;
-@property (nonatomic, retain) NSMutableDictionary *callExpr_memo;
-@property (nonatomic, retain) NSMutableDictionary *argList_memo;
 @property (nonatomic, retain) NSMutableDictionary *primary_memo;
 @property (nonatomic, retain) NSMutableDictionary *atom_memo;
 @property (nonatomic, retain) NSMutableDictionary *ohmID_memo;
@@ -27,7 +25,6 @@
 @property (nonatomic, retain) NSMutableDictionary *ge_memo;
 @property (nonatomic, retain) NSMutableDictionary *openParen_memo;
 @property (nonatomic, retain) NSMutableDictionary *closeParen_memo;
-@property (nonatomic, retain) NSMutableDictionary *comma_memo;
 @property (nonatomic, retain) NSMutableDictionary *or_memo;
 @property (nonatomic, retain) NSMutableDictionary *and_memo;
 @property (nonatomic, retain) NSMutableDictionary *not_memo;
@@ -44,7 +41,6 @@
         self.startRuleName = @"expr";
         self.tokenKindTab[@">="] = @(OHMCONDITIONPARSER_TOKEN_KIND_GE);
         self.tokenKindTab[@"=="] = @(OHMCONDITIONPARSER_TOKEN_KIND_EQ);
-        self.tokenKindTab[@","] = @(OHMCONDITIONPARSER_TOKEN_KIND_COMMA);
         self.tokenKindTab[@"<"] = @(OHMCONDITIONPARSER_TOKEN_KIND_LT);
         self.tokenKindTab[@"<="] = @(OHMCONDITIONPARSER_TOKEN_KIND_LE);
         self.tokenKindTab[@"OR"] = @(OHMCONDITIONPARSER_TOKEN_KIND_OR);
@@ -59,7 +55,6 @@
 
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_GE] = @">=";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_EQ] = @"==";
-        self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_COMMA] = @",";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LT] = @"<";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_LE] = @"<=";
         self.tokenKindNameTab[OHMCONDITIONPARSER_TOKEN_KIND_OR] = @"OR";
@@ -81,8 +76,6 @@
         self.relExpr_memo = [NSMutableDictionary dictionary];
         self.relOpTerm_memo = [NSMutableDictionary dictionary];
         self.relOp_memo = [NSMutableDictionary dictionary];
-        self.callExpr_memo = [NSMutableDictionary dictionary];
-        self.argList_memo = [NSMutableDictionary dictionary];
         self.primary_memo = [NSMutableDictionary dictionary];
         self.atom_memo = [NSMutableDictionary dictionary];
         self.ohmID_memo = [NSMutableDictionary dictionary];
@@ -95,7 +88,6 @@
         self.ge_memo = [NSMutableDictionary dictionary];
         self.openParen_memo = [NSMutableDictionary dictionary];
         self.closeParen_memo = [NSMutableDictionary dictionary];
-        self.comma_memo = [NSMutableDictionary dictionary];
         self.or_memo = [NSMutableDictionary dictionary];
         self.and_memo = [NSMutableDictionary dictionary];
         self.not_memo = [NSMutableDictionary dictionary];
@@ -115,8 +107,6 @@
     [_relExpr_memo removeAllObjects];
     [_relOpTerm_memo removeAllObjects];
     [_relOp_memo removeAllObjects];
-    [_callExpr_memo removeAllObjects];
-    [_argList_memo removeAllObjects];
     [_primary_memo removeAllObjects];
     [_atom_memo removeAllObjects];
     [_ohmID_memo removeAllObjects];
@@ -129,7 +119,6 @@
     [_ge_memo removeAllObjects];
     [_openParen_memo removeAllObjects];
     [_closeParen_memo removeAllObjects];
-    [_comma_memo removeAllObjects];
     [_or_memo removeAllObjects];
     [_and_memo removeAllObjects];
     [_not_memo removeAllObjects];
@@ -175,7 +164,6 @@
     [self orExpr_]; 
     [self execute:^{
     
-        NSLog(@"NEGterm: %@", self.assembly);
 	BOOL rhs = POP_BOOL();
 	PUSH_BOOL(!rhs);
 
@@ -242,15 +230,10 @@
 
 - (void)__relExpr {
     
-    [self callExpr_]; 
+    [self primary_]; 
     while ([self speculate:^{ [self relOpTerm_]; }]) {
         [self relOpTerm_]; 
     }
-    [self execute:^{
-    
-    NSLog(@"RELexpr");
-
-    }];
 
     [self fireDelegateSelector:@selector(parser:didMatchRelExpr:)];
 }
@@ -262,12 +245,7 @@
 - (void)__relOpTerm {
     
     [self relOp_]; 
-    [self callExpr_]; 
-    [self execute:^{
-    
-    NSLog(@"RELopTerm");
-
-    }];
+    [self primary_]; 
 
     [self fireDelegateSelector:@selector(parser:didMatchRelOpTerm:)];
 }
@@ -301,39 +279,6 @@
     [self parseRule:@selector(__relOp) withMemo:_relOp_memo];
 }
 
-- (void)__callExpr {
-    
-    [self primary_]; 
-    if ([self speculate:^{ [self openParen_]; if ([self speculate:^{ [self argList_]; }]) {[self argList_]; }[self closeParen_]; }]) {
-        [self openParen_]; 
-        if ([self speculate:^{ [self argList_]; }]) {
-            [self argList_]; 
-        }
-        [self closeParen_]; 
-    }
-
-    [self fireDelegateSelector:@selector(parser:didMatchCallExpr:)];
-}
-
-- (void)callExpr_ {
-    [self parseRule:@selector(__callExpr) withMemo:_callExpr_memo];
-}
-
-- (void)__argList {
-    
-    [self atom_]; 
-    while ([self speculate:^{ [self comma_]; [self atom_]; }]) {
-        [self comma_]; 
-        [self atom_]; 
-    }
-
-    [self fireDelegateSelector:@selector(parser:didMatchArgList:)];
-}
-
-- (void)argList_ {
-    [self parseRule:@selector(__argList) withMemo:_argList_memo];
-}
-
 - (void)__primary {
     
     if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED, OHMCONDITIONPARSER_TOKEN_KIND_SKIPPED, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, TOKEN_KIND_BUILTIN_WORD, 0]) {
@@ -363,11 +308,6 @@
         [self skipped_]; 
     } else if ([self predicts:OHMCONDITIONPARSER_TOKEN_KIND_NOTDISPLAYED, 0]) {
         [self notDisplayed_]; 
-        [self execute:^{
-        
-    NSLog(@"ATOM");
-
-        }];
     } else {
         [self raise:@"No viable alternative found in rule 'atom'."];
     }
@@ -499,17 +439,6 @@
 
 - (void)closeParen_ {
     [self parseRule:@selector(__closeParen) withMemo:_closeParen_memo];
-}
-
-- (void)__comma {
-    
-    [self match:OHMCONDITIONPARSER_TOKEN_KIND_COMMA discard:NO]; 
-
-    [self fireDelegateSelector:@selector(parser:didMatchComma:)];
-}
-
-- (void)comma_ {
-    [self parseRule:@selector(__comma) withMemo:_comma_memo];
 }
 
 - (void)__or {
