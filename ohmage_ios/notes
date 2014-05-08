@@ -45,6 +45,54 @@ https://github.com/ohmage/server/wiki/3.x%20People%20APIs
 
 For the ohmlet features, we should talk through again. Basically the standard use case for 3.0 is that a user can only belong to one ohmlet at a time.
 
+Here is some quick documentation for uploading surveys.
+
+For media responses, the server should return the IDs back to you and then you can read them back using the media read API call, which also needs to be documented.
+
+The request is a POST to the following URL https://dev.ohmage.org/ohmage/<survey_id>/<survey_version>/data.
+
+The body is similar to the ohmlet creation POST body. https://github.com/ohmage/server/wiki/3.x%20Ohmlet%20APIs#example-request-with-an-icon
+
+The first part is the survey response JSON must be called "data". The second and any other following media part must be called "media". The Content-Disposition for each media file part must contain a filename string where the string value is the ID of a media prompt response.
+
+The JSON data is an array of responses where each response has a metadata and a data object. (The meta_data key is incorrect and needs to be renamed to metadata. The location object is optional. Either timestamp or timestamp_millis should be present.)
+
+{
+    "meta_data": {
+    "id":"A string that is a unique ID for this point.",
+    "timestamp":"A W3C-formatted ISO 8601 date",
+    "timestamp_millis":"Milliseconds since the UNIX epoch",
+    "location" :  {
+        "longitude": a valid float for longitude,
+        "latitiude": a valid float for latitude,
+        "accuracy": the accuracy in meters for the GPS lock,
+        "time": the milliseconds since the UNIX epoch indicating when the location was obtained
+    }
+},
+"data" : {
+    "myStringMultiChoicePrompt" : [
+        "foo",
+        "bar"
+    ],
+    "myVideo" : "78ee0524-c8f6-4ce6-aba3-026e8fcc330c",
+    "myImage" : "0daad9d9-3a02-4920-acfb-dcd5a230fc35",
+    "myNumberSingleChoicePrompt" : 1,
+    "myRemoteActivity" : {
+
+    },
+    "myAudio" : "a7b87520-a519-45ea-8d45-2debc642634d",
+    "myTimestamp" : "2014-03-06",
+    "myText" : "text",
+    "myNumber" : 2,
+    "myNumberMultiChoicePrompt" : [
+        2,
+        1
+    ],
+    "myStringSingleChoicePrompt" : "foo"
+}
+
+---------------
+
 
     "survey_items": [
         {

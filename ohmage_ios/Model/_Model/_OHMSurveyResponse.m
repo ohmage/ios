@@ -4,6 +4,7 @@
 #import "_OHMSurveyResponse.h"
 
 const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
+	.ohmID = @"ohmID",
 	.submitted = @"submitted",
 	.timestamp = @"timestamp",
 };
@@ -50,6 +51,13 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic ohmID;
+
+
 
 
 

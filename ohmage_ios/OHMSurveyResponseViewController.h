@@ -14,6 +14,6 @@
 
 - (instancetype)initWithSurveyResponse:(OHMSurveyResponse *)response;
 
-- (void)setupSubmitHeader;
+//- (void)setupSubmitHeader;
 
 @end

@@ -54,12 +54,10 @@
     self.tableView.tableHeaderView = headerView;
 }
 
-
-
 - (void)submitButtonPressed:(id)sender
 {
     self.response.timestamp = [NSDate date];
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMClient sharedClient] submitSurveyResponse:self.response];
     
     UIViewController *vc = self.navigationController.viewControllers[1];
     if (![vc isKindOfClass:[OHMSurveyDetailViewController class]]) {

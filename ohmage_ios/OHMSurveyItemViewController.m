@@ -393,7 +393,7 @@
     }
     else {
         OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:self.surveyResponse];
-        [vc setupSubmitHeader];
+//        [vc setupSubmitHeader];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

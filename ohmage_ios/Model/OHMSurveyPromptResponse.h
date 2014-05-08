@@ -6,7 +6,6 @@
 @property (nonatomic, copy) NSURL *videoURL;
 
 - (void)initializeDefaultResonse;
-
-- (BOOL)compareToConditionValue:(id)value withComparison:(NSString *)comparison isRHS:(BOOL)isRHS;
+- (id)jsonVal;
 
 @end

@@ -5,6 +5,7 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyResponseAttributes {
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *submitted;
 	__unsafe_unretained NSString *timestamp;
 } OHMSurveyResponseAttributes;
@@ -23,6 +24,7 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
+
 @interface OHMSurveyResponseID : NSManagedObjectID {}
 @end
 
@@ -31,6 +33,16 @@ extern const struct OHMSurveyResponseFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyResponseID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -87,6 +99,12 @@ extern const struct OHMSurveyResponseFetchedProperties {
 @end
 
 @interface _OHMSurveyResponse (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
+
+
 
 
 - (NSNumber*)primitiveSubmitted;

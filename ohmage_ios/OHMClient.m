@@ -56,13 +56,17 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     self = [super initWithBaseURL:url];
     
     if (self) {
-        self.responseSerializer = [AFJSONResponseSerializer serializer];
+        self.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        NSMutableSet *contentTypes = [self.responseSerializer.acceptableContentTypes mutableCopy];
+        [contentTypes addObject:@"text/plain"];
+        self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-//        [[AFNetworkActivityLogger sharedLogger] startLogging];
+        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
+            [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
         }
     }
     
@@ -150,6 +154,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (void)setAuthorizationToken:(NSString *)token
 {
+    NSLog(@"set auth token: %@", token);
     if (token) {
         [self.requestSerializer setValue:[@"ohmage " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
     }
@@ -170,55 +175,29 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }];
 }
 
+- (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+   completionBlock:(void (^)(NSDictionary *, NSError *))block
+{
+    [self POST:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSLog(@"POST %@ Succeeded", request);
+        block((NSDictionary *)responseObject, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"POST %@ Failed, task: %@, response: %@", request, task, task.response);
+        block(nil, error);
+    }];
+}
+
 - (void)submitSurveyResponse:(OHMSurveyResponse *)response
 {
-//    NSDictionary *responseJSON = @[
-//    {
-//        "meta_data": {
-//            "id":"uid1",
-//            "timestamp": null,
-//            "timestamp_millis":"1399320427000",
-//            "location" :  null
-//        },
-//        "data" : {
-//            "min": [
-//                    2,
-//                    1
-//                    ],
-//            "minMax": [
-//                       3,
-//                       2
-//                       ],
-//            "defaultSingle": [
-//                              2
-//                              ],
-//            "max": [
-//                    3,
-//                    2
-//                    ],
-//            "minDefault": [
-//                           2,
-//                           1
-//                           ],
-//            "basicMultiple": [
-//                              2
-//                              ],
-//            "minMaxDefault": [
-//                              3,
-//                              1
-//                              ],
-//            "defaultMultiple": [
-//                                2
-//                                ],
-//            "basicSingle": [
-//                            1
-//                            ],
-//            "maxDefault": [
-//                           2
-//                           ]
-//        }
-//    }
-//                                  ]
+    NSLog(@"submit response: %@", [response JSON]);
+    
+    NSArray *submissions = @[response.JSON];
+    
+    [self postRequest:response.uploadResquestUrlString withParameters:(NSDictionary *)submissions completionBlock:^(NSDictionary *response, NSError *error) {
+        NSLog(@"completion block for survey submission with response: %@, error: %@", response, error);
+    }];
+    
+    [self saveClientState];
 }
 
 - (void)refreshUserInfo
