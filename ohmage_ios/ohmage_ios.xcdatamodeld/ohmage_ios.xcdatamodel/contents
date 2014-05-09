@@ -66,7 +66,7 @@
     </entity>
     <entity name="OHMSurveyPromptResponse" representedClassName="OHMSurveyPromptResponse" syncable="YES">
         <attribute name="notDisplayed" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="numberValue" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="numberValue" optional="YES" attributeType="Double" syncable="YES"/>
         <attribute name="ohmID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="skipped" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="stringValue" optional="YES" attributeType="String" syncable="YES"/>
@@ -77,8 +77,9 @@
     </entity>
     <entity name="OHMSurveyResponse" representedClassName="OHMSurveyResponse" syncable="YES">
         <attribute name="ohmID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="submitted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="submissionConfirmed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="timestamp" attributeType="Date" syncable="YES"/>
+        <attribute name="userSubmitted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <relationship name="promptResponses" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="OHMSurveyPromptResponse" inverseName="surveyResponse" inverseEntity="OHMSurveyPromptResponse" syncable="YES"/>
         <relationship name="survey" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="surveyResponses" inverseEntity="OHMSurvey" syncable="YES"/>
     </entity>
@@ -97,7 +98,7 @@
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="330"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="178"/>
-        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="120"/>
+        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="133"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="133"/>
     </elements>
 </model>

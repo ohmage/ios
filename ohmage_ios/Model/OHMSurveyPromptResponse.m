@@ -82,7 +82,10 @@
 - (NSURL *)audioURL
 {
     if (_audioURL == nil) {
-        _audioURL = [[OHMMediaStore sharedStore] audioURLForKey:self.ohmID];
+        NSURL *url = [[OHMMediaStore sharedStore] audioURLForKey:self.ohmID];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+            _audioURL = url;
+        }
     }
     return _audioURL;
 }
@@ -125,7 +128,7 @@
         if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberMultiChoicePrompt) {
             [valArray addObject:[(OHMSurveyPromptChoice *)obj numberValue]];
         }
-        else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberMultiChoicePrompt) {
+        else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeStringMultiChoicePrompt) {
             [valArray addObject:[(OHMSurveyPromptChoice *)obj stringValue]];
         }
     }];
@@ -139,10 +142,10 @@
     }
     
     if (self.skippedValue) {
-        return @"SKIPPED";
+        return nil;// @"SKIPPED";
     }
     else if (self.notDisplayedValue) {
-        return @"NOT_DISPLAYED";
+        return nil;// @"NOT_DISPLAYED";
     }
     else {
         switch (self.surveyItem.itemTypeValue) {
@@ -162,7 +165,7 @@
             case OHMSurveyItemTypeImagePrompt:
             case OHMSurveyItemTypeVideoPrompt:
             case OHMSurveyItemTypeAudioPrompt:
-                return self.ohmID;
+                return nil;// self.ohmID;
             default:
                 return nil;
         }

@@ -5,8 +5,9 @@
 
 const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
 	.ohmID = @"ohmID",
-	.submitted = @"submitted",
+	.submissionConfirmed = @"submissionConfirmed",
 	.timestamp = @"timestamp",
+	.userSubmitted = @"userSubmitted",
 };
 
 const struct OHMSurveyResponseRelationships OHMSurveyResponseRelationships = {
@@ -43,8 +44,13 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"submittedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"submitted"];
+	if ([key isEqualToString:@"submissionConfirmedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"submissionConfirmed"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"userSubmittedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"userSubmitted"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -62,26 +68,26 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 
 
 
-@dynamic submitted;
+@dynamic submissionConfirmed;
 
 
 
-- (BOOL)submittedValue {
-	NSNumber *result = [self submitted];
+- (BOOL)submissionConfirmedValue {
+	NSNumber *result = [self submissionConfirmed];
 	return [result boolValue];
 }
 
-- (void)setSubmittedValue:(BOOL)value_ {
-	[self setSubmitted:[NSNumber numberWithBool:value_]];
+- (void)setSubmissionConfirmedValue:(BOOL)value_ {
+	[self setSubmissionConfirmed:[NSNumber numberWithBool:value_]];
 }
 
-- (BOOL)primitiveSubmittedValue {
-	NSNumber *result = [self primitiveSubmitted];
+- (BOOL)primitiveSubmissionConfirmedValue {
+	NSNumber *result = [self primitiveSubmissionConfirmed];
 	return [result boolValue];
 }
 
-- (void)setPrimitiveSubmittedValue:(BOOL)value_ {
-	[self setPrimitiveSubmitted:[NSNumber numberWithBool:value_]];
+- (void)setPrimitiveSubmissionConfirmedValue:(BOOL)value_ {
+	[self setPrimitiveSubmissionConfirmed:[NSNumber numberWithBool:value_]];
 }
 
 
@@ -90,6 +96,32 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 
 @dynamic timestamp;
 
+
+
+
+
+
+@dynamic userSubmitted;
+
+
+
+- (BOOL)userSubmittedValue {
+	NSNumber *result = [self userSubmitted];
+	return [result boolValue];
+}
+
+- (void)setUserSubmittedValue:(BOOL)value_ {
+	[self setUserSubmitted:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveUserSubmittedValue {
+	NSNumber *result = [self primitiveUserSubmitted];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveUserSubmittedValue:(BOOL)value_ {
+	[self setPrimitiveUserSubmitted:[NSNumber numberWithBool:value_]];
+}
 
 
 

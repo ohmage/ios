@@ -92,7 +92,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         [self setupAudioRecorder];
     }
     
-    if (self.promptResponse.imageValue != nil) {
+    if ([self itemNeedsImageView]) {
         self.imageView.image = self.promptResponse.imageValue;
     }
 }
@@ -221,6 +221,16 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     return (self.item.itemTypeValue == OHMSurveyItemTypeAudioPrompt);
 }
 
+- (BOOL)itemNeedsImageView
+{
+    if (self.item.itemTypeValue == OHMSurveyItemTypeImagePrompt || self.item.itemTypeValue == OHMSurveyItemTypeVideoPrompt) {
+        return self.promptResponse.imageValue != nil;
+    }
+    else {
+        return NO;
+    }
+}
+
 
 #pragma mark - Setup
 
@@ -291,8 +301,14 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         self.numberPlusMinusControl = plusMinusControl;
     }
     
-    if (self.item.defaultNumberResponse != nil) {
-        textField.text = [NSString stringWithFormat:@"%g", [self.item.defaultNumberResponse doubleValue]];
+    if (self.promptResponse.numberValue != nil) {
+        textField.text = [NSString stringWithFormat:@"%g", self.promptResponse.numberValueValue];
+    }
+    else if (self.promptResponse.stringValue != nil) {
+        textField.text = self.promptResponse.stringValue;
+    }
+    else if (self.item.defaultNumberResponse != nil) {
+        textField.text = [NSString stringWithFormat:@"%g", self.item.defaultNumberResponseValue];
     }
     else if (self.item.defaultStringResponse != nil) {
         textField.text = self.item.defaultStringResponse;

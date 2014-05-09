@@ -10,6 +10,13 @@
 
 @interface NSDictionary (Ohmage)
 
+@property (nonatomic, readonly) NSArray *jsonArray;
+
+@property (nonatomic, readonly) NSDictionary *surveyResponseMetadata;
+@property (nonatomic, readonly) NSDictionary *surveyResponseData;
+@property (nonatomic, readonly) NSString *surveyResponseID;
+@property (nonatomic, readonly) NSString *surveyResponseTimestamp;
+
 - (NSString *)authToken;
 - (NSString *)refreshToken;
 - (NSString *)userID;
@@ -50,5 +57,14 @@
 - (NSString *)surveyPromptChoiceStringValue;
 - (NSNumber *)surveyPromptChoiceNumberValue;
 
+@end
+
+
+@interface NSMutableDictionary (Ohmage)
+
+@property (nonatomic, copy) NSDictionary *surveyResponseMetadata;
+@property (nonatomic, copy) NSDictionary *surveyResponseData;
+@property (nonatomic, copy) NSString *surveyResponseID;
+@property (nonatomic, copy) NSString *surveyResponseTimestamp;
 
 @end

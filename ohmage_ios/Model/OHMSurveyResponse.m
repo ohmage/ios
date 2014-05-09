@@ -51,8 +51,8 @@
 - (NSDictionary *)JSON
 {
     NSMutableDictionary *metadata = [NSMutableDictionary dictionary];
-    metadata[@"id"] = self.ohmID;
-    metadata[@"timestamp_millis"] = @(self.timestamp.timeIntervalSince1970 * 1000);
+    metadata.surveyResponseID = self.ohmID;
+    metadata.surveyResponseTimestamp = self.timestamp.ISO8601String;
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     [self.promptResponses enumerateObjectsUsingBlock:^(OHMSurveyPromptResponse *promptResponse, NSUInteger idx, BOOL *stop) {
@@ -62,7 +62,12 @@
         }
     }];
     
-    return @{@"meta_data" : metadata, @"data" : data};
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+    json.surveyResponseMetadata = metadata;
+    json.surveyResponseData = data;
+    return json;
+    
+//    return @{@"meta_data" : metadata, @"data" : data};
 }
 
 - (NSString *)uploadResquestUrlString

@@ -10,7 +10,10 @@
 
 @implementation NSDictionary (Ohmage)
 
-
+- (NSArray *)jsonArray
+{
+    return @[self];
+}
 
 - (id)nonNullValueForKey:(NSString *)key
 {
@@ -216,5 +219,49 @@
     return [self nonNullValueForKey:@"value"];
 }
 
+- (NSDictionary *)surveyResponseMetadata
+{
+    return [self nonNullValueForKey:@"meta_data"];
+}
+
+- (NSDictionary *)surveyResponseData
+{
+    return [self nonNullValueForKey:@"data"];
+}
+
+- (NSString *)surveyResponseID
+{
+    return [self nonNullValueForKey:@"id"];
+}
+
+- (NSString *)surveyResponseTimestamp
+{
+    return [self nonNullValueForKey:@"timestamp"];
+}
+
+@end
+
+
+@implementation NSMutableDictionary (Ohmage)
+
+- (void)setSurveyResponseMetadata:(NSDictionary *)metadata
+{
+    self[@"meta_data"] = metadata;
+}
+
+- (void)setSurveyResponseData:(NSDictionary *)data
+{
+    self[@"data"] = data;
+}
+
+- (void)setSurveyResponseID:(NSString *)surveyResponseID
+{
+    self[@"id"] = surveyResponseID;
+}
+
+- (void)setSurveyResponseTimestamp:(NSString *)surveyResponseTimestamp
+{
+    self[@"timestamp"] = surveyResponseTimestamp;
+}
 
 @end

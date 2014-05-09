@@ -187,14 +187,28 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }];
 }
 
-- (void)submitSurveyResponse:(OHMSurveyResponse *)response
+- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
-    NSLog(@"submit response: %@", [response JSON]);
+    NSLog(@"submit response: %@", [surveyResponse JSON]);
     
-    NSArray *submissions = @[response.JSON];
+//    NSArray *submissions = @[response.JSON];
     
-    [self postRequest:response.uploadResquestUrlString withParameters:(NSDictionary *)submissions completionBlock:^(NSDictionary *response, NSError *error) {
-        NSLog(@"completion block for survey submission with response: %@, error: %@", response, error);
+    [self postRequest:surveyResponse.uploadResquestUrlString
+       withParameters:(NSDictionary *)[surveyResponse JSON].jsonArray
+      completionBlock:^(NSDictionary *response, NSError *error) {
+          NSLog(@"completion block for survey submission with response: %@, error: %@", response, error);
+          // response should actually be an array
+          if (![response isKindOfClass:[NSArray class]]) {
+              NSLog(@"Submitted survey response is not an array");
+              return;
+          }
+          NSArray *responseArray = (NSArray *)response;
+          NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
+          NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
+          NSLog(@"response matches submission: %d, submitted.id: %@, response.id: %@", [surveyResponse.ohmID isEqualToString:ohmId], surveyResponse.ohmID, ohmId);
+          if ([surveyResponse.ohmID isEqualToString:ohmId]) {
+              surveyResponse.submissionConfirmedValue = YES;
+          }
     }];
     
     [self saveClientState];

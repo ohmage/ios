@@ -40,7 +40,7 @@
     
     self.navigationItem.title = @"Survey Response";
 
-    if (!self.response.submittedValue) {
+    if (!self.response.userSubmittedValue) {
         [self setupSubmitHeader];
     }
 }
@@ -174,9 +174,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
+    if (self.response.userSubmittedValue) return;
+    
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:self.response atQuestionIndex:indexPath.row];
-//    [vc prepareForModalPresentation];
     UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:navCon animated:YES completion:nil];
     

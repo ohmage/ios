@@ -6,8 +6,9 @@
 
 extern const struct OHMSurveyResponseAttributes {
 	__unsafe_unretained NSString *ohmID;
-	__unsafe_unretained NSString *submitted;
+	__unsafe_unretained NSString *submissionConfirmed;
 	__unsafe_unretained NSString *timestamp;
+	__unsafe_unretained NSString *userSubmitted;
 } OHMSurveyResponseAttributes;
 
 extern const struct OHMSurveyResponseRelationships {
@@ -20,6 +21,7 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 @class OHMSurveyPromptResponse;
 @class OHMSurvey;
+
 
 
 
@@ -48,15 +50,15 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* submitted;
+@property (nonatomic, strong) NSNumber* submissionConfirmed;
 
 
 
-@property BOOL submittedValue;
-- (BOOL)submittedValue;
-- (void)setSubmittedValue:(BOOL)value_;
+@property BOOL submissionConfirmedValue;
+- (BOOL)submissionConfirmedValue;
+- (void)setSubmissionConfirmedValue:(BOOL)value_;
 
-//- (BOOL)validateSubmitted:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateSubmissionConfirmed:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -67,6 +69,20 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 //- (BOOL)validateTimestamp:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* userSubmitted;
+
+
+
+@property BOOL userSubmittedValue;
+- (BOOL)userSubmittedValue;
+- (void)setUserSubmittedValue:(BOOL)value_;
+
+//- (BOOL)validateUserSubmitted:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -107,17 +123,26 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
-- (NSNumber*)primitiveSubmitted;
-- (void)setPrimitiveSubmitted:(NSNumber*)value;
+- (NSNumber*)primitiveSubmissionConfirmed;
+- (void)setPrimitiveSubmissionConfirmed:(NSNumber*)value;
 
-- (BOOL)primitiveSubmittedValue;
-- (void)setPrimitiveSubmittedValue:(BOOL)value_;
+- (BOOL)primitiveSubmissionConfirmedValue;
+- (void)setPrimitiveSubmissionConfirmedValue:(BOOL)value_;
 
 
 
 
 - (NSDate*)primitiveTimestamp;
 - (void)setPrimitiveTimestamp:(NSDate*)value;
+
+
+
+
+- (NSNumber*)primitiveUserSubmitted;
+- (void)setPrimitiveUserSubmitted:(NSNumber*)value;
+
+- (BOOL)primitiveUserSubmittedValue;
+- (void)setPrimitiveUserSubmittedValue:(BOOL)value_;
 
 
 
