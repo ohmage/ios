@@ -12,8 +12,6 @@
 
 @interface OHMSurveyItemViewController : OHMBaseViewController
 
-+ (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index;
-
 @property (nonatomic, strong) UIToolbar *toolbar;
 @property (nonatomic, strong) UIBarButtonItem *backButton;
 @property (nonatomic, strong) UIBarButtonItem *skipButton;

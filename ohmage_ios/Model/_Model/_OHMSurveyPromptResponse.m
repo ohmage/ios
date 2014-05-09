@@ -6,9 +6,10 @@
 const struct OHMSurveyPromptResponseAttributes OHMSurveyPromptResponseAttributes = {
 	.notDisplayed = @"notDisplayed",
 	.numberValue = @"numberValue",
-	.promptResponseKey = @"promptResponseKey",
+	.ohmID = @"ohmID",
 	.skipped = @"skipped",
 	.stringValue = @"stringValue",
+	.timestampValue = @"timestampValue",
 };
 
 const struct OHMSurveyPromptResponseRelationships OHMSurveyPromptResponseRelationships = {
@@ -120,7 +121,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 
 
 
-@dynamic promptResponseKey;
+@dynamic ohmID;
 
 
 
@@ -154,6 +155,13 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 
 
 @dynamic stringValue;
+
+
+
+
+
+
+@dynamic timestampValue;
 
 
 

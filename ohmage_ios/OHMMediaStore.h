@@ -20,4 +20,8 @@
 - (NSURL *)videoURLForKey:(NSString *)key;
 - (void)deleteVideoForKey:(NSString *)key;
 
+- (void)setAudioWithURL:(NSURL *)tempAudioURL forKey:(NSString *)key;
+- (NSURL *)audioURLForKey:(NSString *)key;
+- (void)deleteAudioForKey:(NSString *)key;
+
 @end

@@ -123,6 +123,8 @@
             return promptResponse.stringValue;
         case OHMSurveyItemTypeNumberPrompt:
             return [NSString stringWithFormat:@"%g", promptResponse.numberValueValue];
+        case OHMSurveyItemTypeTimestampPrompt:
+            return [OHMUserInterface formattedDate:promptResponse.timestampValue];
         default:
             return nil;
     }
@@ -134,9 +136,11 @@
     UITableViewCell *cell = nil;
     
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
-    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
+    NSString *promptText = [NSString stringWithFormat:@"%d:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
-    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt && !promptResponse.skippedValue) {
+    if (!promptResponse.skippedValue &&
+        (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt ||
+         promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) ) {
         cell = [OHMUserInterface cellWithImage:promptResponse.imageValue text:promptText fromTableView:tableView];
     }
     else {
@@ -153,9 +157,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
-    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
+    NSString *promptText = [NSString stringWithFormat:@"%d:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
-    if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt && !promptResponse.skippedValue) {
+    if (!promptResponse.skippedValue &&
+        (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt ||
+         promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) ) {
         return [OHMUserInterface heightForImageCellWithText:promptText fromTableView:tableView];
     }
     else {

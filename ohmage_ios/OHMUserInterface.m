@@ -388,6 +388,16 @@
     return [self buttonWithTitle:title color:color target:target action:selector size:buttonSize];
 }
 
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector fixedWidth:(CGFloat)fixedWidth
+{
+    UIEdgeInsets insets = kUIButtonTitleDefaultInsets;
+    CGFloat titleWidth = fixedWidth - (insets.left + insets.right);
+    CGSize titleSize = [self sizeForText:title withWidth:titleWidth font:[OHMAppConstants buttonFont]];
+    CGSize buttonSize = CGSizeMake(fixedWidth, titleSize.height + (insets.top + insets.bottom));
+    
+    return [self buttonWithTitle:title color:color target:target action:selector size:buttonSize];
+}
+
 + (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius
 {
 //    view.backgroundColor = [UIColor whiteColor];

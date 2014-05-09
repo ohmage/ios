@@ -15,8 +15,13 @@
 #import "OHMSurveyItem.h"
 #import "OHMUserInterface.h"
 #import "OHMSurveyPromptChoice.h"
+#import "OHMAudioRecorder.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface OHMSurveyItemViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface OHMSurveyItemViewController () <UITextFieldDelegate,
+UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate,
+UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
+
 @property (nonatomic, strong) UILabel *textLabel;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UITableView *tableView;
@@ -31,6 +36,12 @@
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) UIImagePickerController *videoPicker;
+@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIDatePicker *timePicker;
+
+@property (nonatomic, strong) OHMAudioRecorder *audioRecorder;
+@property (nonatomic, strong) UIButton *recordAudioButton;
+@property (nonatomic, strong) UIButton *playAudioButton;
 
 @property (nonatomic, strong) OHMSurveyItem *item;
 @property (nonatomic, strong) OHMSurveyPromptResponse *promptResponse;
@@ -39,14 +50,9 @@
 
 @implementation OHMSurveyItemViewController
 
-+ (instancetype)viewControllerForSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index
-{
-    return [[OHMSurveyItemViewController alloc] initWithSurveyResponse:response atQuestionIndex:index];
-}
 
 - (id)initWithSurveyResponse:(OHMSurveyResponse *)response atQuestionIndex:(NSInteger)index
 {
-//    self = [super initWithNibName:nil bundle:nil];
     self = [super init];
     if (self) {
         self.surveyResponse = response;
@@ -56,13 +62,8 @@
         self.itemIndex = index;
         self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
         self.item = self.promptResponse.surveyItem;
-        NSLog(@"controller for itemID: %@", self.item.ohmID);
+//        NSLog(@"controller for itemID: %@", self.item.ohmID);
         
-//        if (self.item.condition) {
-//            BOOL displayed = [response shouldShowItemAtIndex:index];
-//            NSLog(@"should show prompt: %d, at index: %ld", displayed, index);
-//            self.promptResponse.notDisplayedValue = !displayed;
-//        }
     }
     return self;
 }
@@ -82,6 +83,18 @@
     if ([self itemNeedsActionButton]) {
         [self setupActionButton];
     }
+    
+    if ([self itemNeedsDatePicker]) {
+        [self setupDateTimePickers];
+    }
+    
+    if ([self itemNeedsAudioRecorder]) {
+        [self setupAudioRecorder];
+    }
+    
+    if (self.promptResponse.imageValue != nil) {
+        self.imageView.image = self.promptResponse.imageValue;
+    }
 }
 
 - (void)viewDidLoad
@@ -95,7 +108,7 @@
     [self.textLabel positionBelowElement:topGuide margin:2 * kUIViewVerticalMargin];
     [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%d of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
     
     self.textLabel.text = self.item.text;
     
@@ -191,7 +204,6 @@
 {
     switch (self.item.itemTypeValue) {
         case OHMSurveyItemTypeImagePrompt:
-        case OHMSurveyItemTypeAudioPrompt:
         case OHMSurveyItemTypeVideoPrompt:
             return YES;
         default:
@@ -199,12 +211,22 @@
     }
 }
 
+- (BOOL)itemNeedsDatePicker
+{
+    return (self.item.itemTypeValue == OHMSurveyItemTypeTimestampPrompt);
+}
+
+- (BOOL)itemNeedsAudioRecorder
+{
+    return (self.item.itemTypeValue == OHMSurveyItemTypeAudioPrompt);
+}
+
 
 #pragma mark - Setup
 
 - (void)basicSetup
 {
-    UIView * view = [[UIView alloc] init];
+    UIView * view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     view.backgroundColor = [UIColor whiteColor];
     self.view = view;
     
@@ -326,12 +348,64 @@
                                                   target:self
                                                   action:@selector(actionButtonPressed:)
                                                 maxWidth:buttonWidth];
-//    button.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
     [self.view addSubview:button];
     [button centerHorizontallyInView:self.view];
     [button positionBelowElementWithDefaultMargin:self.textLabel];
     self.actionButton = button;
 }
+
+- (void)setupDateTimePickers
+{
+    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    [self.view addSubview:datePicker];
+    [datePicker positionBelowElement:self.textLabel margin:0];
+    [datePicker centerHorizontallyInView:self.view];
+    
+    UIDatePicker *timePicker = [[UIDatePicker alloc] init];
+    timePicker.datePickerMode = UIDatePickerModeTime;
+    [self.view addSubview:timePicker];
+    [timePicker positionBelowElement:datePicker margin:-35];
+    [timePicker centerHorizontallyInView:self.view];
+    
+    self.datePicker = datePicker;
+    self.timePicker = timePicker;
+}
+
+- (void)setupAudioRecorder
+{
+    CGFloat buttonWidth = (self.view.bounds.size.width - 3.0 * kUIViewHorizontalMargin) / 2.0;
+    UIButton *recordButton = [OHMUserInterface buttonWithTitle:@"Record"
+                                                   color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                  target:self
+                                                  action:@selector(recordAudioButtonPressed:)
+                                              fixedWidth:buttonWidth];
+    UIButton *playButton = [OHMUserInterface buttonWithTitle:@"Play"
+                                                       color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                      target:self
+                                                      action:@selector(playAudioButtonPressed:)
+                                                  fixedWidth:buttonWidth];
+    
+    [self.view addSubview:recordButton];
+    [self.view addSubview:playButton];
+    
+    [recordButton positionBelowElementWithDefaultMargin:self.textLabel];
+    [playButton positionBelowElementWithDefaultMargin:self.textLabel];
+    [self.view layoutChildrenHorizontallyWithDefaultMargins:@[recordButton, playButton]];
+    
+    self.recordAudioButton = recordButton;
+    self.playAudioButton = playButton;
+    
+    self.audioRecorder = [[OHMAudioRecorder alloc] initWithDelegate:self];
+    if (self.item.maxDuration) {
+        self.audioRecorder.maxDuration = self.item.maxDurationTimeInterval;
+    }
+    
+    [self updateAudioButtonStates];
+}
+
+
+#pragma mark - Interaction
 
 - (void)cancelSurveyButtonPressed:(id)sender
 {
@@ -353,12 +427,16 @@
 - (void)skipButtonPressed:(id)sender
 {
     self.promptResponse.skippedValue = YES;
+    [self.promptResponse clearValues];
     [self pushNextItemViewController];
 }
 
 - (void)nextButtonPressed:(id)sender
 {
     self.promptResponse.skippedValue = NO;
+    if (self.item.itemTypeValue == OHMSurveyItemTypeTimestampPrompt) {
+        [self recordDateTime];
+    }
     [self pushNextItemViewController];
 }
 
@@ -367,9 +445,6 @@
     switch (self.item.itemTypeValue) {
         case OHMSurveyItemTypeImagePrompt:
             [self takePicture];
-            break;
-        case OHMSurveyItemTypeAudioPrompt:
-            [self recordAudio];
             break;
         case OHMSurveyItemTypeVideoPrompt:
             [self recordVideo];
@@ -388,12 +463,11 @@
         nextIndex++;
     }
     if (nextIndex < [self.surveyResponse.survey.surveyItems count]) {
-        OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:self.surveyResponse atQuestionIndex:nextIndex];
+        OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:self.surveyResponse atQuestionIndex:nextIndex];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
         OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:self.surveyResponse];
-//        [vc setupSubmitHeader];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -603,6 +677,20 @@
 
 #pragma - mark Image Prompt
 
+- (UIImageView *)imageView
+{
+    if (_imageView == nil) {
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:imageView];
+        [imageView positionBelowElementWithDefaultMargin:self.actionButton];
+        [imageView positionAboveElementWithDefaultMargin:self.toolbar];
+        [self.view constrainChildToDefaultHorizontalInsets:imageView];
+        _imageView = imageView;
+    }
+    return _imageView;
+}
+
 - (void)takePicture
 {
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -621,38 +709,34 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
+- (UIImage *)thumbnailFromVideoURL:(NSURL *)videoURL
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return thumb;
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     if ([picker isEqual:self.imagePicker]) {
         UIImage *image = info[UIImagePickerControllerOriginalImage];
         self.promptResponse.imageValue = image;
-        
-        if (self.imageView == nil) {
-            UIImageView *imageView = [[UIImageView alloc] init];
-            imageView.contentMode = UIViewContentModeScaleAspectFit;
-            [self.view addSubview:imageView];
-            [imageView positionBelowElementWithDefaultMargin:self.actionButton];
-            [imageView positionAboveElementWithDefaultMargin:self.toolbar];
-            [self.view constrainChildToDefaultHorizontalInsets:imageView];
-            self.imageView = imageView;
-        }
-        
         self.imageView.image = image;
     }
     else if ([picker isEqual:self.videoPicker]) {
         NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
         if (mediaURL) {
             self.promptResponse.videoURL = mediaURL;
-//            // Make sure this device supports videos in its photo album
-//            if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([mediaURL path])) {
-//                
-//                // Save the video to the photos album
-//                UISaveVideoAtPathToSavedPhotosAlbum([mediaURL path], nil, nil, nil);
-//                
-//                // Remove the video from the temporary directory
-//                [[NSFileManager defaultManager] removeItemAtPath:[mediaURL path]
-//                                                           error:nil];
-//            }
+            self.promptResponse.imageValue = [self thumbnailFromVideoURL:mediaURL];
+            self.imageView.image = self.promptResponse.imageValue;
         }
     }
     
@@ -687,15 +771,91 @@
     }
     
     imagePicker.delegate = self;
+    self.videoPicker = imagePicker;
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 
 #pragma - mark Audio Prompt
 
-- (void)recordAudio
+- (void)updateAudioButtonStates
 {
+    NSString *recordButtonTitle = self.audioRecorder.isRecording ? @"Stop" : @"Record";
+    NSString *playButtonTitle = self.audioRecorder.isPlaying ? @"Stop" : @"Play";
+    [self.recordAudioButton setTitle:recordButtonTitle forState:UIControlStateNormal];
+    [self.playAudioButton setTitle:playButtonTitle forState:UIControlStateNormal];
     
+    self.recordAudioButton.enabled = (self.audioRecorder.hasMicrophoneAccess && !self.audioRecorder.isPlaying);
+    self.playAudioButton.enabled = ( !self.audioRecorder.isRecording && (self.promptResponse.audioURL != nil) );
+}
+
+- (void)recordAudioButtonPressed:(id)sender
+{
+    if (self.audioRecorder.isRecording) {
+        [self.audioRecorder stopRecording];
+    }
+    else if ([self.audioRecorder startRecording]) {
+        [self updateAudioButtonStates];
+    }
+}
+
+- (void)playAudioButtonPressed:(id)sender
+{
+    if (self.audioRecorder.isPlaying) {
+        [self.audioRecorder stopPlaying];
+    }
+    else if (self.promptResponse.audioURL != nil) {
+        [self.audioRecorder playFileAtURL:self.promptResponse.audioURL];
+    }
+    [self updateAudioButtonStates];
+}
+
+- (void)OHMAudioRecorder:(OHMAudioRecorder *)recorder didFinishRecordingToURL:(NSURL *)recordingURL
+{
+    self.promptResponse.audioURL = recordingURL;
+    [self updateAudioButtonStates];
+}
+
+- (void)OHMAudioRecorderDidFinishPlaying:(OHMAudioRecorder *)recorder
+{
+    [self updateAudioButtonStates];
+}
+
+- (void)OHMAudioRecorderFailed:(OHMAudioRecorder *)recorder
+{
+    [self updateAudioButtonStates];
+}
+
+- (void)OHMAudioRecorderMicrophoneAccessDenied:(OHMAudioRecorder *)recorder
+{
+    [self updateAudioButtonStates];
+}
+
+
+#pragma - mark Timestamp Prompt
+
+- (void)recordDateTime
+{
+    self.promptResponse.timestampValue = [self combineDate:self.datePicker.date withTime:self.timePicker.date];
+    NSLog(@"recorded dateTime: %@", self.promptResponse.timestampValue);
+}
+
+- (NSDate *)combineDate:(NSDate *)date withTime:(NSDate *)time {
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    unsigned unitFlagsDate = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+    NSDateComponents *dateComponents = [gregorian components:unitFlagsDate fromDate:date];
+    unsigned unitFlagsTime = NSHourCalendarUnit | NSMinuteCalendarUnit |  NSSecondCalendarUnit;
+    NSDateComponents *timeComponents = [gregorian components:unitFlagsTime fromDate:time];
+    
+    [dateComponents setSecond:[timeComponents second]];
+    [dateComponents setHour:[timeComponents hour]];
+    [dateComponents setMinute:[timeComponents minute]];
+    
+    NSDate *combDate = [gregorian dateFromComponents:dateComponents];
+    
+    return combDate;
 }
 
 @end

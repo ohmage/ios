@@ -13,6 +13,11 @@
 
 @implementation OHMSurveyItem
 
+- (NSTimeInterval)maxDurationTimeInterval
+{
+    return self.maxDurationValue / 1000.0;
+}
+
 - (void)setValuesFromDefinition:(NSDictionary *)definition
 {
     self.condition = [definition surveyItemCondition];

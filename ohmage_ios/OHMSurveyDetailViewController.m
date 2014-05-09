@@ -144,7 +144,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 - (IBAction)takeSurvey:(id)sender {
     
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:self.survey];
-    OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
+    OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

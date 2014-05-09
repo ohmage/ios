@@ -270,8 +270,8 @@
     else if ([value isKindOfClass:[NSNumber class]]) {
         return [self comparePromptResponse:promptResponse toNumber:value withComparison:comparison isRHS:isRHS];
     }
-    else if ([value isKindOfClass:[self class]]) {
-        return [((OHMSurveyPromptResponse *)value).promptResponseKey isEqualToString:promptResponse.promptResponseKey];
+    else if ([value isKindOfClass:[OHMSurveyPromptResponse class]]) {
+        return [((OHMSurveyPromptResponse *)value).ohmID isEqualToString:promptResponse.ohmID];
     }
     else {
         return NO;

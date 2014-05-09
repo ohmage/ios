@@ -58,6 +58,12 @@
     return self;
 }
 
+- (void)clearCache:(NSNotification *)note
+{
+    NSLog(@"flushing %ld images out of the cache", [self.imageDictionary count]);
+    [self.imageDictionary removeAllObjects];
+}
+
 #pragma mark - Images
 
 - (void)setImage:(UIImage *)image forKey:(NSString *)key
@@ -142,7 +148,7 @@
 }
 
 
-#pragma mark - Videos
+#pragma mark - Video
 
 - (void)setVideoWithURL:(NSURL *)tempVideoURL forKey:(NSString *)key
 {
@@ -166,6 +172,11 @@
     NSString *documentDirectory = [documentDirectories firstObject];
     NSString *videosDirectory = [documentDirectory stringByAppendingPathComponent:@"videos"];
     
+    BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:videosDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    if (!success) {
+        NSLog(@"Error creating videos directory");
+    }
+    
     return [NSURL URLWithString:[videosDirectory stringByAppendingPathComponent:key]];
 }
 
@@ -179,10 +190,51 @@
     [[NSFileManager defaultManager] removeItemAtURL:videoURL error:nil];
 }
 
-- (void)clearCache:(NSNotification *)note
+
+#pragma mark - Audio
+
+- (void)setAudioWithURL:(NSURL *)tempAudioURL forKey:(NSString *)key
 {
-    NSLog(@"flushing %ld images out of the cache", [self.imageDictionary count]);
-    [self.imageDictionary removeAllObjects];
+    // Create full path for audio
+    NSURL *storeAudioURL = [self audioURLForKey:key];
+    
+    NSError *error = NULL;
+    [[NSFileManager defaultManager] moveItemAtURL:tempAudioURL toURL:storeAudioURL error:&error];
+    if (error != nil) {
+        NSLog(@"Error moving audio to media store. Temp URL: %@, store URL: %@, error: %@", tempAudioURL, storeAudioURL, [error localizedDescription]);
+    }
+}
+
+- (NSURL *)audioURLForKey:(NSString *)key
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSURL *documentsFolderUrl =
+    [fileManager URLForDirectory:NSDocumentDirectory
+                        inDomain:NSUserDomainMask
+               appropriateForURL:nil
+                          create:NO
+                           error:nil];
+    
+    NSURL *audioFolderUrl = [documentsFolderUrl URLByAppendingPathComponent:@"audio" isDirectory:YES];
+    BOOL success = [fileManager createDirectoryAtURL:audioFolderUrl withIntermediateDirectories:YES attributes:nil error:nil];
+    if (!success) {
+        NSLog(@"Error creating audio directory");
+        return nil;
+    }
+    
+    NSString *fileName = [key stringByAppendingPathExtension:@"m4a"];
+    return [audioFolderUrl URLByAppendingPathComponent:fileName];
+}
+
+- (void)deleteAudioForKey:(NSString *)key
+{
+    if (!key) {
+        return;
+    }
+    
+    NSURL *audioURL = [self audioURLForKey:key];
+    [[NSFileManager defaultManager] removeItemAtURL:audioURL error:nil];
 }
 
 @end

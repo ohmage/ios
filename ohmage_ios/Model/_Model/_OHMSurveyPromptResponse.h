@@ -7,9 +7,10 @@
 extern const struct OHMSurveyPromptResponseAttributes {
 	__unsafe_unretained NSString *notDisplayed;
 	__unsafe_unretained NSString *numberValue;
-	__unsafe_unretained NSString *promptResponseKey;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *skipped;
 	__unsafe_unretained NSString *stringValue;
+	__unsafe_unretained NSString *timestampValue;
 } OHMSurveyPromptResponseAttributes;
 
 extern const struct OHMSurveyPromptResponseRelationships {
@@ -24,6 +25,7 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 @class OHMSurveyPromptChoice;
 @class OHMSurveyItem;
 @class OHMSurveyResponse;
+
 
 
 
@@ -72,11 +74,11 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* promptResponseKey;
+@property (nonatomic, strong) NSString* ohmID;
 
 
 
-//- (BOOL)validatePromptResponseKey:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -101,6 +103,16 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 
 //- (BOOL)validateStringValue:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* timestampValue;
+
+
+
+//- (BOOL)validateTimestampValue:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -160,8 +172,8 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 
 
-- (NSString*)primitivePromptResponseKey;
-- (void)setPrimitivePromptResponseKey:(NSString*)value;
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
 
 
 
@@ -177,6 +189,12 @@ extern const struct OHMSurveyPromptResponseFetchedProperties {
 
 - (NSString*)primitiveStringValue;
 - (void)setPrimitiveStringValue:(NSString*)value;
+
+
+
+
+- (NSDate*)primitiveTimestampValue;
+- (void)setPrimitiveTimestampValue:(NSDate*)value;
 
 
 

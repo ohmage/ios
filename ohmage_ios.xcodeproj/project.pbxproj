@@ -67,6 +67,8 @@
 		1E88257D1919CC0F0034D231 /* OHMConditionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88257C1919CC0F0034D231 /* OHMConditionParser.m */; };
 		1E882580191AE0A80034D231 /* OHMConditionParserGrammer.parsergen in Resources */ = {isa = PBXBuildFile; fileRef = 1E88257F191AE0A80034D231 /* OHMConditionParserGrammer.parsergen */; };
 		1E882583191AE21E0034D231 /* OHMConditionParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */; };
+		1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882585191BF7410034D231 /* NSDate+Ohmage.m */; };
+		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -231,6 +233,10 @@
 		1E88257F191AE0A80034D231 /* OHMConditionParserGrammer.parsergen */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = OHMConditionParserGrammer.parsergen; sourceTree = "<group>"; };
 		1E882581191AE21E0034D231 /* OHMConditionParserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMConditionParserDelegate.h; sourceTree = "<group>"; };
 		1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMConditionParserDelegate.m; sourceTree = "<group>"; };
+		1E882584191BF7410034D231 /* NSDate+Ohmage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Ohmage.h"; sourceTree = "<group>"; };
+		1E882585191BF7410034D231 /* NSDate+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Ohmage.m"; sourceTree = "<group>"; };
+		1E882587191C00370034D231 /* OHMAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMAudioRecorder.h; sourceTree = "<group>"; };
+		1E882588191C00370034D231 /* OHMAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMAudioRecorder.m; sourceTree = "<group>"; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -341,6 +347,8 @@
 				1EAECA6018EB518B00035BDF /* NSDictionary+Ohmage.m */,
 				1E1B61071909B3F3001046E0 /* UIColor+Ohmage.h */,
 				1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */,
+				1E882584191BF7410034D231 /* NSDate+Ohmage.h */,
+				1E882585191BF7410034D231 /* NSDate+Ohmage.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -506,6 +514,30 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1E88258A191C6A860034D231 /* Survey */ = {
+			isa = PBXGroup;
+			children = (
+				1E1B60BD19063242001046E0 /* OHMSurvey.h */,
+				1E1B60BE19063242001046E0 /* OHMSurvey.m */,
+				1E1B60BF19063242001046E0 /* OHMSurveyItem.h */,
+				1E1B60C019063242001046E0 /* OHMSurveyItem.m */,
+				1E1B60C119063242001046E0 /* OHMSurveyPromptChoice.h */,
+				1E1B60C219063242001046E0 /* OHMSurveyPromptChoice.m */,
+				1E1B60C319063242001046E0 /* OHMSurveyPromptResponse.h */,
+				1E1B60C419063242001046E0 /* OHMSurveyPromptResponse.m */,
+				1E1B60C519063242001046E0 /* OHMSurveyResponse.h */,
+				1E1B60C619063242001046E0 /* OHMSurveyResponse.m */,
+				1EDA0B2518F4948200C89F91 /* OHMSurveyItemTypes.h */,
+				1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */,
+				1E88257B1919CC0F0034D231 /* OHMConditionParser.h */,
+				1E88257C1919CC0F0034D231 /* OHMConditionParser.m */,
+				1E882581191AE21E0034D231 /* OHMConditionParserDelegate.h */,
+				1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */,
+				1E88257F191AE0A80034D231 /* OHMConditionParserGrammer.parsergen */,
+			);
+			name = Survey;
+			sourceTree = "<group>";
+		};
 		1EAD557F18D1567900B55028 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +545,8 @@
 				1E1B610B1909B736001046E0 /* OHMUserInterface.m */,
 				1E56A335191334EC00384AE9 /* OHMLocationManager.h */,
 				1E56A336191334EC00384AE9 /* OHMLocationManager.m */,
+				1E882587191C00370034D231 /* OHMAudioRecorder.h */,
+				1E882588191C00370034D231 /* OHMAudioRecorder.m */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -532,25 +566,9 @@
 				1E1B60C819063242001046E0 /* OHMUser.m */,
 				1E1B60BB19063242001046E0 /* OHMOhmlet.h */,
 				1E1B60BC19063242001046E0 /* OHMOhmlet.m */,
-				1E1B60BD19063242001046E0 /* OHMSurvey.h */,
-				1E1B60BE19063242001046E0 /* OHMSurvey.m */,
-				1E1B60BF19063242001046E0 /* OHMSurveyItem.h */,
-				1E1B60C019063242001046E0 /* OHMSurveyItem.m */,
-				1E1B60C119063242001046E0 /* OHMSurveyPromptChoice.h */,
-				1E1B60C219063242001046E0 /* OHMSurveyPromptChoice.m */,
-				1E1B60C319063242001046E0 /* OHMSurveyPromptResponse.h */,
-				1E1B60C419063242001046E0 /* OHMSurveyPromptResponse.m */,
-				1E1B60C519063242001046E0 /* OHMSurveyResponse.h */,
-				1E1B60C619063242001046E0 /* OHMSurveyResponse.m */,
-				1EDA0B2518F4948200C89F91 /* OHMSurveyItemTypes.h */,
-				1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */,
 				1E3C80F0191083DA0088D2D0 /* OHMReminder.h */,
 				1E3C80F1191083DA0088D2D0 /* OHMReminder.m */,
-				1E88257B1919CC0F0034D231 /* OHMConditionParser.h */,
-				1E88257C1919CC0F0034D231 /* OHMConditionParser.m */,
-				1E882581191AE21E0034D231 /* OHMConditionParserDelegate.h */,
-				1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */,
-				1E88257F191AE0A80034D231 /* OHMConditionParserGrammer.parsergen */,
+				1E88258A191C6A860034D231 /* Survey */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -768,12 +786,14 @@
 				1E1B60FA19063392001046E0 /* _OHMSurveyResponse.m in Sources */,
 				1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */,
 				1E3C80EC190F66510088D2D0 /* OHMSurveyCompleteViewController.m in Sources */,
+				1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */,
 				1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */,
 				1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */,
 				1E1B60FB19063392001046E0 /* _OHMUser.m in Sources */,
 				1E1B60F719063392001046E0 /* _OHMSurveyItem.m in Sources */,
 				1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */,
 				1EF693DD18EA0F670003E077 /* AFURLRequestSerialization.m in Sources */,
+				1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */,
 				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
 				1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */,
 				1E1B60CB19063242001046E0 /* OHMSurveyItem.m in Sources */,
@@ -947,7 +967,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Charles Forkish (A2HDKNQ6ZN)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
@@ -967,7 +987,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";
+				PROVISIONING_PROFILE = "B27DF7DB-6AF8-48B2-AA1A-8D2DCBA4067C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -997,7 +1017,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "C50F4AD9-212B-4EB5-A82C-ED37BC7EA8BE";
+				PROVISIONING_PROFILE = "B27DF7DB-6AF8-48B2-AA1A-8D2DCBA4067C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -339,7 +339,7 @@
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
-    OHMSurveyItemViewController *vc = [OHMSurveyItemViewController viewControllerForSurveyResponse:newResponse atQuestionIndex:0];
+    OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -376,35 +376,36 @@
 (NSFetchedResultsController *)controller
 {
 //    NSLog(@"controller will change content");
-    [self.tableView beginUpdates];
+//    [self.tableView beginUpdates];
 }
 
 - (void)controllerDidChangeContent:
 (NSFetchedResultsController *)controller
 {
 //    NSLog(@"controller did change content");
-    [self.tableView endUpdates];
+//    [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller
-  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
-//    NSLog(@"controller did change section info type: %lu", (unsigned long)type);
-    switch(type)
-    {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                          withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
+//- (void)controller:(NSFetchedResultsController *)controller
+//  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+//           atIndex:(NSUInteger)sectionIndex
+//     forChangeType:(NSFetchedResultsChangeType)type
+//{
+////    NSLog(@"controller did change section info type: %lu", (unsigned long)type);
+//    switch(type)
+//    {
+//        case NSFetchedResultsChangeInsert:
+//            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+//                          withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeDelete:
+//            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+//                          withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//    }
+//}
 
 - (void)controller:(NSFetchedResultsController *)controller
    didChangeObject:(id)anObject

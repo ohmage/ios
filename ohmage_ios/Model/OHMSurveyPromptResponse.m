@@ -15,6 +15,7 @@
 
 @synthesize imageValue=_imageValue;
 @synthesize videoURL=_videoURL;
+@synthesize audioURL=_audioURL;
 
 - (void)awakeFromInsert
 {
@@ -22,8 +23,8 @@
     
     // Create an NSUUID object - and get its string representation
     NSUUID *uuid = [[NSUUID alloc] init];
-    NSString *key = [uuid UUIDString];
-    self.promptResponseKey = key;
+    NSString *ohmID = [uuid UUIDString];
+    self.ohmID = ohmID;
 }
 
 
@@ -50,10 +51,10 @@
     if (self.skippedValue) return;
     
     if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
-        [[OHMMediaStore sharedStore] deleteImageForKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] deleteImageForKey:self.ohmID];
     }
     else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) {
-        [[OHMMediaStore sharedStore] deleteVideoForKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] deleteVideoForKey:self.ohmID];
     }
 
 }
@@ -61,26 +62,47 @@
 - (NSURL *)videoURL
 {
     if (_videoURL == nil) {
-        _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.promptResponseKey];
+        _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.ohmID];
     }
     return _videoURL;
 }
 
 - (void)setVideoURL:(NSURL *)videoURL
 {
-    _videoURL = videoURL;
+    // don't store temp path so media store can return permanent path
+    _videoURL = nil;
     if (videoURL) {
-        [[OHMMediaStore sharedStore] setVideoWithURL:videoURL forKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] setVideoWithURL:videoURL forKey:self.ohmID];
     }
     else {
-        [[OHMMediaStore sharedStore] deleteVideoForKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] deleteVideoForKey:self.ohmID];
+    }
+}
+
+- (NSURL *)audioURL
+{
+    if (_audioURL == nil) {
+        _audioURL = [[OHMMediaStore sharedStore] audioURLForKey:self.ohmID];
+    }
+    return _audioURL;
+}
+
+- (void)setAudioURL:(NSURL *)audioURL
+{
+    // don't store temp path so media store can return permanent path
+    _audioURL = nil;
+    if (audioURL) {
+        [[OHMMediaStore sharedStore] setAudioWithURL:audioURL forKey:self.ohmID];
+    }
+    else {
+        [[OHMMediaStore sharedStore] deleteAudioForKey:self.ohmID];
     }
 }
 
 - (UIImage *)imageValue
 {
     if (_imageValue == nil) {
-        _imageValue = [[OHMMediaStore sharedStore] imageForKey:self.promptResponseKey];
+        _imageValue = [[OHMMediaStore sharedStore] imageForKey:self.ohmID];
     }
     return _imageValue;
 }
@@ -89,10 +111,10 @@
 {
     _imageValue = imageValue;
     if (imageValue) {
-        [[OHMMediaStore sharedStore] setImage:imageValue forKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] setImage:imageValue forKey:self.ohmID];
     }
     else {
-        [[OHMMediaStore sharedStore] deleteImageForKey:self.promptResponseKey];
+        [[OHMMediaStore sharedStore] deleteImageForKey:self.ohmID];
     }
 }
 
@@ -135,10 +157,26 @@
             case OHMSurveyItemTypeNumberMultiChoicePrompt:
             case OHMSurveyItemTypeStringMultiChoicePrompt:
                 return [self valArray];
+            case OHMSurveyItemTypeTimestampPrompt:
+                return [self.timestampValue ISO8601String];
+            case OHMSurveyItemTypeImagePrompt:
+            case OHMSurveyItemTypeVideoPrompt:
+            case OHMSurveyItemTypeAudioPrompt:
+                return self.ohmID;
             default:
                 return nil;
         }
     }
+}
+
+- (void)clearValues
+{
+    self.stringValue = nil;
+    self.numberValue = nil;
+    self.imageValue = nil;
+    self.videoURL = nil;
+    self.audioURL = nil;
+    [self.selectedChoicesSet removeAllObjects];
 }
 
 @end

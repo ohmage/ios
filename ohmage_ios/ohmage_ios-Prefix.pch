@@ -17,5 +17,6 @@
     #import "OHMObject.h"
     #import "OHMClient.h"
     #import "NSDictionary+Ohmage.h"
+    #import "NSDate+Ohmage.h"
     #import "UIView+AutoLayoutHelpers.h"
 #endif
