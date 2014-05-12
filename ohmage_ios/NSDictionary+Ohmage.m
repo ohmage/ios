@@ -239,6 +239,11 @@
     return [self nonNullValueForKey:@"timestamp"];
 }
 
+- (NSString *)reminderID
+{
+    return [self nonNullValueForKey:@"reminderID"];
+}
+
 @end
 
 
@@ -262,6 +267,11 @@
 - (void)setSurveyResponseTimestamp:(NSString *)surveyResponseTimestamp
 {
     self[@"timestamp"] = surveyResponseTimestamp;
+}
+
+- (void)setReminderID:(NSString *)reminderID;
+{
+    self[@"reminderID"] = reminderID;
 }
 
 @end

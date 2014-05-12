@@ -17,6 +17,7 @@
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
 #import "OHMReminder.h"
+#import "OHMTimekeeper.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
@@ -77,17 +78,6 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     NSLog(@"Saving client state");
     [self saveManagedContext];
-}
-
-- (NSOrderedSet *)ohmlets
-{
-    return self.user.ohmlets;
-}
-
-- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
-{
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
-    return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 
@@ -189,9 +179,9 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
+    surveyResponse.timestamp = [NSDate date];
+    surveyResponse.userSubmittedValue = YES;
     NSLog(@"submit response: %@", [surveyResponse JSON]);
-    
-//    NSArray *submissions = @[response.JSON];
     
     [self postRequest:surveyResponse.uploadResquestUrlString
        withParameters:(NSDictionary *)[surveyResponse JSON].jsonArray
@@ -205,8 +195,8 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
           NSArray *responseArray = (NSArray *)response;
           NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
           NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
-          NSLog(@"response matches submission: %d, submitted.id: %@, response.id: %@", [surveyResponse.ohmID isEqualToString:ohmId], surveyResponse.ohmID, ohmId);
           if ([surveyResponse.ohmID isEqualToString:ohmId]) {
+              NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
               surveyResponse.submissionConfirmedValue = YES;
           }
     }];
@@ -393,8 +383,9 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
         if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
             // Replace this implementation with code to handle the error appropriately.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+            NSLog(@"Error opening persistant store %@, %@", error, [error userInfo]);
+//            abort();
+            [self resetClient];
         }
     }
     
@@ -424,6 +415,29 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 #pragma mark - Core Data (public)
 
+- (NSArray *)reminders
+{
+    return [self allObjectsWithEntityName:[OHMReminder entityName] sortKey:@"specificTime" predicate:nil ascending:NO];
+}
+
+- (NSOrderedSet *)ohmlets
+{
+    return self.user.ohmlets;
+}
+
+- (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
+{
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
+    return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
+}
+
+- (OHMReminder *)reminderWithOhmID:(NSString *)ohmId
+{
+    return (OHMReminder *)[self fetchObjectForEntityName:[OHMReminder entityName] withUniqueOhmID:ohmId create:NO];
+}
+
+
+
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey
 {
     OHMSurveyResponse *response = [self insertNewSurveyResponse];
@@ -452,24 +466,22 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 }
 
 
-
 #pragma mark - Core Data (private)
 
 - (OHMUser *)userWithOhmID:(NSString *)ohmID
 {
-    return (OHMUser *)[self fetchOrInsertObjectForEntityName:[OHMUser entityName] withUniqueOhmID:ohmID];
+    return (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniqueOhmID:ohmID create:YES];
 }
 
 - (OHMOhmlet *)ohmletWithOhmID:(NSString *)ohmID
 {
-    NSLog(@"OHMLET WITH ID: %@", ohmID);
-    return (OHMOhmlet *)[self fetchOrInsertObjectForEntityName:[OHMOhmlet entityName] withUniqueOhmID:ohmID];
+    return (OHMOhmlet *)[self fetchObjectForEntityName:[OHMOhmlet entityName] withUniqueOhmID:ohmID create:YES];
 }
 
 - (OHMSurvey *)surveyWithOhmID:(NSString *)ohmID andVersion:(int16_t)version
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ohmID == %@) AND (surveyVersion == %d)", ohmID, version];
-    OHMSurvey *survey = (OHMSurvey *)[self fetchOrInsertObjectForEntityName:[OHMSurvey entityName] withUniquePredicate:predicate];
+    OHMSurvey *survey = (OHMSurvey *)[self fetchObjectForEntityName:[OHMSurvey entityName] withUniquePredicate:predicate create:YES];
     survey.ohmID = ohmID;
     survey.surveyVersionValue = version;
     return survey;
@@ -491,15 +503,15 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     return (OHMSurveyPromptResponse *)[self insertNewObjectForEntityForName:[OHMSurveyPromptResponse entityName]];
 }
 
-- (OHMObject *)fetchOrInsertObjectForEntityName:(NSString *)entityName withUniqueOhmID:(NSString *)ohmID
+- (OHMObject *)fetchObjectForEntityName:(NSString *)entityName withUniqueOhmID:(NSString *)ohmID create:(BOOL)create
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmID == %@", ohmID];
-    OHMObject *object = (OHMObject *)[self fetchOrInsertObjectForEntityName:entityName withUniquePredicate:predicate];
+    OHMObject *object = (OHMObject *)[self fetchObjectForEntityName:entityName withUniquePredicate:predicate create:create];
     object.ohmID = ohmID;
     return object;
 }
 
-- (NSManagedObject *)fetchOrInsertObjectForEntityName:(NSString *)entityName withUniquePredicate:(NSPredicate *)predicate
+- (NSManagedObject *)fetchObjectForEntityName:(NSString *)entityName withUniquePredicate:(NSPredicate *)predicate create:(BOOL)create
 {
 //    NSLog(@"fetch or insert entity: %@ with predicate: %@", entityName, [predicate debugDescription]);
     NSArray *results = [self allObjectsWithEntityName:entityName sortKey:nil predicate:predicate ascending:NO];
@@ -633,6 +645,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
  *  deletePersistentStore
  */
 - (void)deletePersistentStore {
+    NSLog(@"Deleting persistent store.");
     self.managedObjectContext = nil;
     self.managedObjectModel = nil;
     self.persistentStoreCoordinator = nil;
@@ -641,6 +654,12 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
     
     self.persistentStoreURL = nil;
+}
+
+- (void)resetClient
+{
+    [self deletePersistentStore];
+    [[OHMTimekeeper sharedTimekeeper] cancelAllNotifications];
 }
 
 @end

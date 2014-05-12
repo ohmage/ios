@@ -87,13 +87,11 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     UILabel *promptCountLabel = [OHMUserInterface headerDetailLabelWithText:promptCountText width:contentWidth];
     contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
     
-//    CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
     UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey"
                                                              color:[OHMAppConstants colorForRowIndex:self.survey.colorIndex]
                                                             target:self
                                                             action:@selector(takeSurvey:)
                                                           maxWidth:contentWidth];
-//    takeSurveyButton.backgroundColor = [OHMAppConstants colorForRowIndex:self.survey.colorIndex];
     contentHeight += takeSurveyButton.frame.size.height + kUIViewVerticalMargin;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
@@ -211,7 +209,8 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
             else {
                 OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:0]];
                 cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
-                    sw.on = YES;
+                    sw.on = reminder.enabledValue;
+                    [sw addTarget:reminder action:@selector(toggleEnabled) forControlEvents:UIControlEventValueChanged];
                 }];
                 cell.textLabel.text = [reminder labelText];
                 cell.detailTextLabel.text = [reminder detailLabelText];

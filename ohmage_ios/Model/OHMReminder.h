@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, OHMRepeatDay) {
 
 + (NSString *)fullNameForRepeatDay:(OHMRepeatDay)repeatDay;
 + (NSString *)shortNameForRepeatDay:(OHMRepeatDay)repeatDay;
++ (NSInteger)calendarUnitForRepeatDay:(OHMRepeatDay)repeatDay;
 
 - (NSString *)labelText;
 - (NSString *)detailLabelText;
@@ -25,5 +26,7 @@ typedef NS_ENUM(NSUInteger, OHMRepeatDay) {
 - (BOOL)repeatDayIsOn:(OHMRepeatDay)repeatDay;
 
 - (void)toggleEnabled;
+
+- (NSDate *)updateFireDate;
 
 @end

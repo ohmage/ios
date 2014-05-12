@@ -10,6 +10,7 @@
 #import "OHMReminderDaysViewController.h"
 #import "OHMReminder.h"
 #import "OHMUserInterface.h"
+#import "OHMTimekeeper.h"
 
 
 static const NSInteger kTimeSectionIndex = 0;
@@ -108,6 +109,7 @@ static const NSInteger kLocationRowIndexLocation = 1;
     else {
         self.reminder.specificTime = self.alarmTimePicker.date;
     }
+    [[OHMTimekeeper sharedTimekeeper] updateNotificationForReminder:self.reminder];
     [[OHMClient sharedClient] saveClientState];
 }
 

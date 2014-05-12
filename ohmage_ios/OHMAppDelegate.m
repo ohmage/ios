@@ -8,8 +8,8 @@
 
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
-#import "OHMClient.h"
 #import "OHMLoginViewController.h"
+#import "OHMTimekeeper.h"
 
 @implementation OHMAppDelegate
 
@@ -27,8 +27,35 @@
     if (![[OHMClient sharedClient] hasLoggedInUser]) {
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
     }
+    else {
+        UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+        NSLog(@"Application launched with local notification: %@", notification);
+        if (notification != nil) {
+            [[OHMTimekeeper sharedTimekeeper] processFiredLocalNotification:notification];
+        }
+    }
     
     return YES;
+}
+
+/**
+ *  application:didReceiveLocalNotification
+ */
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"Application did receive local notification: %@", notification);
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        // If we're the foreground application, then show an alert view as one would not have been
+        // presented to the user via the notification center.
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Reminder"
+                                                            message:notification.alertBody
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        
+        [alertView show];
+    }
+    
+    [[OHMTimekeeper sharedTimekeeper] processFiredLocalNotification:notification];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -51,7 +78,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[OHMTimekeeper sharedTimekeeper] syncStateOfRemindersWithScheduledLocalNotifications];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

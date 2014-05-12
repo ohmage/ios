@@ -39,7 +39,9 @@
 
 // Model
 - (NSOrderedSet *)ohmlets;
+- (NSArray *)reminders;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
+- (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
 
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;

@@ -7,12 +7,14 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 	.alwaysShow = @"alwaysShow",
 	.enabled = @"enabled",
 	.endTime = @"endTime",
+	.fireDate = @"fireDate",
 	.isLocationReminder = @"isLocationReminder",
 	.isTimeReminder = @"isTimeReminder",
 	.locationLatitude = @"locationLatitude",
 	.locationLongitude = @"locationLongitude",
 	.locationRadius = @"locationRadius",
 	.minimumReentryInterval = @"minimumReentryInterval",
+	.ohmID = @"ohmID",
 	.specificTime = @"specificTime",
 	.startTime = @"startTime",
 	.usesTimeRange = @"usesTimeRange",
@@ -163,6 +165,13 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 
 @dynamic endTime;
+
+
+
+
+
+
+@dynamic fireDate;
 
 
 
@@ -320,6 +329,13 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 - (void)setPrimitiveMinimumReentryIntervalValue:(int32_t)value_ {
 	[self setPrimitiveMinimumReentryInterval:[NSNumber numberWithInt:value_]];
 }
+
+
+
+
+
+@dynamic ohmID;
+
 
 
 

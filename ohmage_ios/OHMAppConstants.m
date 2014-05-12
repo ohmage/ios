@@ -13,15 +13,19 @@ CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;
 CGFloat const kUIViewSmallTextMargin = 4.0;
 CGFloat const kUIViewSmallMargin = 8.0;
-UIEdgeInsets const kUIViewDefaultInsets = {kUIViewVerticalMargin, kUIViewHorizontalMargin, kUIViewVerticalMargin, kUIViewHorizontalMargin};
 
-UIEdgeInsets const kUILabelDefaultInsets = {kUIViewSmallTextMargin, kUIViewHorizontalMargin, kUIViewSmallTextMargin, kUIViewHorizontalMargin};
-UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIViewSmallTextMargin, kUIViewSmallMargin, kUIViewSmallTextMargin, kUIViewSmallMargin};
-UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 CGFloat const kUIButtonDefaultHeight = 44.0;
+CGFloat const kUIButtonHorizontalMargin = 14.0;
+CGFloat const kUIButtonVerticalMargin = 7.0;
 CGFloat const kUITextFieldDefaultHeight = 30.0;
 
 CGFloat const kUICellImageHeight = 100;
+
+UIEdgeInsets const kUIViewDefaultInsets = {kUIViewVerticalMargin, kUIViewHorizontalMargin, kUIViewVerticalMargin, kUIViewHorizontalMargin};
+
+UIEdgeInsets const kUILabelDefaultInsets = {kUIViewSmallTextMargin, kUIViewHorizontalMargin, kUIViewSmallTextMargin, kUIViewHorizontalMargin};
+UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIButtonVerticalMargin, kUIButtonHorizontalMargin, kUIButtonVerticalMargin, kUIButtonHorizontalMargin};
+UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 
 @implementation OHMAppConstants
 

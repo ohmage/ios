@@ -69,6 +69,7 @@
 		1E882583191AE21E0034D231 /* OHMConditionParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */; };
 		1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882585191BF7410034D231 /* NSDate+Ohmage.m */; };
 		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
+		1E88258D191D96AA0034D231 /* OHMTimekeeper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88258C191D96AA0034D231 /* OHMTimekeeper.m */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -237,6 +238,8 @@
 		1E882585191BF7410034D231 /* NSDate+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Ohmage.m"; sourceTree = "<group>"; };
 		1E882587191C00370034D231 /* OHMAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMAudioRecorder.h; sourceTree = "<group>"; };
 		1E882588191C00370034D231 /* OHMAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMAudioRecorder.m; sourceTree = "<group>"; };
+		1E88258B191D96AA0034D231 /* OHMTimekeeper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMTimekeeper.h; sourceTree = "<group>"; };
+		1E88258C191D96AA0034D231 /* OHMTimekeeper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMTimekeeper.m; sourceTree = "<group>"; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -545,6 +548,8 @@
 				1E1B610B1909B736001046E0 /* OHMUserInterface.m */,
 				1E56A335191334EC00384AE9 /* OHMLocationManager.h */,
 				1E56A336191334EC00384AE9 /* OHMLocationManager.m */,
+				1E88258B191D96AA0034D231 /* OHMTimekeeper.h */,
+				1E88258C191D96AA0034D231 /* OHMTimekeeper.m */,
 				1E882587191C00370034D231 /* OHMAudioRecorder.h */,
 				1E882588191C00370034D231 /* OHMAudioRecorder.m */,
 			);
@@ -816,6 +821,7 @@
 				1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */,
 				1E56A33C1913643E00384AE9 /* OHMReminderDaysViewController.m in Sources */,
 				1E1B60CC19063242001046E0 /* OHMSurveyPromptChoice.m in Sources */,
+				1E88258D191D96AA0034D231 /* OHMTimekeeper.m in Sources */,
 				1E1B60F919063392001046E0 /* _OHMSurveyPromptResponse.m in Sources */,
 				1EF693E318EA0FE20003E077 /* OHMClient.m in Sources */,
 				1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */,
@@ -974,6 +980,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1004,6 +1011,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

@@ -8,12 +8,14 @@ extern const struct OHMReminderAttributes {
 	__unsafe_unretained NSString *alwaysShow;
 	__unsafe_unretained NSString *enabled;
 	__unsafe_unretained NSString *endTime;
+	__unsafe_unretained NSString *fireDate;
 	__unsafe_unretained NSString *isLocationReminder;
 	__unsafe_unretained NSString *isTimeReminder;
 	__unsafe_unretained NSString *locationLatitude;
 	__unsafe_unretained NSString *locationLongitude;
 	__unsafe_unretained NSString *locationRadius;
 	__unsafe_unretained NSString *minimumReentryInterval;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *specificTime;
 	__unsafe_unretained NSString *startTime;
 	__unsafe_unretained NSString *usesTimeRange;
@@ -30,6 +32,8 @@ extern const struct OHMReminderFetchedProperties {
 
 @class OHMSurvey;
 @class OHMUser;
+
+
 
 
 
@@ -91,6 +95,16 @@ extern const struct OHMReminderFetchedProperties {
 
 
 //- (BOOL)validateEndTime:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* fireDate;
+
+
+
+//- (BOOL)validateFireDate:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -175,6 +189,16 @@ extern const struct OHMReminderFetchedProperties {
 - (void)setMinimumReentryIntervalValue:(int32_t)value_;
 
 //- (BOOL)validateMinimumReentryInterval:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -276,6 +300,12 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+- (NSDate*)primitiveFireDate;
+- (void)setPrimitiveFireDate:(NSDate*)value;
+
+
+
+
 - (NSNumber*)primitiveIsLocationReminder;
 - (void)setPrimitiveIsLocationReminder:(NSNumber*)value;
 
@@ -326,6 +356,12 @@ extern const struct OHMReminderFetchedProperties {
 
 - (int32_t)primitiveMinimumReentryIntervalValue;
 - (void)setPrimitiveMinimumReentryIntervalValue:(int32_t)value_;
+
+
+
+
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
 
 
 

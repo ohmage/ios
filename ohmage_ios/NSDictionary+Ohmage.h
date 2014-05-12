@@ -17,6 +17,8 @@
 @property (nonatomic, readonly) NSString *surveyResponseID;
 @property (nonatomic, readonly) NSString *surveyResponseTimestamp;
 
+@property (nonatomic, readonly) NSString *reminderID;
+
 - (NSString *)authToken;
 - (NSString *)refreshToken;
 - (NSString *)userID;
@@ -66,5 +68,7 @@
 @property (nonatomic, copy) NSDictionary *surveyResponseData;
 @property (nonatomic, copy) NSString *surveyResponseID;
 @property (nonatomic, copy) NSString *surveyResponseTimestamp;
+
+@property (nonatomic, copy) NSString *reminderID;
 
 @end

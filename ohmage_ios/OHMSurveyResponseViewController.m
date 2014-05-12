@@ -56,7 +56,6 @@
 
 - (void)submitButtonPressed:(id)sender
 {
-    self.response.timestamp = [NSDate date];
     [[OHMClient sharedClient] submitSurveyResponse:self.response];
     
     UIViewController *vc = self.navigationController.viewControllers[1];

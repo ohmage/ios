@@ -87,11 +87,9 @@ static NSInteger const kSettingsRowCount = 3;
                                                   target:self
                                                   action:@selector(logoutButtonPressed:)
                                                 maxWidth:contentWidth];
-//    button.backgroundColor = [OHMAppConstants ohmageColor];
     contentHeight += button.frame.size.height + kUIViewVerticalMargin;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, contentHeight)];
-//    headerView.backgroundColor = [[OHMAppConstants lightOhmageColor] lightColor];
     
     [headerView addSubview:nameLabel];
     [headerView addSubview:emailLabel];
@@ -165,6 +163,7 @@ static NSInteger const kSettingsRowCount = 3;
         OHMReminder *reminder = self.reminders[indexPath.row];
         cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
             sw.on = reminder.enabledValue;
+            [sw addTarget:reminder action:@selector(toggleEnabled) forControlEvents:UIControlEventValueChanged];
         }];
         cell.textLabel.text = reminder.survey.surveyName;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", [reminder labelText], [reminder detailLabelText]];
