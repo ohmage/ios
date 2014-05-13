@@ -58,7 +58,7 @@
 {
     UIAlertView *confirmAlert = [[UIAlertView alloc] initWithTitle:title
                                                            message:message
-                                                          delegate:self
+                                                          delegate:self.viewController
                                                  cancelButtonTitle:@"Cancel"
                                                  otherButtonTitles:confirmTitle, nil];
     [confirmAlert show];
@@ -69,27 +69,37 @@
     NSLog(@"Alert did confirm");
 }
 
-- (UIBarButtonItem *)cancelModalPresentationButton
-{
-    if (_cancelModalPresentationButton == nil) {
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                         style:UIBarButtonItemStyleBordered
-                                                                        target:self
-                                                                        action:@selector(cancelModalPresentationButtonPressed:)];
-        _cancelModalPresentationButton = cancelButton;
-    }
-    return _cancelModalPresentationButton;
-}
-
 - (UIBarButtonItem *)doneButton
 {
     if (_doneButton == nil) {
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                    target:self
+                                                                                    target:self.viewController
                                                                                     action:@selector(doneButtonPressed:)];
         _doneButton = doneButton;
     }
     return _doneButton;
+}
+
+- (UIBarButtonItem *)cancelButton
+{
+    if (_cancelButton == nil) {
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                      target:self.viewController
+                                                                                      action:@selector(cancelButtonPressed:)];
+        _cancelButton = cancelButton;
+    }
+    return _cancelButton;
+}
+
+- (UIBarButtonItem *)cancelModalPresentationButton
+{
+    if (_cancelModalPresentationButton == nil) {
+        UIBarButtonItem *cancelModalPresentationButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                       target:self.viewController
+                                                                                                       action:@selector(cancelModalPresentationButtonPressed:)];
+        _cancelModalPresentationButton = cancelModalPresentationButton;
+    }
+    return _cancelModalPresentationButton;
 }
 
 - (void)setBackButtonTitle:(NSString *)title
@@ -101,9 +111,11 @@
     self.viewController.navigationItem.backBarButtonItem = backButtonItem;
 }
 
-- (void)doneButtonPressed:(id)sender
+- (void)doneButtonPressed:(id)sender {}
+
+- (void)cancelButtonPressed:(id)sender
 {
-    [self cancelModalPresentationButtonPressed:self];
+    NSLog(@"Composite view controller cancel button pressed");
 }
 
 - (void)cancelModalPresentationButtonPressed:(id)sender

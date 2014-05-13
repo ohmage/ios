@@ -63,6 +63,11 @@ static NSInteger const kSettingsRowCount = 3;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)doneButtonPressed:(id)sender
+{
+    [self cancelModalPresentationButtonPressed:sender];
+}
+
 - (void)logoutButtonPressed:(id)sender
 {
     [[OHMClient sharedClient] logout];

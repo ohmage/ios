@@ -10,10 +10,6 @@ extern const struct OHMReminderAttributes {
 	__unsafe_unretained NSString *endTime;
 	__unsafe_unretained NSString *fireDate;
 	__unsafe_unretained NSString *isLocationReminder;
-	__unsafe_unretained NSString *isTimeReminder;
-	__unsafe_unretained NSString *locationLatitude;
-	__unsafe_unretained NSString *locationLongitude;
-	__unsafe_unretained NSString *locationRadius;
 	__unsafe_unretained NSString *minimumReentryInterval;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *specificTime;
@@ -23,6 +19,7 @@ extern const struct OHMReminderAttributes {
 } OHMReminderAttributes;
 
 extern const struct OHMReminderRelationships {
+	__unsafe_unretained NSString *reminderLocation;
 	__unsafe_unretained NSString *survey;
 	__unsafe_unretained NSString *user;
 } OHMReminderRelationships;
@@ -30,12 +27,9 @@ extern const struct OHMReminderRelationships {
 extern const struct OHMReminderFetchedProperties {
 } OHMReminderFetchedProperties;
 
+@class NSManagedObject;
 @class OHMSurvey;
 @class OHMUser;
-
-
-
-
 
 
 
@@ -124,62 +118,6 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* isTimeReminder;
-
-
-
-@property BOOL isTimeReminderValue;
-- (BOOL)isTimeReminderValue;
-- (void)setIsTimeReminderValue:(BOOL)value_;
-
-//- (BOOL)validateIsTimeReminder:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* locationLatitude;
-
-
-
-@property double locationLatitudeValue;
-- (double)locationLatitudeValue;
-- (void)setLocationLatitudeValue:(double)value_;
-
-//- (BOOL)validateLocationLatitude:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* locationLongitude;
-
-
-
-@property double locationLongitudeValue;
-- (double)locationLongitudeValue;
-- (void)setLocationLongitudeValue:(double)value_;
-
-//- (BOOL)validateLocationLongitude:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* locationRadius;
-
-
-
-@property double locationRadiusValue;
-- (double)locationRadiusValue;
-- (void)setLocationRadiusValue:(double)value_;
-
-//- (BOOL)validateLocationRadius:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSNumber* minimumReentryInterval;
 
 
@@ -252,6 +190,13 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSManagedObject *reminderLocation;
+
+//- (BOOL)validateReminderLocation:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, strong) OHMSurvey *survey;
 
 //- (BOOL)validateSurvey:(id*)value_ error:(NSError**)error_;
@@ -315,42 +260,6 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-- (NSNumber*)primitiveIsTimeReminder;
-- (void)setPrimitiveIsTimeReminder:(NSNumber*)value;
-
-- (BOOL)primitiveIsTimeReminderValue;
-- (void)setPrimitiveIsTimeReminderValue:(BOOL)value_;
-
-
-
-
-- (NSNumber*)primitiveLocationLatitude;
-- (void)setPrimitiveLocationLatitude:(NSNumber*)value;
-
-- (double)primitiveLocationLatitudeValue;
-- (void)setPrimitiveLocationLatitudeValue:(double)value_;
-
-
-
-
-- (NSNumber*)primitiveLocationLongitude;
-- (void)setPrimitiveLocationLongitude:(NSNumber*)value;
-
-- (double)primitiveLocationLongitudeValue;
-- (void)setPrimitiveLocationLongitudeValue:(double)value_;
-
-
-
-
-- (NSNumber*)primitiveLocationRadius;
-- (void)setPrimitiveLocationRadius:(NSNumber*)value;
-
-- (double)primitiveLocationRadiusValue;
-- (void)setPrimitiveLocationRadiusValue:(double)value_;
-
-
-
-
 - (NSNumber*)primitiveMinimumReentryInterval;
 - (void)setPrimitiveMinimumReentryInterval:(NSNumber*)value;
 
@@ -394,6 +303,11 @@ extern const struct OHMReminderFetchedProperties {
 - (void)setPrimitiveWeekdaysMaskValue:(int16_t)value_;
 
 
+
+
+
+- (NSManagedObject*)primitiveReminderLocation;
+- (void)setPrimitiveReminderLocation:(NSManagedObject*)value;
 
 
 

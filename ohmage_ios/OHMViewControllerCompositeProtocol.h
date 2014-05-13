@@ -13,6 +13,7 @@
 @optional
 
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) UIBarButtonItem *cancelButton;
 @property (nonatomic, strong) UIBarButtonItem *cancelModalPresentationButton;
 @property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, readonly) CGFloat topLength;
@@ -25,6 +26,7 @@
 - (void)setupForTextEntry;
 
 - (void)doneButtonPressed:(id)sender;
+- (void)cancelButtonPressed:(id)sender;
 - (void)cancelModalPresentationButtonPressed:(id)sender;
 
 - (void)prepareForModalPresentation;

@@ -97,6 +97,8 @@
  */
 - (void)updateNotificationForReminder:(OHMReminder *)reminder
 {
+    return; //todo: fix
+    
     NSLog(@"update notification for reminder: %@", reminder);
     UIApplication *application = [UIApplication sharedApplication];
     NSArray *existingNotifications = application.scheduledLocalNotifications;

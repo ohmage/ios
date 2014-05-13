@@ -64,12 +64,7 @@
     self.surveyResponse.timestamp = [NSDate date];
     [[OHMClient sharedClient] saveClientState];
     OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:self.surveyResponse.survey];
-    
-    UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:vc
-                                                                      action:@selector(popToNavigationRootAnimated)];
-    vc.navigationItem.leftBarButtonItem = doneButtonItem;
+    vc.navigationItem.leftBarButtonItem = vc.doneButton;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -34,7 +34,7 @@
                                               [OHMUserInterface formattedTime:self.startTime],
                                               [OHMUserInterface formattedTime:self.endTime]]];
     }
-    else {
+    else if (self.specificTime != nil) {
         text = [text stringByAppendingString:[OHMUserInterface formattedTime:self.specificTime]];
     }
     
@@ -98,6 +98,11 @@
         return YES;
     else
         return (self.weekdaysMaskValue & repeatDay);
+}
+
+- (void)toggleAlwaysShow
+{
+    self.alwaysShowValue = !self.alwaysShowValue;
 }
 
 - (void)toggleEnabled

@@ -10,31 +10,26 @@
 #import "OHMReminderDaysViewController.h"
 #import "OHMReminderLocationViewController.h"
 #import "OHMReminder.h"
-#import "OHMUserInterface.h"
+#import "OHMSurvey.h"
 #import "OHMTimekeeper.h"
 
-
-static const NSInteger kTimeSectionIndex = 0;
-static const NSInteger kLocationSectionIndex = 1;
-
-static const NSInteger kTimeRowIndexEnable = 0;
-static const NSInteger kTimeRowIndexAlarm = 1;
-static const NSInteger kTimeRowIndexRangeEnable = 2;
-static const NSInteger kTimeRowIndexRangeStart = 3;
-static const NSInteger kTimeRowIndexRangeEnd = 4;
-static const NSInteger kTimeRowIndexRepeat = 5;
-
-static const NSInteger kLocationRowIndexEnable = 0;
-static const NSInteger kLocationRowIndexLocation = 1;
+typedef NS_ENUM(NSUInteger, RowIndex) {
+    eRowIndexTimeOrLocation = 0,
+    eRowIndexRangeEnable,
+    eRowIndexRangeStart,
+    eRowIndexRangeEnd,
+    eRowIndexRepeat,
+    eRowIndexMinimumReentry,
+    eRowIndexAlwaysShow
+};
 
 
 @interface OHMReminderViewController ()
 
 @property (nonatomic, strong) OHMReminder *reminder;
-@property (nonatomic, strong) UISwitch *timeReminderSwitch;
+
+@property (nonatomic, strong) UISegmentedControl *timeOrLocationControl;
 @property (nonatomic, strong) UISwitch *rangeEnableSwitch;
-@property (nonatomic, strong) UISwitch *locationReminderSwitch;
-@property (nonatomic, strong) UIBarButtonItem *saveButton;
 @property (nonatomic, strong) UIDatePicker *alarmTimePicker;
 @property (nonatomic, strong) UIDatePicker *startTimePicker;
 @property (nonatomic, strong) UIDatePicker *endTimePicker;
@@ -61,16 +56,30 @@ static const NSInteger kLocationRowIndexLocation = 1;
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"Create Reminder" : @"Edit Reminder");
+    self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"New Reminder" : @"Edit Reminder");
     
-//    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonPressed:)];
-//    self.navigationItem.rightBarButtonItem = saveButton;
-//    self.saveButton = saveButton;
-//    [self updateSaveButtonState];
+    self.view.tintColor = [OHMAppConstants colorForRowIndex:self.reminder.survey.colorIndex];
     
     [self setupTimePickers];
     
-    if (!self.reminder.objectID.isTemporaryID) {
+    UISegmentedControl *timeOrLocationControl = [[UISegmentedControl alloc] initWithItems:@[@"Time Reminder", @"Location Reminder"]];
+    timeOrLocationControl.frame = CGRectMake(0, 0, 0, 30);
+    timeOrLocationControl.backgroundColor = [UIColor whiteColor];
+    timeOrLocationControl.selectedSegmentIndex = 0;
+    [timeOrLocationControl addTarget:self action:@selector(timeOrLocationControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.timeOrLocationControl = timeOrLocationControl;
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectInset(timeOrLocationControl.frame, 0, -kUIViewSmallMargin)];
+    [headerView addSubview:timeOrLocationControl];
+    [timeOrLocationControl constrainToTopInParentWithMargin:kUIViewSmallMargin];
+    [headerView constrainChild:timeOrLocationControl toHorizontalInsets:UIEdgeInsetsMake(0, kUIViewSmallMargin, 0, kUIViewSmallMargin)];
+    self.tableView.tableHeaderView = headerView;
+    
+    if (self.reminder.objectID.isTemporaryID) {
+        self.navigationItem.leftBarButtonItem = self.doneButton;
+        self.navigationItem.rightBarButtonItem = self.cancelButton;
+    }
+    else {
         self.tableView.tableFooterView = [OHMUserInterface tableFooterViewWithButton:@"Delete Reminder" fromTableView:self.tableView setupBlock:^(UIButton *button) {
             [button addTarget:self action:@selector(deleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             button.backgroundColor = [[UIColor redColor] lightColor];
@@ -82,26 +91,26 @@ static const NSInteger kLocationRowIndexLocation = 1;
 {
     [super viewWillAppear:animated];
     NSLog(@"view will appear");
-    if (self.timeReminderSwitch.on) {
-        NSIndexPath *repeatPath = [self indexPathForTimeRepeatRow];
-        [self.tableView reloadRowsAtIndexPaths:@[repeatPath] withRowAnimation:UITableViewRowAnimationNone];
-    }
+//    if (self.timeReminderSwitch.on) {
+//        NSIndexPath *repeatPath = [self indexPathForTimeRepeatRow];
+//        [self.tableView reloadRowsAtIndexPaths:@[repeatPath] withRowAnimation:UITableViewRowAnimationNone];
+//    }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    if (!self.reminder.isTimeReminderValue && !self.reminder.isLocationReminderValue) {
-        [[OHMClient sharedClient] deleteObject:self.reminder];
-        [[OHMClient sharedClient] saveClientState];
-    }
-    else {
-        [self saveReminder];
-    }
-}
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    
+//    if (!self.reminder.isTimeReminderValue && !self.reminder.isLocationReminderValue) {
+//        [[OHMClient sharedClient] deleteObject:self.reminder];
+//        [[OHMClient sharedClient] saveClientState];
+//    }
+//    else {
+//        [self saveReminder];
+//    }
+//}
 
-- (void)saveReminder
+- (void)doneButtonPressed:(id)sender
 {
     if (self.reminder.usesTimeRangeValue) {
         self.reminder.startTime = self.startTimePicker.date;
@@ -112,6 +121,16 @@ static const NSInteger kLocationRowIndexLocation = 1;
     }
     [[OHMTimekeeper sharedTimekeeper] updateNotificationForReminder:self.reminder];
     [[OHMClient sharedClient] saveClientState];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)cancelButtonPressed:(id)sender
+{
+    [[OHMClient sharedClient] deleteObject:self.reminder];
+    [[OHMClient sharedClient] saveClientState];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)deleteButtonPressed:(id)sender
@@ -121,10 +140,9 @@ static const NSInteger kLocationRowIndexLocation = 1;
 
 - (void)confirmationAlertDidConfirm:(UIAlertView *)alert
 {
-    NSLog(@"Alert did confirm");
-    self.reminder.isTimeReminderValue = NO;
-    self.reminder.isLocationReminderValue = NO;
-    [self.navigationController popViewControllerAnimated:YES];
+    NSLog(@"Delete alert did confirm");
+    
+    [self cancelButtonPressed:nil];
 }
 
 
@@ -151,49 +169,49 @@ static const NSInteger kLocationRowIndexLocation = 1;
         if (self.reminder.endTime != nil) {
             dp.date = self.reminder.endTime;
         }
+        else {
+            dp.date = [self.startTimePicker.date dateByAddingHours:1];
+        }
         self.endTimePicker = dp;
     }];
 }
 
-- (void)updateSaveButtonState
+- (void)timeOrLocationControlValueChanged:(id)sender
 {
-    self.saveButton.enabled = (self.reminder.isTimeReminderValue || self.reminder.isLocationReminderValue);
-}
-
-- (void)timeReminderSwitchToggled:(id)sender
-{
-    self.reminder.isTimeReminderValue = self.timeReminderSwitch.on;
+    // hide reminderTime picker if needed before updating isLocationReminderValue
+    if (self.timeOrLocationControl.selectedSegmentIndex == 1) {
+        NSIndexPath *timeReminderPickerPath = [NSIndexPath indexPathForRow:eRowIndexTimeOrLocation + 1 inSection:0];
+        if ([self.timePickerPath isEqual:timeReminderPickerPath]) {
+            [self toggleTimePickerForIndexPath:[self indexPathForRow:eRowIndexTimeOrLocation]];
+        }
+    }
     
-    NSMutableArray *paths = [NSMutableArray array];
+    self.reminder.isLocationReminderValue = self.timeOrLocationControl.selectedSegmentIndex;
     
-    [paths addObject:[self indexPathForTimeRow:kTimeRowIndexAlarm]];
-    [paths addObject:[self indexPathForTimeRow:kTimeRowIndexRangeEnable]];
-    [paths addObject:[self indexPathForTimeRepeatRow]];
-    
+    NSMutableArray *paths = [NSMutableArray arrayWithObject:[self indexPathForRow:eRowIndexMinimumReentry]];
     if (self.rangeEnableSwitch.on) {
-        [paths addObject:[self indexPathForTimeRow:kTimeRowIndexRangeStart]];
-        [paths addObject:[self indexPathForTimeRow:kTimeRowIndexRangeEnd]];
-    }
-    if (self.timePickerPath != nil) {
-        [paths addObject:self.timePickerPath];
-        self.timePickerPath = nil;
+        [paths addObject:[self indexPathForRow:eRowIndexAlwaysShow]];
     }
     
-    if (self.timeReminderSwitch.on) {
+    if (self.reminder.isLocationReminderValue) {
         [self insertRowsAtIndexPaths:paths];
     }
     else {
         [self deleteRowsAtIndexPaths:paths];
     }
     
-    [self updateSaveButtonState];
+    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)timeRangeEnableSwitchToggled:(id)sender
 {
     self.reminder.usesTimeRangeValue = self.rangeEnableSwitch.on;
-    NSArray *paths = @[[self indexPathForTimeRow:kTimeRowIndexRangeStart],
-                       [self indexPathForTimeRow:kTimeRowIndexRangeEnd]];
+    NSArray *paths = @[[self indexPathForRow:eRowIndexRangeStart],
+                       [self indexPathForRow:eRowIndexRangeEnd]];
+    
+    if (self.reminder.isLocationReminderValue) {
+        paths = [paths arrayByAddingObject:[self indexPathForRow:eRowIndexAlwaysShow]];
+    }
     
     if (self.rangeEnableSwitch.on) {
         [self insertRowsAtIndexPaths:paths];
@@ -202,27 +220,7 @@ static const NSInteger kLocationRowIndexLocation = 1;
         [self deleteRowsAtIndexPaths:paths];
     }
     
-    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (void)locationReminderSwitchToggled:(id)sender
-{
-    self.reminder.isLocationReminderValue = self.locationReminderSwitch.on;
-    
-    NSIndexPath *locationPath = [NSIndexPath indexPathForRow:kLocationRowIndexLocation inSection:kLocationSectionIndex];
-    
-    if (self.locationReminderSwitch.on) {
-        [self insertRowsAtIndexPaths:@[locationPath]];
-    }
-    else {
-        [self deleteRowsAtIndexPaths:@[locationPath]];
-    }
-    
-    if (self.reminder.isTimeReminderValue) {
-        [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForTimeRow:kTimeRowIndexAlarm]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    
-    [self updateSaveButtonState];
+    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)toggleTimePickerForIndexPath:(NSIndexPath *)indexPath
@@ -265,13 +263,13 @@ static const NSInteger kLocationRowIndexLocation = 1;
 {
     NSIndexPath *path = nil;
     if ([sender isEqual:self.alarmTimePicker]) {
-        path = [self indexPathForTimeRow:kTimeRowIndexAlarm];
+        path = [self indexPathForRow:eRowIndexTimeOrLocation];
     }
     else if ([sender isEqual:self.startTimePicker]) {
-        path = [self indexPathForTimeRow:kTimeRowIndexRangeStart];
+        path = [self indexPathForRow:eRowIndexRangeStart];
     }
     else if ([sender isEqual:self.endTimePicker]) {
-        path = [self indexPathForTimeRow:kTimeRowIndexRangeEnd];
+        path = [self indexPathForRow:eRowIndexRangeEnd];
     }
     else {
         return;
@@ -282,8 +280,7 @@ static const NSInteger kLocationRowIndexLocation = 1;
 - (void)presentDayPicker
 {
     OHMReminderDaysViewController *vc = [[OHMReminderDaysViewController alloc] initWithReminder:self.reminder];
-    UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:navCon animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)presentLocationPicker
@@ -294,37 +291,19 @@ static const NSInteger kLocationRowIndexLocation = 1;
 
 #pragma mark - Table view
 
-- (NSIndexPath *)indexPathForTimeRepeatRow
-{
-    NSInteger row = kTimeRowIndexRepeat;
-    
-    // adjust for other cells
-    if (self.timePickerPath != nil) row++;
-    if (!self.rangeEnableSwitch.on) row -= 2;
-    
-    return [NSIndexPath indexPathForRow:row inSection:kTimeSectionIndex];
-}
-
-- (NSIndexPath *)indexPathForTimeRow:(NSInteger)row
+- (NSIndexPath *)indexPathForRow:(NSInteger)row
 {
     
-    if (row == kTimeRowIndexRepeat) {
-        return [self indexPathForTimeRepeatRow];
+    if (!self.rangeEnableSwitch.on && row > eRowIndexRangeEnd) {
+        row -= 2;
     }
-    else if (self.timePickerPath != nil && self.timePickerPath.row <= row) {
+    
+    if (self.timePickerPath != nil && self.timePickerPath.row <= row) {
         // adjust for time picker
         row++;
     }
     
-    return [NSIndexPath indexPathForRow:row inSection:kTimeSectionIndex];
-}
-
-- (NSIndexPath *)indexPathForLocationRow:(NSInteger)row
-{
-    if (row != kLocationRowIndexEnable && row != kLocationRowIndexLocation)
-        return nil;
-    
-    return [NSIndexPath indexPathForRow:row inSection:kLocationSectionIndex];
+    return [NSIndexPath indexPathForRow:row inSection:0];
 }
 
 - (void)insertRowsAtIndexPaths:(NSArray *)paths
@@ -345,43 +324,42 @@ static const NSInteger kLocationRowIndexLocation = 1;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger timeSectionRowCount = 1; // time enable
-    switch (section) {
-        case kTimeSectionIndex:
-            if (self.reminder.isTimeReminderValue) {
-                timeSectionRowCount += 3; // alarm, range enable, repeat
-                if (self.reminder.usesTimeRangeValue) {
-                    timeSectionRowCount += 2; // start, end
-                }
-                if (self.timePickerPath != nil) {
-                    timeSectionRowCount++; // time picker
-                }
-            }
-            return timeSectionRowCount;
-        case kLocationSectionIndex:
-            return (self.reminder.isLocationReminderValue ? 2 : 1);
-            
-        default:
-            return 0;
+    NSInteger rowCount = 3; // timeOrLocation, range enable, repeat
+    
+    if (self.reminder.usesTimeRangeValue) {
+        rowCount += 2; // start, end
     }
+    
+    if (self.reminder.isLocationReminderValue) {
+        rowCount++; // minimum reentry
+        if (self.reminder.usesTimeRangeValue) {
+            rowCount++; // always show
+        }
+    }
+    
+    if (self.timePickerPath != nil) {
+        rowCount++; // time picker
+    }
+    
+    return rowCount;
 }
 
 - (UITableViewCell *)timePickerCellForRow:(NSInteger)row
 {
-    NSIndexPath *previousIndex = [NSIndexPath indexPathForRow:row - 1 inSection:kTimeSectionIndex];
+    NSIndexPath *previousIndex = [NSIndexPath indexPathForRow:row - 1 inSection:0];
     
-    if ([previousIndex isEqual:[self indexPathForTimeRow:kTimeRowIndexAlarm]]) {
+    if ([previousIndex isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]]) {
         return self.alarmTimePickerCell;
     }
-    else if ([previousIndex isEqual:[self indexPathForTimeRow:kTimeRowIndexRangeStart]]) {
+    else if ([previousIndex isEqual:[self indexPathForRow:eRowIndexRangeStart]]) {
         return self.startTimePickerCell;
     }
-    else if ([previousIndex isEqual:[self indexPathForTimeRow:kTimeRowIndexRangeEnd]]) {
+    else if ([previousIndex isEqual:[self indexPathForRow:eRowIndexRangeEnd]]) {
         return self.endTimePickerCell;
     }
     
@@ -393,59 +371,32 @@ static const NSInteger kLocationRowIndexLocation = 1;
     if ([self.timePickerPath isEqual:indexPath]) {
         return [self timePickerCellForRow:indexPath.row];
     }
-    else if ([[self indexPathForTimeRepeatRow] isEqual:indexPath]) {
-        return [self timeRepeatCell];
-    }
-    else if (indexPath.section == kTimeSectionIndex) {
+    else {
         
-        // Adjust row for time picker if needed
+        // Adjust row for range and time picker if needed
         NSInteger adjustedRow = indexPath.row;
-        if (self.timePickerPath && (self.timePickerPath.row < indexPath.row)) {
+        
+        if (!self.rangeEnableSwitch.on && adjustedRow > eRowIndexRangeEnable) {
+            adjustedRow += 2; // skip range start and end
+        }
+        
+        if (self.timePickerPath && (self.timePickerPath.row < adjustedRow)) {
             adjustedRow--;
         }
-        return [self timeCellForRow:adjustedRow];
-    }
-    else {
-        return [self locationCellForRow:indexPath.row];
+        
+        return [self cellForRow:adjustedRow];
     }
 }
 
-- (UITableViewCell *)timeRepeatCell
-{
-    UITableViewCell *cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
-    cell.textLabel.text = @"Repeat";
-    cell.detailTextLabel.text = [self.reminder repeatLabelText];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return cell;
-}
-
-- (UITableViewCell *)timeCellForRow:(NSInteger)row
+- (UITableViewCell *)cellForRow:(NSInteger)row
 {
     UITableViewCell *cell = nil;
     
     switch (row) {
-        case kTimeRowIndexEnable:
-        {
-            cell = [OHMUserInterface cellWithSwitchFromTableView:self.tableView setupBlock:^(UISwitch *sw) {
-                [sw addTarget:self action:@selector(timeReminderSwitchToggled:) forControlEvents:UIControlEventValueChanged];
-                sw.on = self.reminder.isTimeReminderValue;
-                self.timeReminderSwitch = sw;
-            }];
-            cell.textLabel.text = @"Remind me at a time";
+        case eRowIndexTimeOrLocation:
+            cell = self.reminder.isLocationReminderValue ? [self locationCell] : [self reminderTimeCell];
             break;
-        }
-        case kTimeRowIndexAlarm:
-            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
-            cell.textLabel.text = @"Alarm";
-            if (self.reminder.usesTimeRangeValue) {
-                cell.detailTextLabel.text = (self.reminder.isLocationReminderValue ? @"Location based" : @"Random");
-            }
-            else {
-                cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.alarmTimePicker.date];
-            }
-            cell.accessoryType = UITableViewRowAnimationNone;
-            break;
-        case kTimeRowIndexRangeEnable:
+        case eRowIndexRangeEnable:
         {
             cell = [OHMUserInterface cellWithSwitchFromTableView:self.tableView setupBlock:^(UISwitch *sw) {
                 [sw addTarget:self action:@selector(timeRangeEnableSwitchToggled:) forControlEvents:UIControlEventValueChanged];
@@ -455,18 +406,40 @@ static const NSInteger kLocationRowIndexLocation = 1;
             cell.textLabel.text = @"Use time range";
             break;
         }
-        case kTimeRowIndexRangeStart:
+        case eRowIndexRangeStart:
             cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
             cell.textLabel.text = @"Start time";
             cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.startTimePicker.date];
-            cell.accessoryType = UITableViewRowAnimationNone;
+            cell.accessoryType = UITableViewCellAccessoryNone;
             break;
-        case kTimeRowIndexRangeEnd:
+        case eRowIndexRangeEnd:
             cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
             cell.textLabel.text = @"End time";
             cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.endTimePicker.date];
-            cell.accessoryType = UITableViewRowAnimationNone;
+            cell.accessoryType = UITableViewCellAccessoryNone;
             break;
+        case eRowIndexRepeat:
+            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
+            cell.textLabel.text = @"Repeat";
+            cell.detailTextLabel.text = [self.reminder repeatLabelText];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        case eRowIndexMinimumReentry:
+            cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
+            cell.textLabel.text = @"Minimum reentry interval";
+            cell.detailTextLabel.text = @"Two hours";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            break;
+        case eRowIndexAlwaysShow:
+        {
+            cell = [OHMUserInterface cellWithSwitchFromTableView:self.tableView setupBlock:^(UISwitch *sw) {
+                [sw addTarget:self.reminder action:@selector(toggleAlwaysShow) forControlEvents:UIControlEventValueChanged];
+                sw.on = self.reminder.alwaysShowValue;
+            }];
+            cell.textLabel.text = @"Always show reminder";
+            cell.detailTextLabel.text = @"Show reminder at end time if location isn't reached";
+            break;
+        }
             
         default:
             break;
@@ -475,45 +448,50 @@ static const NSInteger kLocationRowIndexLocation = 1;
     return cell;
 }
 
-- (UITableViewCell *)locationCellForRow:(NSInteger)row
+- (UITableViewCell *)reminderTimeCell
 {
-    UITableViewCell *cell = nil;
+    UITableViewCell *cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
     
-    switch (row) {
-        case kLocationRowIndexEnable:
-        {
-            cell = [OHMUserInterface cellWithSwitchFromTableView:self.tableView setupBlock:^(UISwitch *sw) {
-                [sw addTarget:self action:@selector(locationReminderSwitchToggled:) forControlEvents:UIControlEventValueChanged];
-                sw.on = self.reminder.isLocationReminderValue;
-                self.locationReminderSwitch = sw;
-            }];
-            cell.textLabel.text = @"Remind me at a location";
-            break;
-        }
-        case kLocationRowIndexLocation:
-            cell = [OHMUserInterface cellWithDefaultStyleFromTableView:self.tableView];
-            cell.textLabel.text = @"Location";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            break;
-            
-        default:
-            break;
+    cell.textLabel.text = @"Reminder time";
+    if (self.reminder.usesTimeRangeValue) {
+        cell.detailTextLabel.text = @"Random";
     }
+    else {
+        cell.detailTextLabel.text = [OHMUserInterface formattedTime:self.alarmTimePicker.date];
+    }
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
     return cell;
 }
+
+- (UITableViewCell *)locationCell
+{
+    UITableViewCell *cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
+    
+    cell.textLabel.text = @"Location";
+    cell.detailTextLabel.text = @"A location";
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    return cell;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([indexPath isEqual:[self indexPathForTimeRow:kTimeRowIndexAlarm]]
-        || ( self.rangeEnableSwitch.on && ([indexPath isEqual:[self indexPathForTimeRow:kTimeRowIndexRangeStart]]
-                                           || [indexPath isEqual:[self indexPathForTimeRow:kTimeRowIndexRangeEnd]]) ) ) {
-        [self toggleTimePickerForIndexPath:indexPath];
-    }
-    else if ([indexPath isEqual:[self indexPathForTimeRepeatRow]]) {
+    if ([indexPath isEqual:[self indexPathForRow:eRowIndexRepeat]]) {
         [self presentDayPicker];
     }
-    else if ([indexPath isEqual:[self indexPathForLocationRow:kLocationRowIndexLocation]]) {
-        [self presentLocationPicker];
+    else if (self.rangeEnableSwitch.on && ([indexPath isEqual:[self indexPathForRow:eRowIndexRangeStart]]
+                                           || [indexPath isEqual:[self indexPathForRow:eRowIndexRangeEnd]]) ) {
+        [self toggleTimePickerForIndexPath:indexPath];
+    }
+    else if (self.reminder.isLocationReminderValue) {
+        if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]]) {
+            [self presentLocationPicker];
+        }
+    }
+    else if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]] && !self.rangeEnableSwitch.on) {
+        [self toggleTimePickerForIndexPath:indexPath];
     }
 }
 

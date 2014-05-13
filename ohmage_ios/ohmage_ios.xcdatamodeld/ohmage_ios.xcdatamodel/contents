@@ -13,18 +13,18 @@
         <attribute name="endTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="fireDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="isLocationReminder" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="isTimeReminder" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="locationLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="locationLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="locationRadius" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="minimumReentryInterval" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="ohmID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="specificTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="usesTimeRange" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="weekdaysMask" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="reminderLocation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMReminderLocation" inverseName="reminder" inverseEntity="OHMReminderLocation" syncable="YES"/>
         <relationship name="survey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="reminders" inverseEntity="OHMSurvey" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMUser" inverseName="reminders" inverseEntity="OHMUser" syncable="YES"/>
+    </entity>
+    <entity name="OHMReminderLocation" syncable="YES">
+        <relationship name="reminder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMReminder" inverseName="reminderLocation" inverseEntity="OHMReminder" syncable="YES"/>
     </entity>
     <entity name="OHMSurvey" representedClassName="OHMSurvey" syncable="YES">
         <attribute name="isLoaded" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -95,12 +95,13 @@
     </entity>
     <elements>
         <element name="OHMOhmlet" positionX="52" positionY="-207" width="128" height="120"/>
-        <element name="OHMReminder" positionX="-54" positionY="-90" width="128" height="300"/>
+        <element name="OHMReminder" positionX="-54" positionY="-90" width="128" height="253"/>
         <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="180"/>
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="330"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="178"/>
         <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="133"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="133"/>
+        <element name="OHMReminderLocation" positionX="-54" positionY="-90" width="128" height="58"/>
     </elements>
 </model>

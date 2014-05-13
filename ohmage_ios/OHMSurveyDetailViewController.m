@@ -59,7 +59,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     [self setupHeaderView];
     
     NSPredicate *remindersPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
-    self.fetchedRemindersController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName] sortKey:@"isTimeReminder" predicate:remindersPredicate sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedRemindersController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName] sortKey:@"isLocationReminder" predicate:remindersPredicate sectionNameKeyPath:nil cacheName:nil];
     
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
@@ -147,7 +147,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 }
 
 
-- (void)popToNavigationRootAnimated
+- (void)doneButtonPressed:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

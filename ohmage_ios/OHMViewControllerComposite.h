@@ -15,6 +15,7 @@
 @property (nonatomic, weak) UIViewController<OHMViewControllerCompositeProtocol> *viewController;
 
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) UIBarButtonItem *cancelButton;
 @property (nonatomic, strong) UIBarButtonItem *cancelModalPresentationButton;
 @property (nonatomic, readonly) CGFloat topLength;
 @property (nonatomic) BOOL backgroundTapEnabled;
@@ -26,6 +27,7 @@
 - (void)setBackButtonTitle:(NSString *)title;
 
 - (void)doneButtonPressed:(id)sender;
+- (void)cancelButtonPressed:(id)sender;
 - (void)cancelModalPresentationButtonPressed:(id)sender;
 - (void)prepareForModalPresentation;
 

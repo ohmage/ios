@@ -9,10 +9,6 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 	.endTime = @"endTime",
 	.fireDate = @"fireDate",
 	.isLocationReminder = @"isLocationReminder",
-	.isTimeReminder = @"isTimeReminder",
-	.locationLatitude = @"locationLatitude",
-	.locationLongitude = @"locationLongitude",
-	.locationRadius = @"locationRadius",
 	.minimumReentryInterval = @"minimumReentryInterval",
 	.ohmID = @"ohmID",
 	.specificTime = @"specificTime",
@@ -22,6 +18,7 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 };
 
 const struct OHMReminderRelationships OHMReminderRelationships = {
+	.reminderLocation = @"reminderLocation",
 	.survey = @"survey",
 	.user = @"user",
 };
@@ -67,26 +64,6 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 	}
 	if ([key isEqualToString:@"isLocationReminderValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"isLocationReminder"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"isTimeReminderValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"isTimeReminder"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"locationLatitudeValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"locationLatitude"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"locationLongitudeValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"locationLongitude"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"locationRadiusValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"locationRadius"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -204,110 +181,6 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 
 
-@dynamic isTimeReminder;
-
-
-
-- (BOOL)isTimeReminderValue {
-	NSNumber *result = [self isTimeReminder];
-	return [result boolValue];
-}
-
-- (void)setIsTimeReminderValue:(BOOL)value_ {
-	[self setIsTimeReminder:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveIsTimeReminderValue {
-	NSNumber *result = [self primitiveIsTimeReminder];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveIsTimeReminderValue:(BOOL)value_ {
-	[self setPrimitiveIsTimeReminder:[NSNumber numberWithBool:value_]];
-}
-
-
-
-
-
-@dynamic locationLatitude;
-
-
-
-- (double)locationLatitudeValue {
-	NSNumber *result = [self locationLatitude];
-	return [result doubleValue];
-}
-
-- (void)setLocationLatitudeValue:(double)value_ {
-	[self setLocationLatitude:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveLocationLatitudeValue {
-	NSNumber *result = [self primitiveLocationLatitude];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveLocationLatitudeValue:(double)value_ {
-	[self setPrimitiveLocationLatitude:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
-@dynamic locationLongitude;
-
-
-
-- (double)locationLongitudeValue {
-	NSNumber *result = [self locationLongitude];
-	return [result doubleValue];
-}
-
-- (void)setLocationLongitudeValue:(double)value_ {
-	[self setLocationLongitude:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveLocationLongitudeValue {
-	NSNumber *result = [self primitiveLocationLongitude];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveLocationLongitudeValue:(double)value_ {
-	[self setPrimitiveLocationLongitude:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
-@dynamic locationRadius;
-
-
-
-- (double)locationRadiusValue {
-	NSNumber *result = [self locationRadius];
-	return [result doubleValue];
-}
-
-- (void)setLocationRadiusValue:(double)value_ {
-	[self setLocationRadius:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveLocationRadiusValue {
-	NSNumber *result = [self primitiveLocationRadius];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveLocationRadiusValue:(double)value_ {
-	[self setPrimitiveLocationRadius:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
 @dynamic minimumReentryInterval;
 
 
@@ -406,6 +279,10 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 
 
+
+@dynamic reminderLocation;
+
+	
 
 @dynamic survey;
 

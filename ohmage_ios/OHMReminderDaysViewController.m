@@ -32,7 +32,6 @@
     // Do any additional setup after loading the view.
     
     self.navigationItem.title = @"Repeat";
-    self.navigationItem.rightBarButtonItem = self.doneButton;
 }
 
 

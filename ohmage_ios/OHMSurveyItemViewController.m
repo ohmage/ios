@@ -424,6 +424,11 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 
 #pragma mark - Interaction
 
+- (void)doneButtonPressed:(id)sender
+{
+    [self cancelModalPresentationButtonPressed:sender];
+}
+
 - (void)cancelSurveyButtonPressed:(id)sender
 {
     [[OHMClient sharedClient] deleteObject:self.surveyResponse];
