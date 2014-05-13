@@ -200,6 +200,12 @@
     return cell;
 }
 
+
++ (UITableViewCell *)cellWithSegmentedControlFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISegmentedControl *sc))scBlock
+{
+    return nil;
+}
+
 + (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock
 {
     CGSize buttonSize = CGSizeMake(tableView.frame.size.width - 2 * kUIViewHorizontalMargin, kUIButtonDefaultHeight);

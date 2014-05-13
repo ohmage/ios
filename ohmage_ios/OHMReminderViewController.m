@@ -8,6 +8,7 @@
 
 #import "OHMReminderViewController.h"
 #import "OHMReminderDaysViewController.h"
+#import "OHMReminderLocationViewController.h"
 #import "OHMReminder.h"
 #import "OHMUserInterface.h"
 #import "OHMTimekeeper.h"
@@ -285,6 +286,12 @@ static const NSInteger kLocationRowIndexLocation = 1;
     [self presentViewController:navCon animated:YES completion:nil];
 }
 
+- (void)presentLocationPicker
+{
+    OHMReminderLocationViewController *vc = [[OHMReminderLocationViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - Table view
 
 - (NSIndexPath *)indexPathForTimeRepeatRow
@@ -309,13 +316,15 @@ static const NSInteger kLocationRowIndexLocation = 1;
         row++;
     }
     
-//    if (!self.reminder.usesTimeRangeValue) {
-//        if (row == kTimeRowIndexRangeStart || row == kTimeRowIndexRangeEnd) {
-//            return nil;
-//        }
-//    }
-    
     return [NSIndexPath indexPathForRow:row inSection:kTimeSectionIndex];
+}
+
+- (NSIndexPath *)indexPathForLocationRow:(NSInteger)row
+{
+    if (row != kLocationRowIndexEnable && row != kLocationRowIndexLocation)
+        return nil;
+    
+    return [NSIndexPath indexPathForRow:row inSection:kLocationSectionIndex];
 }
 
 - (void)insertRowsAtIndexPaths:(NSArray *)paths
@@ -502,6 +511,9 @@ static const NSInteger kLocationRowIndexLocation = 1;
     }
     else if ([indexPath isEqual:[self indexPathForTimeRepeatRow]]) {
         [self presentDayPicker];
+    }
+    else if ([indexPath isEqual:[self indexPathForLocationRow:kLocationRowIndexLocation]]) {
+        [self presentLocationPicker];
     }
 }
 

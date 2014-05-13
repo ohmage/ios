@@ -48,6 +48,10 @@
     NSString *ohmID = notification.userInfo.reminderID;
     OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:ohmID];
     
+    // todo: fix
+    [self cancelAllNotifications];
+    return;
+    
     // Update the reminder if it's still enabled and designed to repeat.
     if (reminder.enabledValue) {
         if (reminder.weekdaysMaskValue != OHMRepeatDayNever) {

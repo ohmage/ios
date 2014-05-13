@@ -383,6 +383,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self.view addSubview:timePicker];
     [timePicker positionBelowElement:datePicker margin:-35];
     [timePicker centerHorizontallyInView:self.view];
+    [self.view sendSubviewToBack:timePicker];
     
     self.datePicker = datePicker;
     self.timePicker = timePicker;

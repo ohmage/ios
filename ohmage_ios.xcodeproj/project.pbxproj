@@ -85,6 +85,7 @@
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
 		1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */; };
 		1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */; };
+		1EF3900A1921713C00CD69BE /* OHMReminderLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF390091921713C00CD69BE /* OHMReminderLocationViewController.m */; };
 		1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */; };
 		1EF693D818EA0F670003E077 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C718EA0F670003E077 /* AFHTTPRequestOperationManager.m */; };
 		1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693C918EA0F670003E077 /* AFHTTPSessionManager.m */; };
@@ -266,6 +267,8 @@
 		1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItemViewController.h; sourceTree = "<group>"; };
 		1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemViewController.m; sourceTree = "<group>"; };
 		1EDA0B3418F5A4DD00C89F91 /* ohmage_ios.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ohmage_ios.xcdatamodel; sourceTree = "<group>"; };
+		1EF390081921713C00CD69BE /* OHMReminderLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderLocationViewController.h; sourceTree = "<group>"; };
+		1EF390091921713C00CD69BE /* OHMReminderLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderLocationViewController.m; sourceTree = "<group>"; };
 		1EF693C418EA0F670003E077 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		1EF693C518EA0F670003E077 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		1EF693C618EA0F670003E077 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 				1EA7645419118699007768EF /* OHMReminderViewController.m */,
 				1E56A33A1913643E00384AE9 /* OHMReminderDaysViewController.h */,
 				1E56A33B1913643E00384AE9 /* OHMReminderDaysViewController.m */,
+				1EF390081921713C00CD69BE /* OHMReminderLocationViewController.h */,
+				1EF390091921713C00CD69BE /* OHMReminderLocationViewController.m */,
 			);
 			name = Reminders;
 			sourceTree = "<group>";
@@ -561,6 +566,7 @@
 			children = (
 				1E1B60E619063392001046E0 /* _Model */,
 				1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */,
+				1E88258A191C6A860034D231 /* Survey */,
 				1EF693E118EA0FE20003E077 /* OHMClient.h */,
 				1EF693E218EA0FE20003E077 /* OHMClient.m */,
 				1ECA87EC190DDE4A00429D5D /* OHMMediaStore.h */,
@@ -573,7 +579,6 @@
 				1E1B60BC19063242001046E0 /* OHMOhmlet.m */,
 				1E3C80F0191083DA0088D2D0 /* OHMReminder.h */,
 				1E3C80F1191083DA0088D2D0 /* OHMReminder.m */,
-				1E88258A191C6A860034D231 /* Survey */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -784,6 +789,7 @@
 				1E70097018CA6F8700203990 /* main.m in Sources */,
 				1E1B60F519063392001046E0 /* _OHMOhmlet.m in Sources */,
 				1E1B60CF19063242001046E0 /* OHMUser.m in Sources */,
+				1EF3900A1921713C00CD69BE /* OHMReminderLocationViewController.m in Sources */,
 				1E88257D1919CC0F0034D231 /* OHMConditionParser.m in Sources */,
 				1E882583191AE21E0034D231 /* OHMConditionParserDelegate.m in Sources */,
 				1EF693DC18EA0F670003E077 /* AFURLConnectionOperation.m in Sources */,
@@ -994,7 +1000,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "B27DF7DB-6AF8-48B2-AA1A-8D2DCBA4067C";
+				PROVISIONING_PROFILE = "C7A9A7BE-527D-479D-AD42-08EBCFFE62FB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1025,7 +1031,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "B27DF7DB-6AF8-48B2-AA1A-8D2DCBA4067C";
+				PROVISIONING_PROFILE = "2941C358-DE80-49CF-B530-87ED1CDA6EF9";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

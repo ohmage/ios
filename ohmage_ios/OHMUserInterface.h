@@ -25,6 +25,7 @@
 + (UITableViewCell *)cellWithImage:(UIImage *)image text:(NSString *)text fromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithSwitchFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISwitch *sw))swBlock;
 + (UITableViewCell *)cellWithTimePickerFromTableView:(UITableView *)tableView setupBlock:(void (^)(UIDatePicker *dp))dpBlock;
++ (UITableViewCell *)cellWithSegmentedControlFromTableView:(UITableView *)tableView setupBlock:(void (^)(UISegmentedControl *sc))scBlock;
 
 + (UILabel *)headerTitleLabelWithText:(NSString *)text width:(CGFloat)width;
 + (UILabel *)headerDescriptionLabelWithText:(NSString *)text width:(CGFloat)width;

@@ -165,7 +165,7 @@
             case OHMSurveyItemTypeImagePrompt:
             case OHMSurveyItemTypeVideoPrompt:
             case OHMSurveyItemTypeAudioPrompt:
-                return nil;// self.ohmID;
+                return self.ohmID;
             default:
                 return nil;
         }

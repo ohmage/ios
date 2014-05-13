@@ -16,7 +16,7 @@ CGFloat const kUIViewSmallMargin = 8.0;
 
 CGFloat const kUIButtonDefaultHeight = 44.0;
 CGFloat const kUIButtonHorizontalMargin = 14.0;
-CGFloat const kUIButtonVerticalMargin = 7.0;
+CGFloat const kUIButtonVerticalMargin = 6.0;
 CGFloat const kUITextFieldDefaultHeight = 30.0;
 
 CGFloat const kUICellImageHeight = 100;
