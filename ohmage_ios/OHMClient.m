@@ -17,6 +17,7 @@
 #import "OHMSurveyResponse.h"
 #import "OHMSurveyPromptResponse.h"
 #import "OHMReminder.h"
+#import "OHMReminderLocation.h"
 #import "OHMTimekeeper.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
@@ -463,6 +464,11 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     reminder.weekdaysMaskValue = OHMRepeatDayEveryday;
     reminder.enabledValue = YES;
     return reminder;
+}
+
+- (OHMReminderLocation *)insertNewReminderLocation
+{
+    return (OHMReminderLocation *)[self insertNewObjectForEntityForName:[OHMReminderLocation entityName]];
 }
 
 

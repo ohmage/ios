@@ -23,7 +23,12 @@
         <relationship name="survey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurvey" inverseName="reminders" inverseEntity="OHMSurvey" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMUser" inverseName="reminders" inverseEntity="OHMUser" syncable="YES"/>
     </entity>
-    <entity name="OHMReminderLocation" syncable="YES">
+    <entity name="OHMReminderLocation" representedClassName="OHMReminderLocation" syncable="YES">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="radius" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="streetAddress" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="reminder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OHMReminder" inverseName="reminderLocation" inverseEntity="OHMReminder" syncable="YES"/>
     </entity>
     <entity name="OHMSurvey" representedClassName="OHMSurvey" syncable="YES">
@@ -102,6 +107,6 @@
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="178"/>
         <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="133"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="133"/>
-        <element name="OHMReminderLocation" positionX="-54" positionY="-90" width="128" height="58"/>
+        <element name="OHMReminderLocation" positionX="-54" positionY="-90" width="128" height="133"/>
     </elements>
 </model>

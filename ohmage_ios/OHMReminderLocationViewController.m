@@ -7,14 +7,14 @@
 //
 
 #import "OHMReminderLocationViewController.h"
-#import <MapKit/MapKit.h>
+#import "OHMLocationSearchViewController.h"
+#import "OHMReminderLocation.h"
 #import "OHMReminder.h"
 
-@interface OHMReminderLocationViewController () <MKMapViewDelegate>
-
-@property (strong, nonatomic) MKMapView *mapView;
+@interface OHMReminderLocationViewController ()
 
 @property (nonatomic, strong) OHMReminder *reminder;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedLocationsController;
 
 @end
 
@@ -22,47 +22,61 @@
 
 - (instancetype)initWithReminder:(OHMReminder *)reminder
 {
-    self = [super init];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.reminder = reminder;
     }
     return self;
 }
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    MKMapView *mapView = [[MKMapView alloc] init];
-    mapView.delegate = self;
-    mapView.showsUserLocation = YES;
-    
-    [self.view addSubview:mapView];
-    [self.view constrainChildToEqualSize:mapView];
-    
-    self.mapView = mapView;
-    
-    if (mapView.userLocation != nil) {
-        [self zoomToUserLocation:mapView.userLocation];
-    }
+    self.navigationItem.title = @"Location";
 }
 
-- (void)zoomToUserLocation:(MKUserLocation *)userLocation
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSLog(@"zoom to user location");
-    CLLocationCoordinate2D coordinate = userLocation.location.coordinate;
-    MKCoordinateRegion reg =
-    MKCoordinateRegionMakeWithDistance(coordinate, 600, 600);
-    self.mapView.region = reg;
+    return 1;
 }
 
-#pragma mark - Map View Delegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [[self.fetchedLocationsController fetchedObjects] count] + 1;
+}
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    NSLog(@"map view did update user location: %@", userLocation);
-    [self zoomToUserLocation:userLocation];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = nil;
+    if (indexPath.row == 0) {
+        cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+        cell.textLabel.text = @"New location";
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    else {
+        OHMReminderLocation *location = self.fetchedLocationsController.fetchedObjects[indexPath.row - 1];
+        cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
+        cell.textLabel.text = location.name;
+        cell.detailTextLabel.text = location.locationText;
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        OHMLocationSearchViewController *vc = [[OHMLocationSearchViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else {
+        self.reminder.reminderLocation = self.fetchedLocationsController.fetchedObjects[indexPath.row - 1];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 @end

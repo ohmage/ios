@@ -35,6 +35,7 @@
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager setDistanceFilter:100.0f];
         [self.locationManager setDelegate:self];
+        [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
         [self setGeocoder:[[CLGeocoder alloc] init]];
     }
@@ -115,6 +116,10 @@
     NSLog(@"Course: %f degrees from true north",direction);
     
     [self getLocationWithCompletionBlock:nil];
+    
+    if ([self.delegate respondsToSelector:@selector(OHMLocationManagerDidUpdateLocation:)]) {
+        [self.delegate OHMLocationManagerDidUpdateLocation:self];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager

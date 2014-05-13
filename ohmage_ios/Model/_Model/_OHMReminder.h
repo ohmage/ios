@@ -27,7 +27,7 @@ extern const struct OHMReminderRelationships {
 extern const struct OHMReminderFetchedProperties {
 } OHMReminderFetchedProperties;
 
-@class NSManagedObject;
+@class OHMReminderLocation;
 @class OHMSurvey;
 @class OHMUser;
 
@@ -190,7 +190,7 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSManagedObject *reminderLocation;
+@property (nonatomic, strong) OHMReminderLocation *reminderLocation;
 
 //- (BOOL)validateReminderLocation:(id*)value_ error:(NSError**)error_;
 
@@ -306,8 +306,8 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-- (NSManagedObject*)primitiveReminderLocation;
-- (void)setPrimitiveReminderLocation:(NSManagedObject*)value;
+- (OHMReminderLocation*)primitiveReminderLocation;
+- (void)setPrimitiveReminderLocation:(OHMReminderLocation*)value;
 
 
 

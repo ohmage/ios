@@ -11,9 +11,13 @@
 
 typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *error);
 
+@protocol OHMLocationManagerDelegate;
+
 @interface OHMLocationManager : NSObject <CLLocationManagerDelegate>
 
 + (instancetype)sharedLocationManager;
+
+@property (nonatomic, weak) id<OHMLocationManagerDelegate> delegate;
 
 @property (strong, nonatomic) CLLocation *location;
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -23,5 +27,12 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 
 - (void)getLocationWithCompletionBlock:(OHMLocationUpdateCompletionBlock)block;
 
+
+@end
+
+@protocol OHMLocationManagerDelegate <NSObject>
+@optional
+
+- (void)OHMLocationManagerDidUpdateLocation:(OHMLocationManager *)locationManager;
 
 @end

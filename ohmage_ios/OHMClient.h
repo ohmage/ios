@@ -14,6 +14,7 @@
 @class OHMSurveyResponse;
 @class OHMSurveyPromptResponse;
 @class OHMReminder;
+@class OHMReminderLocation;
 
 @protocol OHMClientDelegate;
 
@@ -42,10 +43,12 @@
 - (NSArray *)reminders;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
+- (OHMReminderLocation *)insertNewReminderLocation;
 
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
 - (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey;
+
 - (void)deleteObject:(NSManagedObject *)object;
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
                                                                sortKey:(NSString *)sortKey
