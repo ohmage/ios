@@ -10,6 +10,21 @@
 
 @implementation OHMReminderLocation
 
+@synthesize region;
+
+- (void)awakeFromInsert
+{
+    [super awakeFromInsert];
+    
+    // Create an NSUUID object - and get its string representation
+    NSUUID *uuid = [[NSUUID alloc] init];
+    NSString *key = [uuid UUIDString];
+    self.ohmID = key;
+
+    self.radiusValue = kDefaultLocationRadius;
+    self.name = @"New Location";
+}
+
 - (NSString *)locationText
 {
     if (self.name != nil) {

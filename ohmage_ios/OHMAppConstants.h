@@ -22,6 +22,8 @@ extern CGFloat const kUITextFieldDefaultHeight;
 
 extern CGFloat const kUICellImageHeight;
 
+extern double const kDefaultLocationRadius;
+
 @interface OHMAppConstants : NSObject
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex;

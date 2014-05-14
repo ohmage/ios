@@ -27,6 +27,8 @@ UIEdgeInsets const kUILabelDefaultInsets = {kUIViewSmallTextMargin, kUIViewHoriz
 UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIButtonVerticalMargin, kUIButtonHorizontalMargin, kUIButtonVerticalMargin, kUIButtonHorizontalMargin};
 UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 
+double const kDefaultLocationRadius = 100.0;
+
 @implementation OHMAppConstants
 
 + (UIColor *)colorForRowIndex:(NSInteger)rowIndex

@@ -78,16 +78,24 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MKMapItem *mapItem;
+    CLLocationCoordinate2D coordinate;
     if (indexPath.row == 0 && self.locationManager.hasLocation) {
         mapItem = [MKMapItem mapItemForCurrentLocation];
+        coordinate = self.locationManager.location.coordinate;
     }
     else {
         NSInteger row = indexPath.row;
         if (self.locationManager.hasLocation) row--;
         mapItem = self.places[row];
+        coordinate = mapItem.placemark.coordinate;
     }
     
-    OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithMapItem:mapItem];
+    OHMReminderLocation *location = [[OHMClient sharedClient] insertNewReminderLocation];
+    location.coordinate = coordinate;
+    location.name = @"New Location";
+    
+//    OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithMapItem:mapItem];
+    OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -39,6 +39,7 @@
 		1E1B610519099B07001046E0 /* OHMAppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B610419099B07001046E0 /* OHMAppConstants.m */; };
 		1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */; };
 		1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B610B1909B736001046E0 /* OHMUserInterface.m */; };
+		1E25C07B1922F1BC00655CAA /* OHMRegionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */; };
 		1E3C80EC190F66510088D2D0 /* OHMSurveyCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */; };
 		1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */; };
 		1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80F1191083DA0088D2D0 /* OHMReminder.m */; };
@@ -192,6 +193,8 @@
 		1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Ohmage.m"; sourceTree = "<group>"; };
 		1E1B610A1909B736001046E0 /* OHMUserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMUserInterface.h; sourceTree = "<group>"; };
 		1E1B610B1909B736001046E0 /* OHMUserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUserInterface.m; sourceTree = "<group>"; };
+		1E25C0791922F1BC00655CAA /* OHMRegionAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMRegionAnnotationView.h; sourceTree = "<group>"; };
+		1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMRegionAnnotationView.m; sourceTree = "<group>"; };
 		1E3C80EA190F66510088D2D0 /* OHMSurveyCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyCompleteViewController.h; sourceTree = "<group>"; };
 		1E3C80EB190F66510088D2D0 /* OHMSurveyCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyCompleteViewController.m; sourceTree = "<group>"; };
 		1E3C80ED191083BB0088D2D0 /* _OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMReminder.h; sourceTree = "<group>"; };
@@ -427,6 +430,8 @@
 				1E5D6DAA1922AB9000991783 /* OHMLocationSearchViewController.m */,
 				1EF390081921713C00CD69BE /* OHMLocationMapViewController.h */,
 				1EF390091921713C00CD69BE /* OHMLocationMapViewController.m */,
+				1E25C0791922F1BC00655CAA /* OHMRegionAnnotationView.h */,
+				1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */,
 			);
 			name = Reminders;
 			sourceTree = "<group>";
@@ -847,6 +852,7 @@
 				1E56A341191448E700384AE9 /* OHMSurveyResponseViewController.m in Sources */,
 				1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */,
 				1E1B60C919063242001046E0 /* OHMOhmlet.m in Sources */,
+				1E25C07B1922F1BC00655CAA /* OHMRegionAnnotationView.m in Sources */,
 				1EF693DB18EA0F670003E077 /* AFSecurityPolicy.m in Sources */,
 				1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */,
 				1E1B60F619063392001046E0 /* _OHMSurvey.m in Sources */,
