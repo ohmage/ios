@@ -14,6 +14,7 @@ extern const struct OHMSurveyResponseAttributes {
 extern const struct OHMSurveyResponseRelationships {
 	__unsafe_unretained NSString *promptResponses;
 	__unsafe_unretained NSString *survey;
+	__unsafe_unretained NSString *user;
 } OHMSurveyResponseRelationships;
 
 extern const struct OHMSurveyResponseFetchedProperties {
@@ -21,6 +22,7 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 @class OHMSurveyPromptResponse;
 @class OHMSurvey;
+@class OHMUser;
 
 
 
@@ -102,6 +104,13 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
+@property (nonatomic, strong) OHMUser *user;
+
+//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 @end
 
@@ -155,6 +164,11 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 - (OHMSurvey*)primitiveSurvey;
 - (void)setPrimitiveSurvey:(OHMSurvey*)value;
+
+
+
+- (OHMUser*)primitiveUser;
+- (void)setPrimitiveUser:(OHMUser*)value;
 
 
 @end

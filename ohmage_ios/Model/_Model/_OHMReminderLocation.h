@@ -8,18 +8,20 @@ extern const struct OHMReminderLocationAttributes {
 	__unsafe_unretained NSString *latitude;
 	__unsafe_unretained NSString *longitude;
 	__unsafe_unretained NSString *name;
+	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *radius;
-	__unsafe_unretained NSString *streetAddress;
 } OHMReminderLocationAttributes;
 
 extern const struct OHMReminderLocationRelationships {
-	__unsafe_unretained NSString *reminder;
+	__unsafe_unretained NSString *reminders;
+	__unsafe_unretained NSString *user;
 } OHMReminderLocationRelationships;
 
 extern const struct OHMReminderLocationFetchedProperties {
 } OHMReminderLocationFetchedProperties;
 
 @class OHMReminder;
+@class OHMUser;
 
 
 
@@ -78,6 +80,16 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* ohmID;
+
+
+
+//- (BOOL)validateOhmID:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* radius;
 
 
@@ -92,19 +104,16 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* streetAddress;
+@property (nonatomic, strong) NSSet *reminders;
 
-
-
-//- (BOOL)validateStreetAddress:(id*)value_ error:(NSError**)error_;
+- (NSMutableSet*)remindersSet;
 
 
 
 
+@property (nonatomic, strong) OHMUser *user;
 
-@property (nonatomic, strong) NSSet *reminder;
-
-- (NSMutableSet*)reminderSet;
+//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -114,10 +123,10 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 @interface _OHMReminderLocation (CoreDataGeneratedAccessors)
 
-- (void)addReminder:(NSSet*)value_;
-- (void)removeReminder:(NSSet*)value_;
-- (void)addReminderObject:(OHMReminder*)value_;
-- (void)removeReminderObject:(OHMReminder*)value_;
+- (void)addReminders:(NSSet*)value_;
+- (void)removeReminders:(NSSet*)value_;
+- (void)addRemindersObject:(OHMReminder*)value_;
+- (void)removeRemindersObject:(OHMReminder*)value_;
 
 @end
 
@@ -148,6 +157,12 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
+- (NSString*)primitiveOhmID;
+- (void)setPrimitiveOhmID:(NSString*)value;
+
+
+
+
 - (NSNumber*)primitiveRadius;
 - (void)setPrimitiveRadius:(NSNumber*)value;
 
@@ -157,15 +172,14 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
-- (NSString*)primitiveStreetAddress;
-- (void)setPrimitiveStreetAddress:(NSString*)value;
+
+- (NSMutableSet*)primitiveReminders;
+- (void)setPrimitiveReminders:(NSMutableSet*)value;
 
 
 
-
-
-- (NSMutableSet*)primitiveReminder;
-- (void)setPrimitiveReminder:(NSMutableSet*)value;
+- (OHMUser*)primitiveUser;
+- (void)setPrimitiveUser:(OHMUser*)value;
 
 
 @end

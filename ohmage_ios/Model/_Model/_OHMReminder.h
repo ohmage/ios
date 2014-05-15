@@ -8,9 +8,10 @@ extern const struct OHMReminderAttributes {
 	__unsafe_unretained NSString *alwaysShow;
 	__unsafe_unretained NSString *enabled;
 	__unsafe_unretained NSString *endTime;
-	__unsafe_unretained NSString *fireDate;
 	__unsafe_unretained NSString *isLocationReminder;
+	__unsafe_unretained NSString *lastFireDate;
 	__unsafe_unretained NSString *minimumReentryInterval;
+	__unsafe_unretained NSString *nextFireDate;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *specificTime;
 	__unsafe_unretained NSString *startTime;
@@ -30,6 +31,7 @@ extern const struct OHMReminderFetchedProperties {
 @class OHMReminderLocation;
 @class OHMSurvey;
 @class OHMUser;
+
 
 
 
@@ -94,16 +96,6 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSDate* fireDate;
-
-
-
-//- (BOOL)validateFireDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSNumber* isLocationReminder;
 
 
@@ -118,6 +110,16 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSDate* lastFireDate;
+
+
+
+//- (BOOL)validateLastFireDate:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* minimumReentryInterval;
 
 
@@ -127,6 +129,16 @@ extern const struct OHMReminderFetchedProperties {
 - (void)setMinimumReentryIntervalValue:(int32_t)value_;
 
 //- (BOOL)validateMinimumReentryInterval:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* nextFireDate;
+
+
+
+//- (BOOL)validateNextFireDate:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -245,12 +257,6 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
-- (NSDate*)primitiveFireDate;
-- (void)setPrimitiveFireDate:(NSDate*)value;
-
-
-
-
 - (NSNumber*)primitiveIsLocationReminder;
 - (void)setPrimitiveIsLocationReminder:(NSNumber*)value;
 
@@ -260,11 +266,23 @@ extern const struct OHMReminderFetchedProperties {
 
 
 
+- (NSDate*)primitiveLastFireDate;
+- (void)setPrimitiveLastFireDate:(NSDate*)value;
+
+
+
+
 - (NSNumber*)primitiveMinimumReentryInterval;
 - (void)setPrimitiveMinimumReentryInterval:(NSNumber*)value;
 
 - (int32_t)primitiveMinimumReentryIntervalValue;
 - (void)setPrimitiveMinimumReentryIntervalValue:(int32_t)value_;
+
+
+
+
+- (NSDate*)primitiveNextFireDate;
+- (void)setPrimitiveNextFireDate:(NSDate*)value;
 
 
 

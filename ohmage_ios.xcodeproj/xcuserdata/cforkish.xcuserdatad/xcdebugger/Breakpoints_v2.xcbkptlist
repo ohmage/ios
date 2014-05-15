@@ -102,7 +102,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             scope = "0"
@@ -116,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMSurveysViewController.m"
-            timestampString = "420762265.894182"
+            timestampString = "421876458.665905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
             landmarkName = "-updateHeaderAnimated:"
             landmarkType = "5">
          </BreakpointContent>

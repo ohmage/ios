@@ -8,12 +8,14 @@
 
 #import "OHMReminderViewController.h"
 #import "OHMReminderDaysViewController.h"
+#import "OHMReminderReentryViewController.h"
 #import "OHMReminderLocationViewController.h"
 #import "OHMLocationSearchViewController.h"
 #import "OHMReminder.h"
 #import "OHMReminderLocation.h"
 #import "OHMSurvey.h"
-#import "OHMTimekeeper.h"
+#import "OHMReminderManager.h"
+#import "OHMLocationManager.h"
 
 typedef NS_ENUM(NSUInteger, RowIndex) {
     eRowIndexTimeOrLocation = 0,
@@ -69,6 +71,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     timeOrLocationControl.backgroundColor = [UIColor whiteColor];
     timeOrLocationControl.selectedSegmentIndex = self.reminder.isLocationReminderValue;
     [timeOrLocationControl addTarget:self action:@selector(timeOrLocationControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    BOOL canUseLocation = ([OHMLocationManager sharedLocationManager].locationError == nil);
+    [timeOrLocationControl setEnabled:canUseLocation forSegmentAtIndex:1];
     self.timeOrLocationControl = timeOrLocationControl;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectInset(timeOrLocationControl.frame, 0, -kUIViewSmallMargin)];
@@ -94,6 +98,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 //        [self.tableView reloadRowsAtIndexPaths:@[repeatPath] withRowAnimation:UITableViewRowAnimationNone];
 //    }
     [self.tableView reloadData];
+    [self updateDoneButtonEnabledState];
 }
 
 //- (void)viewWillDisappear:(BOOL)animated
@@ -106,6 +111,12 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 //    }
 //}
 
+- (void)updateDoneButtonEnabledState
+{
+    self.doneButton.enabled = (!self.reminder.isLocationReminderValue
+                               || (self.reminder.reminderLocation != nil) );
+}
+
 - (void)doneButtonPressed:(id)sender
 {
     if (self.reminder.usesTimeRangeValue) {
@@ -115,7 +126,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     else {
         self.reminder.specificTime = self.alarmTimePicker.date;
     }
-    [[OHMTimekeeper sharedTimekeeper] updateNotificationForReminder:self.reminder];
+    [[OHMReminderManager sharedReminderManager] updateScheduleForReminder:self.reminder];
     [[OHMClient sharedClient] saveClientState];
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -157,6 +168,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         if (self.reminder.startTime != nil) {
             dp.date = self.reminder.startTime;
         }
+//        dp.maximumDate = [NSDate timeOfDayWithHours:23 minutes:58];
         self.startTimePicker = dp;
     }];
     
@@ -191,14 +203,13 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     if (self.reminder.isLocationReminderValue) {
         [self insertRowsAtIndexPaths:paths];
-        self.doneButton.enabled = (self.reminder.reminderLocation != nil);
     }
     else {
         [self deleteRowsAtIndexPaths:paths];
-        self.doneButton.enabled = YES;
     }
     
     [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
+    [self updateDoneButtonEnabledState];
 }
 
 - (void)timeRangeEnableSwitchToggled:(id)sender
@@ -221,10 +232,22 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+- (void)constrainEndTime
+{
+    self.endTimePicker.minimumDate = [self.startTimePicker.date dateByAddingMinutes:1];
+    NSDate *endOfDay = [NSDate endOfDayToday];
+    self.endTimePicker.maximumDate = [self.startTimePicker.date dateWithTimeFromDate:endOfDay];
+    NSLog(@"constrain time, startTime: %@, min: %@, max: %@", self.startTimePicker.date, self.endTimePicker.minimumDate, self.endTimePicker.maximumDate);
+}
+
 - (void)toggleTimePickerForIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *pathsToAdd;
     NSArray *pathsToDelete;
+    
+    if ([indexPath isEqual:[self indexPathForRow:eRowIndexRangeEnd]]) {
+        [self constrainEndTime];
+    }
     
     if (self.timePickerPath != nil) {
         if (self.timePickerPath.row == indexPath.row + 1) {
@@ -257,6 +280,18 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     [self.tableView endUpdates];
 }
 
+- (void)validateTimeRange
+{
+    if ([[self.startTimePicker.date sameTimeToday] isEqualToDate:[NSDate endOfDayToday]]) {
+        self.startTimePicker.date = [self.startTimePicker.date dateByAddingMinutes:1];
+    }
+    
+    if ([[self.endTimePicker.date sameTimeToday] isBeforeDate:[self.startTimePicker.date sameTimeToday]]) {
+        self.endTimePicker.date = [self.startTimePicker.date dateByAddingMinutes:1];
+        [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexRangeEnd]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
 - (void)timePickerValueChanged:(UIDatePicker *)sender
 {
     NSIndexPath *path = nil;
@@ -265,6 +300,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     }
     else if ([sender isEqual:self.startTimePicker]) {
         path = [self indexPathForRow:eRowIndexRangeStart];
+        [self validateTimeRange];
     }
     else if ([sender isEqual:self.endTimePicker]) {
         path = [self indexPathForRow:eRowIndexRangeEnd];
@@ -291,6 +327,12 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     else {
         vc = [[OHMLocationSearchViewController alloc] init];
     }
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)presentReentryPicker
+{
+    OHMReminderReentryViewController *vc = [[OHMReminderReentryViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -431,9 +473,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
             break;
         case eRowIndexMinimumReentry:
             cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
-            cell.textLabel.text = @"Minimum reentry interval";
-            cell.detailTextLabel.text = @"Two hours";
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.text = @"Ignore repeat arrivals";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d min", self.reminder.minimumReentryIntervalValue];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case eRowIndexAlwaysShow:
         {
@@ -493,6 +535,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     else if (self.reminder.isLocationReminderValue) {
         if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]]) {
             [self presentLocationPicker];
+        }
+        else if ([indexPath isEqual:[self indexPathForRow:eRowIndexMinimumReentry]]) {
+            [self presentReentryPicker];
         }
     }
     else if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]] && !self.rangeEnableSwitch.on) {

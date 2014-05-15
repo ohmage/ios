@@ -131,7 +131,7 @@
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo.reminderID = reminder.ohmID;
     
-    NSDate *fireDate = [reminder updateFireDate];
+    NSDate *fireDate = [reminder updateNextFireDate];
     if (!fireDate) {
         NSLog(@"Can't schedule notification for reminder with nil fire date: %@", reminder);
     }

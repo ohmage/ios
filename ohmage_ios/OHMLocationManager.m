@@ -7,6 +7,9 @@
 //
 
 #import "OHMLocationManager.h"
+#import "OHMReminderManager.h"
+#import "OHMReminder.h"
+#import "OHMReminderLocation.h"
 
 
 @interface OHMLocationManager ()
@@ -38,9 +41,19 @@
         [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
         [self setGeocoder:[[CLGeocoder alloc] init]];
+        [self debugPrintAllMonitoredRegions];
     }
     
     return self;
+}
+
+- (void)debugPrintAllMonitoredRegions
+{
+    NSSet *monitoredRegions = self.locationManager.monitoredRegions;
+    NSLog(@"There are %lu monitored regions.", (unsigned long)monitoredRegions.count);
+    for (CLRegion *region in monitoredRegions) {
+        NSLog(@"Region: %@", region);
+    }
 }
 
 #pragma mark -
@@ -154,6 +167,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     }
     if (status == kCLAuthorizationStatusAuthorized)
     {
+        NSLog(@"Location Services Authorized");
         // Location services have just been authorized on the device, start updating now.
         [self.locationManager startUpdatingLocation];
         [self setLocationError:nil];
@@ -165,71 +179,17 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)locationManager:(CLLocationManager *)manager
          didEnterRegion:(CLRegion *)region
 {
-//    NSString *placeIdentifier = [region identifier];
-//    NSURL *placeIDURL = [NSURL URLWithString:placeIdentifier];
-//    
-//    NSManagedObjectID *placeObjectID =
-//    [kAppDelegate.persistentStoreCoordinator
-//     managedObjectIDForURIRepresentation:placeIDURL];
-//    
-//    [kAppDelegate.managedObjectContext performBlock:^{
-//        
-//        OHMFavoritePlace *place =
-//        (OHMFavoritePlace *)[kAppDelegate.managedObjectContext
-//                             objectWithID:placeObjectID];
-//        
-//        NSNumber *distance = [place valueForKey:@"displayRadius"];
-//        NSString *placeName = [place valueForKey:@"placeName"];
-//        
-//        NSString *baseMessage =
-//        @"Favorite Place %@ nearby - within %@ meters.";
-//        
-//        NSString *proximityMessage =
-//        [NSString stringWithFormat:baseMessage,placeName,distance];
-//        
-//        UIAlertView *alert =
-//        [[UIAlertView alloc] initWithTitle:@"Favorite Nearby!"
-//                                   message:proximityMessage
-//                                  delegate:nil
-//                         cancelButtonTitle:@"OK"
-//                         otherButtonTitles: nil];
-//        [alert show];
-//    }];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
-{
-//    NSString *placeIdentifier = [region identifier];
-//    NSURL *placeIDURL = [NSURL URLWithString:placeIdentifier];
-//    
-//    NSManagedObjectID *placeObjectID =
-//    [kAppDelegate.persistentStoreCoordinator
-//     managedObjectIDForURIRepresentation:placeIDURL];
-//    
-//    [kAppDelegate.managedObjectContext performBlock:^{
-//        
-//        OHMFavoritePlace *place =
-//        (OHMFavoritePlace *)[kAppDelegate.managedObjectContext
-//                             objectWithID:placeObjectID];
-//        
-//        NSNumber *distance = [place valueForKey:@"displayRadius"];
-//        NSString *placeName = [place valueForKey:@"placeName"];
-//        
-//        NSString *baseMessage =
-//        @"Favorite Place %@ Geofence exited.";
-//        
-//        NSString *proximityMessage =
-//        [NSString stringWithFormat:baseMessage,placeName,distance];
-//        
-//        UIAlertView *alert =
-//        [[UIAlertView alloc] initWithTitle:@"Geofence exited"
-//                                   message:proximityMessage
-//                                  delegate:nil
-//                         cancelButtonTitle:@"OK"
-//                         otherButtonTitles: nil];
-//        [alert show];
-//    }];
-//    
+    OHMReminderLocation *location = [[OHMClient sharedClient] locationWithOhmID:region.identifier];
+    NSLog(@"did enter region: %@, reminderLocation: %@", region, location);
+    if (location == nil) return;
+    
+    for (OHMReminder *reminder in location.reminders) {
+        if ([[reminder.lastFireDate dateByAddingMinutes:reminder.minimumReentryIntervalValue]
+             isBeforeDate:[NSDate date]]) {
+        [[OHMReminderManager sharedReminderManager] scheduleNotificationForReminder:reminder];
+        }
+    }
+    
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error

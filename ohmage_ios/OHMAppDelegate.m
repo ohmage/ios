@@ -9,7 +9,8 @@
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
 #import "OHMLoginViewController.h"
-#import "OHMTimekeeper.h"
+#import "OHMReminderManager.h"
+#import "OHMLocationManager.h"
 
 @implementation OHMAppDelegate
 
@@ -31,7 +32,13 @@
         UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
         NSLog(@"Application launched with local notification: %@", notification);
         if (notification != nil) {
-            [[OHMTimekeeper sharedTimekeeper] processFiredLocalNotification:notification];
+            [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
+        }
+        
+        if ([CLLocationManager locationServicesEnabled])
+        {
+            OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
+            [appLocationManager.locationManager startUpdatingLocation];
         }
     }
     
@@ -55,7 +62,7 @@
         [alertView show];
     }
     
-    [[OHMTimekeeper sharedTimekeeper] processFiredLocalNotification:notification];
+    [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -78,7 +85,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[OHMTimekeeper sharedTimekeeper] syncStateOfRemindersWithScheduledLocalNotifications];
+    [[OHMReminderManager sharedReminderManager] updateRemindersForFiredNotifications];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

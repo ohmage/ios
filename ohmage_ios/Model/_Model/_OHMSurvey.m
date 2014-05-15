@@ -4,6 +4,7 @@
 #import "_OHMSurvey.h"
 
 const struct OHMSurveyAttributes OHMSurveyAttributes = {
+	.isDue = @"isDue",
 	.isLoaded = @"isLoaded",
 	.ohmID = @"ohmID",
 	.surveyDescription = @"surveyDescription",
@@ -47,6 +48,11 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"isDueValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isDue"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"isLoadedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"isLoaded"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -60,6 +66,32 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic isDue;
+
+
+
+- (BOOL)isDueValue {
+	NSNumber *result = [self isDue];
+	return [result boolValue];
+}
+
+- (void)setIsDueValue:(BOOL)value_ {
+	[self setIsDue:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveIsDueValue {
+	NSNumber *result = [self primitiveIsDue];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveIsDueValue:(BOOL)value_ {
+	[self setPrimitiveIsDue:[NSNumber numberWithBool:value_]];
+}
+
 
 
 

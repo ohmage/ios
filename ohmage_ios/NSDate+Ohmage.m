@@ -34,6 +34,23 @@
     return [NSDate dateWithTimeInterval:randomInterval sinceDate:startTimeToday];
 }
 
++ (NSDate *)timeOfDayWithHours:(NSInteger)hours minutes:(NSInteger)minutes
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger flags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit;
+    
+    NSDateComponents *components = [calendar components:flags fromDate:[NSDate date]];
+    components.hour = hours;
+    components.minute = minutes;
+    
+    return [calendar dateFromComponents:components];
+}
+
++ (NSDate *)endOfDayToday
+{
+    return [NSDate timeOfDayWithHours:23 minutes:59];
+}
+
 + (NSDateFormatter *)ISO8601Formatter
 {
     static NSDateFormatter *dateFormatter = nil;
@@ -139,7 +156,7 @@
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSWeekdayCalendarUnit fromDate:self];
-    NSLog(@"day compenent: %ld, date: %@, components: %@", (long)components.day, self, components);
+//    NSLog(@"day compenent: %ld, date: %@, components: %@", (long)components.day, self, components);
     return components.weekday;
 }
 

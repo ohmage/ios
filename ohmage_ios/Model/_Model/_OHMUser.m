@@ -12,7 +12,9 @@ const struct OHMUserAttributes OHMUserAttributes = {
 
 const struct OHMUserRelationships OHMUserRelationships = {
 	.ohmlets = @"ohmlets",
+	.reminderLocations = @"reminderLocations",
 	.reminders = @"reminders",
+	.surveyResponses = @"surveyResponses",
 };
 
 const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
@@ -92,6 +94,19 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 }
 	
 
+@dynamic reminderLocations;
+
+	
+- (NSMutableSet*)reminderLocationsSet {
+	[self willAccessValueForKey:@"reminderLocations"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminderLocations"];
+  
+	[self didAccessValueForKey:@"reminderLocations"];
+	return result;
+}
+	
+
 @dynamic reminders;
 
 	
@@ -101,6 +116,19 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
   
 	[self didAccessValueForKey:@"reminders"];
+	return result;
+}
+	
+
+@dynamic surveyResponses;
+
+	
+- (NSMutableSet*)surveyResponsesSet {
+	[self willAccessValueForKey:@"surveyResponses"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"surveyResponses"];
+  
+	[self didAccessValueForKey:@"surveyResponses"];
 	return result;
 }
 	

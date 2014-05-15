@@ -5,6 +5,7 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyAttributes {
+	__unsafe_unretained NSString *isDue;
 	__unsafe_unretained NSString *isLoaded;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *surveyDescription;
@@ -33,6 +34,7 @@ extern const struct OHMSurveyFetchedProperties {
 
 
 
+
 @interface OHMSurveyID : NSManagedObjectID {}
 @end
 
@@ -41,6 +43,20 @@ extern const struct OHMSurveyFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* isDue;
+
+
+
+@property BOOL isDueValue;
+- (BOOL)isDueValue;
+- (void)setIsDueValue:(BOOL)value_;
+
+//- (BOOL)validateIsDue:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -155,6 +171,15 @@ extern const struct OHMSurveyFetchedProperties {
 @end
 
 @interface _OHMSurvey (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveIsDue;
+- (void)setPrimitiveIsDue:(NSNumber*)value;
+
+- (BOOL)primitiveIsDueValue;
+- (void)setPrimitiveIsDueValue:(BOOL)value_;
+
+
 
 
 - (NSNumber*)primitiveIsLoaded;

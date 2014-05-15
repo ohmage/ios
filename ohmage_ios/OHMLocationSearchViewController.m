@@ -85,16 +85,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MKMapItem *mapItem;
     CLLocationCoordinate2D coordinate;
+    BOOL isCurrentLocation = NO;
     if (indexPath.row == 0 && self.locationManager.hasLocation) {
-        mapItem = [MKMapItem mapItemForCurrentLocation];
         coordinate = self.locationManager.location.coordinate;
+        isCurrentLocation = YES;
     }
     else {
         NSInteger row = indexPath.row;
         if (self.locationManager.hasLocation) row--;
-        mapItem = self.places[row];
+        MKMapItem *mapItem = self.places[row];
         coordinate = mapItem.placemark.coordinate;
     }
     
@@ -102,6 +102,7 @@
     location.coordinate = coordinate;
     
     OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];
+    vc.isCurrentLocation = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

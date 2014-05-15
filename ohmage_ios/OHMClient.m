@@ -18,7 +18,6 @@
 #import "OHMSurveyPromptResponse.h"
 #import "OHMReminder.h"
 #import "OHMReminderLocation.h"
-#import "OHMTimekeeper.h"
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
@@ -63,7 +62,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         [contentTypes addObject:@"text/plain"];
         self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-        [[AFNetworkActivityLogger sharedLogger] startLogging];
+//        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
@@ -182,6 +181,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
+    surveyResponse.survey.isDueValue = NO;
     NSLog(@"submit response: %@", [surveyResponse JSON]);
     
     [self postRequest:surveyResponse.uploadResquestUrlString
@@ -423,12 +423,20 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (NSArray *)reminders
 {
-    return [self allObjectsWithEntityName:[OHMReminder entityName] sortKey:@"specificTime" predicate:nil ascending:NO];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"specificTime" ascending:NO];
+    return [self.user.reminders sortedArrayUsingDescriptors:@[sortDescriptor]];
+}
+
+- (NSArray *)timeReminders
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocationReminder == NO"];
+    return [[self reminders] filteredArrayUsingPredicate:predicate];
 }
 
 - (NSArray *)reminderLocations
 {
-    return [self allObjectsWithEntityName:[OHMReminderLocation entityName] sortKey:nil predicate:nil ascending:NO];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO];
+    return [self.user.reminderLocations sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
@@ -448,6 +456,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     OHMSurveyResponse *response = [self insertNewSurveyResponse];
     response.survey = survey;
+    response.user = self.user;
     
     for (OHMSurveyItem *item in survey.surveyItems) {
         OHMSurveyPromptResponse *promptResponse = [self insertNewSurveyPromptResponse];
@@ -473,7 +482,15 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (OHMReminderLocation *)insertNewReminderLocation
 {
-    return (OHMReminderLocation *)[self insertNewObjectForEntityForName:[OHMReminderLocation entityName]];
+    OHMReminderLocation *location = (OHMReminderLocation *)[self insertNewObjectForEntityForName:[OHMReminderLocation entityName]];
+    location.user = self.user;
+    return location;
+}
+
+
+- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmId
+{
+    return (OHMReminderLocation *)[self fetchObjectForEntityName:[OHMReminderLocation entityName] withUniqueOhmID:ohmId create:NO];
 }
 
 
@@ -670,7 +687,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 - (void)resetClient
 {
     [self deletePersistentStore];
-    [[OHMTimekeeper sharedTimekeeper] cancelAllNotifications];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
 
 @end

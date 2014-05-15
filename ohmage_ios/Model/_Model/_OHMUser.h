@@ -13,14 +13,18 @@ extern const struct OHMUserAttributes {
 
 extern const struct OHMUserRelationships {
 	__unsafe_unretained NSString *ohmlets;
+	__unsafe_unretained NSString *reminderLocations;
 	__unsafe_unretained NSString *reminders;
+	__unsafe_unretained NSString *surveyResponses;
 } OHMUserRelationships;
 
 extern const struct OHMUserFetchedProperties {
 } OHMUserFetchedProperties;
 
 @class OHMOhmlet;
+@class OHMReminderLocation;
 @class OHMReminder;
+@class OHMSurveyResponse;
 
 
 
@@ -87,9 +91,23 @@ extern const struct OHMUserFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *reminderLocations;
+
+- (NSMutableSet*)reminderLocationsSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *reminders;
 
 - (NSMutableSet*)remindersSet;
+
+
+
+
+@property (nonatomic, strong) NSSet *surveyResponses;
+
+- (NSMutableSet*)surveyResponsesSet;
 
 
 
@@ -104,10 +122,20 @@ extern const struct OHMUserFetchedProperties {
 - (void)addOhmletsObject:(OHMOhmlet*)value_;
 - (void)removeOhmletsObject:(OHMOhmlet*)value_;
 
+- (void)addReminderLocations:(NSSet*)value_;
+- (void)removeReminderLocations:(NSSet*)value_;
+- (void)addReminderLocationsObject:(OHMReminderLocation*)value_;
+- (void)removeReminderLocationsObject:(OHMReminderLocation*)value_;
+
 - (void)addReminders:(NSSet*)value_;
 - (void)removeReminders:(NSSet*)value_;
 - (void)addRemindersObject:(OHMReminder*)value_;
 - (void)removeRemindersObject:(OHMReminder*)value_;
+
+- (void)addSurveyResponses:(NSSet*)value_;
+- (void)removeSurveyResponses:(NSSet*)value_;
+- (void)addSurveyResponsesObject:(OHMSurveyResponse*)value_;
+- (void)removeSurveyResponsesObject:(OHMSurveyResponse*)value_;
 
 @end
 
@@ -144,8 +172,18 @@ extern const struct OHMUserFetchedProperties {
 
 
 
+- (NSMutableSet*)primitiveReminderLocations;
+- (void)setPrimitiveReminderLocations:(NSMutableSet*)value;
+
+
+
 - (NSMutableSet*)primitiveReminders;
 - (void)setPrimitiveReminders:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveSurveyResponses;
+- (void)setPrimitiveSurveyResponses:(NSMutableSet*)value;
 
 
 @end

@@ -13,6 +13,7 @@ const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
 const struct OHMSurveyResponseRelationships OHMSurveyResponseRelationships = {
 	.promptResponses = @"promptResponses",
 	.survey = @"survey",
+	.user = @"user",
 };
 
 const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperties = {
@@ -141,6 +142,10 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 	
 
 @dynamic survey;
+
+	
+
+@dynamic user;
 
 	
 

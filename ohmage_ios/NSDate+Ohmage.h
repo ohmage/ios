@@ -11,6 +11,8 @@
 @interface NSDate (Ohmage)
 
 + (NSDate *)randomTimeTodayBetweenStartTime:(NSDate *)startTime endTime:(NSDate *)endTime;
++ (NSDate *)endOfDayToday;
++ (NSDate *)timeOfDayWithHours:(NSInteger)hours minutes:(NSInteger)minutes;
 
 - (NSString *)ISO8601String;
 

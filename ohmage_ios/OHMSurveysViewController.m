@@ -34,7 +34,7 @@
 - (instancetype)initWithOhmletIndex:(NSInteger)ohmletIndex
 {
     // Call the superclass's designated initializer
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.ohmletIndex = ohmletIndex;
     }
@@ -67,8 +67,8 @@
     UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"] style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.rightBarButtonItem = helpButton;
     
-    
-    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:nil sectionNameKeyPath:nil cacheName:nil];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
+    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:predicate sectionNameKeyPath:@"isDue" cacheName:nil];
     self.fetchedResultsController.delegate = self;
     
     self.client = [OHMClient sharedClient];
@@ -101,7 +101,7 @@
     [super viewDidAppear:animated];
     
     NSLog(@"did appear nav bounds: %@", NSStringFromCGRect(self.navigationController.navigationBar.bounds));
-    [self updateFetchedResultsController];
+//    [self updateFetchedResultsController];
 }
 
 - (void)userButtonPressed:(id)sender
@@ -185,8 +185,10 @@
     [self updateFetchedResultsController];
     [self updateHeaderAnimated:animated];
     
-    if (animated) {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    if (animated && self.fetchedResultsController.sections.count > 0) {
+        for (int i = 0; i < self.fetchedResultsController.sections.count; i++ ) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:i] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
     else {
         [self.tableView reloadData];
@@ -262,6 +264,7 @@
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
     self.fetchedResultsController.fetchRequest.predicate = predicate;
+    NSLog(@"update fetched results controller, predicate: %@", self.fetchedResultsController.fetchRequest.predicate);
     
     NSError *error;
     BOOL success = [self.fetchedResultsController performFetch:&error];
@@ -274,7 +277,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return MAX([[self.fetchedResultsController sections] count], 1);
+    return [[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
@@ -283,7 +286,7 @@
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     } else
-        return 1;
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -359,6 +362,14 @@
                                                    subtitle:nil//survey.surveyDescription
                                               accessoryType:UITableViewCellAccessoryDetailDisclosureButton
                                               fromTableView:tableView];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (self.fetchedResultsController.sections.count > 1 && section == 0) {
+        return @"Due:";
+    }
+    return nil;
 }
 
 

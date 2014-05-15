@@ -7,12 +7,13 @@ const struct OHMReminderLocationAttributes OHMReminderLocationAttributes = {
 	.latitude = @"latitude",
 	.longitude = @"longitude",
 	.name = @"name",
+	.ohmID = @"ohmID",
 	.radius = @"radius",
-	.streetAddress = @"streetAddress",
 };
 
 const struct OHMReminderLocationRelationships OHMReminderLocationRelationships = {
-	.reminder = @"reminder",
+	.reminders = @"reminders",
+	.user = @"user",
 };
 
 const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProperties = {
@@ -125,6 +126,13 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 
 
 
+@dynamic ohmID;
+
+
+
+
+
+
 @dynamic radius;
 
 
@@ -151,24 +159,21 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 
 
 
-@dynamic streetAddress;
-
-
-
-
-
-
-@dynamic reminder;
+@dynamic reminders;
 
 	
-- (NSMutableSet*)reminderSet {
-	[self willAccessValueForKey:@"reminder"];
+- (NSMutableSet*)remindersSet {
+	[self willAccessValueForKey:@"reminders"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminder"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
   
-	[self didAccessValueForKey:@"reminder"];
+	[self didAccessValueForKey:@"reminders"];
 	return result;
 }
+	
+
+@dynamic user;
+
 	
 
 

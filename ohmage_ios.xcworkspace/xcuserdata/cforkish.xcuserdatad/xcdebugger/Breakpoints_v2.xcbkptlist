@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMClient.m"
-            timestampString = "421559281.059959"
+            timestampString = "421826200.403767"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "-getRequest:withParameters:completionBlock:"
             landmarkType = "5">
             <Locations>
@@ -104,11 +104,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMLocationMapViewController.m"
-            timestampString = "421817012.348354"
+            timestampString = "421881950.976296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "-mapView:annotationView:didChangeDragState:fromOldState:"
             landmarkType = "5">
          </BreakpointContent>
@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMLocationMapViewController.m"
-            timestampString = "421817012.348354"
+            timestampString = "421881950.976296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "-mapView:annotationView:didChangeDragState:fromOldState:"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMLocationMapViewController.m"
-            timestampString = "421817012.348354"
+            timestampString = "421881950.976296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "-mapView:viewForAnnotation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -152,12 +152,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMLocationMapViewController.m"
-            timestampString = "421817012.348354"
+            timestampString = "421881950.976296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "-mapView:viewForOverlay:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ohmage_ios/OHMSurveysViewController.m"
+            timestampString = "421876458.665905"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "-tableView:accessoryButtonTappedForRowWithIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ohmage_ios/OHMLocationMapViewController.m"
+            timestampString = "421881950.976296"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "-zoomToLocation"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ohmage_ios/OHMReminderManager.m"
+            timestampString = "421879207.896108"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "-processFiredLocalNotification:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

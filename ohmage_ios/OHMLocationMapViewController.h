@@ -12,6 +12,8 @@
 
 @interface OHMLocationMapViewController : OHMBaseViewController
 
+@property (nonatomic) BOOL isCurrentLocation;
+
 - (instancetype)initWithLocation:(OHMReminderLocation *)location;
 
 @end

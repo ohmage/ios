@@ -1,7 +1,7 @@
 #import "OHMReminder.h"
 #import "OHMUserInterface.h"
-#import "OHMTimekeeper.h"
 #import "OHMReminderLocation.h"
+#import "OHMReminderManager.h"
 
 
 @interface OHMReminder ()
@@ -21,6 +21,7 @@
     NSUUID *uuid = [[NSUUID alloc] init];
     NSString *key = [uuid UUIDString];
     self.ohmID = key;
+    self.minimumReentryIntervalValue = 120;
 }
 
 - (NSString *)labelText
@@ -73,7 +74,7 @@
     }
     
     if (self.isLocationReminderValue && self.usesTimeRangeValue) {
-        [text appendFormat:@"%, @ - %@", [OHMUserInterface formattedTime:self.startTime],
+        [text appendFormat:@", %@ - %@", [OHMUserInterface formattedTime:self.startTime],
                                        [OHMUserInterface formattedTime:self.endTime]];
     }
     
@@ -112,7 +113,7 @@
 - (void)toggleEnabled
 {
     self.enabledValue = !self.enabledValue;
-    [[OHMTimekeeper sharedTimekeeper] updateNotificationForReminder:self];
+    [[OHMReminderManager sharedReminderManager] updateScheduleForReminder:self];
 }
 
 - (OHMRepeatDay)nextRepeatDayAfterDay:(OHMRepeatDay)repeatDay
@@ -129,11 +130,13 @@
 {
     NSDate *now = [NSDate date];
     BOOL canFireToday = NO;
-    if (self.usesTimeRangeValue) {
-        canFireToday = [[self.endTime sameTimeToday] isAfterDate:now];
-    }
-    else {
-        canFireToday = [[self.specificTime sameTimeToday] isAfterDate:now];
+    if (![self.lastFireDate isEqualToDayOfDate:now]) {
+        if (self.usesTimeRangeValue) {
+            canFireToday = [[self.endTime sameTimeToday] isAfterDate:now];
+        }
+        else {
+            canFireToday = [[self.specificTime sameTimeToday] isAfterDate:now];
+        }
     }
     
     if (self.weekdaysMaskValue == OHMRepeatDayNever) {
@@ -154,9 +157,13 @@
     return interval;
 }
 
-- (NSDate *)updateFireDate
+- (NSDate *)updateNextFireDate
 {
     if (self.enabledValue) {
+        if (self.isLocationReminderValue) {
+            return [NSDate date]; // don't set nextFireDate, but return date for scheduling
+        }
+        
         NSDate *fireTimeToday = nil;
         if (self.usesTimeRangeValue && self.specificTime == nil) {
             fireTimeToday = [NSDate randomTimeTodayBetweenStartTime:self.startTime endTime:self.endTime];
@@ -164,14 +171,14 @@
         else {
             fireTimeToday = self.specificTime.sameTimeToday;
         }
-        self.fireDate = [fireTimeToday dateByAddingDays:[self daysUntilNextFireDate]];
+        self.nextFireDate = [fireTimeToday dateByAddingDays:[self daysUntilNextFireDate]];
     }
     else {
-        self.fireDate = nil;
+        self.nextFireDate = nil;
     }
     
-    NSLog(@"updated fire date: %@", self.fireDate);
-    return self.fireDate;
+    NSLog(@"updated fire date: %@, %@", [OHMUserInterface formattedDate:self.nextFireDate], [OHMUserInterface formattedTime:self.nextFireDate]);
+    return self.nextFireDate;
 }
 
 

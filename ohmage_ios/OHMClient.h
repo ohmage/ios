@@ -41,10 +41,12 @@
 // Model
 - (NSOrderedSet *)ohmlets;
 - (NSArray *)reminders;
+- (NSArray *)timeReminders;
 - (NSArray *)reminderLocations;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
 - (OHMReminderLocation *)insertNewReminderLocation;
+- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmID;
 
 // Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;

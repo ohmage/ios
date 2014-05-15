@@ -22,6 +22,7 @@
 @property (nonatomic, strong) OHMLocationManager *locationManager;
 @property (nonatomic, strong) OHMReminderLocation *location;
 @property (nonatomic, strong) OHMRegionAnnotationView *regionView;
+@property (nonatomic, strong) MKOverlayRenderer *circleRenderer;
 
 @end
 
@@ -52,7 +53,7 @@
         }
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad
@@ -118,16 +119,42 @@
 
 - (void)zoomToLocation
 {
-    NSLog(@"zoom to coordinate");
     CLLocationCoordinate2D coordinate = self.location.coordinate;
-    CLLocationDistance distance = 1.5 * self.location.radiusValue;
+    CLLocationDistance distance = self.location.radiusValue;
     MKCoordinateRegion reg = MKCoordinateRegionMakeWithDistance(coordinate, distance, distance);
-    self.mapView.region = reg;
+    
+    MKMapPoint pt = MKMapPointForCoordinate(self.location.coordinate);
+    double w = MKMapPointsPerMeterAtLatitude(self.location.coordinate.latitude) * self.location.radiusValue * 0.5;
+    self.mapView.visibleMapRect = MKMapRectMake(pt.x - w/2.0, pt.y - w/2.0, w, w);
+    
+//    reg = [self.mapView regionThatFits:reg];
+//    self.mapView.region = reg;
+//    [self.mapView setRegion:reg animated:YES];
+//    MKCoordinateSpan newSpan = self.mapView.region.span;
+//    NSLog(@"zoom to coordinate, distance: %f, %f %f adjusted: %f %f", distance, reg.span.longitudeDelta, reg.span.latitudeDelta, newSpan.longitudeDelta, newSpan.latitudeDelta);
+    [self.regionView updateRadiusOverlay];
 }
 
 #pragma mark - Map View Delegate
 
-#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    NSLog(@"map view did update user location, is updating: %d, accuracy: %f", userLocation.isUpdating, userLocation.location.horizontalAccuracy);
+    if (self.isCurrentLocation) {
+        self.location.coordinate = userLocation.coordinate;
+        [self zoomToLocation];
+//        self.isCurrentLocation = NO; //we only want one update
+    }
+}
+
+//- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+//{
+//    NSLog(@"region with change, animated: %d", animated);
+//}
+//
+//- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+//{
+//    NSLog(@"region did change, animated: %d", animated);
+//}
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
@@ -153,6 +180,8 @@
         [[UIColor blueColor] colorWithAlphaComponent:0.7];
         
         circleView.lineWidth = 2;
+        
+        self.circleRenderer = circleView;
 		
 		return circleView;
 	}
