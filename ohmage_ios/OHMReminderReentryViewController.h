@@ -10,4 +10,6 @@
 
 @interface OHMReminderReentryViewController : OHMBaseViewController
 
+- (instancetype)initWithReminder:(OHMReminder *)reminder;
+
 @end

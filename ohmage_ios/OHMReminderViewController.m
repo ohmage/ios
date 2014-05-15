@@ -62,6 +62,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"New Reminder" : @"Edit Reminder");
     self.navigationItem.leftBarButtonItem = self.doneButton;
     self.navigationItem.rightBarButtonItem = self.cancelButton;
+    [self setBackButtonTitle:@""];
     
     self.view.tintColor = [OHMAppConstants colorForRowIndex:self.reminder.survey.colorIndex];
     
@@ -333,7 +334,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (void)presentReentryPicker
 {
-    OHMReminderReentryViewController *vc = [[OHMReminderReentryViewController alloc] init];
+    OHMReminderReentryViewController *vc = [[OHMReminderReentryViewController alloc] initWithReminder:self.reminder];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -474,7 +475,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
             break;
         case eRowIndexMinimumReentry:
             cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
-            cell.textLabel.text = @"Ignore repeat arrivals";
+            cell.textLabel.text = @"Ignore consecutive arrivals";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d min", self.reminder.minimumReentryIntervalValue];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
