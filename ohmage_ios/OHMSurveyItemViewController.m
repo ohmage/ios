@@ -593,7 +593,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     // call to "super"
     [self.viewControllerComposite textFieldDidEndEditing:textField];
     
-    self.backgroundTapEnabled = NO;
     if ([self validateTextField]) {
         [self setResponseValueFromTextField];
         self.nextButton.enabled = YES;

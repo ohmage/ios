@@ -1,39 +1,30 @@
 //
-//  OHMReminderLocationViewController.m
+//  OHMManageLocationsViewController.m
 //  ohmage_ios
 //
-//  Created by Charles Forkish on 5/12/14.
+//  Created by Charles Forkish on 5/15/14.
 //  Copyright (c) 2014 VPD. All rights reserved.
 //
 
-#import "OHMReminderLocationViewController.h"
 #import "OHMManageLocationsViewController.h"
+#import "OHMLocationSearchViewController.h"
+#import "OHMLocationMapViewController.h"
 #import "OHMReminderLocation.h"
-#import "OHMReminder.h"
 
-@interface OHMReminderLocationViewController ()
+@interface OHMManageLocationsViewController ()
 
 @property (nonatomic, strong) OHMReminder *reminder;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedLocationsController;
 
 @end
 
-@implementation OHMReminderLocationViewController
-
-- (instancetype)initWithReminder:(OHMReminder *)reminder
-{
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    if (self) {
-        self.reminder = reminder;
-    }
-    return self;
-}
+@implementation OHMManageLocationsViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Select";
+    self.navigationItem.title = @"Manage";
     
     self.fetchedLocationsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminderLocation entityName]
                                                                                                sortKey:@"name"
@@ -67,7 +58,7 @@
     UITableViewCell *cell = nil;
     if (indexPath.row == 0) {
         cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
-        cell.textLabel.text = @"Manage locations";
+        cell.textLabel.text = @"New location";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else {
@@ -83,12 +74,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        OHMManageLocationsViewController *vc = [[OHMManageLocationsViewController alloc] init];
+        OHMLocationSearchViewController *vc = [[OHMLocationSearchViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
-        self.reminder.reminderLocation = self.fetchedLocationsController.fetchedObjects[indexPath.row - 1];
-        [self.navigationController popViewControllerAnimated:YES];
+        OHMReminderLocation *location = self.fetchedLocationsController.fetchedObjects[indexPath.row - 1];
+        OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

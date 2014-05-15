@@ -5,11 +5,13 @@
 #import "OHMObject.h"
 
 extern const struct OHMReminderLocationAttributes {
+	__unsafe_unretained NSString *hasCustomName;
 	__unsafe_unretained NSString *latitude;
 	__unsafe_unretained NSString *longitude;
 	__unsafe_unretained NSString *name;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *radius;
+	__unsafe_unretained NSString *streetAddress;
 } OHMReminderLocationAttributes;
 
 extern const struct OHMReminderLocationRelationships {
@@ -29,6 +31,8 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
+
+
 @interface OHMReminderLocationID : NSManagedObjectID {}
 @end
 
@@ -37,6 +41,20 @@ extern const struct OHMReminderLocationFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMReminderLocationID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* hasCustomName;
+
+
+
+@property BOOL hasCustomNameValue;
+- (BOOL)hasCustomNameValue;
+- (void)setHasCustomNameValue:(BOOL)value_;
+
+//- (BOOL)validateHasCustomName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -104,6 +122,16 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* streetAddress;
+
+
+
+//- (BOOL)validateStreetAddress:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSSet *reminders;
 
 - (NSMutableSet*)remindersSet;
@@ -131,6 +159,15 @@ extern const struct OHMReminderLocationFetchedProperties {
 @end
 
 @interface _OHMReminderLocation (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveHasCustomName;
+- (void)setPrimitiveHasCustomName:(NSNumber*)value;
+
+- (BOOL)primitiveHasCustomNameValue;
+- (void)setPrimitiveHasCustomNameValue:(BOOL)value_;
+
+
 
 
 - (NSNumber*)primitiveLatitude;
@@ -168,6 +205,12 @@ extern const struct OHMReminderLocationFetchedProperties {
 
 - (float)primitiveRadiusValue;
 - (void)setPrimitiveRadiusValue:(float)value_;
+
+
+
+
+- (NSString*)primitiveStreetAddress;
+- (void)setPrimitiveStreetAddress:(NSString*)value;
 
 
 

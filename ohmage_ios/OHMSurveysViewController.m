@@ -428,7 +428,12 @@
 //    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
     UITableView *tableView = self.tableView;
     
-    [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadData];
+    
+//    for (int i = 0; i < self.fetchedResultsController.sections.count; i++ ) {
+//        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:i] withRowAnimation:UITableViewRowAnimationFade];
+//    }
+//    [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 //    switch(type)
 //    {
 //        case NSFetchedResultsChangeInsert:

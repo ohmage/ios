@@ -4,11 +4,13 @@
 #import "_OHMReminderLocation.h"
 
 const struct OHMReminderLocationAttributes OHMReminderLocationAttributes = {
+	.hasCustomName = @"hasCustomName",
 	.latitude = @"latitude",
 	.longitude = @"longitude",
 	.name = @"name",
 	.ohmID = @"ohmID",
 	.radius = @"radius",
+	.streetAddress = @"streetAddress",
 };
 
 const struct OHMReminderLocationRelationships OHMReminderLocationRelationships = {
@@ -45,6 +47,11 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"hasCustomNameValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"hasCustomName"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"latitudeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"latitude"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -63,6 +70,32 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic hasCustomName;
+
+
+
+- (BOOL)hasCustomNameValue {
+	NSNumber *result = [self hasCustomName];
+	return [result boolValue];
+}
+
+- (void)setHasCustomNameValue:(BOOL)value_ {
+	[self setHasCustomName:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveHasCustomNameValue {
+	NSNumber *result = [self primitiveHasCustomName];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveHasCustomNameValue:(BOOL)value_ {
+	[self setPrimitiveHasCustomName:[NSNumber numberWithBool:value_]];
+}
+
 
 
 
@@ -154,6 +187,13 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 - (void)setPrimitiveRadiusValue:(float)value_ {
 	[self setPrimitiveRadius:[NSNumber numberWithFloat:value_]];
 }
+
+
+
+
+
+@dynamic streetAddress;
+
 
 
 

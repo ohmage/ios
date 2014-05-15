@@ -17,6 +17,7 @@
 @interface OHMLocationMapViewController () <MKMapViewDelegate>
 
 @property (strong, nonatomic) MKMapView *mapView;
+@property (nonatomic, strong) UITextField *nameField;
 @property (nonatomic, strong) UISlider *radiusSlider;
 
 @property (nonatomic, strong) OHMLocationManager *locationManager;
@@ -39,7 +40,9 @@
 
 - (void)cancelButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] deleteObject:self.location];
+    if ([self.location.objectID isTemporaryID]) {
+        [[OHMClient sharedClient] deleteObject:self.location];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -52,8 +55,6 @@
             [self.navigationController popToViewController:vc animated:YES];
         }
     }
-    
-//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad
@@ -66,7 +67,9 @@
                                                                                 target:self
                                                                                 action:@selector(saveButtonPressed:)];
     self.navigationItem.leftBarButtonItem = saveButton;
-    self.navigationItem.rightBarButtonItem = self.cancelButton;
+    if (self.location.objectID.isTemporaryID) {
+        self.navigationItem.rightBarButtonItem = self.cancelButton;
+    }
     
     self.locationManager = [OHMLocationManager sharedLocationManager];
     
@@ -76,6 +79,9 @@
     
     [self.view addSubview:mapView];
     [self.view constrainChildToEqualSize:mapView];
+//    [self.view constrainChild:mapView toHorizontalInsets:UIEdgeInsetsZero];
+//    [mapView positionBelowElement:nameField margin:0];
+//    [mapView constrainToBottomInParentWithMargin:0];
     
     self.mapView = mapView;
     
@@ -87,7 +93,26 @@
     
     [self reverseGeocodeLocation:self.location];
     
+    [self setupNameField];
     [self setupRadiusSlider];
+}
+
+- (void)setupNameField
+{
+    UITextField *nameField = [[UITextField alloc] init];
+    nameField.delegate = self;
+    nameField.text = self.location.name;
+    nameField.textAlignment = NSTextAlignmentCenter;
+    nameField.clearsOnBeginEditing = !self.location.hasCustomNameValue;
+    nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    nameField.borderStyle = UITextBorderStyleRoundedRect;
+    nameField.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+    [nameField constrainHeight:30];
+    self.nameField = nameField;
+    
+    [self.view addSubview:nameField];
+    [nameField positionBelowElement:self.topLayoutGuide margin:kUIViewSmallMargin];
+    [self.view constrainChild:nameField toHorizontalInsets:UIEdgeInsetsMake(0, kUIViewSmallMargin, 0, kUIViewSmallMargin)];
 }
 
 - (void)setupRadiusSlider
@@ -238,15 +263,38 @@
                        {
                            if ([placemarks count] > 0) {
                                CLPlacemark *placemark = [placemarks lastObject];
-                               NSLog(@"placemark: %@", placemark);
-//                               NSLog(@"thoroughfare")
-//                               [location updateWithPlacemark:placemark];
-//                               location.name = placemark.name;
-                               location.name = [NSString stringWithFormat:@"%@ %@", placemark.subThoroughfare, placemark.thoroughfare];
+                               [location updateWithPlacemark:placemark];
+                               if (!self.location.hasCustomNameValue) {
+                                   self.nameField.text = placemark.name;
+                               }
                            }
                            
                        }
                    }];
+}
+
+#pragma mark - Text Field Delegate
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    // call to "super"
+    [self.viewControllerComposite textFieldDidEndEditing:textField];
+    
+    if (textField.text.length > 0) {
+        self.location.name = textField.text;
+        self.location.hasCustomNameValue = YES;
+        if (self.regionView.selected) {
+            [self.mapView removeAnnotation:self.location];
+            // todo: keep from animating and reshow callout
+            self.regionView.animatesDrop = NO;
+            [self.mapView addAnnotation:self.location];
+            [self.regionView setSelected:YES animated:NO];
+            self.regionView.animatesDrop = YES;
+        }
+    }
+    else {
+        textField.text = self.location.name;
+    }
 }
 
 @end

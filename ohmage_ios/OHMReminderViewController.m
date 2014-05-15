@@ -10,6 +10,7 @@
 #import "OHMReminderDaysViewController.h"
 #import "OHMReminderReentryViewController.h"
 #import "OHMReminderLocationViewController.h"
+//#import "OHMManageLocationsViewController.h"
 #import "OHMLocationSearchViewController.h"
 #import "OHMReminder.h"
 #import "OHMReminderLocation.h"

@@ -27,9 +27,22 @@
 
 - (void)updateWithPlacemark:(CLPlacemark *)placemark
 {
-    NSLog(@"place name: %@, %@", placemark.name, placemark);
-    self.coordinate = placemark.location.coordinate;
-    self.name = placemark.name;
+    
+    NSString *streetAddress = nil;
+    if (placemark.subThoroughfare.length > 0 && placemark.thoroughfare.length > 0) {
+        streetAddress = [NSString stringWithFormat:@"%@ %@", placemark.subThoroughfare, placemark.thoroughfare];
+    }
+    else if (placemark.subThoroughfare.length > 0) {
+        streetAddress = placemark.subThoroughfare;
+    }
+    else {
+        streetAddress = placemark.thoroughfare;
+    }
+    
+    self.streetAddress = streetAddress;
+    if (!self.hasCustomNameValue) {
+        self.name = placemark.name;
+    }
 }
 
 - (CLLocationCoordinate2D)coordinate
@@ -60,6 +73,11 @@
 - (NSString *)title
 {
     return self.name;
+}
+
+- (NSString *)subtitle
+{
+    return self.streetAddress;
 }
 
 - (MKMapRect)boundingMapRect
