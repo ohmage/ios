@@ -416,14 +416,19 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 #pragma mark - Core Data (public)
 
+- (NSOrderedSet *)ohmlets
+{
+    return self.user.ohmlets;
+}
+
 - (NSArray *)reminders
 {
     return [self allObjectsWithEntityName:[OHMReminder entityName] sortKey:@"specificTime" predicate:nil ascending:NO];
 }
 
-- (NSOrderedSet *)ohmlets
+- (NSArray *)reminderLocations
 {
-    return self.user.ohmlets;
+    return [self allObjectsWithEntityName:[OHMReminderLocation entityName] sortKey:nil predicate:nil ascending:NO];
 }
 
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet

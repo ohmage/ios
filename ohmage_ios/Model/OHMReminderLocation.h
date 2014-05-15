@@ -4,11 +4,12 @@
 
 @interface OHMReminderLocation : _OHMReminderLocation <MKAnnotation>
 
-@property (nonatomic, strong) CLRegion *region;
+@property (nonatomic, readonly) CLRegion *region;
 @property (nonatomic, readwrite) CLLocationCoordinate2D coordinate;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSString *subtitle;
+@property (nonatomic, readonly, copy) NSString *title;
+//@property (nonatomic, readonly, copy) NSString *subtitle;
 
-- (NSString *)locationText;
+//- (NSString *)locationText;
+//- (void)updateWithPlacemark:(CLPlacemark *)placemark;
 
 @end

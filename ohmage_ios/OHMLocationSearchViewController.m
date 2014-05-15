@@ -31,8 +31,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.navigationItem.title = @"Search";
+//    self.navigationItem.leftBarButtonItem = nil;
+//    self.navigationItem.rightBarButtonItem = self.cancelButton;
+    
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 0, self.tableView.rowHeight)];
-    NSLog(@"searchBar frame: %@", NSStringFromCGRect(searchBar.frame));
     searchBar.delegate = self;
     searchBar.placeholder = @"Search or Enter Address";
     self.tableView.tableHeaderView = searchBar;
@@ -40,6 +43,11 @@
     
     self.locationManager = [OHMLocationManager sharedLocationManager];
     self.locationManager.delegate = self;
+}
+
+- (void)cancelButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -92,9 +100,7 @@
     
     OHMReminderLocation *location = [[OHMClient sharedClient] insertNewReminderLocation];
     location.coordinate = coordinate;
-    location.name = @"New Location";
     
-//    OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithMapItem:mapItem];
     OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];
     [self.navigationController pushViewController:vc animated:YES];
 }

@@ -27,7 +27,9 @@ UIEdgeInsets const kUILabelDefaultInsets = {kUIViewSmallTextMargin, kUIViewHoriz
 UIEdgeInsets const kUIButtonTitleDefaultInsets = {kUIButtonVerticalMargin, kUIButtonHorizontalMargin, kUIButtonVerticalMargin, kUIButtonHorizontalMargin};
 UIEdgeInsets const kUIButtonTitleSmallInsets = {kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin, kUIViewSmallTextMargin};
 
-double const kDefaultLocationRadius = 100.0;
+double const kDefaultLocationRadius = 20.0;
+double const kMinLocationRadius = 5.0;
+double const kMaxLocationRadius = 500.0;
 
 @implementation OHMAppConstants
 

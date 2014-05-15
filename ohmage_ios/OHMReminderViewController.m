@@ -9,7 +9,9 @@
 #import "OHMReminderViewController.h"
 #import "OHMReminderDaysViewController.h"
 #import "OHMReminderLocationViewController.h"
+#import "OHMLocationSearchViewController.h"
 #import "OHMReminder.h"
+#import "OHMReminderLocation.h"
 #import "OHMSurvey.h"
 #import "OHMTimekeeper.h"
 
@@ -25,8 +27,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 
 @interface OHMReminderViewController ()
-
-@property (nonatomic, strong) OHMReminder *reminder;
 
 @property (nonatomic, strong) UISegmentedControl *timeOrLocationControl;
 @property (nonatomic, strong) UISwitch *rangeEnableSwitch;
@@ -57,6 +57,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     [super viewDidLoad];
     
     self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"New Reminder" : @"Edit Reminder");
+    self.navigationItem.leftBarButtonItem = self.doneButton;
+    self.navigationItem.rightBarButtonItem = self.cancelButton;
     
     self.view.tintColor = [OHMAppConstants colorForRowIndex:self.reminder.survey.colorIndex];
     
@@ -65,7 +67,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     UISegmentedControl *timeOrLocationControl = [[UISegmentedControl alloc] initWithItems:@[@"Time Reminder", @"Location Reminder"]];
     timeOrLocationControl.frame = CGRectMake(0, 0, 0, 30);
     timeOrLocationControl.backgroundColor = [UIColor whiteColor];
-    timeOrLocationControl.selectedSegmentIndex = 0;
+    timeOrLocationControl.selectedSegmentIndex = self.reminder.isLocationReminderValue;
     [timeOrLocationControl addTarget:self action:@selector(timeOrLocationControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     self.timeOrLocationControl = timeOrLocationControl;
     
@@ -75,11 +77,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     [headerView constrainChild:timeOrLocationControl toHorizontalInsets:UIEdgeInsetsMake(0, kUIViewSmallMargin, 0, kUIViewSmallMargin)];
     self.tableView.tableHeaderView = headerView;
     
-    if (self.reminder.objectID.isTemporaryID) {
-        self.navigationItem.leftBarButtonItem = self.doneButton;
-        self.navigationItem.rightBarButtonItem = self.cancelButton;
-    }
-    else {
+    if (!self.reminder.objectID.isTemporaryID) {
         self.tableView.tableFooterView = [OHMUserInterface tableFooterViewWithButton:@"Delete Reminder" fromTableView:self.tableView setupBlock:^(UIButton *button) {
             [button addTarget:self action:@selector(deleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             button.backgroundColor = [[UIColor redColor] lightColor];
@@ -91,22 +89,20 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     [super viewWillAppear:animated];
     NSLog(@"view will appear");
-//    if (self.timeReminderSwitch.on) {
+//    if (self.reminder.isLocationReminderValue) {
 //        NSIndexPath *repeatPath = [self indexPathForTimeRepeatRow];
 //        [self.tableView reloadRowsAtIndexPaths:@[repeatPath] withRowAnimation:UITableViewRowAnimationNone];
 //    }
+    [self.tableView reloadData];
 }
 
 //- (void)viewWillDisappear:(BOOL)animated
 //{
 //    [super viewWillDisappear:animated];
 //    
-//    if (!self.reminder.isTimeReminderValue && !self.reminder.isLocationReminderValue) {
-//        [[OHMClient sharedClient] deleteObject:self.reminder];
-//        [[OHMClient sharedClient] saveClientState];
-//    }
-//    else {
-//        [self saveReminder];
+//    if (!self.reminder.objectID.isTemporaryID) {
+//        self.navigationItem.leftBarButtonItem = self.doneButton;
+//        self.navigationItem.rightBarButtonItem = self.cancelButton;
 //    }
 //}
 
@@ -195,9 +191,11 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     if (self.reminder.isLocationReminderValue) {
         [self insertRowsAtIndexPaths:paths];
+        self.doneButton.enabled = (self.reminder.reminderLocation != nil);
     }
     else {
         [self deleteRowsAtIndexPaths:paths];
+        self.doneButton.enabled = YES;
     }
     
     [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
@@ -285,7 +283,14 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (void)presentLocationPicker
 {
-    OHMReminderLocationViewController *vc = [[OHMReminderLocationViewController alloc] init];
+    UIViewController *vc = nil;
+    NSArray *locations = [[OHMClient sharedClient] reminderLocations];
+    if (locations.count) {
+        vc = [[OHMReminderLocationViewController alloc] initWithReminder:self.reminder];
+    }
+    else {
+        vc = [[OHMLocationSearchViewController alloc] init];
+    }
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -469,7 +474,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     UITableViewCell *cell = [OHMUserInterface cellWithDetailStyleFromTableView:self.tableView];
     
     cell.textLabel.text = @"Location";
-    cell.detailTextLabel.text = @"A location";
+    cell.detailTextLabel.text = self.reminder.reminderLocation ? self.reminder.reminderLocation.name : @"Select";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;

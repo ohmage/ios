@@ -61,5 +61,6 @@
 - (id)initWithAnnotation:(id <MKAnnotation>)annotation;
 - (void)updateRadiusOverlay;
 - (void)removeRadiusOverlay;
+- (void)radiusNeedsUpdate;
 
 @end

@@ -23,6 +23,8 @@ extern CGFloat const kUITextFieldDefaultHeight;
 extern CGFloat const kUICellImageHeight;
 
 extern double const kDefaultLocationRadius;
+extern double const kMinLocationRadius;
+extern double const kMaxLocationRadius;
 
 @interface OHMAppConstants : NSObject
 

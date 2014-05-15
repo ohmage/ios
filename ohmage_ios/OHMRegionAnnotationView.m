@@ -73,34 +73,30 @@
 
 
 - (void)removeRadiusOverlay {
-	// Find the overlay for this annotation view and remove it if it has the same coordinates.
-	for (id overlay in [map overlays]) {
-		if ([overlay isKindOfClass:[MKCircle class]]) {						
-			MKCircle *circleOverlay = (MKCircle *)overlay;			
-			CLLocationCoordinate2D coord = circleOverlay.coordinate;
-			
-			if (coord.latitude == theAnnotation.coordinate.latitude && coord.longitude == theAnnotation.coordinate.longitude) {
-				[map removeOverlay:overlay];
-			}			
-		}
-	}
-	
-	isRadiusUpdated = NO;
+
+	[map removeOverlay:radiusOverlay];
+//	isRadiusUpdated = NO;
 }
 
 
 - (void)updateRadiusOverlay {
-	if (!isRadiusUpdated) {
+	if (1 || !isRadiusUpdated) {
 		isRadiusUpdated = YES;
 		
-		[self removeRadiusOverlay];	
+//		self.canShowCallout = NO;
+        
+        MKCircle *oldOverlay = radiusOverlay;
+        radiusOverlay = [MKCircle circleWithCenterCoordinate:theAnnotation.coordinate radius:theAnnotation.radiusValue];
+        [map addOverlay:radiusOverlay];
+        [map removeOverlay:oldOverlay];
 		
-		self.canShowCallout = NO;
-		
-		[map addOverlay:[MKCircle circleWithCenterCoordinate:theAnnotation.coordinate radius:theAnnotation.radiusValue]];
-		
-		self.canShowCallout = YES;		
+//		self.canShowCallout = YES;		
 	}
+}
+
+- (void)radiusNeedsUpdate
+{
+    isRadiusUpdated = NO;
 }
 
 

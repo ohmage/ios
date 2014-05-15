@@ -9,11 +9,9 @@
 #import "OHMBaseViewController.h"
 
 @class OHMReminderLocation;
-@class MKMapItem;
 
 @interface OHMLocationMapViewController : OHMBaseViewController
 
 - (instancetype)initWithLocation:(OHMReminderLocation *)location;
-- (instancetype)initWithMapItem:(MKMapItem *)mapItem;
 
 @end

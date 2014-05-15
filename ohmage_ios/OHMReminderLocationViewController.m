@@ -33,7 +33,20 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Location";
+    self.navigationItem.title = @"Select";
+    
+    self.fetchedLocationsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminderLocation entityName]
+                                                                                               sortKey:@"name"
+                                                                                             predicate:nil
+                                                                                    sectionNameKeyPath:nil
+                                                                                             cacheName:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.fetchedLocationsController performFetch:nil];
+    [self.tableView reloadData];
 }
 
 
@@ -61,7 +74,7 @@
         OHMReminderLocation *location = self.fetchedLocationsController.fetchedObjects[indexPath.row - 1];
         cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
         cell.textLabel.text = location.name;
-        cell.detailTextLabel.text = location.locationText;
+//        cell.detailTextLabel.text = location.locationText;
     }
     
     return cell;

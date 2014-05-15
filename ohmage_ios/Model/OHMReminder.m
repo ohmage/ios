@@ -1,6 +1,7 @@
 #import "OHMReminder.h"
 #import "OHMUserInterface.h"
 #import "OHMTimekeeper.h"
+#import "OHMReminderLocation.h"
 
 
 @interface OHMReminder ()
@@ -24,21 +25,19 @@
 
 - (NSString *)labelText
 {
-    NSString *text = @"";
     if (self.isLocationReminderValue) {
-        text = @"Location: ";
+        return [NSString stringWithFormat:@"Location: %@", self.reminderLocation.name];
     }
-    
-    if (self.usesTimeRangeValue) {
-        text = [text stringByAppendingString:[NSString stringWithFormat:@"%@ - %@",
-                                              [OHMUserInterface formattedTime:self.startTime],
-                                              [OHMUserInterface formattedTime:self.endTime]]];
+    else if (self.usesTimeRangeValue) {
+        return [NSString stringWithFormat:@"%@ - %@", [OHMUserInterface formattedTime:self.startTime],
+                                                      [OHMUserInterface formattedTime:self.endTime]];
     }
     else if (self.specificTime != nil) {
-        text = [text stringByAppendingString:[OHMUserInterface formattedTime:self.specificTime]];
+        return [OHMUserInterface formattedTime:self.specificTime];
     }
-    
-    return text;
+    else {
+        return @"Reminder";
+    }
 }
 
 - (NSString *)detailLabelText
@@ -71,6 +70,11 @@
     for (NSNumber *day in repeatDays) {
         [text appendFormat:@"%@%@", comma, [OHMReminder shortNameForRepeatDay:day.unsignedIntegerValue]];
         comma = @", ";
+    }
+    
+    if (self.isLocationReminderValue && self.usesTimeRangeValue) {
+        [text appendFormat:@"%, @ - %@", [OHMUserInterface formattedTime:self.startTime],
+                                       [OHMUserInterface formattedTime:self.endTime]];
     }
     
     return text;
@@ -200,7 +204,7 @@
     }
 }
 
-+ (NSString *)shortNameForRepeatDay:(OHMRepeatDay)repeatDay
++ (NSString *)mediumNameForRepeatDay:(OHMRepeatDay)repeatDay
 {
     switch (repeatDay) {
         case OHMRepeatDaySunday:
@@ -217,6 +221,29 @@
             return @"Fri";
         case OHMRepeatDaySaturday:
             return @"Sat";
+            
+        default:
+            return nil;
+    }
+}
+
++ (NSString *)shortNameForRepeatDay:(OHMRepeatDay)repeatDay
+{
+    switch (repeatDay) {
+        case OHMRepeatDaySunday:
+            return @"Su";
+        case OHMRepeatDayMonday:
+            return @"M";
+        case OHMRepeatDayTuesday:
+            return @"T";
+        case OHMRepeatDayWednesday:
+            return @"W";
+        case OHMRepeatDayThursday:
+            return @"Th";
+        case OHMRepeatDayFriday:
+            return @"F";
+        case OHMRepeatDaySaturday:
+            return @"Sa";
             
         default:
             return nil;

@@ -41,6 +41,7 @@
 // Model
 - (NSOrderedSet *)ohmlets;
 - (NSArray *)reminders;
+- (NSArray *)reminderLocations;
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet;
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
 - (OHMReminderLocation *)insertNewReminderLocation;

@@ -10,6 +10,8 @@
 
 @interface OHMReminderViewController : OHMBaseTableViewController
 
+@property (nonatomic, strong) OHMReminder *reminder;
+
 - (instancetype)initWithReminder:(OHMReminder *)reminder;
 
 @end
