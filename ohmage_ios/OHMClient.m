@@ -62,7 +62,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         [contentTypes addObject:@"text/plain"];
         self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-//        [[AFNetworkActivityLogger sharedLogger] startLogging];
+        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
@@ -126,6 +126,44 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             
         }
         
+        if (completionBlock) {
+            completionBlock(error == nil);
+        }
+    }];
+}
+
+- (void)createAccountWithName:(NSString *)name
+                        email:(NSString *)email
+                     password:(NSString *)password
+              completionBlock:(void (^)(BOOL success))completionBlock
+{
+    [self setAuthorizationToken:nil];
+    
+    NSString *request =  [NSString stringWithFormat:@"people?password=%@", password];
+    NSDictionary *json = @{@"email": email, @"full_name": name};
+    
+    [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
+        if (error) {
+            NSLog(@"account create failed with error: %@", error);
+        }
+        else {
+            NSLog(@"account create succeeded with response: %@", response);
+            
+            NSString *userID = email; //temp in case no ohmID returned
+            if (response.userID) {
+                userID = response.userID;
+            }
+            else if (response[@"id"] != [NSNull null] && response[@"id"] != nil) {
+                userID = response[@"id"];
+            }
+            NSLog(@"setting user id for new account: %@", userID);
+            
+            self.user = [self userWithOhmID:userID];
+            self.user.email = email;
+            self.user.password = password;
+            self.user.fullName = name;
+            
+        }
         if (completionBlock) {
             completionBlock(error == nil);
         }
@@ -402,6 +440,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (void)setPersistentStoreMetadataText:(NSString *)text forKey:(NSString *)key
 {
+    NSLog(@"set store metadata text: %@ for key: %@", text, key);
     NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
     NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
     if (text) {
@@ -411,6 +450,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         [metadata removeObjectForKey:key];
     }
     [self.persistentStoreCoordinator setMetadata:metadata forPersistentStore:store];
+    NSLog(@"store metadata: %@ for key: %@", [self persistentStoreMetadataTextForKey:key], key);
 }
 
 
@@ -654,11 +694,9 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
  */
 - (void)saveManagedContext {
     NSError *error = nil;
-    if ([self.managedObjectContext hasChanges]) {
-        [self.managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"Error saving context: %@", [error localizedDescription]);
-        }
+    [self.managedObjectContext save:&error];
+    if (error) {
+        NSLog(@"Error saving context: %@", [error localizedDescription]);
     }
 }
 

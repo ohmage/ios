@@ -9,6 +9,7 @@
 #import "OHMLoginViewController.h"
 #import "OHMUserInterface.h"
 #import "OHMEmailLoginViewController.h"
+#import "OHMCreateAccountViewController.h"
 
 @interface OHMLoginViewController ()
 
@@ -42,8 +43,8 @@
     
     UIButton *createButton = [OHMUserInterface buttonWithTitle:@"Create Account"
                                                          color:[UIColor whiteColor]
-                                                        target:nil
-                                                        action:nil
+                                                        target:self
+                                                        action:@selector(createAccountButtonPressed:)
                                                           size:buttonSize];
     createButton.titleEdgeInsets = kUIButtonTitleSmallInsets;
     createButton.backgroundColor = [UIColor whiteColor];
@@ -71,16 +72,15 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)emailLoginButtonPressed:(id)sender
 {
     OHMEmailLoginViewController *vc = [[OHMEmailLoginViewController alloc] init];
-//    UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)createAccountButtonPressed:(id)sender
+{
+    OHMCreateAccountViewController *vc = [[OHMCreateAccountViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
 }
 

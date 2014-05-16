@@ -102,7 +102,7 @@
     location.coordinate = coordinate;
     
     OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];
-    vc.isCurrentLocation = YES;
+    vc.isCurrentLocation = isCurrentLocation;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

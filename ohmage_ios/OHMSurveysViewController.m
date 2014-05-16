@@ -185,12 +185,13 @@
     [self updateFetchedResultsController];
     [self updateHeaderAnimated:animated];
     
-    if (animated && self.fetchedResultsController.sections.count > 0) {
-        for (int i = 0; i < self.fetchedResultsController.sections.count; i++ ) {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:i] withRowAnimation:UITableViewRowAnimationFade];
-        }
-    }
-    else {
+//    if (animated && self.fetchedResultsController.sections.count > 0) {
+//        for (int i = 0; i < self.fetchedResultsController.sections.count; i++ ) {
+//            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:i] withRowAnimation:UITableViewRowAnimationFade];
+//        }
+//    }
+//    else
+    {
         [self.tableView reloadData];
     }
 }

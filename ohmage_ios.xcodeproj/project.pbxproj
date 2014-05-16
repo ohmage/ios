@@ -71,6 +71,7 @@
 		1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882585191BF7410034D231 /* NSDate+Ohmage.m */; };
 		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
 		1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */; };
+		1E9081AB1925952A00A0468C /* OHMCreateAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -249,6 +250,8 @@
 		1E882588191C00370034D231 /* OHMAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMAudioRecorder.m; sourceTree = "<group>"; };
 		1E9081A21925787000A0468C /* OHMManageLocationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMManageLocationsViewController.h; sourceTree = "<group>"; };
 		1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMManageLocationsViewController.m; sourceTree = "<group>"; };
+		1E9081A91925952A00A0468C /* OHMCreateAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMCreateAccountViewController.h; sourceTree = "<group>"; };
+		1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMCreateAccountViewController.m; sourceTree = "<group>"; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -413,6 +416,8 @@
 				1EA764571912C941007768EF /* OHMLoginViewController.m */,
 				1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */,
 				1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */,
+				1E9081A91925952A00A0468C /* OHMCreateAccountViewController.h */,
+				1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -875,6 +880,7 @@
 				1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */,
 				1EED8815192557F5004F7C51 /* OHMReminderReentryViewController.m in Sources */,
 				1ECA87EE190DDE4A00429D5D /* OHMMediaStore.m in Sources */,
+				1E9081AB1925952A00A0468C /* OHMCreateAccountViewController.m in Sources */,
 				1E56A3341913104D00384AE9 /* OHMUserViewController.m in Sources */,
 				1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */,
 				1E56A337191334EC00384AE9 /* OHMLocationManager.m in Sources */,
