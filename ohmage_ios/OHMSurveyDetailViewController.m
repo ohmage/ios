@@ -87,7 +87,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     contentHeight += promptCountLabel.frame.size.height + kUIViewVerticalMargin;
     
     UIButton *takeSurveyButton = [OHMUserInterface buttonWithTitle:@"Take Survey"
-                                                             color:[OHMAppConstants colorForSurveyIndex:self.survey.index]
+                                                             color:[OHMAppConstants colorForSurveyIndex:self.survey.indexValue]
                                                             target:self
                                                             action:@selector(takeSurvey:)
                                                           maxWidth:contentWidth];
@@ -125,7 +125,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
-    self.navigationController.navigationBar.barTintColor = [OHMAppConstants colorForSurveyIndex:self.survey.index];
+    self.navigationController.navigationBar.barTintColor = [OHMAppConstants colorForSurveyIndex:self.survey.indexValue];
     
     [self.fetchedRemindersController performFetch:nil];
     [self.fetchedSurveyResponsesController performFetch:nil];

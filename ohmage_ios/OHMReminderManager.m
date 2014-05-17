@@ -114,6 +114,11 @@
     NSString *ohmID = notification.userInfo.reminderID;
     OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:ohmID];
     reminder.lastFireDate = notification.fireDate;
+    [self processFiredReminder:reminder];
+}
+
+- (void)processFiredReminder:(OHMReminder *)reminder
+{
     reminder.survey.isDueValue = YES;
     
     if (reminder.weekdaysMaskValue == OHMRepeatDayNever) {
@@ -121,14 +126,22 @@
     }
     
     [self updateScheduleForReminder:reminder];
+    [[OHMClient sharedClient] saveClientState];
 }
 
-- (void)updateRemindersForFiredNotifications
+- (void)synchronizeTimeReminders
 {
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
     NSArray *timeReminders = [[OHMClient sharedClient] timeReminders];
     for (OHMReminder *reminder in timeReminders) {
+        NSLog(@"reminder nextFireDate: %@, now: %@", reminder.nextFireDate, [NSDate date]);
         if (reminder.nextFireDate != nil && [reminder.nextFireDate isBeforeDate:[NSDate date]]) {
-            [self updateScheduleForReminder:reminder];
+            reminder.lastFireDate = reminder.nextFireDate;
+            [self processFiredReminder:reminder];
+        }
+        else {
+            [self scheduleNotificationForReminder:reminder];
         }
     }
     [self debugPrintAllNotifications];

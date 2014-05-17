@@ -142,10 +142,10 @@
     }
     
     if (self.skippedValue) {
-        return nil;// @"SKIPPED";
+        return @"SKIPPED";
     }
     else if (self.notDisplayedValue) {
-        return nil;// @"NOT_DISPLAYED";
+        return @"NOT_DISPLAYED";
     }
     else {
         switch (self.surveyItem.itemTypeValue) {

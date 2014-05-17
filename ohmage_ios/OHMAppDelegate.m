@@ -36,12 +36,12 @@
         if (notification != nil) {
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
-    }
-    
-    if ([CLLocationManager locationServicesEnabled])
-    {
-        OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
-        [appLocationManager.locationManager startUpdatingLocation];
+        
+        if ([CLLocationManager locationServicesEnabled])
+        {
+            OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
+            [appLocationManager.locationManager startUpdatingLocation];
+        }
     }
     
     return YES;
@@ -87,7 +87,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[OHMReminderManager sharedReminderManager] updateRemindersForFiredNotifications];
+    [[OHMReminderManager sharedReminderManager] synchronizeTimeReminders];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

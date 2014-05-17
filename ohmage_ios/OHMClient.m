@@ -134,6 +134,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             self.user.password = password;
             
             [self refreshUserInfo];
+            [self didLogin];
             
         }
         
@@ -165,7 +166,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             self.user.usesGoogleAuthValue = YES;
             
             [self refreshUserInfo];
-            
+            [self didLogin];
         }
         
         if (completionBlock) {
@@ -239,6 +240,15 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }
     
     [self saveClientState];
+}
+
+- (void)didLogin
+{
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
+        [appLocationManager.locationManager startUpdatingLocation];
+    }
 }
 
 
@@ -350,6 +360,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
             NSLog(@"got ohmlet: %@, id: %@", [response ohmletName], [response ohmletID]);
             ohmlet.ohmletName = [response ohmletName];
             ohmlet.ohmletDescription = [response ohmletDescription];
+            [self.delegate OHMClientDidUpdate:self];
             [self saveClientState];
             if (ohmlet.ohmletUpdatedBlock) {
                 ohmlet.ohmletUpdatedBlock();
@@ -535,7 +546,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (NSArray *)timeReminders
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocationReminder == NO"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocationReminder != YES"];
     return [[self reminders] filteredArrayUsingPredicate:predicate];
 }
 

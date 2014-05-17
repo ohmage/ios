@@ -163,6 +163,9 @@
         if (self.isLocationReminderValue) {
             return [NSDate date]; // don't set nextFireDate, but return date for scheduling
         }
+        else if ([[NSDate date] isBeforeDate:self.nextFireDate]) {
+            return self.nextFireDate; // reminder hasn't fired yet
+        }
         
         NSDate *fireTimeToday = nil;
         if (self.usesTimeRangeValue && self.specificTime == nil) {

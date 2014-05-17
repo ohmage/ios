@@ -108,7 +108,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self.textLabel positionBelowElement:topGuide margin:2 * kUIViewVerticalMargin];
     [self.toolbar positionAboveElementWithDefaultMargin:bottomGuide];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%d of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld of %ld", self.itemIndex + 1, (unsigned long)[self.surveyResponse.survey.surveyItems count]];
     
     self.textLabel.text = self.item.text;
     
@@ -124,7 +124,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
-    UIColor *color = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index];
+    UIColor *color = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.indexValue];
     self.navigationController.navigationBar.barTintColor = color;
     self.toolbar.barTintColor = color;
     self.toolbar.tintColor = [UIColor whiteColor];
@@ -360,7 +360,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     
     CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
     UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText]
-                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
+                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.indexValue]
                                                   target:self
                                                   action:@selector(actionButtonPressed:)
                                                 maxWidth:buttonWidth];
@@ -393,12 +393,12 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 {
     CGFloat buttonWidth = (self.view.bounds.size.width - 3.0 * kUIViewHorizontalMargin) / 2.0;
     UIButton *recordButton = [OHMUserInterface buttonWithTitle:@"Record"
-                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
+                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.indexValue]
                                                   target:self
                                                   action:@selector(recordAudioButtonPressed:)
                                               fixedWidth:buttonWidth];
     UIButton *playButton = [OHMUserInterface buttonWithTitle:@"Play"
-                                                       color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
+                                                       color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.indexValue]
                                                       target:self
                                                       action:@selector(playAudioButtonPressed:)
                                                   fixedWidth:buttonWidth];
@@ -681,7 +681,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
                                                                alignment:NSTextAlignmentCenter];
     
     [messageView moveOriginToPoint:messageFrame.origin];
-    messageView.backgroundColor = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index];
+    messageView.backgroundColor = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.indexValue];
     [self.view insertSubview:messageView belowSubview:presenter];
     self.validationMessageView = messageView;
     

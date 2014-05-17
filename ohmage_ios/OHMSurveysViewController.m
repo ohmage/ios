@@ -58,8 +58,8 @@
     
     self.navigationItem.title = @"Ohmage";
     
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.separatorColor = [UIColor clearColor];
+//    self.tableView.separatorInset = UIEdgeInsetsZero;
+//    self.tableView.separatorColor = [UIColor blackColor];
     
     UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(userButtonPressed:)];
     self.navigationItem.leftBarButtonItem = ohmButton;
@@ -100,6 +100,7 @@
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
+    [self updateFetchedResultsController];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -120,7 +121,7 @@
 
 - (void)setupHeader
 {
-//    if (self.tableView.tableHeaderView != nil) // go back to using setup header instead of update header and check for old header height to animate transition
+    if (self.client.ohmlets.count < 2) return; // only show header if needed for switching ohmlets
     
     NSString *nameText = nil;
     NSString *descriptionText = nil;
@@ -139,6 +140,8 @@
     pageControl.numberOfPages = MAX([self.client.ohmlets count], 1);
     pageControl.currentPage = self.ohmletIndex;
     pageControl.hidesForSinglePage = YES;
+    pageControl.pageIndicatorTintColor = [OHMAppConstants lightOhmageColor];
+    pageControl.currentPageIndicatorTintColor = [OHMAppConstants ohmageColor];
     [pageControl addTarget:self action:@selector(pageControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [pageControl constrainSize:CGSizeMake(contentWidth, 20)];
     self.pageControl = pageControl;
@@ -150,7 +153,7 @@
     self.ohmletDescriptionLabel = descriptionLabel;
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, [self headerHeight])];
-    headerView.backgroundColor = [OHMAppConstants lightOhmageColor];
+//    headerView.backgroundColor = [OHMAppConstants lightOhmageColor];
     
     [headerView addSubview:nameLabel];
     [headerView addSubview:descriptionLabel];
@@ -180,7 +183,8 @@
         self.ohmlet = self.client.ohmlets[self.ohmletIndex];
         __weak __typeof(self) weakSelf = self;
         self.ohmlet.ohmletUpdatedBlock = ^{
-            [weakSelf updateHeaderAnimated:YES];
+//            [weakSelf updateHeaderAnimated:YES];
+            [weakSelf setupHeader];
         };
     }
     else {
@@ -189,7 +193,8 @@
     }
         
     [self updateFetchedResultsController];
-    [self updateHeaderAnimated:animated];
+//    [self updateHeaderAnimated:animated];
+    [self setupHeader];
     
 //    if (animated && self.fetchedResultsController.sections.count > 0) {
 //        for (int i = 0; i < self.fetchedResultsController.sections.count; i++ ) {
@@ -285,22 +290,35 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.fetchedResultsController sections] count];
+    return MAX([[self.fetchedResultsController sections] count], 1);
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
+    if (self.fetchedResultsController.fetchedObjects.count == 0) {
+        return 1;
+    }
+    
     if ([[self.fetchedResultsController sections] count] > 0) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
-    } else
+    }
+    else {
         return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OHMSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OHMSurveyTableViewCell" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    UITableViewCell *cell = nil;
+    if (self.fetchedResultsController.fetchedObjects.count == 0) {
+        cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+        cell.textLabel.text = @"No Surveys";
+    }
+    else {
+        cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
+        [self configureCell:cell atIndexPath:indexPath];
+    }
     
     return cell;
 }
@@ -316,7 +334,7 @@
     
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:indexPath.row];
+    cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:survey.indexValue];
     cell.tintColor = [UIColor darkTextColor];
     
     if (survey.isLoaded) {
@@ -354,6 +372,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.fetchedResultsController.fetchedObjects.count == 0) {
+        return tableView.rowHeight;
+    }
+    
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return [OHMUserInterface heightForSubtitleCellWithTitle:survey.surveyName
                                                    subtitle:nil//survey.surveyDescription
@@ -363,8 +385,13 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (self.fetchedResultsController.sections.count > 1 && section == 0) {
-        return @"Due:";
+    if (self.fetchedResultsController.sections.count > 1) {
+        if (section == 0) {
+            return @"Due:";
+        }
+        else {
+            return @"Available:";
+        }
     }
     return nil;
 }
