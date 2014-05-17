@@ -18,5 +18,6 @@
 - (void)processFiredLocalNotification:(UILocalNotification *)notification;
 - (void)updateRemindersForFiredNotifications;
 - (void)scheduleNotificationForReminder:(OHMReminder *)reminder;
+- (void)cancelAllNotificationsForLoggedInUser;
 
 @end

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const kGoogleClientId;
+
 extern CGFloat const kUIViewVerticalMargin;
 extern CGFloat const kUIViewHorizontalMargin;
 extern CGFloat const kUIViewSmallTextMargin;
@@ -28,8 +30,8 @@ extern double const kMaxLocationRadius;
 
 @interface OHMAppConstants : NSObject
 
-+ (UIColor *)colorForRowIndex:(NSInteger)rowIndex;
-+ (UIColor *)lightColorForRowIndex:(NSInteger)rowIndex;
++ (UIColor *)colorForSurveyIndex:(NSInteger)rowIndex;
++ (UIColor *)lightColorForSurveyIndex:(NSInteger)rowIndex;
 + (UIColor *)ohmageColor;
 + (UIColor *)lightOhmageColor;
 + (UIColor *)primaryTextColor;

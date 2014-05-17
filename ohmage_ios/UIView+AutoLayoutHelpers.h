@@ -39,6 +39,7 @@
 - (void)constrainToBottomInParentWithMargin:(CGFloat)margin;
 - (void)positionBelowElement:(id)layoutElement margin:(CGFloat)margin;
 - (void)positionBelowElementWithDefaultMargin:(id)layoutElement;
+- (void)positionAboveElement:(id)layoutElement withMargin:(CGFloat)margin;
 - (void)positionAboveElementWithDefaultMargin:(id)layoutElement;
 
 - (void)moveOriginToPoint:(CGPoint)point;

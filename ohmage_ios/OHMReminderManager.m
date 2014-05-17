@@ -11,6 +11,7 @@
 #import "OHMLocationManager.h"
 #import "OHMReminderLocation.h"
 #import "OHMSurvey.h"
+#import "OHMUser.h"
 
 @implementation OHMReminderManager
 
@@ -133,7 +134,18 @@
     [self debugPrintAllNotifications];
 }
 
-
+- (void)cancelAllNotificationsForLoggedInUser
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    OHMUser *user = [[OHMClient sharedClient] loggedInUser];
+    NSArray *scheduledNotifications = [application scheduledLocalNotifications];
+    for (UILocalNotification *notification in scheduledNotifications) {
+        OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:notification.userInfo.reminderID];
+        if (reminder && [reminder.user isEqual:user]) {
+            [application cancelLocalNotification:notification];
+        }
+    }
+}
 
 - (void)debugPrintAllNotifications {
 #ifdef DEBUG

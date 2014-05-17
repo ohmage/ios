@@ -67,8 +67,14 @@
     UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"] style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.rightBarButtonItem = helpButton;
     
+    NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
+    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
-    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName] sortKey:@"surveyName" predicate:predicate sectionNameKeyPath:@"isDue" cacheName:nil];
+    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
+                                                                                            sortDescriptors:@[dueDescriptor, indexDescriptor]
+                                                                                           predicate:predicate
+                                                                                  sectionNameKeyPath:@"isDue"
+                                                                                           cacheName:nil];
     self.fetchedResultsController.delegate = self;
     
     self.client = [OHMClient sharedClient];
@@ -263,7 +269,8 @@
 
 - (void)updateFetchedResultsController
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@", self.ohmlet];
     self.fetchedResultsController.fetchRequest.predicate = predicate;
     NSLog(@"update fetched results controller, predicate: %@", self.fetchedResultsController.fetchRequest.predicate);
     
@@ -308,40 +315,31 @@
     }
     
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    NSLog(@"configureCell for survey: %@, row: %ld", survey.surveyName, (long)indexPath.row);
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:indexPath.row];
+    cell.tintColor = [UIColor darkTextColor];
     
     if (survey.isLoaded) {
         cell.textLabel.text = survey.surveyName;
-        //        cell.detailTextLabel.text = survey.surveyDescription;
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
-        
-        //        [OHMUserInterface applyRoundedBorderToView:cell];
-        cell.tintColor = [UIColor darkTextColor];
-        survey.colorIndex = indexPath.row;
-        //        CGFloat height = [OHMUserInterface heightForSubtitleCellWithTitle:cell.textLabel.text subtitle:cell.detailTextLabel.text accessoryType:cell.accessoryType];
-        //        NSLog(@"height for cell %ld: %f", indexPath.row, height);
     }
     
-//    __weak OHMSurvey *weakSurvey = survey;
     survey.surveyUpdatedBlock = ^{
 //        NSLog(@"executing update block for survey: %@, row: %ld", weakSurvey.surveyName, (long)indexPath.row);
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    NSLog(@"will display survey: %@, at row: %ld", survey.surveyName, indexPath.row);
-    survey.colorIndex = indexPath.row;
-    cell.backgroundColor = [OHMAppConstants lightColorForRowIndex:indexPath.row];
-}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
+////    NSLog(@"will display survey: %@, at row: %ld", survey.surveyName, indexPath.row);
+//    survey.index = indexPath.row;
+//    cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:indexPath.row];
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
@@ -350,8 +348,6 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    NSLog(@"accessory tapped for row: %ld, color index: %ld", (long)indexPath.row, (long)survey.colorIndex);
-    survey.colorIndex = indexPath.row; //todo: this should not be necessary
     OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
     [self.navigationController pushViewController:vc animated:YES];
 }

@@ -4,6 +4,7 @@
 #import "_OHMSurvey.h"
 
 const struct OHMSurveyAttributes OHMSurveyAttributes = {
+	.index = @"index",
 	.isDue = @"isDue",
 	.isLoaded = @"isLoaded",
 	.ohmID = @"ohmID",
@@ -48,6 +49,11 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"indexValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"index"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"isDueValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"isDue"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -66,6 +72,32 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic index;
+
+
+
+- (int16_t)indexValue {
+	NSNumber *result = [self index];
+	return [result shortValue];
+}
+
+- (void)setIndexValue:(int16_t)value_ {
+	[self setIndex:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveIndexValue {
+	NSNumber *result = [self primitiveIndex];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveIndexValue:(int16_t)value_ {
+	[self setPrimitiveIndex:[NSNumber numberWithShort:value_]];
+}
+
 
 
 

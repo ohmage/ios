@@ -15,6 +15,7 @@
 @class OHMSurveyPromptResponse;
 @class OHMReminder;
 @class OHMReminderLocation;
+@class GTMOAuth2Authentication;
 
 @protocol OHMClientDelegate;
 
@@ -32,11 +33,13 @@
 - (void)loginWithEmail:(NSString *)email
               password:(NSString *)password
        completionBlock:(void (^)(BOOL success))completionBlock;
+- (void)loginWithGoogleAuthToken:(NSString *)token completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password
               completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)logout;
+- (void)clearUserData;
 
 // HTTP
 - (void)setAuthorizationToken:(NSString *)token;
@@ -61,6 +64,11 @@
 - (void)deleteObject:(NSManagedObject *)object;
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
                                                                sortKey:(NSString *)sortKey
+                                                             predicate:(NSPredicate *)predicate
+                                                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                                                             cacheName:(NSString *)cacheName;
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+                                                       sortDescriptors:(NSArray *)sortDescriptors
                                                              predicate:(NSPredicate *)predicate
                                                     sectionNameKeyPath:(NSString *)sectionNameKeyPath
                                                              cacheName:(NSString *)cacheName;

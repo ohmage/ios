@@ -8,6 +8,7 @@ const struct OHMUserAttributes OHMUserAttributes = {
 	.fullName = @"fullName",
 	.ohmID = @"ohmID",
 	.password = @"password",
+	.usesGoogleAuth = @"usesGoogleAuth",
 };
 
 const struct OHMUserRelationships OHMUserRelationships = {
@@ -46,6 +47,11 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"usesGoogleAuthValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"usesGoogleAuth"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
@@ -76,6 +82,32 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 
 @dynamic password;
 
+
+
+
+
+
+@dynamic usesGoogleAuth;
+
+
+
+- (BOOL)usesGoogleAuthValue {
+	NSNumber *result = [self usesGoogleAuth];
+	return [result boolValue];
+}
+
+- (void)setUsesGoogleAuthValue:(BOOL)value_ {
+	[self setUsesGoogleAuth:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveUsesGoogleAuthValue {
+	NSNumber *result = [self primitiveUsesGoogleAuth];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveUsesGoogleAuthValue:(BOOL)value_ {
+	[self setPrimitiveUsesGoogleAuth:[NSNumber numberWithBool:value_]];
+}
 
 
 

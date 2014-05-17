@@ -7,7 +7,6 @@
 @implementation OHMSurvey
 
 @synthesize surveyUpdatedBlock;
-@synthesize colorIndex;
 
 - (NSString *)definitionRequestUrlString
 {

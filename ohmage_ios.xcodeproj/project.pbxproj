@@ -72,6 +72,16 @@
 		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
 		1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */; };
 		1E9081AB1925952A00A0468C /* OHMCreateAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */; };
+		1E9081AD1926834A00A0468C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AC1926834A00A0468C /* AddressBook.framework */; };
+		1E9081AF1926835100A0468C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AE1926835100A0468C /* AssetsLibrary.framework */; };
+		1E9081B11926836600A0468C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B01926836600A0468C /* CoreMotion.framework */; };
+		1E9081B31926837400A0468C /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B21926837400A0468C /* CoreText.framework */; };
+		1E9081B51926837F00A0468C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B41926837F00A0468C /* MediaPlayer.framework */; };
+		1E9081B71926838A00A0468C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B61926838A00A0468C /* Security.framework */; };
+		1E9081B91926839700A0468C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B81926839700A0468C /* SystemConfiguration.framework */; };
+		1E9081C41926841500A0468C /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081C21926841500A0468C /* GoogleOpenSource.framework */; };
+		1E9081C51926841500A0468C /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081C31926841500A0468C /* GooglePlus.framework */; };
+		1E9081C71926842F00A0468C /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E9081C61926842F00A0468C /* GooglePlus.bundle */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -252,6 +262,20 @@
 		1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMManageLocationsViewController.m; sourceTree = "<group>"; };
 		1E9081A91925952A00A0468C /* OHMCreateAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMCreateAccountViewController.h; sourceTree = "<group>"; };
 		1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMCreateAccountViewController.m; sourceTree = "<group>"; };
+		1E9081AC1926834A00A0468C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		1E9081AE1926835100A0468C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		1E9081B01926836600A0468C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		1E9081B21926837400A0468C /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		1E9081B41926837F00A0468C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		1E9081B61926838A00A0468C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1E9081B81926839700A0468C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1E9081BA192683C100A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = "../google-plus-ios-sdk-1.5.1/GoogleOpenSource.framework"; sourceTree = "<group>"; };
+		1E9081BB192683C100A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = "../google-plus-ios-sdk-1.5.1/GooglePlus.framework"; sourceTree = "<group>"; };
+		1E9081BE192683EE00A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = external/GoogleOpenSource.framework; sourceTree = "<group>"; };
+		1E9081BF192683EE00A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = external/GooglePlus.framework; sourceTree = "<group>"; };
+		1E9081C21926841500A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = external/Google/GoogleOpenSource.framework; sourceTree = "<group>"; };
+		1E9081C31926841500A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = external/Google/GooglePlus.framework; sourceTree = "<group>"; };
+		1E9081C61926842F00A0468C /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = external/Google/GooglePlus.bundle; sourceTree = SOURCE_ROOT; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -318,8 +342,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E9081B91926839700A0468C /* SystemConfiguration.framework in Frameworks */,
+				1E9081B71926838A00A0468C /* Security.framework in Frameworks */,
+				1E9081B51926837F00A0468C /* MediaPlayer.framework in Frameworks */,
+				1E9081B31926837400A0468C /* CoreText.framework in Frameworks */,
+				1E9081B11926836600A0468C /* CoreMotion.framework in Frameworks */,
+				1E9081AF1926835100A0468C /* AssetsLibrary.framework in Frameworks */,
+				1E9081AD1926834A00A0468C /* AddressBook.framework in Frameworks */,
 				1E88257A1919C4C90034D231 /* libPEGKitIOS.a in Frameworks */,
 				1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */,
+				1E9081C41926841500A0468C /* GoogleOpenSource.framework in Frameworks */,
+				1E9081C51926841500A0468C /* GooglePlus.framework in Frameworks */,
 				1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */,
 				1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */,
 				1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */,
@@ -486,6 +519,19 @@
 		1E70096218CA6F8700203990 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E9081C21926841500A0468C /* GoogleOpenSource.framework */,
+				1E9081C31926841500A0468C /* GooglePlus.framework */,
+				1E9081BE192683EE00A0468C /* GoogleOpenSource.framework */,
+				1E9081BF192683EE00A0468C /* GooglePlus.framework */,
+				1E9081BA192683C100A0468C /* GoogleOpenSource.framework */,
+				1E9081BB192683C100A0468C /* GooglePlus.framework */,
+				1E9081B81926839700A0468C /* SystemConfiguration.framework */,
+				1E9081B61926838A00A0468C /* Security.framework */,
+				1E9081B41926837F00A0468C /* MediaPlayer.framework */,
+				1E9081B21926837400A0468C /* CoreText.framework */,
+				1E9081B01926836600A0468C /* CoreMotion.framework */,
+				1E9081AE1926835100A0468C /* AssetsLibrary.framework */,
+				1E9081AC1926834A00A0468C /* AddressBook.framework */,
 				1E8824F71919BF0B0034D231 /* libPEGKitIOS.a */,
 				1E8824F51919BEA30034D231 /* PEGKit.framework */,
 				1E56A3381913354200384AE9 /* CoreLocation.framework */,
@@ -517,6 +563,7 @@
 		1E70096A18CA6F8700203990 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1E9081C61926842F00A0468C /* GooglePlus.bundle */,
 				1E70096B18CA6F8700203990 /* ohmage_ios-Info.plist */,
 				1E70096C18CA6F8700203990 /* InfoPlist.strings */,
 				1E70096F18CA6F8700203990 /* main.m */,
@@ -781,6 +828,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E70096E18CA6F8700203990 /* InfoPlist.strings in Resources */,
+				1E9081C71926842F00A0468C /* GooglePlus.bundle in Resources */,
 				1EAECA5B18EB40CC00035BDF /* notes in Resources */,
 				1E70097618CA6F8700203990 /* Images.xcassets in Resources */,
 				1E882580191AE0A80034D231 /* OHMConditionParserGrammer.parsergen in Resources */,
@@ -1025,6 +1073,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
+					"/Users/cforkish/Code/Contracting/ohmage/google-plus-ios-sdk-1.5.1",
+					"$(PROJECT_DIR)/external/Google",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
@@ -1056,6 +1106,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
+					"/Users/cforkish/Code/Contracting/ohmage/google-plus-ios-sdk-1.5.1",
+					"$(PROJECT_DIR)/external/Google",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";

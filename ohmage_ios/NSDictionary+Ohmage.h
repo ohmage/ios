@@ -22,6 +22,7 @@
 - (NSString *)authToken;
 - (NSString *)refreshToken;
 - (NSString *)userID;
+- (NSString *)username;
 - (NSString *)userFullName;
 
 - (NSArray *)ohmlets;

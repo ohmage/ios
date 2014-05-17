@@ -12,6 +12,8 @@
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
 
+#import <GooglePlus/GooglePlus.h>
+
 @implementation OHMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -34,12 +36,12 @@
         if (notification != nil) {
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
-        
-        if ([CLLocationManager locationServicesEnabled])
-        {
-            OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
-            [appLocationManager.locationManager startUpdatingLocation];
-        }
+    }
+    
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
+        [appLocationManager.locationManager startUpdatingLocation];
     }
     
     return YES;
@@ -91,6 +93,18 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+#pragma mark - Google Login
+
+- (BOOL)application: (UIApplication *)application
+            openURL: (NSURL *)url
+  sourceApplication: (NSString *)sourceApplication
+         annotation: (id)annotation {
+    return [GPPURLHandler handleURL:url
+                  sourceApplication:sourceApplication
+                         annotation:annotation];
 }
 
 @end

@@ -49,7 +49,7 @@
 {
     UIView *headerView = [OHMUserInterface tableFooterViewWithButton:@"Submit" fromTableView:self.tableView setupBlock:^(UIButton *button) {
         [button addTarget:self action:@selector(submitButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        button.backgroundColor = [OHMAppConstants colorForRowIndex:self.response.survey.colorIndex];
+        button.backgroundColor = [OHMAppConstants colorForSurveyIndex:self.response.survey.index];
     }];
     self.tableView.tableHeaderView = headerView;
 }

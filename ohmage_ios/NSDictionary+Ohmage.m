@@ -41,6 +41,11 @@
     return [self nonNullValueForKey:@"user_id"];
 }
 
+- (NSString *)username
+{
+    return [self nonNullValueForKey:@"username"];
+}
+
 - (NSString *)userFullName
 {
     return [self nonNullValueForKey:@"full_name"];

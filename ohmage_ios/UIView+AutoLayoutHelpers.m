@@ -362,6 +362,16 @@
                                     views:NSDictionaryOfVariableBindings(layoutElement, self)]];
 }
 
+- (void)positionAboveElement:(id)layoutElement withMargin:(CGFloat)margin
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.superview addConstraints:[NSLayoutConstraint
+                                    constraintsWithVisualFormat:@"V:[self]-margin-[layoutElement]" options:0
+                                    metrics:@{@"margin":@(margin)}
+                                    views:NSDictionaryOfVariableBindings(self, layoutElement)]];
+}
+
 - (void)positionAboveElementWithDefaultMargin:(id)layoutElement
 {
     self.translatesAutoresizingMaskIntoConstraints = NO;

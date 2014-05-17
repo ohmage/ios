@@ -18,10 +18,15 @@
 #import "OHMSurveyPromptResponse.h"
 #import "OHMReminder.h"
 #import "OHMReminderLocation.h"
+#import "OHMLocationManager.h"
+#import "OHMReminderManager.h"
+
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
 
 static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
-@interface OHMClient ()
+@interface OHMClient () <GPPSignInDelegate>
 
 // Core Data
 @property(nonatomic, copy) NSURL *persistentStoreURL;
@@ -62,12 +67,18 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         [contentTypes addObject:@"text/plain"];
         self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-        [[AFNetworkActivityLogger sharedLogger] startLogging];
+//        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
-            [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
+            if (self.user.usesGoogleAuthValue) {
+                [GPPSignIn sharedInstance].delegate = self;
+                [[GPPSignIn sharedInstance] trySilentAuthentication];
+            }
+            else {
+                [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
+            }
         }
     }
     
@@ -132,6 +143,38 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     }];
 }
 
+- (void)loginWithGoogleAuthToken:(NSString *)token completionBlock:(void (^)(BOOL success))completionBlock
+{
+    [self setAuthorizationToken:nil];
+    
+    NSString *request =  @"auth_token";
+    NSDictionary *parameters = @{@"provider": @"google", @"access_token" : token};
+    
+    [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
+        if (error) {
+            NSLog(@"Google login Error");
+        }
+        else {
+            NSLog(@"Google login Success");
+            
+            self.authToken = [response authToken];
+            self.refreshToken = [response refreshToken];
+            [self setAuthorizationToken:self.authToken];
+            
+            self.user = [self userWithOhmID:[response username]];
+            self.user.usesGoogleAuthValue = YES;
+            
+            [self refreshUserInfo];
+            
+        }
+        
+        if (completionBlock) {
+            completionBlock(error == nil);
+        }
+    }];
+}
+
+
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password
@@ -174,6 +217,27 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     self.user = nil;
     [self.delegate OHMClientDidUpdate:self];
+    [self saveClientState];
+}
+
+- (void)clearUserData
+{
+    NSLog(@"clearing user data");
+    for (OHMSurveyResponse *response in self.user.surveyResponses ) {
+        [self deleteObject:response];
+    }
+    
+    [[OHMReminderManager sharedReminderManager] cancelAllNotificationsForLoggedInUser];
+    for (OHMReminder *reminder in self.user.reminders) {
+        [self deleteObject:reminder];
+    }
+    
+    for (OHMReminderLocation *location in self.user.reminderLocations) {
+        // todo: stopMonitoring doesn't seem to be working...
+        [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:location.region];
+        [self deleteObject:location];
+    }
+    
     [self saveClientState];
 }
 
@@ -297,8 +361,10 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 - (void)refreshSurveys:(NSArray *)surveyDefinitions forOhmlet:(OHMOhmlet *)ohmlet
 {
     NSMutableSet *surveys = [NSMutableSet setWithCapacity:[surveyDefinitions count]];
+    int index = 0;
     for (NSDictionary *surveyDefinition in surveyDefinitions) {
         OHMSurvey * survey = [self surveyWithOhmID:[surveyDefinition surveyID] andVersion:[surveyDefinition surveyVersion]];
+        survey.indexValue = index++;
         if (!survey.isLoadedValue) {
             [self loadSurveyFromServer:survey];
         }
@@ -659,14 +725,32 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
                                                     sectionNameKeyPath:(NSString *)sectionNameKeyPath
                                                              cacheName:(NSString *)cacheName
 {
+    
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
-    NSArray *descriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+    return [self fetchedResultsControllerWithEntityName:entityName
+                                               sortDescriptors:@[sortDescriptor]
+                                              predicate:predicate
+                                     sectionNameKeyPath:sectionNameKeyPath
+                                              cacheName:cacheName];
+}
+
+
+/**
+ *  fetchedResultsControllerWithEntityName:sortKey:cacheName
+ */
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+                                                       sortDescriptors:(NSArray *)sortDescriptors
+                                                             predicate:(NSPredicate *)predicate
+                                                    sectionNameKeyPath:(NSString *)sectionNameKeyPath
+                                                             cacheName:(NSString *)cacheName
+{
     
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entity];
-    [fetchRequest setSortDescriptors:descriptors];
+    [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setPredicate:predicate];
     [fetchRequest setFetchBatchSize:20];
     
@@ -726,6 +810,31 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 {
     [self deletePersistentStore];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
+}
+
+
+
+#pragma mark - Google Login Delegate
+
+- (void)showGoogleLoginFailureAlert
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Google Authentication Failed" message:@"You have been logged out because your google account failed to authenticate." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
+                   error: (NSError *) error {
+    NSLog(@"Client received google error %@ and auth object %@",error, auth);
+    if (error) {
+        [self showGoogleLoginFailureAlert];
+    }
+    else {
+        [self loginWithGoogleAuthToken:auth.accessToken completionBlock:^(BOOL success) {
+            if (!success) {
+                [self showGoogleLoginFailureAlert];
+            }
+        }];
+    }
 }
 
 @end

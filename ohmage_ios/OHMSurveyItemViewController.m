@@ -124,7 +124,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
-    UIColor *color = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    UIColor *color = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index];
     self.navigationController.navigationBar.barTintColor = color;
     self.toolbar.barTintColor = color;
     self.toolbar.tintColor = [UIColor whiteColor];
@@ -360,7 +360,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     
     CGFloat buttonWidth = self.view.bounds.size.width - 2 * kUIViewHorizontalMargin;
     UIButton *button = [OHMUserInterface buttonWithTitle:[self actionButtonTitleText]
-                                                   color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
                                                   target:self
                                                   action:@selector(actionButtonPressed:)
                                                 maxWidth:buttonWidth];
@@ -393,12 +393,12 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 {
     CGFloat buttonWidth = (self.view.bounds.size.width - 3.0 * kUIViewHorizontalMargin) / 2.0;
     UIButton *recordButton = [OHMUserInterface buttonWithTitle:@"Record"
-                                                   color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                   color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
                                                   target:self
                                                   action:@selector(recordAudioButtonPressed:)
                                               fixedWidth:buttonWidth];
     UIButton *playButton = [OHMUserInterface buttonWithTitle:@"Play"
-                                                       color:[OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex]
+                                                       color:[OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index]
                                                       target:self
                                                       action:@selector(playAudioButtonPressed:)
                                                   fixedWidth:buttonWidth];
@@ -681,7 +681,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
                                                                alignment:NSTextAlignmentCenter];
     
     [messageView moveOriginToPoint:messageFrame.origin];
-    messageView.backgroundColor = [OHMAppConstants colorForRowIndex:self.surveyResponse.survey.colorIndex];
+    messageView.backgroundColor = [OHMAppConstants colorForSurveyIndex:self.surveyResponse.survey.index];
     [self.view insertSubview:messageView belowSubview:presenter];
     self.validationMessageView = messageView;
     

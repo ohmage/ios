@@ -11,7 +11,12 @@
 #import "OHMEmailLoginViewController.h"
 #import "OHMCreateAccountViewController.h"
 
-@interface OHMLoginViewController ()
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+
+@interface OHMLoginViewController () <GPPSignInDelegate>
+
+@property (nonatomic, strong) GPPSignInButton *googleSignInButton;
 
 @end
 
@@ -59,9 +64,14 @@
                           metrics:@{@"margin": @(buttonMargin)}
                           views:NSDictionaryOfVariableBindings(emailButton, createButton)]];
     
-//    [view layoutChildrenHorizontallyWithDefaultMargins:@[emailButton, createButton]];
     [emailButton constrainToBottomInParentWithMargin:buttonMargin];
     [createButton constrainToBottomInParentWithMargin:buttonMargin];
+    
+    GPPSignInButton *googleButton = [[GPPSignInButton alloc] init];
+    googleButton.style = kGPPSignInButtonStyleWide;
+    [view addSubview:googleButton];
+    [view constrainChildToDefaultHorizontalInsets:googleButton];
+    [googleButton positionAboveElement:emailButton withMargin:buttonMargin];
     
     self.view = view;
 }
@@ -69,7 +79,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    GPPSignIn *signIn = [GPPSignIn sharedInstance];
+    signIn.shouldFetchGooglePlusUser = YES;
+    //signIn.shouldFetchGoogleUserEmail = YES;  // Uncomment to get the user's email
+    
+    signIn.clientID = kGoogleClientId;
+    signIn.scopes = @[ @"profile" ];            // "profile" scope
+    
+    // Optional: declare signIn.actions, see "app activities"
+    signIn.delegate = self;
+    
+    [signIn trySilentAuthentication];
 }
 
 - (void)emailLoginButtonPressed:(id)sender
@@ -82,6 +103,40 @@
 {
     OHMCreateAccountViewController *vc = [[OHMCreateAccountViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)presentLoginError
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign In Failed" message:@"Unable to sign in" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
+
+#pragma mark - Google Login Delegate
+
+- (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
+                   error: (NSError *) error {
+    NSLog(@"Received error %@ and auth object %@",error, auth);
+    if (!error) {
+        [[OHMClient sharedClient] loginWithGoogleAuthToken:auth.accessToken completionBlock:^(BOOL success) {
+            if (success) {
+    
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
+            else {
+                [self presentLoginError];
+            }
+        }];
+    }
+    else {
+        [self presentLoginError];
+    }
+}
+
+- (void)presentSignInViewController:(UIViewController *)viewController {
+    // This is an example of how you can implement it if your app is navigation-based.
+//    [[self navigationController] pushViewController:viewController animated:YES];
+    [self presentViewController:viewController animated:YES completion:nil];
 }
 
 @end

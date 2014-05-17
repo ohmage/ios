@@ -9,6 +9,8 @@
 #import "OHMAppConstants.h"
 #import "UIColor+Ohmage.h"
 
+NSString *const kGoogleClientId = @"129502935732-oc2o5e5lp99l7hijurrre8l9s20aidkk.apps.googleusercontent.com";
+
 CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;
 CGFloat const kUIViewSmallTextMargin = 4.0;
@@ -33,7 +35,7 @@ double const kMaxLocationRadius = 500.0;
 
 @implementation OHMAppConstants
 
-+ (UIColor *)colorForRowIndex:(NSInteger)rowIndex
++ (UIColor *)colorForSurveyIndex:(NSInteger)rowIndex
 {
     rowIndex %= 6;
     UIColor *color = nil;
@@ -63,9 +65,9 @@ double const kMaxLocationRadius = 500.0;
     return color;
 }
 
-+ (UIColor *)lightColorForRowIndex:(NSInteger)rowIndex
++ (UIColor *)lightColorForSurveyIndex:(NSInteger)rowIndex
 {
-    return [[self colorForRowIndex:rowIndex] lightColor];
+    return [[self colorForSurveyIndex:rowIndex] lightColor];
 }
 
 + (UIColor *)ohmageColor

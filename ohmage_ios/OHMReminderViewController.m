@@ -64,7 +64,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     self.navigationItem.rightBarButtonItem = self.cancelButton;
     [self setBackButtonTitle:@""];
     
-    self.view.tintColor = [OHMAppConstants colorForRowIndex:self.reminder.survey.colorIndex];
+    self.view.tintColor = [OHMAppConstants colorForSurveyIndex:self.reminder.survey.index];
     
     [self setupTimePickers];
     

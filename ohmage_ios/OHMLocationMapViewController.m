@@ -144,10 +144,6 @@
 
 - (void)zoomToLocation
 {
-    CLLocationCoordinate2D coordinate = self.location.coordinate;
-    CLLocationDistance distance = self.location.radiusValue;
-    MKCoordinateRegion reg = MKCoordinateRegionMakeWithDistance(coordinate, distance, distance);
-    
     MKMapPoint pt = MKMapPointForCoordinate(self.location.coordinate);
     double w = MKMapPointsPerMeterAtLatitude(self.location.coordinate.latitude) * self.location.radiusValue * 0.5;
     self.mapView.visibleMapRect = MKMapRectMake(pt.x - w/2.0, pt.y - w/2.0, w, w);
@@ -162,14 +158,14 @@
 
 #pragma mark - Map View Delegate
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    NSLog(@"map view did update user location, is updating: %d, accuracy: %f", userLocation.isUpdating, userLocation.location.horizontalAccuracy);
-    if (self.isCurrentLocation) {
-        self.location.coordinate = userLocation.coordinate;
-        [self zoomToLocation];
-//        self.isCurrentLocation = NO; //we only want one update
-    }
-}
+//- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+//    NSLog(@"map view did update user location, is updating: %d, accuracy: %f", userLocation.isUpdating, userLocation.location.horizontalAccuracy);
+//    if (self.isCurrentLocation) {
+//        self.location.coordinate = userLocation.coordinate;
+//        [self zoomToLocation];
+////        self.isCurrentLocation = NO; //we only want one update
+//    }
+//}
 
 //- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 //{

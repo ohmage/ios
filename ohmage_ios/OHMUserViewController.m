@@ -16,10 +16,10 @@
 static NSInteger const kSettingsSectionIndex = 0;
 static NSInteger const kRemindersSectionIndex = 1;
 
-static NSInteger const kSettingsRowCellularData = 0;
-static NSInteger const kSettingsRowSyncNow = 1;
-static NSInteger const kSettingsRowClearUserData = 2;
-static NSInteger const kSettingsRowCount = 3;
+//static NSInteger const kSettingsRowCellularData = 0;
+//static NSInteger const kSettingsRowSyncNow = 1;
+static NSInteger const kSettingsRowClearUserData = 0;
+static NSInteger const kSettingsRowCount = 1;
 
 @interface OHMUserViewController ()
 
@@ -113,7 +113,9 @@ static NSInteger const kSettingsRowCount = 3;
 
 - (void)confirmationAlertDidConfirm:(UIAlertView *)alert
 {
-    
+    [[OHMClient sharedClient] clearUserData];
+    self.reminders = nil;
+    [self.tableView reloadData];
 }
 
 
@@ -143,17 +145,17 @@ static NSInteger const kSettingsRowCount = 3;
     
     if (indexPath.section == kSettingsSectionIndex) {
         switch (indexPath.row) {
-            case kSettingsRowCellularData:
-                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
-                    sw.on = YES;
-                }];
-                cell.textLabel.text = @"Use cellular data";
-                break;
-            case kSettingsRowSyncNow:
-                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
-                cell.textLabel.text = @"Sync data";
-//                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                break;
+//            case kSettingsRowCellularData:
+//                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
+//                    sw.on = YES;
+//                }];
+//                cell.textLabel.text = @"Use cellular data";
+//                break;
+//            case kSettingsRowSyncNow:
+//                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
+//                cell.textLabel.text = @"Sync data";
+////                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//                break;
             case kSettingsRowClearUserData:
                 cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
                 cell.textLabel.text = @"Clear user data";
