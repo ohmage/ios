@@ -51,7 +51,7 @@
         self.nameTextField = tf;
         
         //debug
-        tf.text = @"charlie";
+//        tf.text = @"charlie";
     }];
     
     UIView *emailField = [OHMUserInterface textFieldWithLabelText:@"E-MAIL" setupBlock:^(UITextField *tf) {
@@ -61,7 +61,7 @@
         self.emailTextField = tf;
         
         //debug
-        tf.text = @"charlie@forkishproductions.com";
+//        tf.text = @"charlie@forkishproductions.com";
     }];
     
     UIView *passwordField = [OHMUserInterface textFieldWithLabelText:@"PASSWORD" setupBlock:^(UITextField *tf) {
@@ -71,7 +71,7 @@
         self.passwordTextField = tf;
         
         //debug
-        tf.text = @"loudfowl98";
+//        tf.text = @"loudfowl98";
     }];
     
     [contentBox addSubview:nameField];

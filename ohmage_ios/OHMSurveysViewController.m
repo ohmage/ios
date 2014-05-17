@@ -61,10 +61,16 @@
 //    self.tableView.separatorInset = UIEdgeInsetsZero;
 //    self.tableView.separatorColor = [UIColor blackColor];
     
-    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"] style:UIBarButtonItemStylePlain target:self action:@selector(userButtonPressed:)];
+    UIBarButtonItem *ohmButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ohmage_toolbar"]
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(userButtonPressed:)];
     self.navigationItem.leftBarButtonItem = ohmButton;
     
-    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"] style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help_icon"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(helpButtonPressed:)];
     self.navigationItem.rightBarButtonItem = helpButton;
     
     NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
@@ -87,8 +93,6 @@
     
     
     [self setupHeader];
-    
-//    self.tableView.restorationIdentifier = @"PQTItemsViewControllerTableView";
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,6 +120,12 @@
     OHMUserViewController *vc = [[OHMUserViewController alloc] init];
     UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:navCon animated:YES completion:nil];
+}
+
+- (void)helpButtonPressed:(id)sender
+{
+    NSURL *url = [NSURL URLWithString:@"http://ohmage.org/"];
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 

@@ -833,6 +833,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 
 - (void)OHMAudioRecorder:(OHMAudioRecorder *)recorder didFinishRecordingToURL:(NSURL *)recordingURL
 {
+    self.promptResponse.audioURL = nil; // remove existing recording, if any
     self.promptResponse.audioURL = recordingURL;
     [self updateAudioButtonStates];
 }

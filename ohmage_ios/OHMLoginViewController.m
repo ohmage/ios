@@ -90,7 +90,7 @@
     // Optional: declare signIn.actions, see "app activities"
     signIn.delegate = self;
     
-    [signIn trySilentAuthentication];
+//    [signIn trySilentAuthentication];
 }
 
 - (void)emailLoginButtonPressed:(id)sender
