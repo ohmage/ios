@@ -182,19 +182,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     OHMReminderLocation *location = [[OHMClient sharedClient] locationWithOhmID:region.identifier];
     NSLog(@"did enter region: %@, reminderLocation: %@", region, location);
     
-    OHMReminder *test = nil;
-    if (location.reminders.count) {
-        test = [location.reminders anyObject];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    NSString *alertBody = [NSString stringWithFormat:@"location: %d, reminder: %d, last fire date: %d", location != nil, test != nil, test.lastFireDate != nil];
-    
-    notification.alertBody = alertBody;
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    
     if (location == nil) return;
     
     for (OHMReminder *reminder in location.reminders) {
