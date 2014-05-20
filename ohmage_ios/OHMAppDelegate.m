@@ -70,7 +70,7 @@
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier
   completionHandler:(void (^)())completionHandler
 {
-    
+    NSLog(@"application handle events for background url session, identifier: %@", identifier);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

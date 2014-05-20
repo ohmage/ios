@@ -294,86 +294,111 @@
     }];
 }
 
+- (void)buildResponseBodyForSurveyResponse:(OHMSurveyResponse *)surveyResponse
+                              withFormData:(id<AFMultipartFormData>)formData
+{
+    
+    NSDictionary *dataHeaders = @{@"Content-Disposition" :@"form-data; name=\"data\"",
+                                  @"Content-Type" : @"application/json"};
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:surveyResponse.JSON.jsonArray
+                                                       options:0
+                                                         error:nil];
+    
+    [formData appendPartWithHeaders:dataHeaders body:jsonData];
+    
+    for (OHMSurveyPromptResponse *promptResponse in surveyResponse.promptResponses) {
+        if (promptResponse.hasMediaAttachment) {
+            NSLog(@"appending file with name: %@, url: %@",
+                  promptResponse.mediaAttachmentName,
+                  promptResponse.mediaAttachmentURL);
+            NSError *error = nil;
+            [formData appendPartWithFileURL:promptResponse.mediaAttachmentURL
+                                       name:@"media"
+                                   fileName:promptResponse.mediaAttachmentName
+                                   mimeType:promptResponse.mimeType
+                                      error:&error];
+            if (error != nil) {
+                NSLog(@"error appending file: %@", error);
+            }
+        }
+    }
+}
+
+- (void)handleCompletionForRequest:(NSURLRequest *)request
+                 forSurveyResponse:(OHMSurveyResponse *)surveyResponse
+                         withError:(NSError *)error
+{
+    if (error != nil) {
+        NSLog(@"error creating new request");
+    }
+    else {
+        NSLog(@"request body: %ld, stream: %d", [request.HTTPBody length], request.HTTPBodyStream.hasBytesAvailable);
+        NSURLSessionUploadTask *task =
+        [self.backgroundSessionManager uploadTaskWithRequest:request
+                                                    fromFile:surveyResponse.tempFileURL
+                                                    progress:nil
+                                           completionHandler:^(NSURLResponse *response, id responseObject, NSError *error)
+        {
+           if (error != nil) {
+               NSLog(@"Submit survey failure with error: %@", error);
+           }
+           else {
+               NSLog(@"submit survey success with response: %@", responseObject);
+               if (![responseObject isKindOfClass:[NSArray class]]) {
+                   NSLog(@"Submitted survey response is not an array");
+                   return;
+               }
+               NSArray *responseArray = (NSArray *)responseObject;
+               NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
+               NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
+               if ([surveyResponse.ohmID isEqualToString:ohmId]) {
+                   NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
+                   surveyResponse.submissionConfirmedValue = YES;
+                   [self saveClientState];
+               }
+           }
+       }];
+        
+        [task resume];
+        
+        [self saveClientState];
+    }
+}
+
 - (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
-    NSLog(@"submit response: %@", [surveyResponse JSON]);
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
     surveyResponse.survey.isDueValue = NO;
+    NSLog(@"submit response: %@", [surveyResponse JSON]);
     [self saveClientState];
     
     NSError *requestError = nil;
     NSString *requestString = [kOhmageServerUrlString stringByAppendingPathComponent:surveyResponse.uploadRequestUrlString];
-    NSDictionary *dataHeaders = @{@"Content-Disposition" :@"form-data; name=\"data\"", @"Content-Type" : @"application/json"};
     
-    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST"
-                                                                                URLString:requestString
-                                                                               parameters:nil
-                                                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        
-        [formData appendPartWithHeaders:dataHeaders body:[NSJSONSerialization dataWithJSONObject:[surveyResponse JSON].jsonArray options:0 error:nil]];
-                                          
-        for (OHMSurveyPromptResponse *promptResponse in surveyResponse.promptResponses) {
-            if (promptResponse.hasMediaAttachment) {
-                NSLog(@"appending file with name: %@, url: %@", promptResponse.mediaAttachmentName, promptResponse.mediaAttachmentURL);
-                NSError *error = nil;
-                [formData appendPartWithFileURL:promptResponse.mediaAttachmentURL name:@"media" fileName:promptResponse.mediaAttachmentName mimeType:@"image/jpeg" error:&error];
-                if (error != nil) {
-                    NSLog(@"error appending file: %@", error);
-                }
-            }
-        }
+    NSMutableURLRequest *request =
+    [self.requestSerializer multipartFormRequestWithMethod:@"POST"
+                                                 URLString:requestString
+                                                parameters:nil
+                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData)
+    {
+                                     [self buildResponseBodyForSurveyResponse:surveyResponse
+                                                                 withFormData:formData];
     }
-                                                                                    error:&requestError];
+                                                     error:&requestError];
+    
     if (requestError != nil) {
         NSLog(@"Error creating request: %@", requestError);
         return;
     }
     
-
-    
-    
-    request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request writingStreamContentsToFile:fileUrl completionHandler:^(NSError *error) {
-        if (error != nil) {
-            NSLog(@"error creating new request");
-        }
-        else {
-            NSLog(@"request body: %ld, stream: %d", [request.HTTPBody length], request.HTTPBodyStream.hasBytesAvailable);
-            NSURLSessionUploadTask *task = [self.backgroundSessionManager uploadTaskWithRequest:request fromFile:fileUrl progress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-                if (error != nil) {
-                    NSLog(@"Submit survey failure with error: %@", error);
-                }
-                else {
-                    NSLog(@"submit survey success with response: %@", responseObject);
-                    if (![responseObject isKindOfClass:[NSArray class]]) {
-                        NSLog(@"Submitted survey response is not an array");
-                        return;
-                    }
-                    NSArray *responseArray = (NSArray *)responseObject;
-                    NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
-                    NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
-                    if ([surveyResponse.ohmID isEqualToString:ohmId]) {
-                        NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
-                        surveyResponse.submissionConfirmedValue = YES;
-                        [self saveClientState];
-                    }
-                }
-            }];
-            
-            [task resume];
-            
-            [self saveClientState];
-        }
+    request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request
+                                                                   writingStreamContentsToFile:surveyResponse.tempFileURL
+                                                                             completionHandler:^(NSError *error)
+    {
+         [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
     }];
-    
-//    NSLog(@"new request body: %ld, stream: %d", [newRequest.HTTPBody length], newRequest.HTTPBodyStream.hasBytesAvailable);
-    
-//    NSURLRequest *newRequest = [self.backgroundSessionManager.requestSerializer requestWithMethod:@"POST" URLString:requestString parameters:(NSDictionary *)surveyResponse.JSON.jsonArray error:&requestError];
-//    if (requestError != nil) {
-//        NSLog(@"error creating new request");
-//        return;
-//    }
-    
 
 }
 

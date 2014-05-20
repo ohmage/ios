@@ -730,21 +730,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
-- (UIImage *)thumbnailFromVideoURL:(NSURL *)videoURL
-{
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
-    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    gen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    
-    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    return thumb;
-}
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     if ([picker isEqual:self.imagePicker]) {
@@ -756,9 +741,9 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
         NSLog(@"Media URL: %@", mediaURL);
         if (mediaURL) {
-            self.promptResponse.videoURL = mediaURL;
             self.promptResponse.imageValue = [self thumbnailFromVideoURL:mediaURL];
             self.imageView.image = self.promptResponse.imageValue;
+            self.promptResponse.videoURL = mediaURL;
         }
     }
     
@@ -795,6 +780,21 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     imagePicker.delegate = self;
     self.videoPicker = imagePicker;
     [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+- (UIImage *)thumbnailFromVideoURL:(NSURL *)videoURL
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return thumb;
 }
 
 

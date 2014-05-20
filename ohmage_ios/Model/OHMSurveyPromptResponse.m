@@ -105,9 +105,9 @@
         case OHMSurveyItemTypeImagePrompt:
             return @"image/jpeg";
         case OHMSurveyItemTypeAudioPrompt:
-            return @";
+            return @"audio/mp4";
         case OHMSurveyItemTypeVideoPrompt:
-            return self.videoURL;
+            return @"video/mp4";
         default:
             return nil;
     }
@@ -119,6 +119,8 @@
 {
     if (_videoURL == nil) {
         _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.ohmID];
+        BOOL isFile = [[NSFileManager defaultManager] fileExistsAtPath:[_videoURL path]];
+        NSLog(@"file exists at path: %d, %@", isFile, [_videoURL path]);
     }
     return _videoURL;
 }
@@ -198,10 +200,10 @@
     }
     
     if (self.skippedValue) {
-        return @"SKIPPED";
+        return nil; //@"SKIPPED";
     }
     else if (self.notDisplayedValue) {
-        return @"NOT_DISPLAYED";
+        return nil; //@"NOT_DISPLAYED";
     }
     else {
         switch (self.surveyItem.itemTypeValue) {

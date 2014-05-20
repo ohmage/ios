@@ -71,7 +71,7 @@
     self.imageDictionary[key] = image;
     
     // Create full path for image
-    NSString *imagePath = [self imagePathForKey:key];
+    NSString *imagePath = [[self imageURLForKey:key] path];
     
     // Turn image into JPEG data
     NSData *data = UIImageJPEGRepresentation(image, 0.5);
@@ -87,7 +87,8 @@
     UIImage *result = self.imageDictionary[key];
     
     if (!result) {
-        NSString *imagePath = [self imagePathForKey:key];
+        NSString *imagePath = [[self imageURLForKey:key] path];
+        
         
         // Create UIImage object from file
         result = [UIImage imageWithContentsOfFile:imagePath];
@@ -97,7 +98,7 @@
             self.imageDictionary[key] = result;
         }
         else {
-            NSLog(@"Error: unable to find %@", [self imagePathForKey:key]);
+            NSLog(@"Error: unable to find %@", imagePath);
         }
     }
     return result;
@@ -110,33 +111,30 @@
     }
     [self.imageDictionary removeObjectForKey:key];
     
-    NSString *imagePath = [self imagePathForKey:key];
-    [[NSFileManager defaultManager] removeItemAtPath:imagePath
-                                               error:nil];
-}
-
-- (NSString *)imagePathForKey:(NSString *)key
-{
-    NSArray *documentDirectories =
-    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                        NSUserDomainMask,
-                                        YES);
-    
-    NSString *documentDirectory = [documentDirectories firstObject];
-    NSString *imagesDirectory = [documentDirectory stringByAppendingPathComponent:@"images"];
-    
-    BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:imagesDirectory withIntermediateDirectories:YES attributes:nil error:nil];
-    if (!success) {
-        NSLog(@"Error creating images directory");
-    }
-    
-    return [[imagesDirectory stringByAppendingPathComponent:key] stringByAppendingPathExtension:@"jpg"];
+    NSURL *imageURL = [self imageURLForKey:key];
+    [[NSFileManager defaultManager] removeItemAtURL:imageURL error:nil];
 }
 
 - (NSURL *)imageURLForKey:(NSString *)key
 {
-    NSLog(@"ImageURL for key: %@", [NSURL fileURLWithPath:[self imagePathForKey:key]]);
-    return [NSURL fileURLWithPath:[self imagePathForKey:key]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSURL *documentsFolderUrl =
+    [fileManager URLForDirectory:NSDocumentDirectory
+                        inDomain:NSUserDomainMask
+               appropriateForURL:nil
+                          create:NO
+                           error:nil];
+    
+    NSURL *imagesFolderUrl = [documentsFolderUrl URLByAppendingPathComponent:@"images" isDirectory:YES];
+    BOOL success = [fileManager createDirectoryAtURL:imagesFolderUrl withIntermediateDirectories:YES attributes:nil error:nil];
+    if (!success) {
+        NSLog(@"Error creating audio directory");
+        return nil;
+    }
+    
+    NSString *fileName = [key stringByAppendingPathExtension:@"mp4"];
+    return [imagesFolderUrl URLByAppendingPathComponent:fileName];
 }
 
 
@@ -156,20 +154,24 @@
 
 - (NSURL *)videoURLForKey:(NSString *)key
 {
-    NSArray *documentDirectories =
-    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                        NSUserDomainMask,
-                                        YES);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    NSString *documentDirectory = [documentDirectories firstObject];
-    NSString *videosDirectory = [documentDirectory stringByAppendingPathComponent:@"videos"];
+    NSURL *documentsFolderUrl =
+    [fileManager URLForDirectory:NSDocumentDirectory
+                        inDomain:NSUserDomainMask
+               appropriateForURL:nil
+                          create:NO
+                           error:nil];
     
-    BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:videosDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    NSURL *videoFolderUrl = [documentsFolderUrl URLByAppendingPathComponent:@"videos" isDirectory:YES];
+    BOOL success = [fileManager createDirectoryAtURL:videoFolderUrl withIntermediateDirectories:YES attributes:nil error:nil];
     if (!success) {
-        NSLog(@"Error creating videos directory");
+        NSLog(@"Error creating audio directory");
+        return nil;
     }
     
-    return [NSURL URLWithString:[videosDirectory stringByAppendingPathComponent:key]];
+    NSString *fileName = [key stringByAppendingPathExtension:@"mp4"];
+    return [videoFolderUrl URLByAppendingPathComponent:fileName];
 }
 
 - (void)deleteVideoForKey:(NSString *)key
