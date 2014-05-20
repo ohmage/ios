@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const kOhmageServerUrlString;
 extern NSString *const kGoogleClientId;
 
 extern CGFloat const kUIViewVerticalMargin;

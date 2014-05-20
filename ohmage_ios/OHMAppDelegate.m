@@ -67,6 +67,12 @@
     [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
 }
 
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier
+  completionHandler:(void (^)())completionHandler
+{
+    
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [[OHMClient sharedClient] saveClientState];

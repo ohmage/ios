@@ -35,10 +35,8 @@
         
         [session requestRecordPermission:^(BOOL granted) {
             _hasMicrophoneAccess = granted;
-            if (!granted) {
-                NSLog(@"Audio recording permission denied");
-                [self.delegate OHMAudioRecorderMicrophoneAccessDenied:self];
-            }
+            [self.delegate OHMAudioRecorderMicrophoneAccessChanged:self];
+
         }];
     }
     return self;

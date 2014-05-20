@@ -9,6 +9,7 @@
 #import "OHMAppConstants.h"
 #import "UIColor+Ohmage.h"
 
+NSString *const kOhmageServerUrlString = @"https://dev.ohmage.org/ohmage";
 NSString *const kGoogleClientId = @"129502935732-oc2o5e5lp99l7hijurrre8l9s20aidkk.apps.googleusercontent.com";
 
 CGFloat const kUIViewVerticalMargin = 15.0;

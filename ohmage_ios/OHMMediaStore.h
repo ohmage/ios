@@ -15,6 +15,7 @@
 - (void)setImage:(UIImage *)image forKey:(NSString *)key;
 - (UIImage *)imageForKey:(NSString *)key;
 - (void)deleteImageForKey:(NSString *)key;
+- (NSURL *)imageURLForKey:(NSString *)key;
 
 - (void)setVideoWithURL:(NSURL *)tempVideoURL forKey:(NSString *)key;
 - (NSURL *)videoURLForKey:(NSString *)key;

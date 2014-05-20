@@ -38,6 +38,17 @@ Reminders
 
 ---------------------
 
+https://github.com/ohmage/android/blob/master/ohmage/src/main/java/org/ohmage/sync/ResponseTypedOutput.java#L52
+
+First, the data is added as a part and then each media file is added as a part.
+
+This is semi-equivalent cURL command-line example.
+
+curl --trace-ascii ./curltrace.txt -H "Content-Type: application/json" -H "Authorization: ohmage f6be6b3c-11c9-4f41-8505-3ba437db45dd" -F 'data=@data.json' -F "media=@fox.jpg;type=image/jpeg;filename=0daad9d9-3a02-4920-acfb-dcd5a230fc35" https://dev.ohmage.org/ohmage/surveys/986d601b-7dd4-4216-8797-a9e5ed8f07c1/1/data
+
+
+--------------
+
 The 3.0 server docs are here: https://github.com/ohmage/server/wiki/3.x-Documentation
 
 We are still working on the API documentation, but we have a good version of the docs for the "people" APIs:

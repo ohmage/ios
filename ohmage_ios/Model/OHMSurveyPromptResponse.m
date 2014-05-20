@@ -56,7 +56,63 @@
     else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) {
         [[OHMMediaStore sharedStore] deleteVideoForKey:self.ohmID];
     }
+    else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeAudioPrompt) {
+        [[OHMMediaStore sharedStore] deleteAudioForKey:self.ohmID];
+    }
 
+}
+
+- (BOOL)hasMediaAttachment
+{
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+            return self.imageValue != nil;
+        case OHMSurveyItemTypeAudioPrompt:
+            return self.audioURL != nil;
+        case OHMSurveyItemTypeVideoPrompt:
+            return self.videoURL != nil;
+            default:
+        return NO;
+    }
+    
+    return NO;
+}
+
+- (NSURL *)mediaAttachmentURL
+{
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+            return [[OHMMediaStore sharedStore] imageURLForKey:self.ohmID];
+        case OHMSurveyItemTypeAudioPrompt:
+            return self.audioURL;
+        case OHMSurveyItemTypeVideoPrompt:
+            return self.videoURL;
+        default:
+            return nil;
+    }
+    
+    return nil;
+}
+
+- (NSString *)mediaAttachmentName
+{
+    return [[self mediaAttachmentURL] lastPathComponent];
+}
+
+- (NSString *)mimeType
+{
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeImagePrompt:
+            return @"image/jpeg";
+        case OHMSurveyItemTypeAudioPrompt:
+            return @";
+        case OHMSurveyItemTypeVideoPrompt:
+            return self.videoURL;
+        default:
+            return nil;
+    }
+    
+    return nil;
 }
 
 - (NSURL *)videoURL
@@ -165,7 +221,7 @@
             case OHMSurveyItemTypeImagePrompt:
             case OHMSurveyItemTypeVideoPrompt:
             case OHMSurveyItemTypeAudioPrompt:
-                return self.ohmID;
+                return self.mediaAttachmentName;
             default:
                 return nil;
         }

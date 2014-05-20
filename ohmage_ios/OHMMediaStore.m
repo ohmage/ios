@@ -60,7 +60,7 @@
 
 - (void)clearCache:(NSNotification *)note
 {
-    NSLog(@"flushing %ld images out of the cache", [self.imageDictionary count]);
+    NSLog(@"flushing %ld images out of the cache", (unsigned long)[self.imageDictionary count]);
     [self.imageDictionary removeAllObjects];
 }
 
@@ -117,20 +117,6 @@
 
 - (NSString *)imagePathForKey:(NSString *)key
 {
-    
-//    NSArray *documentsUrls = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-//    NSURL *documentDirectory = [documentsUrls firstObject];
-//    //    NSArray *documentDirectories =
-//    //    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-//    //                                        NSUserDomainMask,
-//    //                                        YES);
-//    //
-//    //    NSString *documentDirectory = [documentDirectories firstObject];
-//    NSURL *imagesDirectory = [documentDirectory URLByAppendingPathComponent:@"images"];
-//    //    NSString *imagesDirectory = [documentDirectory stringByAppendingPathComponent:@"images"];
-//    
-//    return [imagesDirectory URLByAppendingPathComponent:key];
-    
     NSArray *documentDirectories =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                         NSUserDomainMask,
@@ -144,7 +130,13 @@
         NSLog(@"Error creating images directory");
     }
     
-    return [imagesDirectory stringByAppendingPathComponent:key];
+    return [[imagesDirectory stringByAppendingPathComponent:key] stringByAppendingPathExtension:@"jpg"];
+}
+
+- (NSURL *)imageURLForKey:(NSString *)key
+{
+    NSLog(@"ImageURL for key: %@", [NSURL fileURLWithPath:[self imagePathForKey:key]]);
+    return [NSURL fileURLWithPath:[self imagePathForKey:key]];
 }
 
 

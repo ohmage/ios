@@ -70,9 +70,25 @@
 //    return @{@"meta_data" : metadata, @"data" : data};
 }
 
-- (NSString *)uploadResquestUrlString
+- (NSString *)uploadRequestUrlString
 {
     return [NSString stringWithFormat:@"surveys/%@/%d/data", self.survey.ohmID, self.survey.surveyVersionValue];
+}
+
+- (NSURL *)tempFileURL
+{
+    NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
+                                        NSUserDomainMask,
+                                        YES);
+    
+    NSString *cacheDirectory = [cacheDirectories firstObject];
+    NSString *filePath = [cacheDirectory stringByAppendingPathComponent:self.ohmID];
+    return [NSURL fileURLWithPath:filePath];
+}
+
+- (void)removeTempFile
+{
+    [[NSFileManager defaultManager] removeItemAtURL:[self tempFileURL] error:nil];
 }
 
 

@@ -34,7 +34,7 @@
 - (void)OHMAudioRecorderDidFinishPlaying:(OHMAudioRecorder *)recorder;
 
 - (void)OHMAudioRecorderFailed:(OHMAudioRecorder *)recorder;
-- (void)OHMAudioRecorderMicrophoneAccessDenied:(OHMAudioRecorder *)recorder;
+- (void)OHMAudioRecorderMicrophoneAccessChanged:(OHMAudioRecorder *)recorder;
 
 
 @end

@@ -24,7 +24,6 @@
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
 
-static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 @interface OHMClient () <GPPSignInDelegate>
 
@@ -37,6 +36,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 // HTTP
 @property (nonatomic, copy) NSString *authToken;
 @property (nonatomic, copy) NSString *refreshToken;
+@property (nonatomic, strong) AFHTTPSessionManager *backgroundSessionManager;
 
 // Model
 @property (nonatomic, strong) OHMUser *user;
@@ -51,7 +51,7 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:OhmageServerUrl]];
+        _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:kOhmageServerUrlString]];
     });
     
     return _sharedClient;
@@ -68,6 +68,11 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
         self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
 //        [[AFNetworkActivityLogger sharedLogger] startLogging];
+        
+        
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"OHMBackgroundSessionConfiguration"];
+        self.backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
+        self.backgroundSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
@@ -291,30 +296,85 @@ static NSString * const OhmageServerUrl = @"https://dev.ohmage.org/ohmage";
 
 - (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
+    NSLog(@"submit response: %@", [surveyResponse JSON]);
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
     surveyResponse.survey.isDueValue = NO;
-    NSLog(@"submit response: %@", [surveyResponse JSON]);
+    [self saveClientState];
     
-    [self postRequest:surveyResponse.uploadResquestUrlString
-       withParameters:(NSDictionary *)[surveyResponse JSON].jsonArray
-      completionBlock:^(NSDictionary *response, NSError *error) {
-          NSLog(@"completion block for survey submission with response: %@, error: %@", response, error);
-          // response should actually be an array
-          if (![response isKindOfClass:[NSArray class]]) {
-              NSLog(@"Submitted survey response is not an array");
-              return;
-          }
-          NSArray *responseArray = (NSArray *)response;
-          NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
-          NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
-          if ([surveyResponse.ohmID isEqualToString:ohmId]) {
-              NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
-              surveyResponse.submissionConfirmedValue = YES;
-          }
+    NSError *requestError = nil;
+    NSString *requestString = [kOhmageServerUrlString stringByAppendingPathComponent:surveyResponse.uploadRequestUrlString];
+    NSDictionary *dataHeaders = @{@"Content-Disposition" :@"form-data; name=\"data\"", @"Content-Type" : @"application/json"};
+    
+    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST"
+                                                                                URLString:requestString
+                                                                               parameters:nil
+                                                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+        [formData appendPartWithHeaders:dataHeaders body:[NSJSONSerialization dataWithJSONObject:[surveyResponse JSON].jsonArray options:0 error:nil]];
+                                          
+        for (OHMSurveyPromptResponse *promptResponse in surveyResponse.promptResponses) {
+            if (promptResponse.hasMediaAttachment) {
+                NSLog(@"appending file with name: %@, url: %@", promptResponse.mediaAttachmentName, promptResponse.mediaAttachmentURL);
+                NSError *error = nil;
+                [formData appendPartWithFileURL:promptResponse.mediaAttachmentURL name:@"media" fileName:promptResponse.mediaAttachmentName mimeType:@"image/jpeg" error:&error];
+                if (error != nil) {
+                    NSLog(@"error appending file: %@", error);
+                }
+            }
+        }
+    }
+                                                                                    error:&requestError];
+    if (requestError != nil) {
+        NSLog(@"Error creating request: %@", requestError);
+        return;
+    }
+    
+
+    
+    
+    request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request writingStreamContentsToFile:fileUrl completionHandler:^(NSError *error) {
+        if (error != nil) {
+            NSLog(@"error creating new request");
+        }
+        else {
+            NSLog(@"request body: %ld, stream: %d", [request.HTTPBody length], request.HTTPBodyStream.hasBytesAvailable);
+            NSURLSessionUploadTask *task = [self.backgroundSessionManager uploadTaskWithRequest:request fromFile:fileUrl progress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                if (error != nil) {
+                    NSLog(@"Submit survey failure with error: %@", error);
+                }
+                else {
+                    NSLog(@"submit survey success with response: %@", responseObject);
+                    if (![responseObject isKindOfClass:[NSArray class]]) {
+                        NSLog(@"Submitted survey response is not an array");
+                        return;
+                    }
+                    NSArray *responseArray = (NSArray *)responseObject;
+                    NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
+                    NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
+                    if ([surveyResponse.ohmID isEqualToString:ohmId]) {
+                        NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
+                        surveyResponse.submissionConfirmedValue = YES;
+                        [self saveClientState];
+                    }
+                }
+            }];
+            
+            [task resume];
+            
+            [self saveClientState];
+        }
     }];
     
-    [self saveClientState];
+//    NSLog(@"new request body: %ld, stream: %d", [newRequest.HTTPBody length], newRequest.HTTPBodyStream.hasBytesAvailable);
+    
+//    NSURLRequest *newRequest = [self.backgroundSessionManager.requestSerializer requestWithMethod:@"POST" URLString:requestString parameters:(NSDictionary *)surveyResponse.JSON.jsonArray error:&requestError];
+//    if (requestError != nil) {
+//        NSLog(@"error creating new request");
+//        return;
+//    }
+    
+
 }
 
 - (void)refreshUserInfo

@@ -6,6 +6,8 @@
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID;
 
 - (NSDictionary *)JSON;
-- (NSString *)uploadResquestUrlString;
+- (NSString *)uploadRequestUrlString;
+- (NSURL *)tempFileURL;
+- (void)removeTempFile;
 
 @end

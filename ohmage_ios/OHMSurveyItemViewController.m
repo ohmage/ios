@@ -754,6 +754,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     }
     else if ([picker isEqual:self.videoPicker]) {
         NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
+        NSLog(@"Media URL: %@", mediaURL);
         if (mediaURL) {
             self.promptResponse.videoURL = mediaURL;
             self.promptResponse.imageValue = [self thumbnailFromVideoURL:mediaURL];
@@ -848,7 +849,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     [self updateAudioButtonStates];
 }
 
-- (void)OHMAudioRecorderMicrophoneAccessDenied:(OHMAudioRecorder *)recorder
+- (void)OHMAudioRecorderMicrophoneAccessChanged:(OHMAudioRecorder *)recorder
 {
     [self updateAudioButtonStates];
 }

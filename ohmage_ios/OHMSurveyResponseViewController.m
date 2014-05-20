@@ -40,7 +40,7 @@
     
     self.navigationItem.title = @"Survey Response";
 
-    if (!self.response.userSubmittedValue) {
+    if (!self.response.submissionConfirmedValue) { // todo: change back to user submitted
         [self setupSubmitHeader];
     }
 }
