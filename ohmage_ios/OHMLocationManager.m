@@ -36,7 +36,7 @@
     if (self) {
         [self setLocationManager:[[CLLocationManager alloc] init]];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [self.locationManager setDistanceFilter:100.0f];
+        [self.locationManager setDistanceFilter:20.0f]; //todo: what should this be?
         [self.locationManager setDelegate:self];
         [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
@@ -138,6 +138,7 @@
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error
 {
+    NSLog(@"location manager did fail with error: %@", error);
     [self.locationManager stopUpdatingLocation];
     [self setLocationError:error];
     [self getLocationWithCompletionBlock:nil];
@@ -185,11 +186,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (location == nil) return;
     
     for (OHMReminder *reminder in location.reminders) {
-        if (reminder.lastFireDate == nil
-            || [[reminder.lastFireDate dateByAddingMinutes:reminder.minimumReentryIntervalValue]
-                isBeforeDate:[NSDate date]]) {
-            [[OHMReminderManager sharedReminderManager] scheduleNotificationForReminder:reminder];
-        }
+        [[OHMReminderManager sharedReminderManager] processArrivalAtLocationForReminder:reminder];
     }
     
 }

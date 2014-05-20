@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, OHMRepeatDay) {
 
 - (void)toggleEnabled;
 
-- (NSDate *)updateNextFireDate;
+- (BOOL)shouldFireLocationNotification;
+- (void)updateNextFireDate;
 
 @end

@@ -24,6 +24,7 @@
 + (OHMClient*)sharedClient;
 
 @property (nonatomic, weak) id<OHMClientDelegate> delegate;
+@property (copy) void (^backgroundSessionCompletionHandler)();
 
 - (void)saveClientState;
 

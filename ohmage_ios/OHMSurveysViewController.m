@@ -287,7 +287,7 @@
 //    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@", self.ohmlet];
     self.fetchedResultsController.fetchRequest.predicate = predicate;
-    NSLog(@"update fetched results controller, predicate: %@", self.fetchedResultsController.fetchRequest.predicate);
+//    NSLog(@"update fetched results controller, predicate: %@", self.fetchedResultsController.fetchRequest.predicate);
     
     NSError *error;
     BOOL success = [self.fetchedResultsController performFetch:&error];
