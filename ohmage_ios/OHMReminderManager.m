@@ -61,7 +61,7 @@
 
 - (void)updateScheduleForReminder:(OHMReminder *)reminder
 {
-    NSLog(@"update schedule for reminder: %@", reminder);
+//    NSLog(@"update schedule for reminder: %@", reminder);
     
     [self unscheduleNotificationsForReminder:reminder];
     [self synchronizeLocationReminders];
@@ -72,8 +72,6 @@
         [reminder updateNextFireDate];
         [self scheduleNotificationForReminder:reminder];
     }
-    
-    [self debugPrintAllNotifications];
 }
 
 - (void)scheduleNotificationForReminder:(OHMReminder *)reminder
@@ -83,7 +81,7 @@
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo.reminderID = reminder.ohmID;
     
-    NSDate *fireDate = reminder.nextFireDate;// [reminder updateNextFireDate];
+    NSDate *fireDate = reminder.nextFireDate;
     if (!fireDate) {
         NSLog(@"Can't schedule notification for reminder with nil fire date: %@", reminder);
         return;
@@ -95,7 +93,7 @@
     notification.timeZone = [NSTimeZone defaultTimeZone];
     notification.userInfo = userInfo;
     
-    NSLog(@"scheduling notification: %@ for reminder: %@", notification.fireDate, reminder.survey.surveyName);
+//    NSLog(@"scheduling notification: %@ for reminder: %@", notification.fireDate, reminder.survey.surveyName);
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 

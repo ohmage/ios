@@ -105,7 +105,7 @@
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
 {
     NSLog(@"reachability status changed: %d", status);
-    if (status > AFNetworkReachabilityStatusNotReachable) {
+    if (status > AFNetworkReachabilityStatusNotReachable && self.hasLoggedInUser) {
         [self authenticateCurrentUser];
     }
 }

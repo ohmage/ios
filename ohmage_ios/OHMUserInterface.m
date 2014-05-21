@@ -18,23 +18,23 @@
     return size;
 }
 
-+ (CGFloat)cellContentWidthForAccessoryType:(UITableViewCellAccessoryType)accessoryType
++ (CGFloat)widthForAccessoryOfType:(UITableViewCellAccessoryType)accessoryType
 {
     switch (accessoryType) {
         case UITableViewCellAccessoryNone:
-            return 320.0;
+            return 0.0;
             break;
         case UITableViewCellAccessoryDisclosureIndicator:
-            return 287.0;
+            return 33.0;
             break;
         case UITableViewCellAccessoryDetailDisclosureButton:
-            return 253.0;
+            return 67.0;
             break;
         case UITableViewCellAccessoryDetailButton:
-            return 273.0;
+            return 47.0;
             break;
         default:
-            return 320.0;
+            return 0.0;
             break;
     }
 }
@@ -59,14 +59,40 @@
 
 + (CGFloat)heightForSubtitleCellWithTitle:(NSString *)title
                                  subtitle:(NSString *)subtitle
-                            accessoryType:(UITableViewCellAccessoryType)accessoryType
-                            fromTableView:(UITableView *)tableView
-{
-    CGFloat width = [self cellContentWidthForAccessoryType:accessoryType] - kUIViewHorizontalMargin;
+                           accessoryWidth:(CGFloat)accessoryWidth
+                            fromTableView:(UITableView *)tableView{
+    CGFloat width = tableView.bounds.size.width - kUIViewHorizontalMargin - accessoryWidth;
     CGFloat titleHeight = [self heightForText:title withWidth:width font:[OHMAppConstants cellTextFont]];
     CGFloat subtitleHeight = [self heightForText:subtitle withWidth:width font:[OHMAppConstants cellSubtitleTextFont]];
     
     return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
+}
+
++ (CGFloat)heightForSubtitleCellWithTitle:(NSString *)title
+                                 subtitle:(NSString *)subtitle
+                            accessoryType:(UITableViewCellAccessoryType)accessoryType
+                            fromTableView:(UITableView *)tableView
+{
+    return [self heightForSubtitleCellWithTitle:title
+                                       subtitle:subtitle
+                                 accessoryWidth:[self widthForAccessoryOfType:accessoryType]
+                                  fromTableView:tableView];
+}
+
++ (CGFloat)heightForSwitchCellWithTitle:(NSString *)title
+                               subtitle:(NSString *)subtitle
+                          fromTableView:(UITableView *)tableView
+{
+    static CGFloat switchWidth = 0;
+    if (switchWidth == 0) {
+        UISwitch *aSwitch = [[UISwitch alloc] init];
+        switchWidth = aSwitch.frame.size.width;
+    }
+    
+    return [self heightForSubtitleCellWithTitle:title
+                                       subtitle:subtitle
+                                 accessoryWidth:switchWidth
+                                  fromTableView:tableView];
 }
 
 + (CGFloat)heightForImageCellWithText:(NSString *)text fromTableView:(UITableView *)tableView
@@ -131,26 +157,18 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         
         UIEdgeInsets insets = kUILabelDefaultInsets;
         CGFloat labelWidth = tableView.frame.size.width - (insets.left + insets.right);
         UILabel *label = [self variableHeightLabelWithText:text width:labelWidth font:[OHMAppConstants cellTextFont] fixedWidth:YES];
-//        label.backgroundColor = [UIColor greenColor];
         [cell.contentView addSubview:label];
         [label constrainPosition:CGPointMake(insets.left, insets.top)];
-//        [label constrainToTopInParentWithMargin:insets.top];
-//        [cell.contentView constrainChild:label toHorizontalInsets:insets];
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-//        imageView.backgroundColor = [UIColor redColor];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [cell.contentView addSubview:imageView];
         [imageView constrainSize:CGSizeMake(tableView.frame.size.width, kUICellImageHeight)];
         [imageView constrainPosition:CGPointMake(0, label.frame.size.height + insets.top + insets.bottom)];
-//        [imageView positionBelowElement:label margin:insets.bottom];
-//        [imageView centerInView:cell.contentView];
-//        [cell.contentView constrainChildToEqualSize:imageView];
     }
     
     return cell;
@@ -168,6 +186,10 @@
         cell.detailTextLabel.font = [OHMAppConstants cellSubtitleTextFont];
         cell.textLabel.adjustsFontSizeToFitWidth = YES;
         cell.textLabel.minimumScaleFactor = 0.75;
+        cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+        cell.detailTextLabel.minimumScaleFactor = 0.75;
+        cell.detailTextLabel.numberOfLines = 0;
         
         
         UISwitch *sw = [[UISwitch alloc] init];

@@ -214,8 +214,6 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
                 cell.textLabel.text = [reminder labelText];
                 cell.detailTextLabel.text = [reminder detailLabelText];
             }
-//            cell = [OHMUserInterface cellWithDetailStyleFromTableView:tableView];
-//            [self configureReminderCell:cell forRow:indexPath.row];
             break;
         case kSurveyResponsesSectionIndex:
             cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];

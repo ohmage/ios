@@ -164,7 +164,7 @@ double const kMaxLocationRadius = 500.0;
 
 + (UIFont *)cellSubtitleTextFont
 {
-    return [UIFont systemFontOfSize:14.0];
+    return [UIFont systemFontOfSize:13.0];
 }
 
 @end

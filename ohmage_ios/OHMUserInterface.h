@@ -17,6 +17,13 @@
                                  subtitle:(NSString *)subtitle
                             accessoryType:(UITableViewCellAccessoryType)accessoryType
                             fromTableView:(UITableView *)tableView;
++ (CGFloat)heightForSubtitleCellWithTitle:(NSString *)title
+                                 subtitle:(NSString *)subtitle
+                            accessoryWidth:(CGFloat)accessoryWidth
+                            fromTableView:(UITableView *)tableView;
++ (CGFloat)heightForSwitchCellWithTitle:(NSString *)title
+                               subtitle:(NSString *)subtitle
+                          fromTableView:(UITableView *)tableView;
 + (CGFloat)heightForImageCellWithText:(NSString *)text fromTableView:(UITableView *)tableView;
 + (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock;
 + (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView;

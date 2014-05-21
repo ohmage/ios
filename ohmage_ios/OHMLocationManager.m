@@ -41,7 +41,6 @@
         [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
         [self setGeocoder:[[CLGeocoder alloc] init]];
-        [self debugPrintAllMonitoredRegions];
     }
     
     return self;

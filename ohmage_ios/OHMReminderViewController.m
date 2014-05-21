@@ -18,6 +18,9 @@
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
 
+static NSString *const kAlwaysShowCellTitle = @"Always show reminder";
+static NSString *const kAlwaysShowCellSubtitle = @"Show reminder at end time if location isn't reached";
+
 typedef NS_ENUM(NSUInteger, RowIndex) {
     eRowIndexTimeOrLocation = 0,
     eRowIndexRangeEnable,
@@ -61,7 +64,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     self.navigationItem.title = ([self.reminder.objectID isTemporaryID] ? @"New Reminder" : @"Edit Reminder");
     self.navigationItem.leftBarButtonItem = self.doneButton;
-    self.navigationItem.rightBarButtonItem = self.cancelButton;
     [self setBackButtonTitle:@""];
     
     self.view.tintColor = [OHMAppConstants colorForSurveyIndex:self.reminder.survey.indexValue];
@@ -88,6 +90,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
             [button addTarget:self action:@selector(deleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             button.backgroundColor = [[UIColor redColor] lightColor];
         }];
+    }
+    else {
+        self.navigationItem.rightBarButtonItem = self.cancelButton;
     }
 }
 
@@ -157,7 +162,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         if (self.reminder.startTime != nil) {
             dp.date = self.reminder.startTime;
         }
-//        dp.maximumDate = [NSDate timeOfDayWithHours:23 minutes:58];
         self.startTimePicker = dp;
     }];
     
@@ -186,7 +190,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     self.reminder.isLocationReminderValue = self.timeOrLocationControl.selectedSegmentIndex;
     
     NSMutableArray *paths = [NSMutableArray arrayWithObject:[self indexPathForRow:eRowIndexMinimumReentry]];
-    if (self.rangeEnableSwitch.on) {
+    if (self.reminder.usesTimeRangeValue) {
         [paths addObject:[self indexPathForRow:eRowIndexAlwaysShow]];
     }
     
@@ -203,12 +207,23 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (void)timeRangeEnableSwitchToggled:(id)sender
 {
+    // hide time picker if needed
+    if (!self.rangeEnableSwitch.on && self.timePickerPath != nil && self.timePickerPath.row > 1) {
+        NSIndexPath *togglePath = [NSIndexPath indexPathForRow:self.timePickerPath.row - 1 inSection:0];
+        [self toggleTimePickerForIndexPath:togglePath];
+    }
+    
     self.reminder.usesTimeRangeValue = self.rangeEnableSwitch.on;
     NSArray *paths = @[[self indexPathForRow:eRowIndexRangeStart],
                        [self indexPathForRow:eRowIndexRangeEnd]];
     
     if (self.reminder.isLocationReminderValue) {
-        paths = [paths arrayByAddingObject:[self indexPathForRow:eRowIndexAlwaysShow]];
+        NSInteger alwaysShowRow = eRowIndexAlwaysShow;
+        if (!self.rangeEnableSwitch.on) {
+            // indexPathForRow thinks range cells are already gone
+            alwaysShowRow += 2;
+        }
+        paths = [paths arrayByAddingObject:[self indexPathForRow:alwaysShowRow]];
     }
     
     if (self.rangeEnableSwitch.on) {
@@ -218,7 +233,11 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         [self deleteRowsAtIndexPaths:paths];
     }
     
-    [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
+    if (!self.reminder.isLocationReminderValue) {
+        // update label to/from "random"
+        [self.tableView reloadRowsAtIndexPaths:@[[self indexPathForRow:eRowIndexTimeOrLocation]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    
 }
 
 - (void)constrainEndTime
@@ -226,7 +245,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     self.endTimePicker.minimumDate = [self.startTimePicker.date dateByAddingMinutes:1];
     NSDate *endOfDay = [NSDate endOfDayToday];
     self.endTimePicker.maximumDate = [self.startTimePicker.date dateWithTimeFromDate:endOfDay];
-    NSLog(@"constrain time, startTime: %@, min: %@, max: %@", self.startTimePicker.date, self.endTimePicker.minimumDate, self.endTimePicker.maximumDate);
 }
 
 - (void)toggleTimePickerForIndexPath:(NSIndexPath *)indexPath
@@ -329,8 +347,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (NSIndexPath *)indexPathForRow:(NSInteger)row
 {
-    
-    if (!self.rangeEnableSwitch.on && row > eRowIndexRangeEnd) {
+    if (!self.reminder.usesTimeRangeValue && row > eRowIndexRangeEnd) {
         row -= 2;
     }
     
@@ -365,6 +382,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"number or rows in section, timeRangeOn: %d", self.rangeEnableSwitch.on);
     NSInteger rowCount = 3; // timeOrLocation, range enable, repeat
     
     if (self.reminder.usesTimeRangeValue) {
@@ -408,17 +426,18 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         return [self timePickerCellForRow:indexPath.row];
     }
     else {
-        
         // Adjust row for range and time picker if needed
         NSInteger adjustedRow = indexPath.row;
         
-        if (!self.rangeEnableSwitch.on && adjustedRow > eRowIndexRangeEnable) {
+        if (!self.reminder.usesTimeRangeValue && adjustedRow > eRowIndexRangeEnable) {
             adjustedRow += 2; // skip range start and end
         }
         
         if (self.timePickerPath && (self.timePickerPath.row < adjustedRow)) {
             adjustedRow--;
         }
+        
+        NSLog(@"cell for row: %ld, timeRangeOn: %d, adjusted: %ld", indexPath.row, self.rangeEnableSwitch.on, adjustedRow);
         
         return [self cellForRow:adjustedRow];
     }
@@ -472,8 +491,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                 [sw addTarget:self.reminder action:@selector(toggleAlwaysShow) forControlEvents:UIControlEventValueChanged];
                 sw.on = self.reminder.alwaysShowValue;
             }];
-            cell.textLabel.text = @"Always show reminder";
-            cell.detailTextLabel.text = @"Show reminder at end time if location isn't reached";
+            cell.textLabel.text = kAlwaysShowCellTitle;
+            cell.detailTextLabel.text = kAlwaysShowCellSubtitle;
             break;
         }
             
@@ -483,6 +502,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     return cell;
 }
+
+
 
 - (UITableViewCell *)reminderTimeCell
 {
@@ -517,7 +538,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     if ([indexPath isEqual:[self indexPathForRow:eRowIndexRepeat]]) {
         [self presentDayPicker];
     }
-    else if (self.rangeEnableSwitch.on && ([indexPath isEqual:[self indexPathForRow:eRowIndexRangeStart]]
+    else if (self.reminder.usesTimeRangeValue && ([indexPath isEqual:[self indexPathForRow:eRowIndexRangeStart]]
                                            || [indexPath isEqual:[self indexPathForRow:eRowIndexRangeEnd]]) ) {
         [self toggleTimePickerForIndexPath:indexPath];
     }
@@ -529,7 +550,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
             [self presentReentryPicker];
         }
     }
-    else if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]] && !self.rangeEnableSwitch.on) {
+    else if ([indexPath isEqual:[self indexPathForRow:eRowIndexTimeOrLocation]] && !self.reminder.usesTimeRangeValue) {
         [self toggleTimePickerForIndexPath:indexPath];
     }
 }
@@ -538,6 +559,11 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     if ([self.timePickerPath isEqual:indexPath]) {
         return self.alarmTimePicker.frame.size.height;
+    }
+    else if ([indexPath isEqual:[self indexPathForRow:eRowIndexAlwaysShow]]) {
+        return [OHMUserInterface heightForSwitchCellWithTitle:kAlwaysShowCellTitle
+                                                     subtitle:kAlwaysShowCellSubtitle
+                                                fromTableView:tableView];
     }
     
     return tableView.rowHeight;
