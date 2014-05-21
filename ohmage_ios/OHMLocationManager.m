@@ -49,6 +49,7 @@
 
 - (void)stopMonitoringAllRegions
 {
+    NSLog(@"stop monitoring all regions");
     NSSet *monitoredRegions = self.locationManager.monitoredRegions;
     for (CLRegion *region in monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];

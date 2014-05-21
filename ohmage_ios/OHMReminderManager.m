@@ -68,13 +68,7 @@
     
     if (!reminder.enabledValue) return;
     
-    if (reminder.isLocationReminderValue) {
-        if (reminder.usesTimeRangeValue && reminder.alwaysShowValue) {
-            [reminder updateNextFireDate];
-            [self scheduleNotificationForReminder:reminder];
-        }
-    }
-    else {
+    if (!reminder.isLocationReminderValue) {
         [reminder updateNextFireDate];
         [self scheduleNotificationForReminder:reminder];
     }
@@ -139,7 +133,10 @@
     for (OHMReminder *reminder in location.reminders) {
         if (reminder.isLocationReminderValue && reminder.enabledValue) {
             shouldMonitorLocation = YES;
-            break;
+            if (reminder.usesTimeRangeValue && reminder.alwaysShowValue) {
+                [reminder updateNextFireDate];
+                [self scheduleNotificationForReminder:reminder];
+            }
         }
     }
     
@@ -147,25 +144,42 @@
         NSLog(@"Start monitoring region: %@", location.name);
         [[OHMLocationManager sharedLocationManager].locationManager startMonitoringForRegion:location.region];
     }
-}
-
-- (void)synchronizeLocationReminders
-{
-    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
-    
-    NSArray *locations = [OHMClient sharedClient].reminderLocations;
-    for (OHMReminderLocation *location in locations) {
-        [self synchronizeRemindersForLocation:location];
+    else {
+        NSLog(@"Stop monitoring region: %@", location.name);
+        [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:location.region];
     }
 }
 
-- (void)synchronizeTimeReminders
+
+
+- (void)synchronizeLocationReminders
+{
+//    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
+    
+    NSArray *locations = [OHMClient sharedClient].reminderLocations;
+    NSMutableSet *locationIDs = [NSMutableSet setWithCapacity:locations.count];
+    for (OHMReminderLocation *location in locations) {
+        [self synchronizeRemindersForLocation:location];
+        [locationIDs addObject:location.ohmID];
+    }
+    
+    // make sure we aren't monitoring any extra regions
+    NSSet *regions = [OHMLocationManager sharedLocationManager].locationManager.monitoredRegions;
+    for (CLRegion *region in regions) {
+        NSString *locationID = region.identifier;
+        if (![locationIDs containsObject:locationID]) {
+            NSLog(@"Can't find location for region: %@", locationID);
+            [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:region];
+        }
+    }
+}
+
+- (void)synchronizeReminders
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     NSArray *timeReminders = [[OHMClient sharedClient] timeReminders];
     for (OHMReminder *reminder in timeReminders) {
-        NSLog(@"reminder nextFireDate: %@, now: %@", reminder.nextFireDate, [NSDate date]);
         if (reminder.nextFireDate != nil && [reminder.nextFireDate isBeforeDate:[NSDate date]]) {
             reminder.lastFireDate = reminder.nextFireDate;
             [self processFiredReminder:reminder];
@@ -174,6 +188,9 @@
             [self scheduleNotificationForReminder:reminder];
         }
     }
+    
+    [self synchronizeLocationReminders];
+    
     [self debugPrintAllNotifications];
 }
 
@@ -205,6 +222,16 @@
         NSDate *fireDate = notification.fireDate;
         NSLog(@"%@", [NSString stringWithFormat:@"%u. %@, %@", idx + 1, reminder.survey.surveyName, [dateFormatter stringFromDate:fireDate]]);
     }];
+    
+    [[OHMLocationManager sharedLocationManager] debugPrintAllMonitoredRegions];
+    
+    NSArray *locations = [[OHMClient sharedClient] reminderLocations];
+    for (OHMReminderLocation *location in locations) {
+        NSLog(@"Location: %@ - %@", location.name, location.ohmID);
+        for (OHMReminder *reminder in location.reminders) {
+            NSLog(@"Reminder: %@, enabled: %d", reminder.survey.surveyName, reminder.enabledValue);
+        }
+    }
 #endif
 }
 

@@ -95,23 +95,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     [super viewWillAppear:animated];
     NSLog(@"view will appear");
-//    if (self.reminder.isLocationReminderValue) {
-//        NSIndexPath *repeatPath = [self indexPathForTimeRepeatRow];
-//        [self.tableView reloadRowsAtIndexPaths:@[repeatPath] withRowAnimation:UITableViewRowAnimationNone];
-//    }
     [self.tableView reloadData];
     [self updateDoneButtonEnabledState];
 }
-
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    
-//    if (!self.reminder.objectID.isTemporaryID) {
-//        self.navigationItem.leftBarButtonItem = self.doneButton;
-//        self.navigationItem.rightBarButtonItem = self.cancelButton;
-//    }
-//}
 
 - (void)updateDoneButtonEnabledState
 {
@@ -128,6 +114,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     else {
         self.reminder.specificTime = self.alarmTimePicker.date;
     }
+    
     [[OHMReminderManager sharedReminderManager] updateScheduleForReminder:self.reminder];
     [[OHMClient sharedClient] saveClientState];
     

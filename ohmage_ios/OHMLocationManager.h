@@ -27,6 +27,7 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 
 - (void)getLocationWithCompletionBlock:(OHMLocationUpdateCompletionBlock)block;
 - (void)stopMonitoringAllRegions;
+- (void)debugPrintAllMonitoredRegions;
 
 
 @end

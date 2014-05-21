@@ -219,7 +219,7 @@
         self.nextFireDate = nil;
     }
     
-    NSLog(@"updated fire date: %@, %@", [OHMUserInterface formattedDate:self.nextFireDate], [OHMUserInterface formattedTime:self.nextFireDate]);
+//    NSLog(@"updated fire date: %@, %@", [OHMUserInterface formattedDate:self.nextFireDate], [OHMUserInterface formattedTime:self.nextFireDate]);
 //    return self.nextFireDate;
 }
 

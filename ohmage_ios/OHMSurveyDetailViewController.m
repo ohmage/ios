@@ -64,7 +64,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
     
-    NSLog(@"Survey: %@, ID: %@", self.survey.surveyName, self.survey.ohmID);
+    NSLog(@"Survey: %@, ID: %@, version: %d", self.survey.surveyName, self.survey.ohmID, self.survey.surveyVersionValue);
 }
 
 - (void)setupHeaderView

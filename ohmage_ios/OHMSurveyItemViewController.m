@@ -599,7 +599,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     }
     else {
         self.nextButton.enabled = NO;
-        self.textField.text = nil;
         [self presentValidationMessage];
     }
 }
@@ -655,6 +654,8 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 }
 - (void)presentValidationMessage
 {
+    if (self.validationMessageView != nil) return;
+    
     NSString *message = nil;
     if (self.item.min != nil && self.item.max != nil) {
         message = [NSString stringWithFormat:@"Response must be between %d and %d", [self.item.min intValue], [self.item.max intValue]];

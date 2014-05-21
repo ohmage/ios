@@ -93,7 +93,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[OHMReminderManager sharedReminderManager] synchronizeTimeReminders];
+    [[OHMReminderManager sharedReminderManager] synchronizeReminders];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

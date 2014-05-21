@@ -83,7 +83,9 @@
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
-            [self authenticateCurrentUser];
+            if (self.reachabilityManager.isReachable) {
+                [self authenticateCurrentUser];
+            }
         }
     }
     
@@ -345,6 +347,7 @@
         [appLocationManager.locationManager startUpdatingLocation];
     }
     
+    [[OHMReminderManager sharedReminderManager] synchronizeReminders];
     [self submitPendingSurveyResponses];
 }
 
@@ -353,7 +356,7 @@
 
 - (void)setAuthorizationToken:(NSString *)token
 {
-    NSLog(@"set auth token: %@", token);
+//    NSLog(@"set auth token: %@", token);
     if (token) {
         [self.requestSerializer setValue:[@"ohmage " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
     }
@@ -378,7 +381,7 @@
    completionBlock:(void (^)(NSDictionary *, NSError *))block
 {
     [self POST:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"POST %@ Succeeded", request);
+//        NSLog(@"POST %@ Succeeded", request);
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"POST %@ Failed, task: %@, response: %@", request, task, task.response);
@@ -401,9 +404,6 @@
     
     for (OHMSurveyPromptResponse *promptResponse in surveyResponse.promptResponses) {
         if (promptResponse.hasMediaAttachment) {
-            NSLog(@"appending file with name: %@, url: %@",
-                  promptResponse.mediaAttachmentName,
-                  promptResponse.mediaAttachmentURL);
             NSError *error = nil;
             [formData appendPartWithFileURL:promptResponse.mediaAttachmentURL
                                        name:@"media"
@@ -435,7 +435,7 @@
                NSLog(@"Submit survey failure with error: %@", error);
            }
            else {
-               NSLog(@"submit survey success with response: %@", responseObject);
+//               NSLog(@"submit survey success with response: %@", responseObject);
                if (![responseObject isKindOfClass:[NSArray class]]) {
                    NSLog(@"Submitted survey response is not an array");
                    return;
@@ -491,7 +491,7 @@
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
     surveyResponse.survey.isDueValue = NO;
-    NSLog(@"submit response: %@", [surveyResponse JSON]);
+//    NSLog(@"submit response: %@", [surveyResponse JSON]);
     [self saveClientState];
     
     if (self.reachabilityManager.isReachable) {
@@ -700,7 +700,7 @@
 
 - (void)setPersistentStoreMetadataText:(NSString *)text forKey:(NSString *)key
 {
-    NSLog(@"set store metadata text: %@ for key: %@", text, key);
+//    NSLog(@"set store metadata text: %@ for key: %@", text, key);
     NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
     NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
     if (text) {
@@ -710,7 +710,6 @@
         [metadata removeObjectForKey:key];
     }
     [self.persistentStoreCoordinator setMetadata:metadata forPersistentStore:store];
-    NSLog(@"store metadata: %@ for key: %@", [self persistentStoreMetadataTextForKey:key], key);
 }
 
 
