@@ -34,7 +34,7 @@
 - (void)loginWithEmail:(NSString *)email
               password:(NSString *)password
        completionBlock:(void (^)(BOOL success))completionBlock;
-- (void)loginWithGoogleAuthToken:(NSString *)token completionBlock:(void (^)(BOOL success))completionBlock;
+- (void)loginWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password

@@ -47,6 +47,14 @@
     return self;
 }
 
+- (void)stopMonitoringAllRegions
+{
+    NSSet *monitoredRegions = self.locationManager.monitoredRegions;
+    for (CLRegion *region in monitoredRegions) {
+        [self.locationManager stopMonitoringForRegion:region];
+    }
+}
+
 - (void)debugPrintAllMonitoredRegions
 {
     NSSet *monitoredRegions = self.locationManager.monitoredRegions;
@@ -103,30 +111,30 @@
     [self setHasLocation:YES];
     [self setLocationError:nil];
     
-    CLLocationCoordinate2D coord = lastLocation.coordinate;
-    NSLog(@"Location lat/long: %f,%f",coord.latitude, coord.longitude);
-    
-    CLLocationAccuracy horizontalAccuracy =
-    lastLocation.horizontalAccuracy;
-    
-    NSLog(@"Horizontal accuracy: %f meters",horizontalAccuracy);
-    
-    CLLocationDistance altitude = lastLocation.altitude;
-    NSLog(@"Location altitude: %f meters",altitude);
-    
-    CLLocationAccuracy verticalAccuracy =
-    lastLocation.verticalAccuracy;
-    
-    NSLog(@"Vertical accuracy: %f meters",verticalAccuracy);
-    
-    NSDate *timestamp = lastLocation.timestamp;
-    NSLog(@"Timestamp: %@",timestamp);
-    
-    CLLocationSpeed speed = lastLocation.speed;
-    NSLog(@"Speed: %f meters per second",speed);
-    
-    CLLocationDirection direction = lastLocation.course;
-    NSLog(@"Course: %f degrees from true north",direction);
+//    CLLocationCoordinate2D coord = lastLocation.coordinate;
+//    NSLog(@"Location lat/long: %f,%f",coord.latitude, coord.longitude);
+//    
+//    CLLocationAccuracy horizontalAccuracy =
+//    lastLocation.horizontalAccuracy;
+//    
+//    NSLog(@"Horizontal accuracy: %f meters",horizontalAccuracy);
+//    
+//    CLLocationDistance altitude = lastLocation.altitude;
+//    NSLog(@"Location altitude: %f meters",altitude);
+//    
+//    CLLocationAccuracy verticalAccuracy =
+//    lastLocation.verticalAccuracy;
+//    
+//    NSLog(@"Vertical accuracy: %f meters",verticalAccuracy);
+//    
+//    NSDate *timestamp = lastLocation.timestamp;
+//    NSLog(@"Timestamp: %@",timestamp);
+//    
+//    CLLocationSpeed speed = lastLocation.speed;
+//    NSLog(@"Speed: %f meters per second",speed);
+//    
+//    CLLocationDirection direction = lastLocation.course;
+//    NSLog(@"Course: %f degrees from true north",direction);
     
     [self getLocationWithCompletionBlock:nil];
     

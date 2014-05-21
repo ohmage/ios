@@ -78,8 +78,7 @@
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
             if (self.user.usesGoogleAuthValue) {
-                [GPPSignIn sharedInstance].delegate = self;
-                [[GPPSignIn sharedInstance] trySilentAuthentication];
+                [self refreshGoogleAuthentication];
             }
             else {
                 [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
@@ -116,6 +115,19 @@
     return self.user;
 }
 
+- (void)refreshGoogleAuthentication
+{
+    GPPSignIn *googleSignIn = [GPPSignIn sharedInstance];
+    googleSignIn.delegate = self;
+    googleSignIn.clientID = kGoogleClientId;
+    googleSignIn.attemptSSO = YES;
+    BOOL success = [googleSignIn trySilentAuthentication];
+    NSLog(@"silent google auth success: %d", success);
+    if (!success) {
+        [googleSignIn authenticate];
+    }
+}
+
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock
 {
     [self setAuthorizationToken:nil];
@@ -134,9 +146,16 @@
             self.refreshToken = [response refreshToken];
             [self setAuthorizationToken:self.authToken];
             
-            self.user = [self userWithOhmID:([response userID])];
+            if (self.hasLoggedInUser && self.user.isNewAccountValue) {
+                self.user.ohmID = [response userID];
+            }
+            else {
+                self.user = [self userWithOhmID:[response userID]];
+            }
+            
             self.user.email = email;
             self.user.password = password;
+            self.user.isNewAccountValue = NO;
             
             [self refreshUserInfo];
             [self didLogin];
@@ -149,33 +168,40 @@
     }];
 }
 
-- (void)loginWithGoogleAuthToken:(NSString *)token completionBlock:(void (^)(BOOL success))completionBlock
+- (void)loginWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock
 {
     [self setAuthorizationToken:nil];
     
     NSString *request =  @"auth_token";
-    NSDictionary *parameters = @{@"provider": @"google", @"access_token" : token};
+    NSDictionary *parameters = @{@"provider": @"google", @"access_token" : auth.accessToken};
     
     [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
         if (error) {
             NSLog(@"Google login Error");
+            if (self.hasLoggedInUser) {
+                if (completionBlock) {
+                    completionBlock(NO);
+                }
+            }
+            else {
+                [self createAccountWithGoogleAuth:auth completionBlock:completionBlock];
+            }
         }
         else {
-            NSLog(@"Google login Success");
+            NSLog(@"Google login Success with response: %@", response);
             
             self.authToken = [response authToken];
             self.refreshToken = [response refreshToken];
             [self setAuthorizationToken:self.authToken];
             
-            self.user = [self userWithOhmID:[response username]];
-            self.user.usesGoogleAuthValue = YES;
+            [self updateUserWithGoogleAuth:auth userID:response.userID];
             
             [self refreshUserInfo];
             [self didLogin];
-        }
-        
-        if (completionBlock) {
-            completionBlock(error == nil);
+            
+            if (completionBlock) {
+                completionBlock(YES);
+            }
         }
     }];
 }
@@ -198,19 +224,11 @@
         else {
             NSLog(@"account create succeeded with response: %@", response);
             
-            NSString *userID = email; //temp in case no ohmID returned
-            if (response.userID) {
-                userID = response.userID;
-            }
-            else if (response[@"id"] != [NSNull null] && response[@"id"] != nil) {
-                userID = response[@"id"];
-            }
-            NSLog(@"setting user id for new account: %@", userID);
-            
-            self.user = [self userWithOhmID:userID];
+            self.user = [self userWithOhmID:email];
             self.user.email = email;
             self.user.password = password;
             self.user.fullName = name;
+            self.user.isNewAccountValue = YES;
             
         }
         if (completionBlock) {
@@ -219,10 +237,55 @@
     }];
 }
 
+- (void)createAccountWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock
+{
+    NSString *request =  [NSString stringWithFormat:@"people?provider=google&access_token=%@", auth.accessToken];
+    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
+    NSString *email = auth.parameters[@"email"];
+    NSDictionary *json = @{@"email": email, @"full_name": user.displayName};
+    
+    [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
+        if (error) {
+            NSLog(@"google account create failed with error: %@", error);
+        }
+        else {
+            NSLog(@"google account create succeeded with response: %@", response);
+            [self updateUserWithGoogleAuth:auth userID:response.userID];
+        }
+        if (completionBlock) {
+            completionBlock(error == nil);
+        }
+    }];
+    
+}
+
+- (void)updateUserWithGoogleAuth:(GTMOAuth2Authentication *)auth userID:(NSString *)userID
+{
+    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
+    NSString *email = auth.parameters[@"email"];
+    
+    self.user = [self userWithOhmID:email];
+    self.user.email = email;
+    self.user.fullName = user.displayName;
+    self.user.usesGoogleAuthValue = YES;
+    if (userID != nil) {
+        self.user.ohmID = userID;
+        self.user.isNewAccountValue = NO;
+    }
+    else {
+        self.user.isNewAccountValue = YES;
+    }
+}
+
 - (void)logout
 {
+    if (self.user.usesGoogleAuthValue) {
+        [[GPPSignIn sharedInstance] signOut];
+    }
     self.user = nil;
     [self.delegate OHMClientDidUpdate:self];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     [self saveClientState];
 }
 
@@ -233,14 +296,13 @@
         [self deleteObject:response];
     }
     
-    [[OHMReminderManager sharedReminderManager] cancelAllNotificationsForLoggedInUser];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     for (OHMReminder *reminder in self.user.reminders) {
         [self deleteObject:reminder];
     }
     
+    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     for (OHMReminderLocation *location in self.user.reminderLocations) {
-        // todo: stopMonitoring doesn't seem to be working...
-        [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:location.region];
         [self deleteObject:location];
     }
     
@@ -333,7 +395,6 @@
         NSLog(@"error creating new request");
     }
     else {
-        NSLog(@"request body: %ld, stream: %d", [request.HTTPBody length], request.HTTPBodyStream.hasBytesAvailable);
         NSURLSessionUploadTask *task =
         [self.backgroundSessionManager uploadTaskWithRequest:request
                                                     fromFile:surveyResponse.tempFileURL
@@ -906,6 +967,7 @@
 {
     [self deletePersistentStore];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
 }
 
 
@@ -922,10 +984,10 @@
                    error: (NSError *) error {
     NSLog(@"Client received google error %@ and auth object %@",error, auth);
     if (error) {
-        [self showGoogleLoginFailureAlert];
+//        [self showGoogleLoginFailureAlert];
     }
     else {
-        [self loginWithGoogleAuthToken:auth.accessToken completionBlock:^(BOOL success) {
+        [self loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
             if (!success) {
                 [self showGoogleLoginFailureAlert];
             }

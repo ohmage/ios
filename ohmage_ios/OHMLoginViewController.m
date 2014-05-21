@@ -17,6 +17,7 @@
 @interface OHMLoginViewController () <GPPSignInDelegate>
 
 @property (nonatomic, strong) GPPSignInButton *googleSignInButton;
+@property (nonatomic) BOOL didPressGoogleButton;
 
 @end
 
@@ -68,6 +69,7 @@
     [createButton constrainToBottomInParentWithMargin:buttonMargin];
     
     GPPSignInButton *googleButton = [[GPPSignInButton alloc] init];
+    [googleButton addTarget:self action:@selector(googleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     googleButton.style = kGPPSignInButtonStyleWide;
     [view addSubview:googleButton];
     [view constrainChildToDefaultHorizontalInsets:googleButton];
@@ -82,7 +84,7 @@
     
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.shouldFetchGooglePlusUser = YES;
-    //signIn.shouldFetchGoogleUserEmail = YES;  // Uncomment to get the user's email
+    signIn.shouldFetchGoogleUserEmail = YES;  // Uncomment to get the user's email
     
     signIn.clientID = kGoogleClientId;
     signIn.scopes = @[ @"profile" ];            // "profile" scope
@@ -90,7 +92,7 @@
     // Optional: declare signIn.actions, see "app activities"
     signIn.delegate = self;
     
-//    [signIn trySilentAuthentication];
+    [signIn trySilentAuthentication];
 }
 
 - (void)emailLoginButtonPressed:(id)sender
@@ -103,6 +105,11 @@
 {
     OHMCreateAccountViewController *vc = [[OHMCreateAccountViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)googleButtonPressed:(id)sender
+{
+    self.didPressGoogleButton = YES;
 }
 
 - (void)presentLoginError
@@ -118,7 +125,7 @@
                    error: (NSError *) error {
     NSLog(@"Received error %@ and auth object %@",error, auth);
     if (!error) {
-        [[OHMClient sharedClient] loginWithGoogleAuthToken:auth.accessToken completionBlock:^(BOOL success) {
+        [[OHMClient sharedClient] loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
             if (success) {
     
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -128,7 +135,7 @@
             }
         }];
     }
-    else {
+    else if (self.didPressGoogleButton) { //don't present error for silent auth failure
         [self presentLoginError];
     }
 }

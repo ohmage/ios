@@ -197,7 +197,7 @@ static NSInteger const kSettingsRowCount = 1;
         case kSettingsSectionIndex:
             return @"";
         case kRemindersSectionIndex:
-            return @"Reminders";
+            return (self.reminders.count > 0 ? @"Reminders" : nil);
             
         default:
             return nil;

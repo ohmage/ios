@@ -460,7 +460,7 @@
 {
 //    OHMSurvey *survey = (OHMSurvey *)anObject;
 //    NSLog(@"controller did change survey: %@, type: %lu, indexRow: %lu, newRow: %lu", survey.surveyName, (unsigned long)type, indexPath.row, newIndexPath.row);
-    UITableView *tableView = self.tableView;
+//    UITableView *tableView = self.tableView;
     
     [self.tableView reloadData];
     

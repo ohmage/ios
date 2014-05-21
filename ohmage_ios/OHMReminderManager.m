@@ -151,10 +151,7 @@
 
 - (void)synchronizeLocationReminders
 {
-    NSSet *monitoredRegions = [OHMLocationManager sharedLocationManager].locationManager.monitoredRegions;
-    for (CLRegion *region in monitoredRegions) {
-        [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:region];
-    }
+    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     
     NSArray *locations = [OHMClient sharedClient].reminderLocations;
     for (OHMReminderLocation *location in locations) {

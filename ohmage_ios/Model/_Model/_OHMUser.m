@@ -6,6 +6,7 @@
 const struct OHMUserAttributes OHMUserAttributes = {
 	.email = @"email",
 	.fullName = @"fullName",
+	.isNewAccount = @"isNewAccount",
 	.ohmID = @"ohmID",
 	.password = @"password",
 	.usesGoogleAuth = @"usesGoogleAuth",
@@ -47,6 +48,11 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"isNewAccountValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isNewAccount"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"usesGoogleAuthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"usesGoogleAuth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -68,6 +74,32 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 
 @dynamic fullName;
 
+
+
+
+
+
+@dynamic isNewAccount;
+
+
+
+- (BOOL)isNewAccountValue {
+	NSNumber *result = [self isNewAccount];
+	return [result boolValue];
+}
+
+- (void)setIsNewAccountValue:(BOOL)value_ {
+	[self setIsNewAccount:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveIsNewAccountValue {
+	NSNumber *result = [self primitiveIsNewAccount];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveIsNewAccountValue:(BOOL)value_ {
+	[self setPrimitiveIsNewAccount:[NSNumber numberWithBool:value_]];
+}
 
 
 

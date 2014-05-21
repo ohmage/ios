@@ -13,8 +13,6 @@
 @property (nonatomic, strong) NSMutableDictionary *imageDictionary;
 @property (nonatomic, strong) NSMutableDictionary *audioDictionary;
 
-- (NSString *)imagePathForKey:(NSString *)key;
-
 @end
 
 @implementation OHMMediaStore

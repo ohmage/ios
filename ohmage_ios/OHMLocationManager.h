@@ -26,6 +26,7 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 @property (strong, nonatomic) CLGeocoder *geocoder;
 
 - (void)getLocationWithCompletionBlock:(OHMLocationUpdateCompletionBlock)block;
+- (void)stopMonitoringAllRegions;
 
 
 @end
