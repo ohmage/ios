@@ -69,6 +69,12 @@
         self.requestSerializer = [AFJSONRequestSerializer serializer];
 //        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
+        __weak OHMClient *weakSelf = self;
+        [self.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            [weakSelf reachabilityStatusDidChange:status];
+        }];
+        [self.reachabilityManager startMonitoring];
+        
         
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"OHMBackgroundSessionConfiguration"];
         self.backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
@@ -77,16 +83,38 @@
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
-            if (self.user.usesGoogleAuthValue) {
-                [self refreshGoogleAuthentication];
-            }
-            else {
-                [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
-            }
+            [self authenticateCurrentUser];
         }
     }
     
     return self;
+}
+
+- (void)authenticateCurrentUser
+{
+    if (self.user.usesGoogleAuthValue) {
+        [self refreshGoogleAuthentication];
+    }
+    else {
+        [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
+    }
+}
+
+- (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
+{
+    NSLog(@"reachability status changed: %d", status);
+    if (status > AFNetworkReachabilityStatusNotReachable) {
+        [self authenticateCurrentUser];
+    }
+}
+
+- (void)submitPendingSurveyResponses
+{
+    NSArray *pendingResponses = [self pendingSurveyResponses];
+    for (OHMSurveyResponse *response in pendingResponses) {
+        NSLog(@"uploading pending response for survey: %@", response.survey.surveyName);
+        [self uploadSurveyResponse:response];
+    }
 }
 
 - (void)saveClientState
@@ -316,6 +344,8 @@
         OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
         [appLocationManager.locationManager startUpdatingLocation];
     }
+    
+    [self submitPendingSurveyResponses];
 }
 
 
@@ -427,14 +457,8 @@
     }
 }
 
-- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
+- (void)uploadSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
-    surveyResponse.timestamp = [NSDate date];
-    surveyResponse.userSubmittedValue = YES;
-    surveyResponse.survey.isDueValue = NO;
-    NSLog(@"submit response: %@", [surveyResponse JSON]);
-    [self saveClientState];
-    
     NSError *requestError = nil;
     NSString *requestString = [kOhmageServerUrlString stringByAppendingPathComponent:surveyResponse.uploadRequestUrlString];
     
@@ -443,10 +467,10 @@
                                                  URLString:requestString
                                                 parameters:nil
                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData)
-    {
-                                     [self buildResponseBodyForSurveyResponse:surveyResponse
-                                                                 withFormData:formData];
-    }
+     {
+         [self buildResponseBodyForSurveyResponse:surveyResponse
+                                     withFormData:formData];
+     }
                                                      error:&requestError];
     
     if (requestError != nil) {
@@ -457,9 +481,22 @@
     request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request
                                                                    writingStreamContentsToFile:surveyResponse.tempFileURL
                                                                              completionHandler:^(NSError *error)
-    {
-         [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
-    }];
+       {
+           [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
+       }];
+}
+
+- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
+{
+    surveyResponse.timestamp = [NSDate date];
+    surveyResponse.userSubmittedValue = YES;
+    surveyResponse.survey.isDueValue = NO;
+    NSLog(@"submit response: %@", [surveyResponse JSON]);
+    [self saveClientState];
+    
+    if (self.reachabilityManager.isReachable) {
+        [self uploadSurveyResponse:surveyResponse];
+    }
 
 }
 
@@ -706,6 +743,12 @@
 {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
     return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
+}
+
+- (NSArray *)pendingSurveyResponses
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userSubmitted == YES AND submissionConfirmed == NO"];
+    return [self fetchManagedObjectsWithEntityName:[OHMSurveyResponse entityName] predicate:predicate sortDescriptors:nil fetchLimit:0];
 }
 
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmId
