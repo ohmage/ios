@@ -227,6 +227,17 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kRemindersSectionIndex && indexPath.row > 0) {
+        OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:0]];
+        return [OHMUserInterface heightForSwitchCellWithTitle:reminder.labelText subtitle:reminder.detailLabelText fromTableView:tableView];
+    }
+    else {
+        return tableView.rowHeight;
+    }
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {

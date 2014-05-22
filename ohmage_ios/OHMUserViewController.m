@@ -179,6 +179,19 @@ static NSInteger const kSettingsRowCount = 1;
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kRemindersSectionIndex) {
+        OHMReminder *reminder = self.reminders[indexPath.row];
+        NSString *title = reminder.survey.surveyName;
+        NSString *subtitle = [NSString stringWithFormat:@"%@ %@", [reminder labelText], [reminder detailLabelText]];
+        return [OHMUserInterface heightForSwitchCellWithTitle:title subtitle:subtitle fromTableView:tableView];
+    }
+    else {
+        return tableView.rowHeight;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kSettingsSectionIndex && indexPath.row == kSettingsRowClearUserData) {
