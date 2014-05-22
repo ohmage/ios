@@ -19,6 +19,7 @@
 @interface OHMSurveyResponseViewController ()
 
 @property (nonatomic, strong) OHMSurveyResponse *response;
+@property (nonatomic) BOOL canEditResponse;
 
 @end
 
@@ -39,10 +40,29 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"Survey Response";
+    
+    self.canEditResponse = YES;
 
-    if (!self.response.userSubmittedValue) {
-        [self setupSubmitHeader];
+    if (self.response.userSubmittedValue) {
+        self.canEditResponse = NO;
     }
+    else {
+        [self setupSubmitHeader];
+        
+        // don't allow editing of surveys with conditions
+        for (OHMSurveyPromptResponse * promptResponse in self.response.promptResponses) {
+            if (promptResponse.surveyItem.condition != nil) {
+                self.canEditResponse = NO;
+                break;
+            }
+        }
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)setupSubmitHeader
@@ -135,7 +155,7 @@
     UITableViewCell *cell = nil;
     
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
-    NSString *promptText = [NSString stringWithFormat:@"%d:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
+    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
     if (!promptResponse.skippedValue &&
         (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt ||
@@ -148,6 +168,7 @@
     }
     
     cell.detailTextLabel.text = [self detailTextForPromptResponse:promptResponse];
+    NSLog(@"prompt response: %@", promptResponse);
 //    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
@@ -156,7 +177,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OHMSurveyPromptResponse *promptResponse = self.response.promptResponses[indexPath.row];
-    NSString *promptText = [NSString stringWithFormat:@"%d:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
+    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
     if (!promptResponse.skippedValue &&
         (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt ||
@@ -173,7 +194,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.response.userSubmittedValue) return;
+    if (!self.canEditResponse) return;
     
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:self.response atQuestionIndex:indexPath.row];
     UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];

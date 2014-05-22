@@ -62,6 +62,29 @@
 
 }
 
+- (BOOL)hasValue
+{
+    switch (self.surveyItem.itemTypeValue) {
+        case OHMSurveyItemTypeNumberPrompt:
+            return self.numberValue != nil;
+        case OHMSurveyItemTypeTextPrompt:
+            return self.stringValue != nil;
+        case OHMSurveyItemTypeNumberSingleChoicePrompt:
+        case OHMSurveyItemTypeStringSingleChoicePrompt:
+        case OHMSurveyItemTypeNumberMultiChoicePrompt:
+        case OHMSurveyItemTypeStringMultiChoicePrompt:
+            return self.selectedChoices.count > 0;
+        case OHMSurveyItemTypeTimestampPrompt:
+            return self.timestampValue != nil;
+        case OHMSurveyItemTypeImagePrompt:
+        case OHMSurveyItemTypeVideoPrompt:
+        case OHMSurveyItemTypeAudioPrompt:
+            return self.hasMediaAttachment;
+        default:
+            return NO;
+    }
+}
+
 - (BOOL)hasMediaAttachment
 {
     switch (self.surveyItem.itemTypeValue) {

@@ -9,6 +9,7 @@
 - (void)initializeDefaultResonse;
 - (id)jsonVal;
 
+- (BOOL)hasValue;
 - (BOOL)hasMediaAttachment;
 - (NSURL *)mediaAttachmentURL;
 - (NSString *)mediaAttachmentName;

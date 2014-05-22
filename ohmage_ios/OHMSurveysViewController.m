@@ -56,7 +56,7 @@
                                                                       action:nil];
     self.navigationItem.backBarButtonItem = backButtonItem;
     
-    self.navigationItem.title = @"Ohmage";
+    self.navigationItem.title = @"ohmage";
     
 //    self.tableView.separatorInset = UIEdgeInsetsZero;
 //    self.tableView.separatorColor = [UIColor blackColor];

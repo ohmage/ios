@@ -56,9 +56,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     self = [super init];
     if (self) {
         self.surveyResponse = response;
-        if (![response shouldShowItemAtIndex:index]) {
-            
-        }
         self.itemIndex = index;
         self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
         self.item = self.promptResponse.surveyItem;
@@ -426,6 +423,9 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 
 - (void)doneButtonPressed:(id)sender
 {
+    if (self.promptResponse.skippedValue) {
+        self.promptResponse.skippedValue = !self.promptResponse.hasValue;
+    }
     [self cancelModalPresentationButtonPressed:sender];
 }
 
