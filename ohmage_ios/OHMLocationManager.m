@@ -159,6 +159,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     {
         // Location services are disabled on the device.
         [self.locationManager stopUpdatingLocation];
+        self.isAuthorized = NO;
         
         NSString *errorMessage =
         @"Location Services Permission Denied for this app.  Visit Settings.app to allow.";
@@ -180,6 +181,11 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         // Location services have just been authorized on the device, start updating now.
         [self.locationManager startUpdatingLocation];
         [self setLocationError:nil];
+        self.isAuthorized = YES;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(OHMLocationManagerAuthorizationStatusChanged:)]) {
+        [self.delegate OHMLocationManagerAuthorizationStatusChanged:self];
     }
 }
 

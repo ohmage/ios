@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 };
 
 
-@interface OHMReminderViewController ()
+@interface OHMReminderViewController () <OHMLocationManagerDelegate>
 
 @property (nonatomic, strong) UISegmentedControl *timeOrLocationControl;
 @property (nonatomic, strong) UISwitch *rangeEnableSwitch;
@@ -75,9 +75,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     timeOrLocationControl.backgroundColor = [UIColor whiteColor];
     timeOrLocationControl.selectedSegmentIndex = self.reminder.isLocationReminderValue;
     [timeOrLocationControl addTarget:self action:@selector(timeOrLocationControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    BOOL canUseLocation = ([OHMLocationManager sharedLocationManager].locationError == nil);
-    [timeOrLocationControl setEnabled:canUseLocation forSegmentAtIndex:1];
     self.timeOrLocationControl = timeOrLocationControl;
+    [self updateLocationButtonEnabledState];
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectInset(timeOrLocationControl.frame, 0, -kUIViewSmallMargin)];
     [headerView addSubview:timeOrLocationControl];
@@ -102,6 +101,12 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     NSLog(@"view will appear");
     [self.tableView reloadData];
     [self updateDoneButtonEnabledState];
+}
+
+- (void)updateLocationButtonEnabledState
+{
+    BOOL canUseLocation = [OHMLocationManager sharedLocationManager].isAuthorized;
+    [self.timeOrLocationControl setEnabled:canUseLocation forSegmentAtIndex:1];
 }
 
 - (void)updateDoneButtonEnabledState
@@ -567,6 +572,13 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     }
     
     return tableView.rowHeight;
+}
+
+#pragma mark - Location Manager Delegate
+
+- (void)OHMLocationManagerAuthorizationStatusChanged:(OHMLocationManager *)locationManager
+{
+    [self updateLocationButtonEnabledState];
 }
 
 @end

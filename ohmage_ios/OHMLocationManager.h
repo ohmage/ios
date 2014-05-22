@@ -22,6 +22,7 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 @property (strong, nonatomic) CLLocation *location;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) BOOL hasLocation;
+@property (nonatomic) BOOL isAuthorized;
 @property (nonatomic, strong) NSError *locationError;
 @property (strong, nonatomic) CLGeocoder *geocoder;
 
@@ -36,5 +37,6 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 @optional
 
 - (void)OHMLocationManagerDidUpdateLocation:(OHMLocationManager *)locationManager;
+- (void)OHMLocationManagerAuthorizationStatusChanged:(OHMLocationManager *)locationManager;
 
 @end
