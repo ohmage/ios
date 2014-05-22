@@ -89,6 +89,10 @@
         <relationship name="surveyResponse" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OHMSurveyResponse" inverseName="promptResponses" inverseEntity="OHMSurveyResponse" syncable="YES"/>
     </entity>
     <entity name="OHMSurveyResponse" representedClassName="OHMSurveyResponse" syncable="YES">
+        <attribute name="locAccuracy" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="ohmID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="submissionConfirmed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="timestamp" attributeType="Date" syncable="YES"/>
@@ -117,7 +121,7 @@
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="330"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="180"/>
-        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="148"/>
+        <element name="OHMSurveyResponse" positionX="70" positionY="9" width="128" height="208"/>
         <element name="OHMUser" positionX="-128" positionY="-238" width="128" height="193"/>
     </elements>
 </model>

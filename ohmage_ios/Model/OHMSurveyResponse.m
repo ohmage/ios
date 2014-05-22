@@ -54,6 +54,15 @@
     metadata.surveyResponseID = self.ohmID;
     metadata.surveyResponseTimestamp = self.timestamp.ISO8601String;
     
+    if (self.locTimestamp != nil) {
+        NSMutableDictionary *location = [NSMutableDictionary dictionary];
+        location.surveyResponseLatitude = self.locLatitude;
+        location.surveyResponseLongitude = self.locLongitude;
+        location.surveyResponseLocationAccuracy = self.locAccuracy;
+        location.surveyResponseLocationTimestamp = @([self.locTimestamp timeIntervalSince1970]);
+        metadata.surveyResponseMetadataLocation = location;
+    }
+    
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     [self.promptResponses enumerateObjectsUsingBlock:^(OHMSurveyPromptResponse *promptResponse, NSUInteger idx, BOOL *stop) {
         id val = [promptResponse jsonVal];

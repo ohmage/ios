@@ -11,6 +11,7 @@
 
 NSString *const kOhmageServerUrlString = @"https://dev.ohmage.org/ohmage";
 NSString *const kGoogleClientId = @"129502935732-oc2o5e5lp99l7hijurrre8l9s20aidkk.apps.googleusercontent.com";
+//NSString *const kGoogleClientId = @"494798802772-jbgdqhjhiodp9m5p1pl4lcrgpobnim7m.apps.googleusercontent.com";
 
 CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;

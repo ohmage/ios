@@ -13,9 +13,14 @@
 @property (nonatomic, readonly) NSArray *jsonArray;
 
 @property (nonatomic, readonly) NSDictionary *surveyResponseMetadata;
+@property (nonatomic, readonly) NSDictionary *surveyResponseMetadataLocation;
 @property (nonatomic, readonly) NSDictionary *surveyResponseData;
 @property (nonatomic, readonly) NSString *surveyResponseID;
 @property (nonatomic, readonly) NSString *surveyResponseTimestamp;
+@property (nonatomic, readonly) NSNumber *surveyResponseLatitude;
+@property (nonatomic, readonly) NSNumber *surveyResponseLongitude;
+@property (nonatomic, readonly) NSNumber *surveyResponseLocationAccuracy;
+@property (nonatomic, readonly) NSNumber *surveyResponseLocationTimestamp;
 
 @property (nonatomic, readonly) NSString *reminderID;
 
@@ -66,9 +71,14 @@
 @interface NSMutableDictionary (Ohmage)
 
 @property (nonatomic, copy) NSDictionary *surveyResponseMetadata;
+@property (nonatomic, copy) NSDictionary *surveyResponseMetadataLocation;
 @property (nonatomic, copy) NSDictionary *surveyResponseData;
 @property (nonatomic, copy) NSString *surveyResponseID;
 @property (nonatomic, copy) NSString *surveyResponseTimestamp;
+@property (nonatomic, copy) NSNumber *surveyResponseLatitude;
+@property (nonatomic, copy) NSNumber *surveyResponseLongitude;
+@property (nonatomic, copy) NSNumber *surveyResponseLocationAccuracy;
+@property (nonatomic, copy) NSNumber *surveyResponseLocationTimestamp;
 
 @property (nonatomic, copy) NSString *reminderID;
 

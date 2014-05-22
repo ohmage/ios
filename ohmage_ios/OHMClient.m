@@ -491,7 +491,14 @@
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
     surveyResponse.survey.isDueValue = NO;
-//    NSLog(@"submit response: %@", [surveyResponse JSON]);
+    if ([OHMLocationManager sharedLocationManager].hasLocation) {
+        CLLocation *location = [OHMLocationManager sharedLocationManager].location;
+        surveyResponse.locLongitudeValue = location.coordinate.longitude;
+        surveyResponse.locLatitudeValue = location.coordinate.latitude;
+        surveyResponse.locAccuracyValue = location.horizontalAccuracy;
+        surveyResponse.locTimestamp = location.timestamp;
+    }
+    
     [self saveClientState];
     
     if (self.reachabilityManager.isReachable) {

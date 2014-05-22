@@ -229,6 +229,11 @@
     return [self nonNullValueForKey:@"meta_data"];
 }
 
+- (NSDictionary *)surveyResponseMetadataLocation
+{
+    return [self nonNullValueForKey:@"location"];
+}
+
 - (NSDictionary *)surveyResponseData
 {
     return [self nonNullValueForKey:@"data"];
@@ -242,6 +247,26 @@
 - (NSString *)surveyResponseTimestamp
 {
     return [self nonNullValueForKey:@"timestamp"];
+}
+
+- (NSNumber *)surveyResponseLatitude
+{
+    return [self nonNullValueForKey:@"latitude"];
+}
+
+- (NSNumber *)surveyResponseLongitude
+{
+    return [self nonNullValueForKey:@"longitude"];
+}
+
+- (NSNumber *)surveyResponseLocationAccuracy
+{
+    return [self nonNullValueForKey:@"accuracy"];
+}
+
+- (NSNumber *)surveyResponseLocationTimestamp
+{
+    return [self nonNullValueForKey:@"time"];
 }
 
 - (NSString *)reminderID
@@ -259,6 +284,11 @@
     self[@"meta_data"] = metadata;
 }
 
+- (void)setSurveyResponseMetadataLocation:(NSDictionary *)location
+{
+    self[@"location"] = location;
+}
+
 - (void)setSurveyResponseData:(NSDictionary *)data
 {
     self[@"data"] = data;
@@ -272,6 +302,26 @@
 - (void)setSurveyResponseTimestamp:(NSString *)surveyResponseTimestamp
 {
     self[@"timestamp"] = surveyResponseTimestamp;
+}
+
+- (void)setSurveyResponseLatitude:(NSNumber *)latitude
+{
+    self[@"latitude"] = latitude;
+}
+
+- (void)setSurveyResponseLongitude:(NSNumber *)longitude
+{
+    self[@"longitude"] = longitude;
+}
+
+- (void)setSurveyResponseLocationAccuracy:(NSNumber *)accuracy
+{
+    self[@"accuracy"] = accuracy;
+}
+
+- (void)setSurveyResponseLocationTimestamp:(NSNumber *)timestamp
+{
+    self[@"time"] = timestamp;
 }
 
 - (void)setReminderID:(NSString *)reminderID;

@@ -5,6 +5,10 @@
 #import "OHMObject.h"
 
 extern const struct OHMSurveyResponseAttributes {
+	__unsafe_unretained NSString *locAccuracy;
+	__unsafe_unretained NSString *locLatitude;
+	__unsafe_unretained NSString *locLongitude;
+	__unsafe_unretained NSString *locTimestamp;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *submissionConfirmed;
 	__unsafe_unretained NSString *timestamp;
@@ -29,6 +33,10 @@ extern const struct OHMSurveyResponseFetchedProperties {
 
 
 
+
+
+
+
 @interface OHMSurveyResponseID : NSManagedObjectID {}
 @end
 
@@ -37,6 +45,58 @@ extern const struct OHMSurveyResponseFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (OHMSurveyResponseID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* locAccuracy;
+
+
+
+@property double locAccuracyValue;
+- (double)locAccuracyValue;
+- (void)setLocAccuracyValue:(double)value_;
+
+//- (BOOL)validateLocAccuracy:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* locLatitude;
+
+
+
+@property double locLatitudeValue;
+- (double)locLatitudeValue;
+- (void)setLocLatitudeValue:(double)value_;
+
+//- (BOOL)validateLocLatitude:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* locLongitude;
+
+
+
+@property double locLongitudeValue;
+- (double)locLongitudeValue;
+- (void)setLocLongitudeValue:(double)value_;
+
+//- (BOOL)validateLocLongitude:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* locTimestamp;
+
+
+
+//- (BOOL)validateLocTimestamp:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -124,6 +184,39 @@ extern const struct OHMSurveyResponseFetchedProperties {
 @end
 
 @interface _OHMSurveyResponse (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveLocAccuracy;
+- (void)setPrimitiveLocAccuracy:(NSNumber*)value;
+
+- (double)primitiveLocAccuracyValue;
+- (void)setPrimitiveLocAccuracyValue:(double)value_;
+
+
+
+
+- (NSNumber*)primitiveLocLatitude;
+- (void)setPrimitiveLocLatitude:(NSNumber*)value;
+
+- (double)primitiveLocLatitudeValue;
+- (void)setPrimitiveLocLatitudeValue:(double)value_;
+
+
+
+
+- (NSNumber*)primitiveLocLongitude;
+- (void)setPrimitiveLocLongitude:(NSNumber*)value;
+
+- (double)primitiveLocLongitudeValue;
+- (void)setPrimitiveLocLongitudeValue:(double)value_;
+
+
+
+
+- (NSDate*)primitiveLocTimestamp;
+- (void)setPrimitiveLocTimestamp:(NSDate*)value;
+
+
 
 
 - (NSString*)primitiveOhmID;
