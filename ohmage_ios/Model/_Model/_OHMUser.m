@@ -9,6 +9,7 @@ const struct OHMUserAttributes OHMUserAttributes = {
 	.isNewAccount = @"isNewAccount",
 	.ohmID = @"ohmID",
 	.password = @"password",
+	.useCellularData = @"useCellularData",
 	.usesGoogleAuth = @"usesGoogleAuth",
 };
 
@@ -50,6 +51,11 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 	
 	if ([key isEqualToString:@"isNewAccountValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"isNewAccount"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"useCellularDataValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"useCellularData"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -114,6 +120,32 @@ const struct OHMUserFetchedProperties OHMUserFetchedProperties = {
 
 @dynamic password;
 
+
+
+
+
+
+@dynamic useCellularData;
+
+
+
+- (BOOL)useCellularDataValue {
+	NSNumber *result = [self useCellularData];
+	return [result boolValue];
+}
+
+- (void)setUseCellularDataValue:(BOOL)value_ {
+	[self setUseCellularData:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveUseCellularDataValue {
+	NSNumber *result = [self primitiveUseCellularData];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveUseCellularDataValue:(BOOL)value_ {
+	[self setPrimitiveUseCellularData:[NSNumber numberWithBool:value_]];
+}
 
 
 

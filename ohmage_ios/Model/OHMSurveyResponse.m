@@ -7,8 +7,6 @@
 
 @interface OHMSurveyResponse ()
 
-// Private interface goes here.
-
 @end
 
 
@@ -75,8 +73,6 @@
     json.surveyResponseMetadata = metadata;
     json.surveyResponseData = data;
     return json;
-    
-//    return @{@"meta_data" : metadata, @"data" : data};
 }
 
 - (NSString *)uploadRequestUrlString

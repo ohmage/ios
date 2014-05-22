@@ -10,6 +10,7 @@ extern const struct OHMUserAttributes {
 	__unsafe_unretained NSString *isNewAccount;
 	__unsafe_unretained NSString *ohmID;
 	__unsafe_unretained NSString *password;
+	__unsafe_unretained NSString *useCellularData;
 	__unsafe_unretained NSString *usesGoogleAuth;
 } OHMUserAttributes;
 
@@ -27,6 +28,7 @@ extern const struct OHMUserFetchedProperties {
 @class OHMReminderLocation;
 @class OHMReminder;
 @class OHMSurveyResponse;
+
 
 
 
@@ -97,6 +99,20 @@ extern const struct OHMUserFetchedProperties {
 
 
 //- (BOOL)validatePassword:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* useCellularData;
+
+
+
+@property BOOL useCellularDataValue;
+- (BOOL)useCellularDataValue;
+- (void)setUseCellularDataValue:(BOOL)value_;
+
+//- (BOOL)validateUseCellularData:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -203,6 +219,15 @@ extern const struct OHMUserFetchedProperties {
 
 - (NSString*)primitivePassword;
 - (void)setPrimitivePassword:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveUseCellularData;
+- (void)setPrimitiveUseCellularData:(NSNumber*)value;
+
+- (BOOL)primitiveUseCellularDataValue;
+- (void)setPrimitiveUseCellularDataValue:(BOOL)value_;
 
 
 

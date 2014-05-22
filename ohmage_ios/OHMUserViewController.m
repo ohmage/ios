@@ -16,15 +16,17 @@
 static NSInteger const kSettingsSectionIndex = 0;
 static NSInteger const kRemindersSectionIndex = 1;
 
-//static NSInteger const kSettingsRowCellularData = 0;
+static NSInteger const kSettingsRowCellularData = 0;
 //static NSInteger const kSettingsRowSyncNow = 1;
-static NSInteger const kSettingsRowClearUserData = 0;
-static NSInteger const kSettingsRowCount = 1;
+static NSInteger const kSettingsRowClearUserData = 1;
+static NSInteger const kSettingsRowCount = 2;
 
 @interface OHMUserViewController ()
 
 @property (nonatomic, strong) OHMUser *user;
 @property (nonatomic, strong) NSArray *reminders;
+
+@property (nonatomic, strong) UISwitch *cellularDataSwitch;
 
 @end
 
@@ -118,6 +120,12 @@ static NSInteger const kSettingsRowCount = 1;
     [self.tableView reloadData];
 }
 
+- (void)cellularDataSwitchToggled:(id)sender
+{
+    self.user.useCellularDataValue = self.cellularDataSwitch.on;
+    [[OHMClient sharedClient] saveClientState];
+}
+
 
 #pragma mark - Table view data source
 
@@ -145,12 +153,16 @@ static NSInteger const kSettingsRowCount = 1;
     
     if (indexPath.section == kSettingsSectionIndex) {
         switch (indexPath.row) {
-//            case kSettingsRowCellularData:
-//                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
-//                    sw.on = YES;
-//                }];
-//                cell.textLabel.text = @"Use cellular data";
-//                break;
+            case kSettingsRowCellularData:
+            {
+                cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
+                    sw.on = self.user.useCellularDataValue;
+                    [sw addTarget:self action:@selector(cellularDataSwitchToggled:) forControlEvents:UIControlEventValueChanged];
+                    self.cellularDataSwitch = sw;
+                }];
+                cell.textLabel.text = @"Use cellular data";
+                break;
+            }
 //            case kSettingsRowSyncNow:
 //                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
 //                cell.textLabel.text = @"Sync data";
@@ -187,6 +199,9 @@ static NSInteger const kSettingsRowCount = 1;
         NSString *subtitle = [NSString stringWithFormat:@"%@ %@", [reminder labelText], [reminder detailLabelText]];
         return [OHMUserInterface heightForSwitchCellWithTitle:title subtitle:subtitle fromTableView:tableView];
     }
+//    else if (indexPath.section == kSettingsSectionIndex && indexPath.row == kSettingsRowCellularData) {
+//        
+//    }
     else {
         return tableView.rowHeight;
     }

@@ -8,6 +8,7 @@
 
 #import "OHMClient.h"
 #import "AFNetworkActivityLogger.h"
+#import "AFNetworkActivityIndicatorManager.h"
 #import "OHMUser.h"
 #import "OHMOhmlet.h"
 #import "OHMSurvey.h"
@@ -75,6 +76,8 @@
         }];
         [self.reachabilityManager startMonitoring];
         
+        [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+        
         
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"OHMBackgroundSessionConfiguration"];
         self.backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
@@ -104,7 +107,7 @@
 
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
 {
-    NSLog(@"reachability status changed: %d", status);
+//    NSLog(@"reachability status changed: %d", status);
     if (status > AFNetworkReachabilityStatusNotReachable && self.hasLoggedInUser) {
         [self authenticateCurrentUser];
     }
@@ -112,6 +115,10 @@
 
 - (void)submitPendingSurveyResponses
 {
+    
+    if (!self.reachabilityManager.reachableViaWiFi && !self.user.useCellularDataValue)
+        return;
+    
     NSArray *pendingResponses = [self pendingSurveyResponses];
     for (OHMSurveyResponse *response in pendingResponses) {
         NSLog(@"uploading pending response for survey: %@", response.survey.surveyName);
@@ -425,6 +432,7 @@
         NSLog(@"error creating new request");
     }
     else {
+        NSLog(@"user cell: %d, request cell: %d", self.user.useCellularDataValue, request.allowsCellularAccess);
         NSURLSessionUploadTask *task =
         [self.backgroundSessionManager uploadTaskWithRequest:request
                                                     fromFile:surveyResponse.tempFileURL
@@ -478,6 +486,7 @@
         return;
     }
     
+    request.allowsCellularAccess = self.user.useCellularDataValue;
     request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request
                                                                    writingStreamContentsToFile:surveyResponse.tempFileURL
                                                                              completionHandler:^(NSError *error)
