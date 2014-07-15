@@ -9,6 +9,7 @@
 #import "OHMClient.h"
 #import "AFNetworkActivityLogger.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import "HMFJSONResponseSerializerWithData.h"
 #import "OHMUser.h"
 #import "OHMOhmlet.h"
 #import "OHMSurvey.h"
@@ -24,6 +25,9 @@
 
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
+
+
+static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 
 @interface OHMClient () <GPPSignInDelegate>
@@ -63,7 +67,8 @@
     self = [super initWithBaseURL:url];
     
     if (self) {
-        self.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+//        self.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        self.responseSerializer = [HMFJSONResponseSerializerWithData serializerWithReadingOptions:NSJSONReadingAllowFragments];
         NSMutableSet *contentTypes = [self.responseSerializer.acceptableContentTypes mutableCopy];
         [contentTypes addObject:@"text/plain"];
         self.responseSerializer.acceptableContentTypes = contentTypes;
@@ -165,7 +170,8 @@
     }
 }
 
-- (void)loginWithEmail:(NSString *)email password:(NSString *)password completionBlock:(void (^)(BOOL success))completionBlock
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password
+       completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
 {
     [self setAuthorizationToken:nil];
     
@@ -173,8 +179,10 @@
     NSDictionary *parameters = @{@"email": email, @"password" : password};
     
     [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
+        NSString *errorString = nil;
         if (error) {
             NSLog(@"Login Error");
+            errorString = response[kResponseErrorStringKey];
         }
         else {
             NSLog(@"Login Success");
@@ -200,7 +208,7 @@
         }
         
         if (completionBlock) {
-            completionBlock(error == nil);
+            completionBlock( (error == nil), errorString);
         }
     }];
 }
@@ -247,7 +255,7 @@
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password
-              completionBlock:(void (^)(BOOL success))completionBlock
+              completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
 {
     [self setAuthorizationToken:nil];
     
@@ -255,8 +263,10 @@
     NSDictionary *json = @{@"email": email, @"full_name": name};
     
     [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
+        NSString *errorString = nil;
         if (error) {
             NSLog(@"account create failed with error: %@", error);
+            errorString = response[kResponseErrorStringKey];
         }
         else {
             NSLog(@"account create succeeded with response: %@", response);
@@ -268,8 +278,9 @@
             self.user.isNewAccountValue = YES;
             
         }
+        
         if (completionBlock) {
-            completionBlock(error == nil);
+            completionBlock( (error == nil), errorString);
         }
     }];
 }
@@ -379,8 +390,10 @@
 //        NSLog(@"GET %@ Succeeded", request);
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"GET %@ Failed", request);
-        block(nil, error);
+        NSLog(@"GET %@ Failed with error: %@", request, [error debugDescription]);
+        NSString *errorString = error.userInfo[JSONResponseSerializerWithDataKey];
+        NSDictionary *errorResponse = @{kResponseErrorStringKey : errorString};
+        block(errorResponse, error);
     }];
 }
 
@@ -391,8 +404,10 @@
 //        NSLog(@"POST %@ Succeeded", request);
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"POST %@ Failed, task: %@, response: %@", request, task, task.response);
-        block(nil, error);
+        NSLog(@"POST %@ Failed with error: %@", request, error);
+        NSString *errorString = error.userInfo[JSONResponseSerializerWithDataKey];
+        NSDictionary *errorResponse = @{kResponseErrorStringKey : errorString};
+        block(errorResponse, error);
     }];
 }
 

@@ -33,12 +33,12 @@
 - (OHMUser *)loggedInUser;
 - (void)loginWithEmail:(NSString *)email
               password:(NSString *)password
-       completionBlock:(void (^)(BOOL success))completionBlock;
+       completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock;
 - (void)loginWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock;
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password
-              completionBlock:(void (^)(BOOL success))completionBlock;
+              completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock;
 - (void)logout;
 - (void)clearUserData;
 

@@ -57,52 +57,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ohmage_ios/OHMClient.m"
-            timestampString = "422425083.108371"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
-            landmarkName = "-getRequest:withParameters:completionBlock:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[OHMClient getRequest:withParameters:completionBlock:]"
-                  moduleName = "ohmage_ios"
-                  urlString = "file:///Users/cforkish/Code/Contracting/ohmage/ohmage_ios/ohmage_ios/OHMClient.m"
-                  timestampString = "421292797.099565"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "169"
-                  endingLineNumber = "169"
-                  offsetFromSymbolStart = "134">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__55-[OHMClient getRequest:withParameters:completionBlock:]_block_invoke"
-                  moduleName = "ohmage_ios"
-                  urlString = "file:///Users/cforkish/Code/Contracting/ohmage/ohmage_ios/ohmage_ios/OHMClient.m"
-                  timestampString = "421292797.099772"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "169"
-                  endingLineNumber = "169"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "ohmage_ios/OHMLocationMapViewController.m"
             timestampString = "421970421.478903"
             startingColumnNumber = "9223372036854775807"

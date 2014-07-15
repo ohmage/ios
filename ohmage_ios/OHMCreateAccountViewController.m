@@ -49,9 +49,6 @@
         tf.delegate = self;
         tf.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.nameTextField = tf;
-        
-        //debug
-//        tf.text = @"charlie";
     }];
     
     UIView *emailField = [OHMUserInterface textFieldWithLabelText:@"E-MAIL" setupBlock:^(UITextField *tf) {
@@ -59,9 +56,6 @@
         tf.delegate = self;
         tf.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.emailTextField = tf;
-        
-        //debug
-//        tf.text = @"charlie@forkishproductions.com";
     }];
     
     UIView *passwordField = [OHMUserInterface textFieldWithLabelText:@"PASSWORD" setupBlock:^(UITextField *tf) {
@@ -69,9 +63,6 @@
         tf.secureTextEntry = YES;
         tf.delegate = self;
         self.passwordTextField = tf;
-        
-        //debug
-//        tf.text = @"loudfowl98";
     }];
     
     [contentBox addSubview:nameField];
@@ -136,9 +127,18 @@
     [presenter dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)presentLoginError:(NSString *)errorString
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Create Account Failed" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
 - (void)createAccountButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] createAccountWithName:self.nameTextField.text email:self.emailTextField.text password:self.passwordTextField.text completionBlock:^(BOOL success) {
+    [[OHMClient sharedClient] createAccountWithName:self.nameTextField.text
+                                              email:self.emailTextField.text
+                                           password:self.passwordTextField.text
+                                    completionBlock:^(BOOL success, NSString *errorString) {
         if (success) {
             [self dismissRecursive];
         }
@@ -147,6 +147,7 @@
             [UIView animateWithDuration:0.5 animations:^{
                 self.activityIndicator.alpha = 0.0;
             }];
+            [self presentLoginError:errorString];
         }
     }];
 

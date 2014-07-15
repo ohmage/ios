@@ -51,7 +51,9 @@
         self.emailTextField = tf;
         
         //debug
+#ifdef DEBUG
         tf.text = @"cforkish@gmail.com";
+#endif
     }];
     
     UIView *passwordField = [OHMUserInterface textFieldWithLabelText:@"PASSWORD" setupBlock:^(UITextField *tf) {
@@ -61,7 +63,9 @@
         self.passwordTextField = tf;
         
         //debug
+#ifdef DEBUG
         tf.text = @"loudfowl98";
+#endif
     }];
     
     [contentBox addSubview:emailField];
@@ -124,18 +128,25 @@
     [presenter dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+- (void)presentLoginError:(NSString *)errorString
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign In Failed" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
 - (void)signInButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] loginWithEmail:self.emailTextField.text password:self.passwordTextField.text completionBlock:^(BOOL success) {
+    [[OHMClient sharedClient] loginWithEmail:self.emailTextField.text password:self.passwordTextField.text completionBlock:^(BOOL success, NSString *errorString) {
         if (success) {
             [self dismissRecursive];
-//            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         }
         else {
             [self.activityIndicator stopAnimating];
             [UIView animateWithDuration:0.5 animations:^{
                 self.activityIndicator.alpha = 0.0;
             }];
+            [self presentLoginError:errorString];
         }
     }];
     [self.activityIndicator startAnimating];
