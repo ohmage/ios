@@ -22,7 +22,7 @@
 {
     switch (accessoryType) {
         case UITableViewCellAccessoryNone:
-            return 0.0;
+            return kUIViewHorizontalMargin;
             break;
         case UITableViewCellAccessoryDisclosureIndicator:
             return 33.0;
@@ -61,11 +61,11 @@
                                  subtitle:(NSString *)subtitle
                            accessoryWidth:(CGFloat)accessoryWidth
                             fromTableView:(UITableView *)tableView{
-    CGFloat width = tableView.bounds.size.width - kUIViewHorizontalMargin - accessoryWidth;
+    CGFloat width = tableView.bounds.size.width - 2 * kUIViewSmallMargin - accessoryWidth;
     CGFloat titleHeight = [self heightForText:title withWidth:width font:[OHMAppConstants cellTextFont]];
     CGFloat subtitleHeight = [self heightForText:subtitle withWidth:width font:[OHMAppConstants cellSubtitleTextFont]];
     
-    return MAX(titleHeight + subtitleHeight + kUIViewVerticalMargin, tableView.rowHeight);
+    return MAX(titleHeight + subtitleHeight + 2 * kUIViewSmallMargin + kUIViewSmallTextMargin, tableView.rowHeight);
 }
 
 + (CGFloat)heightForSubtitleCellWithTitle:(NSString *)title

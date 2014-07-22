@@ -96,5 +96,11 @@
     [[NSFileManager defaultManager] removeItemAtURL:[self tempFileURL] error:nil];
 }
 
+- (NSArray *)displayedPromptResponses
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"notDisplayed == NO"];
+    return [[self.promptResponses filteredOrderedSetUsingPredicate:predicate] array];
+}
+
 
 @end

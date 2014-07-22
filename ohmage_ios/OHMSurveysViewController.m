@@ -367,6 +367,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.fetchedResultsController.fetchedObjects.count == 0) return;
+    
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];

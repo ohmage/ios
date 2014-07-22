@@ -10,4 +10,6 @@
 - (NSURL *)tempFileURL;
 - (void)removeTempFile;
 
+- (NSArray *)displayedPromptResponses;
+
 @end

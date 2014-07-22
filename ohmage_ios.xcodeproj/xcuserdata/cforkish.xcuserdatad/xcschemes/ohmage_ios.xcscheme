@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1E70095F18CA6F8700203990"
-               BuildableName = "ohmage_ios.app"
+               BuildableName = "ohmage.app"
                BlueprintName = "ohmage"
                ReferencedContainer = "container:ohmage_ios.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
+            BuildableName = "ohmage.app"
             BlueprintName = "ohmage"
             ReferencedContainer = "container:ohmage_ios.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
+            BuildableName = "ohmage.app"
             BlueprintName = "ohmage"
             ReferencedContainer = "container:ohmage_ios.xcodeproj">
          </BuildableReference>
@@ -84,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E70095F18CA6F8700203990"
-            BuildableName = "ohmage_ios.app"
+            BuildableName = "ohmage.app"
             BlueprintName = "ohmage"
             ReferencedContainer = "container:ohmage_ios.xcodeproj">
          </BuildableReference>
