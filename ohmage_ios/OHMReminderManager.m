@@ -121,6 +121,7 @@
     NSLog(@"process arrival at location for reminder: %@, shouldFire: %d", reminder.survey.surveyName, reminder.shouldFireLocationNotification);
     if ([reminder shouldFireLocationNotification]) {
         reminder.nextFireDate = [NSDate date];
+        reminder.survey.isDueValue = YES;
         [self scheduleNotificationForReminder:reminder];
     }
 }

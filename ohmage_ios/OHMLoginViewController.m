@@ -92,7 +92,7 @@
     // Optional: declare signIn.actions, see "app activities"
     signIn.delegate = self;
     
-    [signIn trySilentAuthentication];
+//    [signIn trySilentAuthentication];
 }
 
 - (void)emailLoginButtonPressed:(id)sender
@@ -118,6 +118,15 @@
     [alert show];
 }
 
+- (void)dismissRecursive
+{
+    UIViewController *presenter = self.presentingViewController;
+    while (presenter.presentingViewController) {
+        presenter = presenter.presentingViewController;
+    }
+    [presenter dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 #pragma mark - Google Login Delegate
 
@@ -127,8 +136,8 @@
     if (!error) {
         [[OHMClient sharedClient] loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
             if (success) {
-    
-                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                [self dismissRecursive];
+//                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }
             else {
                 [self presentLoginError];

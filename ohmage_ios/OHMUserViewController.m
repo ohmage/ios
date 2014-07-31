@@ -74,7 +74,12 @@ static NSInteger const kSettingsRowCount = 2;
 {
     [[OHMClient sharedClient] logout];
     OHMLoginViewController *vc = [[OHMLoginViewController alloc] init];
-    [self presentViewController:vc animated:YES completion:nil];
+//    [self.presentingViewController dismissViewControllerAnimated:NO completion:^{
+//        [self.presentingViewController presentViewController:vc animated:YES completion:nil];
+//    }];
+    [self presentViewController:vc animated:YES completion:^{
+//        [self.navigationController popToRootViewControllerAnimated:NO];
+    }];
 }
 
 - (void)setupHeader

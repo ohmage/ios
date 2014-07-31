@@ -105,6 +105,7 @@
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
+    [self setupHeader];
     [self updateFetchedResultsController];
 }
 
@@ -132,7 +133,12 @@
 
 - (void)setupHeader
 {
-    if (self.client.ohmlets.count < 2) return; // only show header if needed for switching ohmlets
+    if (self.client.ohmlets.count < 2) {
+        // only show header if needed for switching ohmlets
+        self.tableView.tableHeaderView = nil;
+        return;
+    }
+    
     
     NSString *nameText = nil;
     NSString *descriptionText = nil;

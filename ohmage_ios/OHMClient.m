@@ -175,6 +175,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     [self setAuthorizationToken:nil];
     
+    if (email == nil || password == nil) {
+        if (completionBlock != nil) {
+            completionBlock(NO, @"Email or password is blank");
+        }
+        return;
+    }
+    
     NSString *request =  @"auth_token";
     NSDictionary *parameters = @{@"email": email, @"password" : password};
     
