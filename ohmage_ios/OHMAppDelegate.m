@@ -14,6 +14,12 @@
 
 #import <GooglePlus/GooglePlus.h>
 
+@interface OHMAppDelegate ()
+
+@property (nonatomic, strong) UINavigationController *navigationController;
+
+@end
+
 @implementation OHMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -23,6 +29,7 @@
     OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] initWithOhmletIndex:0];
     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
     self.window.rootViewController = nav;
+    self.navigationController = nav;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -34,6 +41,7 @@
         UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
         NSLog(@"Application launched with local notification: %@", notification);
         if (notification != nil) {
+            [vc handleSurveyReminderNotification:notification];
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
         
@@ -62,6 +70,12 @@
                                                   otherButtonTitles:nil];
         
         [alertView show];
+    }
+    else {
+        UIViewController *vc = self.navigationController.viewControllers.firstObject;
+        if ([vc isKindOfClass:[OHMSurveysViewController class]]) {
+            [(OHMSurveysViewController *)vc handleSurveyReminderNotification:notification];
+        }
     }
     
     [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];

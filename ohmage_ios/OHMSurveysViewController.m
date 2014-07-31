@@ -8,12 +8,13 @@
 
 #import "OHMSurveysViewController.h"
 #import "OHMSurveyTableViewCell.h"
-#import "OHMClient.h"
-#import "OHMOhmlet.h"
-#import "OHMSurvey.h"
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurveyItemViewController.h"
 #import "OHMUserViewController.h"
+#import "OHMClient.h"
+#import "OHMOhmlet.h"
+#import "OHMSurvey.h"
+#import "OHMReminder.h"
 
 @interface OHMSurveysViewController () <OHMClientDelegate, NSFetchedResultsControllerDelegate>
 
@@ -296,6 +297,20 @@
     }
 }
 
+- (void)startSurvey:(OHMSurvey *)survey animated:(BOOL)animated
+{
+    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
+    OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
+    [self.navigationController pushViewController:vc animated:animated];
+}
+
+- (void)handleSurveyReminderNotification:(UILocalNotification *)notification
+{
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:notification.userInfo.reminderID];
+    [self startSurvey:reminder.survey animated:NO];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -352,27 +367,16 @@
     }
     
     survey.surveyUpdatedBlock = ^{
-//        NSLog(@"executing update block for survey: %@, row: %ld", weakSurvey.surveyName, (long)indexPath.row);
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
 }
-
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-////    NSLog(@"will display survey: %@, at row: %ld", survey.surveyName, indexPath.row);
-//    survey.index = indexPath.row;
-//    cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:indexPath.row];
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.fetchedResultsController.fetchedObjects.count == 0) return;
     
     OHMSurvey *survey = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
-    OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
-    [self.navigationController pushViewController:vc animated:YES];
+    [self startSurvey:survey animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

@@ -125,6 +125,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         self.reminder.specificTime = self.alarmTimePicker.date;
     }
     
+    self.reminder.lastFireDate = nil; // in case it's already fired today
     [[OHMReminderManager sharedReminderManager] updateScheduleForReminder:self.reminder];
     [[OHMClient sharedClient] saveClientState];
     

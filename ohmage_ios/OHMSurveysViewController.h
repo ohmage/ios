@@ -12,4 +12,6 @@
 
 - (instancetype)initWithOhmletIndex:(NSInteger)ohmletIndex;
 
+- (void)handleSurveyReminderNotification:(UILocalNotification *)notification;
+
 @end
