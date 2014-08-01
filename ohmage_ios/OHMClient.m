@@ -43,6 +43,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 @property (nonatomic, copy) NSString *refreshToken;
 @property (nonatomic, strong) AFHTTPSessionManager *backgroundSessionManager;
 
+@property (nonatomic, copy) NSDate *lastRefresh;
+
 // Model
 @property (nonatomic, strong) OHMUser *user;
 
@@ -168,6 +170,34 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     if (!success) {
         [googleSignIn authenticate];
     }
+}
+
+- (void)refreshLoginWithCompletionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
+{
+    if (self.refreshToken == nil) return;
+    NSString *request =  @"auth_token";
+    NSDictionary *parameters = @{@"refresh_token": self.refreshToken};
+    
+    [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
+        NSString *errorString = nil;
+        if (error) {
+            NSLog(@"Login Refresh Error");
+            errorString = response[kResponseErrorStringKey];
+        }
+        else {
+            NSLog(@"Login Refresh Success");
+            
+            self.authToken = [response authToken];
+            self.refreshToken = [response refreshToken];
+            [self setAuthorizationToken:self.authToken];
+            [self refreshUserInfo];
+            
+        }
+        
+        if (completionBlock) {
+            completionBlock( (error == nil), errorString);
+        }
+    }];
 }
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password
@@ -381,12 +411,22 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 - (void)setAuthorizationToken:(NSString *)token
 {
-//    NSLog(@"set auth token: %@", token);
+    NSLog(@"set auth token: %@", token);
     if (token) {
-        [self.requestSerializer setValue:[@"ohmage " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
+        [self.requestSerializer setValue:[self authorizationHeaderWithToken:token] forHTTPHeaderField:@"Authorization"];
     }
     else {
         [self.requestSerializer setValue:nil forHTTPHeaderField:@"Authorization"];
+    }
+}
+
+- (NSString *)authorizationHeaderWithToken:(NSString *)token
+{
+    if (token) {
+        return [@"ohmage " stringByAppendingString:token];
+    }
+    else {
+        return nil;
     }
 }
 
@@ -446,45 +486,48 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }
 }
 
-- (void)handleCompletionForRequest:(NSURLRequest *)request
-                 forSurveyResponse:(OHMSurveyResponse *)surveyResponse
-                         withError:(NSError *)error
+- (void)submitUploadRequest:(NSMutableURLRequest *)request forSurveyResponse:(OHMSurveyResponse *)surveyResponse retry:(BOOL)retry
 {
-    if (error != nil) {
-        NSLog(@"error creating new request");
-    }
-    else {
-        NSLog(@"user cell: %d, request cell: %d", self.user.useCellularDataValue, request.allowsCellularAccess);
-        NSURLSessionUploadTask *task =
-        [self.backgroundSessionManager uploadTaskWithRequest:request
-                                                    fromFile:surveyResponse.tempFileURL
-                                                    progress:nil
-                                           completionHandler:^(NSURLResponse *response, id responseObject, NSError *error)
-        {
-           if (error != nil) {
-               NSLog(@"Submit survey failure with error: %@", error);
-           }
-           else {
-//               NSLog(@"submit survey success with response: %@", responseObject);
-               if (![responseObject isKindOfClass:[NSArray class]]) {
-                   NSLog(@"Submitted survey response is not an array");
-                   return;
-               }
-               NSArray *responseArray = (NSArray *)responseObject;
-               NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
-               NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
-               if ([surveyResponse.ohmID isEqualToString:ohmId]) {
-                   NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
-                   surveyResponse.submissionConfirmedValue = YES;
-                   [self saveClientState];
-               }
-           }
-       }];
-        
-        [task resume];
-        
-        [self saveClientState];
-    }
+    NSLog(@"submit upload requestion for survey: %@, retry: %d, authToken: %@", surveyResponse.survey.surveyName, retry, self.authToken);
+    NSURLSessionUploadTask *task =
+    [self.backgroundSessionManager uploadTaskWithRequest:request
+                                                fromFile:surveyResponse.tempFileURL
+                                                progress:nil
+                                       completionHandler:^(NSURLResponse *response, id responseObject, NSError *error)
+     {
+         if (error != nil) {
+             NSLog(@"Submit survey failure with error: %@\nRETRY: %d", error, retry);
+             NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+             if (statusCode == 401 && retry) {
+                 [self refreshLoginWithCompletionBlock:^(BOOL success, NSString *errorString) {
+                     if (success) {
+                         // need to set the auth token since token from original request failed.
+                         [request setValue:[self authorizationHeaderWithToken:self.authToken] forHTTPHeaderField:@"Authorization"];
+                         [self submitUploadRequest:request forSurveyResponse:surveyResponse retry:NO];
+                     }
+                 }];
+             }
+         }
+         else {
+             NSLog(@"submit survey success");// with response: %@", responseObject);
+             if (![responseObject isKindOfClass:[NSArray class]]) {
+                 NSLog(@"Submitted survey response is not an array");
+                 return;
+             }
+             NSArray *responseArray = (NSArray *)responseObject;
+             NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
+             NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
+             if ([surveyResponse.ohmID isEqualToString:ohmId]) {
+                 NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
+                 surveyResponse.submissionConfirmedValue = YES;
+                 [self saveClientState];
+             }
+         }
+     }];
+    
+    [task resume];
+    
+    [self saveClientState];
 }
 
 - (void)uploadSurveyResponse:(OHMSurveyResponse *)surveyResponse
@@ -513,7 +556,10 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                                                                    writingStreamContentsToFile:surveyResponse.tempFileURL
                                                                              completionHandler:^(NSError *error)
        {
-           [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
+           if (error == nil) {
+               [self submitUploadRequest:request forSurveyResponse:surveyResponse retry:YES];
+           }
+//           [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
        }];
 }
 
@@ -538,8 +584,19 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 }
 
+- (BOOL)shouldRefresh
+{
+    if (self.lastRefresh == nil) return YES;
+    else {
+        NSDate *hourAgo = [[NSDate date] dateByAddingHours:-1];
+        return [self.lastRefresh isBeforeDate:hourAgo];
+    }
+}
+
 - (void)refreshUserInfo
 {
+    if (![self shouldRefresh]) return;
+    
     [self getRequest:[self.user definitionRequestUrlString]
       withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
           
@@ -548,6 +605,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
           }
           else {
               NSLog(@"Refresh user info Success");
+              self.lastRefresh = [NSDate date];
               
               self.user.fullName = [response userFullName];
               

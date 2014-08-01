@@ -38,13 +38,15 @@
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
     }
     else {
+        
+        // handle reminder notification
         UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-        NSLog(@"Application launched with local notification: %@", notification);
         if (notification != nil) {
             [vc handleSurveyReminderNotification:notification];
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
         
+        // start tracking location for reminders and survey response metadata
         if ([CLLocationManager locationServicesEnabled])
         {
             OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
@@ -59,7 +61,7 @@
  *  application:didReceiveLocalNotification
  */
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    NSLog(@"Application did receive local notification: %@", notification);
+    
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         // If we're the foreground application, then show an alert view as one would not have been
         // presented to the user via the notification center.

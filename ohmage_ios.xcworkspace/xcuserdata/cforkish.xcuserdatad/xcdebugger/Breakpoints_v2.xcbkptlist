@@ -262,16 +262,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ohmage_ios/OHMAppDelegate.m"
-            timestampString = "428460527.404662"
+            filePath = "ohmage_ios/OHMClient.m"
+            timestampString = "428624662.777138"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "-application:didReceiveLocalNotification:"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
+            landmarkName = "-submitUploadRequest:forSurveyResponse:retry:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

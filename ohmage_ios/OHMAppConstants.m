@@ -106,10 +106,6 @@ double const kMaxLocationRadius = 500.0;
     return [UIColor whiteColor];
 }
 
-
-/**
- *  textFont
- */
 + (UIFont *)textFont {
     return [UIFont systemFontOfSize:15.0];
 }
@@ -118,16 +114,10 @@ double const kMaxLocationRadius = 500.0;
     return [UIFont systemFontOfSize:11.0];
 }
 
-/**
- *  boldTextFont
- */
 + (UIFont *)boldTextFont {
     return [UIFont boldSystemFontOfSize:15.0];
 }
 
-/**
- *  italicTextFont
- */
 + (UIFont *)italicTextFont {
     return [UIFont italicSystemFontOfSize:15.0];
 }
