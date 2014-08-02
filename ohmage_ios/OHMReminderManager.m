@@ -61,8 +61,6 @@
 
 - (void)updateScheduleForReminder:(OHMReminder *)reminder
 {
-//    NSLog(@"update schedule for reminder: %@", reminder);
-    
     [self unscheduleNotificationsForReminder:reminder];
     [self synchronizeLocationReminders];
     
@@ -93,7 +91,6 @@
     notification.timeZone = [NSTimeZone defaultTimeZone];
     notification.userInfo = userInfo;
     
-//    NSLog(@"scheduling notification: %@ for reminder: %@", notification.fireDate, reminder.survey.surveyName);
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 
@@ -118,7 +115,6 @@
 
 - (void)processArrivalAtLocationForReminder:(OHMReminder *)reminder
 {
-    NSLog(@"process arrival at location for reminder: %@, shouldFire: %d", reminder.survey.surveyName, reminder.shouldFireLocationNotification);
     if ([reminder shouldFireLocationNotification]) {
         reminder.nextFireDate = [NSDate date];
         reminder.survey.isDueValue = YES;

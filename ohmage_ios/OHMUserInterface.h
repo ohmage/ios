@@ -25,6 +25,7 @@
                                subtitle:(NSString *)subtitle
                           fromTableView:(UITableView *)tableView;
 + (CGFloat)heightForImageCellWithText:(NSString *)text fromTableView:(UITableView *)tableView;
+
 + (UIView *)tableFooterViewWithButton:(NSString *)title fromTableView:(UITableView *)tableView setupBlock:(void (^)(UIButton *))buttonBlock;
 + (UITableViewCell *)cellWithDefaultStyleFromTableView:(UITableView *)tableView;
 + (UITableViewCell *)cellWithDetailStyleFromTableView:(UITableView *)tableView;
@@ -46,11 +47,9 @@
                                alignment:(NSTextAlignment)textAlignment;
 + (UIView *)textFieldWithLabelText:(NSString *)text setupBlock:(void (^)(UITextField *tf))tfBlock;
 
-+ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color  target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector maxWidth:(CGFloat)maxWidth;
 + (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector fixedWidth:(CGFloat)fixedWidth;
-+ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color  target:(id)target action:(SEL)selector size:(CGSize)size;
-
-+ (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius;
++ (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector size:(CGSize)size;
 
 + (NSString *)formattedDate:(NSDate *)date;
 + (NSString *)formattedTime:(NSDate *)time;

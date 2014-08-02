@@ -48,7 +48,7 @@
                                            options:NSStringDrawingUsesLineFragmentOrigin
                                         attributes:@{NSFontAttributeName:font}
                                            context:nil];
-//    rect.size.width = width;
+    
     return [self ceilSize:rect.size];
 }
 
@@ -313,7 +313,9 @@
 {
     UIView *frameView = [[UIView alloc] init];
     [frameView constrainSize:size];
-    [self applyRoundedBorderToView:frameView radius:6.0];
+    
+    frameView.layer.cornerRadius = 6.0;
+    frameView.layer.masksToBounds = YES;
     
     CGSize labelSize = CGSizeMake(size.width - kUIViewSmallTextMargin * 2, size.height - kUIViewSmallTextMargin * 2);
     UILabel *label = [self fixedSizeLabelWithText:text size:labelSize font:font];
@@ -350,39 +352,6 @@
     
     return contentView;
 }
-
-
-//+ (UIButton *)buttonWithTitle:(NSString *)title {
-//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//    
-//    button.titleLabel.font = [AppConstants buttonFont];
-//    button.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
-//    
-//    CGSize titleSize = [title sizeWithAttributes:
-//                        @{NSFontAttributeName:
-//                              button.titleLabel.font}];
-//    CGFloat buttonWidth = MIN(titleSize.width + (kUIViewHorizontalMargin * 2), 320.0 - (kUIViewHorizontalMargin * 2));
-//    CGFloat buttonImageCapWidth = 10.0;
-//    CGFloat buttonImageCapHeight = 0.0;
-//    
-//    // There's an assumption here that the button height is equal to kUIHeightButton.
-//    UIImage *normalImage = [[UIImage imageNamed:@"buttonBackgroundGrayNormal"] stretchableImageWithLeftCapWidth:buttonImageCapWidth
-//                                                                                                   topCapHeight:buttonImageCapHeight];
-//    
-//    [button setBackgroundImage:normalImage forState:UIControlStateNormal];
-//    [button setTitle:title forState:UIControlStateNormal];
-//    
-//    [button setTitleColor:[AppConstants primaryTextColor] forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-//    
-//    [button setTitleShadowColor:[UIColor colorWithWhite:0.9 alpha:1.0] forState:UIControlStateNormal];
-//    [button setTitleShadowColor:[UIColor colorWithWhite:0.3 alpha:1.0] forState:UIControlStateHighlighted];
-//    
-//    [button setFrame:CGRectMake(0.0, 0.0, buttonWidth, kUIHeightButton)];
-//    
-//    return button;
-//}
 
 + (UIButton *)buttonWithTitle:(NSString *)title color:(UIColor *)color target:(id)target action:(SEL)selector size:(CGSize)size
 {
@@ -426,20 +395,6 @@
     return [self buttonWithTitle:title color:color target:target action:selector size:buttonSize];
 }
 
-+ (void)applyRoundedBorderToView:(UIView *)view radius:(CGFloat)borderRadius
-{
-//    view.backgroundColor = [UIColor whiteColor];
-//    view.layer.borderColor = [UIColor clearColor].CGColor;// [UIColor colorWithWhite:0.72 alpha:1.0].CGColor;
-//    view.layer.borderWidth = 3.0f;
-    view.layer.cornerRadius = borderRadius;
-    // This has to be 'NO' for shadows to work.
-    view.layer.masksToBounds = YES;
-//    view.layer.shadowColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
-//    view.layer.shadowOffset = CGSizeMake(0.0, 1.0);
-//    view.layer.shadowRadius = 0;
-//    view.layer.shadowOpacity = 1.0;
-}
-
 + (NSString *)formattedDate:(NSDate *)date
 {
     static NSDateFormatter *dateFormatter = nil;
@@ -448,8 +403,6 @@
                                                                   locale:[NSLocale currentLocale]];
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:formatString];
-//        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-//        dateFormatter.timeStyle = NSDateFormatterShortStyle;
     }
     
     return [dateFormatter stringFromDate:date];
@@ -459,10 +412,7 @@
 {
     static NSDateFormatter *dateFormatter = nil;
     if (!dateFormatter) {
-//        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m" options:0
-//                                                                  locale:[NSLocale currentLocale]];
         dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:formatString];
         dateFormatter.dateStyle = NSDateFormatterNoStyle;
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
     }
