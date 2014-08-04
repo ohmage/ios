@@ -84,15 +84,12 @@
     
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.shouldFetchGooglePlusUser = YES;
-    signIn.shouldFetchGoogleUserEmail = YES;  // Uncomment to get the user's email
+    signIn.shouldFetchGoogleUserEmail = YES;
     
     signIn.clientID = kGoogleClientId;
-    signIn.scopes = @[ @"profile" ];            // "profile" scope
+    signIn.scopes = @[ @"profile" ];
     
-    // Optional: declare signIn.actions, see "app activities"
     signIn.delegate = self;
-    
-//    [signIn trySilentAuthentication];
 }
 
 - (void)emailLoginButtonPressed:(id)sender
@@ -114,7 +111,10 @@
 
 - (void)presentLoginError
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign In Failed" message:@"Unable to sign in" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign In Failed"
+                                                    message:@"Unable to sign in"
+                                                   delegate:nil cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     [alert show];
 }
 
@@ -131,13 +131,12 @@
 #pragma mark - Google Login Delegate
 
 - (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
-                   error: (NSError *) error {
-    NSLog(@"Received error %@ and auth object %@",error, auth);
+                   error: (NSError *) error
+{
     if (!error) {
         [[OHMClient sharedClient] loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
             if (success) {
                 [self dismissRecursive];
-//                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }
             else {
                 [self presentLoginError];
@@ -149,9 +148,8 @@
     }
 }
 
-- (void)presentSignInViewController:(UIViewController *)viewController {
-    // This is an example of how you can implement it if your app is navigation-based.
-//    [[self navigationController] pushViewController:viewController animated:YES];
+- (void)presentSignInViewController:(UIViewController *)viewController
+{
     [self presentViewController:viewController animated:YES completion:nil];
 }
 

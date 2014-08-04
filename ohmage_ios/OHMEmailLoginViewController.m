@@ -49,11 +49,6 @@
         tf.delegate = self;
         tf.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.emailTextField = tf;
-        
-        //debug
-#ifdef DEBUG
-        tf.text = @"cforkish@gmail.com";
-#endif
     }];
     
     UIView *passwordField = [OHMUserInterface textFieldWithLabelText:@"PASSWORD" setupBlock:^(UITextField *tf) {
@@ -61,11 +56,6 @@
         tf.secureTextEntry = YES;
         tf.delegate = self;
         self.passwordTextField = tf;
-        
-        //debug
-#ifdef DEBUG
-        tf.text = @"loudfowl98";
-#endif
     }];
     
     [contentBox addSubview:emailField];
@@ -109,7 +99,6 @@
     [view addSubview:cancelButton];
     [cancelButton constrainToBottomInParentWithMargin:kUIViewVerticalMargin];
     [cancelButton centerHorizontallyInView:view];
-//    [view constrainChild:cancelButton toHorizontalInsets:kUIViewDefaultInsets];
 }
 
 - (void)viewDidLoad

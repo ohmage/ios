@@ -17,7 +17,6 @@ static NSInteger const kSettingsSectionIndex = 0;
 static NSInteger const kRemindersSectionIndex = 1;
 
 static NSInteger const kSettingsRowCellularData = 0;
-//static NSInteger const kSettingsRowSyncNow = 1;
 static NSInteger const kSettingsRowClearUserData = 1;
 static NSInteger const kSettingsRowCount = 2;
 
@@ -44,8 +43,6 @@ static NSInteger const kSettingsRowCount = 2;
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"survey.surveyName" ascending:YES];
     self.reminders = [self.user.reminders sortedArrayUsingDescriptors:@[sort]];
-    
-//    self.tableView.backgroundColor = [[OHMAppConstants lightOhmageColor] lightColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -59,12 +56,6 @@ static NSInteger const kSettingsRowCount = 2;
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)doneButtonPressed:(id)sender
 {
     [self cancelModalPresentationButtonPressed:sender];
@@ -74,12 +65,7 @@ static NSInteger const kSettingsRowCount = 2;
 {
     [[OHMClient sharedClient] logout];
     OHMLoginViewController *vc = [[OHMLoginViewController alloc] init];
-//    [self.presentingViewController dismissViewControllerAnimated:NO completion:^{
-//        [self.presentingViewController presentViewController:vc animated:YES completion:nil];
-//    }];
-    [self presentViewController:vc animated:YES completion:^{
-//        [self.navigationController popToRootViewControllerAnimated:NO];
-    }];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)setupHeader
@@ -168,15 +154,9 @@ static NSInteger const kSettingsRowCount = 2;
                 cell.textLabel.text = @"Use cellular data";
                 break;
             }
-//            case kSettingsRowSyncNow:
-//                cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
-//                cell.textLabel.text = @"Sync data";
-////                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//                break;
             case kSettingsRowClearUserData:
                 cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
                 cell.textLabel.text = @"Clear user data";
-                //                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 break;
                 
             default:
@@ -204,9 +184,6 @@ static NSInteger const kSettingsRowCount = 2;
         NSString *subtitle = [NSString stringWithFormat:@"%@ %@", [reminder labelText], [reminder detailLabelText]];
         return [OHMUserInterface heightForSwitchCellWithTitle:title subtitle:subtitle fromTableView:tableView];
     }
-//    else if (indexPath.section == kSettingsSectionIndex && indexPath.row == kSettingsRowCellularData) {
-//        
-//    }
     else {
         return tableView.rowHeight;
     }
