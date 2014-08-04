@@ -79,9 +79,6 @@
     
     [self.view addSubview:mapView];
     [self.view constrainChildToEqualSize:mapView];
-//    [self.view constrainChild:mapView toHorizontalInsets:UIEdgeInsetsZero];
-//    [mapView positionBelowElement:nameField margin:0];
-//    [mapView constrainToBottomInParentWithMargin:0];
     
     self.mapView = mapView;
     
@@ -131,7 +128,6 @@
     float val = self.radiusSlider.value;
     float scaledVal = kMinLocationRadius * powf(10, 2 * val);
     self.location.radiusValue = scaledVal;
-//    [self.regionView radiusNeedsUpdate];
     [self.regionView updateRadiusOverlay];
 }
 
@@ -148,34 +144,10 @@
     double w = MKMapPointsPerMeterAtLatitude(self.location.coordinate.latitude) * self.location.radiusValue * 0.5;
     self.mapView.visibleMapRect = MKMapRectMake(pt.x - w/2.0, pt.y - w/2.0, w, w);
     
-//    reg = [self.mapView regionThatFits:reg];
-//    self.mapView.region = reg;
-//    [self.mapView setRegion:reg animated:YES];
-//    MKCoordinateSpan newSpan = self.mapView.region.span;
-//    NSLog(@"zoom to coordinate, distance: %f, %f %f adjusted: %f %f", distance, reg.span.longitudeDelta, reg.span.latitudeDelta, newSpan.longitudeDelta, newSpan.latitudeDelta);
     [self.regionView updateRadiusOverlay];
 }
 
 #pragma mark - Map View Delegate
-
-//- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-//    NSLog(@"map view did update user location, is updating: %d, accuracy: %f", userLocation.isUpdating, userLocation.location.horizontalAccuracy);
-//    if (self.isCurrentLocation) {
-//        self.location.coordinate = userLocation.coordinate;
-//        [self zoomToLocation];
-////        self.isCurrentLocation = NO; //we only want one update
-//    }
-//}
-
-//- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
-//{
-//    NSLog(@"region with change, animated: %d", animated);
-//}
-//
-//- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
-//{
-//    NSLog(@"region did change, animated: %d", animated);
-//}
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
@@ -281,7 +253,6 @@
         self.location.hasCustomNameValue = YES;
         if (self.regionView.selected) {
             [self.mapView removeAnnotation:self.location];
-            // todo: keep from animating and reshow callout
             self.regionView.animatesDrop = NO;
             [self.mapView addAnnotation:self.location];
             [self.regionView setSelected:YES animated:NO];

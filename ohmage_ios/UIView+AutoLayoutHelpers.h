@@ -42,6 +42,7 @@
 - (void)positionAboveElement:(id)layoutElement withMargin:(CGFloat)margin;
 - (void)positionAboveElementWithDefaultMargin:(id)layoutElement;
 
+// position without AutoLayout
 - (void)moveOriginToPoint:(CGPoint)point;
 - (void)positionFrameBelowView:(UIView *)reference margin:(CGFloat)margin;
 - (void)centerFrameHorizontallyInView:(UIView *)reference;

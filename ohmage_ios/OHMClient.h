@@ -26,9 +26,9 @@
 @property (nonatomic, weak) id<OHMClientDelegate> delegate;
 @property (copy) void (^backgroundSessionCompletionHandler)();
 
-- (void)saveClientState;
 
-// Auth
+// user
+- (void)saveClientState;
 - (BOOL)hasLoggedInUser;
 - (OHMUser *)loggedInUser;
 - (void)loginWithEmail:(NSString *)email
@@ -41,11 +41,6 @@
               completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock;
 - (void)logout;
 - (void)clearUserData;
-
-// HTTP
-- (void)setAuthorizationToken:(NSString *)token;
-- (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-   completionBlock:(void (^)(NSDictionary *response, NSError *error))block;
 - (void)submitSurveyResponse:(OHMSurveyResponse *)response;
 
 // Model
@@ -57,11 +52,10 @@
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
 - (OHMReminderLocation *)insertNewReminderLocation;
 - (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmID;
-
-// Core Data
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
 - (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey;
 
+// Core Data
 - (void)deleteObject:(NSManagedObject *)object;
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
                                                                sortKey:(NSString *)sortKey

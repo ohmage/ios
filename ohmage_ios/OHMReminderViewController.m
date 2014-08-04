@@ -98,7 +98,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"view will appear");
     [self.tableView reloadData];
     [self updateDoneButtonEnabledState];
 }
@@ -142,13 +141,13 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (void)deleteButtonPressed:(id)sender
 {
-    [self presentConfirmationAlertWithTitle:@"Delete reminder?" message:@"Are you sure you want to delete this reminder?" confirmTitle:@"Delete"];
+    [self presentConfirmationAlertWithTitle:@"Delete reminder?"
+                                    message:@"Are you sure you want to delete this reminder?"
+                               confirmTitle:@"Delete"];
 }
 
 - (void)confirmationAlertDidConfirm:(UIAlertView *)alert
 {
-    NSLog(@"Delete alert did confirm");
-    
     [self cancelButtonPressed:nil];
 }
 
@@ -388,7 +387,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"number or rows in section, timeRangeOn: %d", self.rangeEnableSwitch.on);
     NSInteger rowCount = 3; // timeOrLocation, range enable, repeat
     
     if (self.reminder.usesTimeRangeValue) {
@@ -442,8 +440,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
         if (self.timePickerPath && (self.timePickerPath.row < adjustedRow)) {
             adjustedRow--;
         }
-        
-        NSLog(@"cell for row: %ld, timeRangeOn: %d, adjusted: %ld", indexPath.row, self.rangeEnableSwitch.on, adjustedRow);
         
         return [self cellForRow:adjustedRow];
     }

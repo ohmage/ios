@@ -59,7 +59,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         self.itemIndex = index;
         self.promptResponse = self.surveyResponse.promptResponses[self.itemIndex];
         self.item = self.promptResponse.surveyItem;
-//        NSLog(@"controller for itemID: %@", self.item.ohmID);
         
     }
     return self;
@@ -97,8 +96,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-//    NSLog(@"view did load with itemID: %@", self.item.description);
     
     id<UILayoutSupport> topGuide = self.topLayoutGuide;
     id<UILayoutSupport> bottomGuide = self.bottomLayoutGuide;
@@ -489,8 +486,14 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
-        OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:self.surveyResponse];
-        [self.navigationController pushViewController:vc animated:YES];
+        if (self.presentingViewController != nil) {
+            // in modal presentation, just dismiss self to return to response vc
+            [self doneButtonPressed:self];
+        }
+        else {
+            OHMSurveyResponseViewController *vc = [[OHMSurveyResponseViewController alloc] initWithSurveyResponse:self.surveyResponse];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -565,7 +568,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
         [self.promptResponse addSelectedChoicesObject:choice];
     }
     self.nextButton.enabled = [self validateChoices];
-//    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
@@ -740,7 +742,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     }
     else if ([picker isEqual:self.videoPicker]) {
         NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
-        NSLog(@"Media URL: %@", mediaURL);
         if (mediaURL) {
             self.promptResponse.imageValue = [self thumbnailFromVideoURL:mediaURL];
             self.imageView.image = self.promptResponse.imageValue;
@@ -861,7 +862,6 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 - (void)recordDateTime
 {
     self.promptResponse.timestampValue = [self combineDate:self.datePicker.date withTime:self.timePicker.date];
-    NSLog(@"recorded dateTime: %@", self.promptResponse.timestampValue);
 }
 
 - (NSDate *)combineDate:(NSDate *)date withTime:(NSDate *)time {

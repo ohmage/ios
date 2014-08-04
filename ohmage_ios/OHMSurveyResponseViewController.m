@@ -78,17 +78,6 @@
 {
     [[OHMClient sharedClient] submitSurveyResponse:self.response];
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
-//    // pop to survey detail vc
-//    UIViewController *vc = self.navigationController.viewControllers[1];
-//    if (![vc isKindOfClass:[OHMSurveyDetailViewController class]]) {
-//        vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:self.response.survey];
-//        NSMutableArray *vcStack = [self.navigationController.viewControllers mutableCopy];
-//        [vcStack insertObject:vc atIndex:1];
-//        self.navigationController.viewControllers = vcStack;
-//    }
-//    
-//    [self.navigationController popToViewController:vc animated:YES];
 }
 
 #pragma mark - Table view data source
@@ -109,14 +98,6 @@
     
     for (OHMSurveyPromptChoice *choice in promptResponse.selectedChoices) {
         [text appendFormat:@"%@\n", choice.text];
-//        [text appendFormat:@"%@: ", choice.text];
-//        if (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberMultiChoicePrompt
-//            || promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeNumberSingleChoicePrompt) {
-//            [text appendFormat:@"%g\n", choice.numberValueValue];
-//        }
-//        else {
-//            [text appendFormat:@"%@\n", choice.stringValue];
-//        }
     }
     
     return text;
@@ -179,7 +160,6 @@
 {
     OHMSurveyPromptResponse *promptResponse = self.response.displayedPromptResponses[indexPath.row];
     NSString *promptText = promptResponse.surveyItem.text;
-//    NSString *promptText = [NSString stringWithFormat:@"%ld:  %@", indexPath.row + 1, promptResponse.surveyItem.text];
     
     if (!promptResponse.skippedValue &&
         (promptResponse.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt ||

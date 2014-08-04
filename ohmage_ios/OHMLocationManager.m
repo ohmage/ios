@@ -48,7 +48,6 @@
 
 - (void)stopMonitoringAllRegions
 {
-    NSLog(@"stop monitoring all regions");
     NSSet *monitoredRegions = self.locationManager.monitoredRegions;
     for (CLRegion *region in monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
@@ -111,31 +110,6 @@
     [self setHasLocation:YES];
     [self setLocationError:nil];
     
-//    CLLocationCoordinate2D coord = lastLocation.coordinate;
-//    NSLog(@"Location lat/long: %f,%f",coord.latitude, coord.longitude);
-//    
-//    CLLocationAccuracy horizontalAccuracy =
-//    lastLocation.horizontalAccuracy;
-//    
-//    NSLog(@"Horizontal accuracy: %f meters",horizontalAccuracy);
-//    
-//    CLLocationDistance altitude = lastLocation.altitude;
-//    NSLog(@"Location altitude: %f meters",altitude);
-//    
-//    CLLocationAccuracy verticalAccuracy =
-//    lastLocation.verticalAccuracy;
-//    
-//    NSLog(@"Vertical accuracy: %f meters",verticalAccuracy);
-//    
-//    NSDate *timestamp = lastLocation.timestamp;
-//    NSLog(@"Timestamp: %@",timestamp);
-//    
-//    CLLocationSpeed speed = lastLocation.speed;
-//    NSLog(@"Speed: %f meters per second",speed);
-//    
-//    CLLocationDirection direction = lastLocation.course;
-//    NSLog(@"Course: %f degrees from true north",direction);
-    
     [self getLocationWithCompletionBlock:nil];
     
     if ([self.delegate respondsToSelector:@selector(OHMLocationManagerDidUpdateLocation:)]) {
@@ -146,7 +120,6 @@
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error
 {
-    NSLog(@"location manager did fail with error: %@", error);
     [self.locationManager stopUpdatingLocation];
     [self setLocationError:error];
     [self getLocationWithCompletionBlock:nil];
@@ -177,7 +150,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     }
     if (status == kCLAuthorizationStatusAuthorized)
     {
-        NSLog(@"Location Services Authorized");
         // Location services have just been authorized on the device, start updating now.
         [self.locationManager startUpdatingLocation];
         [self setLocationError:nil];
@@ -195,7 +167,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
          didEnterRegion:(CLRegion *)region
 {
     OHMReminderLocation *location = [[OHMClient sharedClient] locationWithOhmID:region.identifier];
-    NSLog(@"did enter region: %@, reminderLocation: %@", region, location);
     
     if (location == nil) return;
     

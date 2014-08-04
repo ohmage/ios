@@ -52,6 +52,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 @implementation OHMClient
 
+/**
+ *  sharedClient
+ */
 + (OHMClient*)sharedClient
 {
     static OHMClient *_sharedClient = nil;
@@ -64,32 +67,39 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return _sharedClient;
 }
 
+/**
+ *  initWithBaseURL
+ */
 - (instancetype)initWithBaseURL:(NSURL *)url
 {
+    // client is subclass of AFHTTPSessionManager
+    // initializing with base URL allows us to use relative paths for requests
     self = [super initWithBaseURL:url];
     
     if (self) {
-//        self.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+        // setup serializers
         self.responseSerializer = [HMFJSONResponseSerializerWithData serializerWithReadingOptions:NSJSONReadingAllowFragments];
         NSMutableSet *contentTypes = [self.responseSerializer.acceptableContentTypes mutableCopy];
         [contentTypes addObject:@"text/plain"];
         self.responseSerializer.acceptableContentTypes = contentTypes;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
-//        [[AFNetworkActivityLogger sharedLogger] startLogging];
         
+        // setup reachability
         __weak OHMClient *weakSelf = self;
         [self.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             [weakSelf reachabilityStatusDidChange:status];
         }];
         [self.reachabilityManager startMonitoring];
         
+        // enable network activity indicator
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
         
-        
+        // configure background session for survey uploads
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"OHMBackgroundSessionConfiguration"];
         self.backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
         self.backgroundSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         
+        // if we have a logged-in user and network is reachable, authenticate and refresh
         NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
         if (userID != nil) {
             self.user = [self userWithOhmID:userID];
@@ -102,107 +112,40 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return self;
 }
 
-- (void)authenticateCurrentUser
-{
-    if (self.user.usesGoogleAuthValue) {
-        [self refreshGoogleAuthentication];
-    }
-    else {
-        [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
-    }
-}
 
-- (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
-{
-//    NSLog(@"reachability status changed: %d", status);
-    if (status > AFNetworkReachabilityStatusNotReachable && self.hasLoggedInUser) {
-        [self authenticateCurrentUser];
-    }
-}
+#pragma mark - User (Public)
 
-- (void)submitPendingSurveyResponses
-{
-    
-    if (!self.reachabilityManager.reachableViaWiFi && !self.user.useCellularDataValue)
-        return;
-    
-    NSArray *pendingResponses = [self pendingSurveyResponses];
-    for (OHMSurveyResponse *response in pendingResponses) {
-        NSLog(@"uploading pending response for survey: %@", response.survey.surveyName);
-        [self uploadSurveyResponse:response];
-    }
-}
-
+/**
+ *  saveClientState
+ */
 - (void)saveClientState
 {
-    NSLog(@"Saving client state");
     [self saveManagedContext];
 }
 
-
-#pragma mark - Auth
-
-- (void)setUser:(OHMUser *)user
-{
-    _user = user;
-    [self setPersistentStoreMetadataText:user.ohmID forKey:@"loggedInUserID"];
-    NSLog(@"storing user id for logged in user: %@", user.ohmID);
-}
-
+/**
+ *  hasLoggedInUser
+ */
 - (BOOL)hasLoggedInUser
 {
     return self.user != nil;
 }
 
+/**
+ *  loggedInUser
+ */
 - (OHMUser *)loggedInUser
 {
     return self.user;
 }
 
-- (void)refreshGoogleAuthentication
-{
-    GPPSignIn *googleSignIn = [GPPSignIn sharedInstance];
-    googleSignIn.delegate = self;
-    googleSignIn.clientID = kGoogleClientId;
-    googleSignIn.attemptSSO = YES;
-    BOOL success = [googleSignIn trySilentAuthentication];
-    NSLog(@"silent google auth success: %d", success);
-    if (!success) {
-        [googleSignIn authenticate];
-    }
-}
-
-- (void)refreshLoginWithCompletionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
-{
-    if (self.refreshToken == nil) return;
-    NSString *request =  @"auth_token";
-    NSDictionary *parameters = @{@"refresh_token": self.refreshToken};
-    
-    [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
-        NSString *errorString = nil;
-        if (error) {
-            NSLog(@"Login Refresh Error");
-            errorString = response[kResponseErrorStringKey];
-        }
-        else {
-            NSLog(@"Login Refresh Success");
-            
-            self.authToken = [response authToken];
-            self.refreshToken = [response refreshToken];
-            [self setAuthorizationToken:self.authToken];
-            [self refreshUserInfo];
-            
-        }
-        
-        if (completionBlock) {
-            completionBlock( (error == nil), errorString);
-        }
-    }];
-}
-
+/**
+ *  loginWithEmail:password:completionBlock
+ */
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password
        completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
 {
+    // clear auth token
     [self setAuthorizationToken:nil];
     
     if (email == nil || password == nil) {
@@ -218,12 +161,10 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
         NSString *errorString = nil;
         if (error) {
-            NSLog(@"Login Error");
             errorString = response[kResponseErrorStringKey];
         }
         else {
-            NSLog(@"Login Success");
-            
+            // login success, set logged-in user and auth tokens
             self.authToken = [response authToken];
             self.refreshToken = [response refreshToken];
             [self setAuthorizationToken:self.authToken];
@@ -237,9 +178,11 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
             
             self.user.email = email;
             self.user.password = password;
+            
+            // clear new account flag after successful login
             self.user.isNewAccountValue = NO;
             
-            [self refreshUserInfo];
+            // post-login setup
             [self didLogin];
             
         }
@@ -250,8 +193,12 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }];
 }
 
+/**
+ *  loginWithGoogleAuth:completionBlock
+ */
 - (void)loginWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock
 {
+    // clear auth token
     [self setAuthorizationToken:nil];
     
     NSString *request =  @"auth_token";
@@ -259,26 +206,26 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     
     [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
         if (error) {
-            NSLog(@"Google login Error");
             if (self.hasLoggedInUser) {
+                // access token must be invalid, report failure to completion block
                 if (completionBlock) {
                     completionBlock(NO);
                 }
             }
             else {
+                // no logged-in user, try creating one
                 [self createAccountWithGoogleAuth:auth completionBlock:completionBlock];
             }
         }
         else {
-            NSLog(@"Google login Success with response: %@", response);
-            
+            // login success, update logged-in user and auth tokens
             self.authToken = [response authToken];
             self.refreshToken = [response refreshToken];
             [self setAuthorizationToken:self.authToken];
             
             [self updateUserWithGoogleAuth:auth userID:response.userID];
             
-            [self refreshUserInfo];
+            // post-login setup
             [self didLogin];
             
             if (completionBlock) {
@@ -288,12 +235,15 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }];
 }
 
-
+/**
+ *  createAccountWithName:email:completionBlock
+ */
 - (void)createAccountWithName:(NSString *)name
                         email:(NSString *)email
                      password:(NSString *)password
               completionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
 {
+    // clear auth token
     [self setAuthorizationToken:nil];
     
     NSString *request =  [NSString stringWithFormat:@"people?password=%@", password];
@@ -302,16 +252,17 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
         NSString *errorString = nil;
         if (error) {
-            NSLog(@"account create failed with error: %@", error);
             errorString = response[kResponseErrorStringKey];
         }
         else {
-            NSLog(@"account create succeeded with response: %@", response);
             
-            self.user = [self userWithOhmID:email];
+            // account creation succeeded
+            self.user = [self userWithOhmID:email]; //temp id
             self.user.email = email;
             self.user.password = password;
             self.user.fullName = name;
+            
+            // mark user as a new account with temp ID
             self.user.isNewAccountValue = YES;
             
         }
@@ -322,61 +273,29 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }];
 }
 
-- (void)createAccountWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock
-{
-    NSString *request =  [NSString stringWithFormat:@"people?provider=google&access_token=%@", auth.accessToken];
-    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
-    NSString *email = auth.parameters[@"email"];
-    NSDictionary *json = @{@"email": email, @"full_name": user.displayName};
-    
-    [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
-        if (error) {
-            NSLog(@"google account create failed with error: %@", error);
-        }
-        else {
-            NSLog(@"google account create succeeded with response: %@", response);
-            [self updateUserWithGoogleAuth:auth userID:response.userID];
-        }
-        if (completionBlock) {
-            completionBlock(error == nil);
-        }
-    }];
-    
-}
-
-- (void)updateUserWithGoogleAuth:(GTMOAuth2Authentication *)auth userID:(NSString *)userID
-{
-    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
-    NSString *email = auth.parameters[@"email"];
-    
-    self.user = [self userWithOhmID:email];
-    self.user.email = email;
-    self.user.fullName = user.displayName;
-    self.user.usesGoogleAuthValue = YES;
-    if (userID != nil) {
-        self.user.ohmID = userID;
-        self.user.isNewAccountValue = NO;
-    }
-    else {
-        self.user.isNewAccountValue = YES;
-    }
-}
-
+/**
+ *  logout
+ */
 - (void)logout
 {
     if (self.user.usesGoogleAuthValue) {
         [[GPPSignIn sharedInstance] signOut];
     }
     self.user = nil;
+    self.lastRefresh = nil;
     [self.delegate OHMClientDidUpdate:self];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     [self saveClientState];
 }
 
+/**
+ *  clearUserData
+ */
 - (void)clearUserData
 {
-    NSLog(@"clearing user data");
+    // clear all data for current user
+    
     for (OHMSurveyResponse *response in self.user.surveyResponses ) {
         [self deleteObject:response];
     }
@@ -394,10 +313,164 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self saveClientState];
 }
 
+/**
+ *  submitSurveyResponse
+ */
+- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
+{
+    // timestamp and mark as submitted by user
+    surveyResponse.timestamp = [NSDate date];
+    surveyResponse.userSubmittedValue = YES;
+    surveyResponse.survey.isDueValue = NO;
+    
+    // add location data if available
+    if ([OHMLocationManager sharedLocationManager].hasLocation) {
+        CLLocation *location = [OHMLocationManager sharedLocationManager].location;
+        surveyResponse.locLongitudeValue = location.coordinate.longitude;
+        surveyResponse.locLatitudeValue = location.coordinate.latitude;
+        surveyResponse.locAccuracyValue = location.horizontalAccuracy;
+        surveyResponse.locTimestamp = location.timestamp;
+    }
+    
+    [self saveClientState];
+    
+    // upload response if we have a network connection
+    if (self.reachabilityManager.isReachable) {
+        [self uploadSurveyResponse:surveyResponse];
+    }
+    
+}
+
+#pragma mark - User (Private)
+
+
+/**
+ *  setUser
+ */
+- (void)setUser:(OHMUser *)user
+{
+    _user = user;
+    
+    // keep track of current logged-in user by ID
+    [self setPersistentStoreMetadataText:user.ohmID forKey:@"loggedInUserID"];
+}
+
+/**
+ *  authenticateCurrentUser
+ */
+- (void)authenticateCurrentUser
+{
+    if (self.user.usesGoogleAuthValue) {
+        [self refreshGoogleAuthentication];
+    }
+    else {
+        [self loginWithEmail:self.user.email password:self.user.password completionBlock:nil];
+    }
+}
+
+/**
+ *  refreshGoogleAuthentication
+ */
+- (void)refreshGoogleAuthentication
+{
+    GPPSignIn *googleSignIn = [GPPSignIn sharedInstance];
+    googleSignIn.delegate = self;
+    googleSignIn.clientID = kGoogleClientId;
+    googleSignIn.attemptSSO = YES;
+    BOOL success = [googleSignIn trySilentAuthentication];
+    if (!success) {
+        [googleSignIn authenticate];
+    }
+}
+
+/**
+ *  refreshLoginWithCompletionBlock
+ */
+- (void)refreshLoginWithCompletionBlock:(void (^)(BOOL success, NSString *errorString))completionBlock
+{
+    if (self.refreshToken == nil) return;
+    NSString *request =  @"auth_token";
+    NSDictionary *parameters = @{@"refresh_token": self.refreshToken};
+    
+    [self getRequest:request withParameters:parameters completionBlock:^(NSDictionary *response, NSError *error) {
+        NSString *errorString = nil;
+        if (error) {
+            errorString = response[kResponseErrorStringKey];
+        }
+        else {
+            self.authToken = [response authToken];
+            self.refreshToken = [response refreshToken];
+            [self setAuthorizationToken:self.authToken];
+            [self refreshUserInfo];
+            
+        }
+        
+        if (completionBlock) {
+            completionBlock( (error == nil), errorString);
+        }
+    }];
+}
+
+/**
+ *  createAccountWithGoogleAuth:completionBlock
+ */
+- (void)createAccountWithGoogleAuth:(GTMOAuth2Authentication *)auth completionBlock:(void (^)(BOOL success))completionBlock
+{
+    // clear auth token
+    [self setAuthorizationToken:nil];
+    
+    NSString *request =  [NSString stringWithFormat:@"people?provider=google&access_token=%@", auth.accessToken];
+    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
+    NSString *email = auth.parameters[@"email"];
+    NSDictionary *json = @{@"email": email, @"full_name": user.displayName};
+    
+    [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
+        
+        if (error == nil) {
+            // account creation succeeded, setup google user
+            [self updateUserWithGoogleAuth:auth userID:response.userID];
+        }
+        
+        if (completionBlock) {
+            completionBlock(error == nil);
+        }
+    }];
+    
+}
+
+/**
+ *  updateUserWithGoogleAuth:userID
+ */
+- (void)updateUserWithGoogleAuth:(GTMOAuth2Authentication *)auth userID:(NSString *)userID
+{
+    GTLPlusPerson *user = [GPPSignIn sharedInstance].googlePlusUser;
+    NSString *email = auth.parameters[@"email"];
+    
+    self.user = [self userWithOhmID:email]; // temp id
+    self.user.email = email;
+    self.user.fullName = user.displayName;
+    self.user.usesGoogleAuthValue = YES;
+    if (userID != nil) {
+        // clear new account flag if we have actual user ID
+        self.user.ohmID = userID;
+        self.user.isNewAccountValue = NO;
+    }
+    else {
+        // flag as new account with temp ID
+        self.user.isNewAccountValue = YES;
+    }
+}
+
+/**
+ *  didLogin
+ */
 - (void)didLogin
 {
-    if ([CLLocationManager locationServicesEnabled])
-    {
+    // refresh ohmlets
+    [self refreshUserInfo];
+    
+    // start tracking location for reminders and survey response metadata
+    if ([CLLocationManager locationServicesEnabled]) {
         OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
         [appLocationManager.locationManager startUpdatingLocation];
     }
@@ -409,9 +482,23 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 #pragma mark - HTTP
 
+/**
+ *  reachabilityStatusDidChange
+ */
+- (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
+{
+    // when network becomes reachable, re-authenticate user
+    // and upload any pending survey responses
+    if (status > AFNetworkReachabilityStatusNotReachable && self.hasLoggedInUser) {
+        [self authenticateCurrentUser];
+    }
+}
+
+/**
+ *  setAuthorizationToken
+ */
 - (void)setAuthorizationToken:(NSString *)token
 {
-    NSLog(@"set auth token: %@", token);
     if (token) {
         [self.requestSerializer setValue:[self authorizationHeaderWithToken:token] forHTTPHeaderField:@"Authorization"];
     }
@@ -420,6 +507,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }
 }
 
+/**
+ *  authorizationHeaderWithToken
+ */
 - (NSString *)authorizationHeaderWithToken:(NSString *)token
 {
     if (token) {
@@ -430,34 +520,50 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }
 }
 
+/**
+ *  getRequest:withParameters:completionBlock
+ */
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *, NSError *))block
 {
     [self GET:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-//        NSLog(@"GET %@ Succeeded", request);
+        // request succeeded
         block((NSDictionary *)responseObject, nil);
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"GET %@ Failed with error: %@", request, [error debugDescription]);
-        NSString *errorString = error.userInfo[JSONResponseSerializerWithDataKey];
-        NSDictionary *errorResponse = @{kResponseErrorStringKey : errorString};
-        block(errorResponse, error);
+        // request failed
+        block([self responseDictionaryForError:error], error);
     }];
 }
 
+/**
+ *  postRequest:withParameters:completionBlock
+ */
 - (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(NSDictionary *, NSError *))block
 {
     [self POST:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-//        NSLog(@"POST %@ Succeeded", request);
+        // request succeeded
         block((NSDictionary *)responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"POST %@ Failed with error: %@", request, error);
-        NSString *errorString = error.userInfo[JSONResponseSerializerWithDataKey];
-        NSDictionary *errorResponse = @{kResponseErrorStringKey : errorString};
-        block(errorResponse, error);
+        // request failed
+        block([self responseDictionaryForError:error], error);
     }];
 }
 
+/**
+ *  responseDictionaryForError
+ */
+- (NSDictionary *)responseDictionaryForError:(NSError *)error
+{
+    NSString *errorString = error.userInfo[JSONResponseSerializerWithDataKey];
+    NSDictionary *errorResponse = @{kResponseErrorStringKey : errorString};
+    return errorResponse;
+}
+
+/**
+ *  buildResponseBodyForSurveyResponse:withFormData
+ */
 - (void)buildResponseBodyForSurveyResponse:(OHMSurveyResponse *)surveyResponse
                               withFormData:(id<AFMultipartFormData>)formData
 {
@@ -480,15 +586,19 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                                    mimeType:promptResponse.mimeType
                                       error:&error];
             if (error != nil) {
-                NSLog(@"error appending file: %@", error);
+                // should handle error
             }
         }
     }
 }
 
-- (void)submitUploadRequest:(NSMutableURLRequest *)request forSurveyResponse:(OHMSurveyResponse *)surveyResponse retry:(BOOL)retry
+/**
+ *  submitUploadRequest:forSurveyResponse:retry
+ */
+- (void)submitUploadRequest:(NSMutableURLRequest *)request
+          forSurveyResponse:(OHMSurveyResponse *)surveyResponse
+                      retry:(BOOL)retry
 {
-    NSLog(@"submit upload requestion for survey: %@, retry: %d, authToken: %@", surveyResponse.survey.surveyName, retry, self.authToken);
     NSURLSessionUploadTask *task =
     [self.backgroundSessionManager uploadTaskWithRequest:request
                                                 fromFile:surveyResponse.tempFileURL
@@ -496,7 +606,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                                        completionHandler:^(NSURLResponse *response, id responseObject, NSError *error)
      {
          if (error != nil) {
-             NSLog(@"Submit survey failure with error: %@\nRETRY: %d", error, retry);
+             // upload task failed
+             
+             // if status is a 401, re-authenticate and try again
              NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
              if (statusCode == 401 && retry) {
                  [self refreshLoginWithCompletionBlock:^(BOOL success, NSString *errorString) {
@@ -508,17 +620,14 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                  }];
              }
          }
-         else {
-             NSLog(@"submit survey success");// with response: %@", responseObject);
-             if (![responseObject isKindOfClass:[NSArray class]]) {
-                 NSLog(@"Submitted survey response is not an array");
-                 return;
-             }
+         else if ([responseObject isKindOfClass:[NSArray class]]) {
+             // updoad task succeeded
+             
              NSArray *responseArray = (NSArray *)responseObject;
              NSDictionary *returnedSurveyResponseDef = [responseArray firstObject];
              NSString *ohmId = returnedSurveyResponseDef.surveyResponseMetadata.surveyResponseID;
              if ([surveyResponse.ohmID isEqualToString:ohmId]) {
-                 NSLog(@"Submission confirmed for survey: %@", surveyResponse.survey.surveyName);
+                 // mark survey response as submitted
                  surveyResponse.submissionConfirmedValue = YES;
                  [self saveClientState];
              }
@@ -530,6 +639,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self saveClientState];
 }
 
+/**
+ *  uploadSurveyResponse
+ */
 - (void)uploadSurveyResponse:(OHMSurveyResponse *)surveyResponse
 {
     NSError *requestError = nil;
@@ -547,7 +659,6 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                                                      error:&requestError];
     
     if (requestError != nil) {
-        NSLog(@"Error creating request: %@", requestError);
         return;
     }
     
@@ -559,40 +670,40 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
            if (error == nil) {
                [self submitUploadRequest:request forSurveyResponse:surveyResponse retry:YES];
            }
-//           [self handleCompletionForRequest:request forSurveyResponse:surveyResponse withError:error];
        }];
 }
 
-- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse
+/**
+ *  submitPendingSurveyResponses
+ */
+- (void)submitPendingSurveyResponses
 {
-    surveyResponse.timestamp = [NSDate date];
-    surveyResponse.userSubmittedValue = YES;
-    surveyResponse.survey.isDueValue = NO;
-    if ([OHMLocationManager sharedLocationManager].hasLocation) {
-        CLLocation *location = [OHMLocationManager sharedLocationManager].location;
-        surveyResponse.locLongitudeValue = location.coordinate.longitude;
-        surveyResponse.locLatitudeValue = location.coordinate.latitude;
-        surveyResponse.locAccuracyValue = location.horizontalAccuracy;
-        surveyResponse.locTimestamp = location.timestamp;
-    }
+    // only upload over cellular connection if user has allowed it in their settings
+    if (!self.reachabilityManager.reachableViaWiFi && !self.user.useCellularDataValue)
+        return;
     
-    [self saveClientState];
-    
-    if (self.reachabilityManager.isReachable) {
-        [self uploadSurveyResponse:surveyResponse];
+    NSArray *pendingResponses = [self pendingSurveyResponses];
+    for (OHMSurveyResponse *response in pendingResponses) {
+        [self uploadSurveyResponse:response];
     }
-
 }
 
+/**
+ *  shouldRefresh
+ */
 - (BOOL)shouldRefresh
 {
     if (self.lastRefresh == nil) return YES;
     else {
+        // don't refresh more than once per hour
         NSDate *hourAgo = [[NSDate date] dateByAddingHours:-1];
         return [self.lastRefresh isBeforeDate:hourAgo];
     }
 }
 
+/**
+ *  refreshUserInfo
+ */
 - (void)refreshUserInfo
 {
     if (![self shouldRefresh]) return;
@@ -600,15 +711,12 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self getRequest:[self.user definitionRequestUrlString]
       withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
           
-          if (error) {
-              NSLog(@"Refresh user info Error");
-          }
-          else {
-              NSLog(@"Refresh user info Success");
+          if (error == nil) {
               self.lastRefresh = [NSDate date];
               
               self.user.fullName = [response userFullName];
               
+              // refresh ohmlets and surveys
               [self refreshOhmlets:[response ohmlets]];
               
               [self.delegate OHMClientDidUpdate:self];
@@ -617,26 +725,36 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
       }];
 }
 
+/**
+ *  refreshOhmlets
+ */
 - (void)refreshOhmlets:(NSArray *)ohmletDefinitions
 {
     NSMutableOrderedSet *ohmlets = [NSMutableOrderedSet orderedSetWithCapacity:[ohmletDefinitions count]];
     for (NSDictionary *ohmletDefinition in ohmletDefinitions) {
+        
+        // fetch ohmlet for ID from database, or create it if it doesn't exist
         OHMOhmlet *ohmlet = [self ohmletWithOhmID:[ohmletDefinition ohmletID]];
+        
+        // synchronize local ohmlet info with definition from server
         [self refreshOhmletInfo:ohmlet];
         [self refreshSurveys:[ohmletDefinition surveyDefinitions] forOhmlet:ohmlet];
+        
+        // add to user's ohmlets
         [ohmlets addObject:ohmlet];
     }
     self.user.ohmlets = ohmlets;
 }
 
+/**
+ *  refreshOhmletInfo
+ */
 - (void)refreshOhmletInfo:(OHMOhmlet *)ohmlet
 {
+    // request a detailed definition of ohmlet from server
+    // (ohmlet definitions in user definition aren't complete)
     [self getRequest:[ohmlet definitionRequestUrlString] withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
-        if (error) {
-            NSLog(@"Error updating ohmlet: %@", [error localizedDescription]);
-        }
-        else {
-            NSLog(@"got ohmlet: %@, id: %@", [response ohmletName], [response ohmletID]);
+        if (error == nil) {
             ohmlet.ohmletName = [response ohmletName];
             ohmlet.ohmletDescription = [response ohmletDescription];
             [self.delegate OHMClientDidUpdate:self];
@@ -648,6 +766,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }];
 }
 
+/**
+ *  refreshSurveys:forOhmlet
+ */
 - (void)refreshSurveys:(NSArray *)surveyDefinitions forOhmlet:(OHMOhmlet *)ohmlet
 {
     NSMutableSet *surveys = [NSMutableSet setWithCapacity:[surveyDefinitions count]];
@@ -663,14 +784,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     ohmlet.surveys = surveys;
 }
 
+/**
+ *  loadSurveyFromServer
+ */
 - (void)loadSurveyFromServer:(OHMSurvey *)survey
 {
     [self getRequest:[survey definitionRequestUrlString] withParameters:nil completionBlock:^(NSDictionary *response, NSError *error) {
-        if (error) {
-            NSLog(@"Error updating survey: %@", [error localizedDescription]);
-        }
-        else {
-            NSLog(@"got survey: %@, version: %ld", [response surveyName], (long)[response surveyVersion]);
+        if (error == nil) {
             survey.surveyName = [response surveyName];
             survey.surveyDescription = [response surveyDescription];
             [self createSurveyItems:[response surveyItems] forSurvey:survey];
@@ -683,6 +803,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }];
 }
 
+/**
+ *  createSurveyItems:forSurvey
+ */
 - (void)createSurveyItems:(NSArray *)itemDefinitions forSurvey:(OHMSurvey *)survey
 {
     NSMutableOrderedSet *surveyItems = [NSMutableOrderedSet orderedSetWithCapacity:[itemDefinitions count]];
@@ -695,6 +818,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     survey.surveyItems = surveyItems;
 }
 
+/**
+ *  createChoicesForSurveyItem:withDefinition
+ */
 - (void)createChoicesForSurveyItem:(OHMSurveyItem *)surveyItem withDefinition:(NSDictionary *)itemDefinition
 {
     NSArray *choiceDefinitions = [itemDefinition surveyItemChoices];
@@ -722,19 +848,19 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                 }
                 break;
             default:
-                NSLog(@"item type: %d", surveyItem.itemTypeValue);
-                NSAssert(0, @"Can't parse value for choice: %@", choiceDefinition);
                 break;
         }
     }
 }
+
 
 #pragma mark - Property Accessors (Core Data)
 
 /**
  *  persistentStoreURL
  */
-- (NSURL *)persistentStoreURL {
+- (NSURL *)persistentStoreURL
+{
     if (_persistentStoreURL == nil) {
         NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentDirectory = [documentDirectories firstObject];
@@ -748,7 +874,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  managedObjectContext
  */
-- (NSManagedObjectContext *)managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContext
+{
     if (_managedObjectContext == nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] init];
         [_managedObjectContext setUndoManager:nil];
@@ -761,7 +888,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  managedObjectModel
  */
-- (NSManagedObjectModel *)managedObjectModel {
+- (NSManagedObjectModel *)managedObjectModel
+{
     if (_managedObjectModel == nil) {
         _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     }
@@ -772,14 +900,14 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  persistentStoreCoordinator
  */
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
     if (_persistentStoreCoordinator == nil) {
         NSError *error = nil;
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
         if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
             // Replace this implementation with code to handle the error appropriately.
-            NSLog(@"Error opening persistant store %@, %@", error, [error userInfo]);
-//            abort();
+            NSLog(@"Error opening persistant store, resetting client\n%@\n%@", error, [error userInfo]);
             [self resetClient];
         }
     }
@@ -787,6 +915,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return _persistentStoreCoordinator;
 }
 
+/**
+ *  persistentStoreMetadataTextForKey
+ */
 - (NSString *)persistentStoreMetadataTextForKey:(NSString *)key
 {
     NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
@@ -794,9 +925,11 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return metadata[key];
 }
 
+/**
+ *  setPersistentStoreMetadataText:forKey
+ */
 - (void)setPersistentStoreMetadataText:(NSString *)text forKey:(NSString *)key
 {
-//    NSLog(@"set store metadata text: %@ for key: %@", text, key);
     NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
     NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
     if (text) {
@@ -809,50 +942,82 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 }
 
 
-#pragma mark - Core Data (public)
+#pragma mark - Model (public)
 
+/**
+ *  ohmlets
+ */
 - (NSOrderedSet *)ohmlets
 {
     return self.user.ohmlets;
 }
 
+/**
+ *  reminders
+ */
 - (NSArray *)reminders
 {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"specificTime" ascending:NO];
     return [self.user.reminders sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
+/**
+ *  timeReminders
+ */
 - (NSArray *)timeReminders
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocationReminder != YES"];
     return [[self reminders] filteredArrayUsingPredicate:predicate];
 }
 
+/**
+ *  reminderLocations
+ */
 - (NSArray *)reminderLocations
 {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO];
     return [self.user.reminderLocations sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
+/**
+ *  surveysForOhmlet
+ */
 - (NSArray *)surveysForOhmlet:(OHMOhmlet *)ohmlet
 {
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"surveyName" ascending:YES];
     return [ohmlet.surveys sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
-- (NSArray *)pendingSurveyResponses
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userSubmitted == YES AND submissionConfirmed == NO"];
-    return [self fetchManagedObjectsWithEntityName:[OHMSurveyResponse entityName] predicate:predicate sortDescriptors:nil fetchLimit:0];
-}
-
+/**
+ *  reminderWithOhmID
+ */
 - (OHMReminder *)reminderWithOhmID:(NSString *)ohmId
 {
     return (OHMReminder *)[self fetchObjectForEntityName:[OHMReminder entityName] withUniqueOhmID:ohmId create:NO];
 }
 
+/**
+ *  insertNewReminderLocation
+ */
+- (OHMReminderLocation *)insertNewReminderLocation
+{
+    OHMReminderLocation *location = (OHMReminderLocation *)[self insertNewObjectForEntityForName:[OHMReminderLocation entityName]];
+    location.user = self.user;
+    return location;
+}
 
 
+/**
+ *  locationWithOhmID
+ */
+- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmId
+{
+    return (OHMReminderLocation *)[self fetchObjectForEntityName:[OHMReminderLocation entityName] withUniqueOhmID:ohmId create:NO];
+}
+
+/**
+ *  buildResponseForSurvey
+ */
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey
 {
     OHMSurveyResponse *response = [self insertNewSurveyResponse];
@@ -871,6 +1036,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return response;
 }
 
+/**
+ *  buildNewReminderForSurvey
+ */
 - (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey
 {
     OHMReminder *reminder = (OHMReminder *)[self insertNewObjectForEntityForName:[OHMReminder entityName]];
@@ -881,32 +1049,37 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return reminder;
 }
 
-- (OHMReminderLocation *)insertNewReminderLocation
+
+#pragma mark - Model (private)
+
+/**
+ *  pendingSurveyResponses
+ */
+- (NSArray *)pendingSurveyResponses
 {
-    OHMReminderLocation *location = (OHMReminderLocation *)[self insertNewObjectForEntityForName:[OHMReminderLocation entityName]];
-    location.user = self.user;
-    return location;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userSubmitted == YES AND submissionConfirmed == NO"];
+    return [self fetchManagedObjectsWithEntityName:[OHMSurveyResponse entityName] predicate:predicate sortDescriptors:nil fetchLimit:0];
 }
 
-
-- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmId
-{
-    return (OHMReminderLocation *)[self fetchObjectForEntityName:[OHMReminderLocation entityName] withUniqueOhmID:ohmId create:NO];
-}
-
-
-#pragma mark - Core Data (private)
-
+/**
+ *  userWithOhmID
+ */
 - (OHMUser *)userWithOhmID:(NSString *)ohmID
 {
     return (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniqueOhmID:ohmID create:YES];
 }
 
+/**
+ *  ohmletWithOhmID
+ */
 - (OHMOhmlet *)ohmletWithOhmID:(NSString *)ohmID
 {
     return (OHMOhmlet *)[self fetchObjectForEntityName:[OHMOhmlet entityName] withUniqueOhmID:ohmID create:YES];
 }
 
+/**
+ *  surveyWithOhmID:andVersion
+ */
 - (OHMSurvey *)surveyWithOhmID:(NSString *)ohmID andVersion:(int16_t)version
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ohmID == %@) AND (surveyVersion == %d)", ohmID, version];
@@ -916,22 +1089,34 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return survey;
 }
 
+/**
+ *  insertNewSurveyItem
+ */
 - (OHMSurveyItem *)insertNewSurveyItem
 {
     OHMSurveyItem *newItem = (OHMSurveyItem *)[self insertNewObjectForEntityForName:[OHMSurveyItem entityName]];
     return newItem;
 }
 
+/**
+ *  insertNewSurveyResponse
+ */
 - (OHMSurveyResponse *)insertNewSurveyResponse
 {
     return (OHMSurveyResponse *)[self insertNewObjectForEntityForName:[OHMSurveyResponse entityName]];
 }
 
+/**
+ *  insertNewSurveyPromptResponse
+ */
 - (OHMSurveyPromptResponse *)insertNewSurveyPromptResponse
 {
     return (OHMSurveyPromptResponse *)[self insertNewObjectForEntityForName:[OHMSurveyPromptResponse entityName]];
 }
 
+/**
+ *  fetchObjectForEntityName:withUniqueOhmID:create
+ */
 - (OHMObject *)fetchObjectForEntityName:(NSString *)entityName withUniqueOhmID:(NSString *)ohmID create:(BOOL)create
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmID == %@", ohmID];
@@ -940,14 +1125,14 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return object;
 }
 
+/**
+ *  fetchObjectForEntityName:withUniquePredicate:create
+ */
 - (NSManagedObject *)fetchObjectForEntityName:(NSString *)entityName withUniquePredicate:(NSPredicate *)predicate create:(BOOL)create
 {
-//    NSLog(@"fetch or insert entity: %@ with predicate: %@", entityName, [predicate debugDescription]);
     NSArray *results = [self allObjectsWithEntityName:entityName sortKey:nil predicate:predicate ascending:NO];
     
     if ([results count]) {
-        NSAssert([results count] == 1, @"More than one object with predicate: %@", [predicate debugDescription]);
-//        NSLog(@"Returning existing entity: %@ for predicate: %@", entityName, [predicate debugDescription]);
         return [results firstObject];
     }
     else {
@@ -967,7 +1152,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  allObjectsWithEntityName:sortKey:predicate:ascending
  */
-- (NSArray *)allObjectsWithEntityName:(NSString *)entityName sortKey:(NSString *)sortKey predicate:(NSPredicate *)predicate ascending:(BOOL)ascending {
+- (NSArray *)allObjectsWithEntityName:(NSString *)entityName sortKey:(NSString *)sortKey predicate:(NSPredicate *)predicate ascending:(BOOL)ascending
+{
     NSArray *descriptors = nil;
     
     if (sortKey != nil) {
@@ -986,7 +1172,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 - (NSArray *)fetchManagedObjectsWithEntityName:(NSString *)entityName
                                      predicate:(NSPredicate *)predicate
                                sortDescriptors:(NSArray *)sortDescriptors
-                                    fetchLimit:(NSUInteger)fetchLimit {
+                                    fetchLimit:(NSUInteger)fetchLimit
+{
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
@@ -1012,6 +1199,54 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 }
 
 /**
+ *  saveManagedContext
+ */
+- (void)saveManagedContext
+{
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
+    if (error) {
+        NSLog(@"Error saving context: %@", [error localizedDescription]);
+    }
+}
+
+/**
+ *  deletePersistentStore
+ */
+- (void)deletePersistentStore
+{
+    NSLog(@"Deleting persistent store.");
+    self.managedObjectContext = nil;
+    self.managedObjectModel = nil;
+    self.persistentStoreCoordinator = nil;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
+    
+    self.persistentStoreURL = nil;
+}
+
+/**
+ *  resetClient
+ */
+- (void)resetClient
+{
+    [self deletePersistentStore];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
+}
+
+
+#pragma mark - Code Data (public)
+
+/**
+ *  deleteObject
+ */
+- (void)deleteObject:(NSManagedObject *)object
+{
+    [self.managedObjectContext deleteObject:object];
+}
+/**
  *  fetchedResultsControllerWithEntityName:sortKey:cacheName
  */
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
@@ -1024,7 +1259,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
     
     return [self fetchedResultsControllerWithEntityName:entityName
-                                               sortDescriptors:@[sortDescriptor]
+                                        sortDescriptors:@[sortDescriptor]
                                               predicate:predicate
                                      sectionNameKeyPath:sectionNameKeyPath
                                               cacheName:cacheName];
@@ -1068,58 +1303,25 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return fetchedResultsController;
 }
 
-/**
- *  saveManagedContext
- */
-- (void)saveManagedContext {
-    NSError *error = nil;
-    [self.managedObjectContext save:&error];
-    if (error) {
-        NSLog(@"Error saving context: %@", [error localizedDescription]);
-    }
-}
-
-/**
- *  deleteObject
- */
-- (void)deleteObject:(NSManagedObject *)object {
-    [self.managedObjectContext deleteObject:object];
-}
-
-/**
- *  deletePersistentStore
- */
-- (void)deletePersistentStore {
-    NSLog(@"Deleting persistent store.");
-    self.managedObjectContext = nil;
-    self.managedObjectModel = nil;
-    self.persistentStoreCoordinator = nil;
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
-    
-    self.persistentStoreURL = nil;
-}
-
-- (void)resetClient
-{
-    [self deletePersistentStore];
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
-}
-
 
 
 #pragma mark - Google Login Delegate
 
+/**
+ *  showGoogleLoginFailureAlert
+ */
 - (void)showGoogleLoginFailureAlert
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Google Authentication Failed" message:@"You have been logged out because your google account failed to authenticate." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }
 
+/**
+ *  finishedWithAuth:error
+ */
 - (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
-                   error: (NSError *) error {
+                   error: (NSError *) error
+{
     NSLog(@"Client received google error %@ and auth object %@",error, auth);
     if (error) {
 //        [self showGoogleLoginFailureAlert];

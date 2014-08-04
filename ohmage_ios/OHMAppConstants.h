@@ -31,6 +31,7 @@ extern double const kMaxLocationRadius;
 
 @interface OHMAppConstants : NSObject
 
+// colors
 + (UIColor *)colorForSurveyIndex:(NSInteger)rowIndex;
 + (UIColor *)lightColorForSurveyIndex:(NSInteger)rowIndex;
 + (UIColor *)ohmageColor;
@@ -41,7 +42,7 @@ extern double const kMaxLocationRadius;
 + (UIColor *)headerDetailColor;
 + (UIColor *)buttonTextColor;
 
-
+//fonts
 + (UIFont *)textFont;
 + (UIFont *)smallTextFont;
 + (UIFont *)boldTextFont;

@@ -81,7 +81,7 @@
     
     NSDate *fireDate = reminder.nextFireDate;
     if (!fireDate) {
-        NSLog(@"Can't schedule notification for reminder with nil fire date: %@", reminder);
+        // can't schedule a notification without a fire date
         return;
     }
     
@@ -136,21 +136,15 @@
     }
     
     if (shouldMonitorLocation) {
-        NSLog(@"Start monitoring region: %@", location.name);
         [[OHMLocationManager sharedLocationManager].locationManager startMonitoringForRegion:location.region];
     }
     else {
-        NSLog(@"Stop monitoring region: %@", location.name);
         [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:location.region];
     }
 }
 
-
-
 - (void)synchronizeLocationReminders
 {
-//    [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
-    
     NSArray *locations = [OHMClient sharedClient].reminderLocations;
     NSMutableSet *locationIDs = [NSMutableSet setWithCapacity:locations.count];
     for (OHMReminderLocation *location in locations) {
@@ -163,7 +157,7 @@
     for (CLRegion *region in regions) {
         NSString *locationID = region.identifier;
         if (![locationIDs containsObject:locationID]) {
-            NSLog(@"Can't find location for region: %@", locationID);
+            // if we don't have a location for this ID in our database, stop monitoring
             [[OHMLocationManager sharedLocationManager].locationManager stopMonitoringForRegion:region];
         }
     }

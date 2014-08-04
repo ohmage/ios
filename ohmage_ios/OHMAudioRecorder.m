@@ -109,16 +109,6 @@
     self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url
                                                               error:&playbackError];
     
-//    NSError *readingError = nil;
-//    NSData  *fileData =
-//    [NSData dataWithContentsOfURL:[self audioRecordingPath]
-//                          options:NSDataReadingMapped
-//                            error:&readingError];
-    
-    /* Form an audio player and make it play the recorded data */
-//    self.audioPlayer = [[AVAudioPlayer alloc] initWithData:fileData
-//                                                     error:&playbackError];
-    
     BOOL success = NO;
     
     /* Could we instantiate the audio player? */
@@ -126,16 +116,11 @@
         self.audioPlayer.delegate = self;
         
         /* Prepare to play and start playing */
-        if ([self.audioPlayer prepareToPlay] &&
-            [self.audioPlayer play]){
-            NSLog(@"Started playing the recorded audio.");
+        if ([self.audioPlayer prepareToPlay]
+            && [self.audioPlayer play]) {
             success = YES;
-        } else {
-            NSLog(@"Could not play the audio.");
         }
         
-    } else {
-        NSLog(@"Failed to create an audio player.");
     }
     
     return success;
@@ -143,21 +128,18 @@
 
 - (void)stopPlaying
 {
-    NSLog(@"stop, isplaying: %d", self.audioPlayer.isPlaying);
     [self.audioPlayer stop];
     self.audioPlayer = nil;
 }
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
-                       successfully:(BOOL)flag{
+                       successfully:(BOOL)flag {
     
     self.audioPlayer = nil;
     
     if (flag){
-        NSLog(@"Audio player stopped correctly.");
         [self.delegate OHMAudioRecorderDidFinishPlaying:self];
     } else {
-        NSLog(@"Audio player did not stop correctly.");
         [self.delegate OHMAudioRecorderFailed:self];
     }
 }
@@ -167,13 +149,10 @@
     
     self.audioRecorder = nil;
     
-    if (flag){
-        
-        NSLog(@"Successfully stopped the audio recording process.");
+    if (flag) {
         [self.delegate OHMAudioRecorder:self didFinishRecordingToURL:recorder.url];
         
     } else {
-        NSLog(@"Stopping the audio recording failed.");
         [self.delegate OHMAudioRecorderFailed:self];
     }
     
@@ -210,8 +189,6 @@
     }
     
 }
-
-
 
 - (NSURL *)audioRecordingPath
 {

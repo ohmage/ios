@@ -10,4 +10,8 @@
 
 @implementation OHMObject
 
+@dynamic ohmID;
+
+- (NSString *)definitionRequestUrlString { return nil; }
+
 @end

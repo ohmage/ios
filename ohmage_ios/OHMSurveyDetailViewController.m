@@ -59,12 +59,20 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     [self setupHeaderView];
     
     NSPredicate *remindersPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
-    self.fetchedRemindersController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName] sortKey:@"isLocationReminder" predicate:remindersPredicate sectionNameKeyPath:nil cacheName:nil];
+    self.fetchedRemindersController =
+    [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName]
+                                                             sortKey:@"isLocationReminder"
+                                                           predicate:remindersPredicate
+                                                  sectionNameKeyPath:nil
+                                                           cacheName:nil];
     
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
-    self.fetchedSurveyResponsesController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName] sortKey:@"timestamp" predicate:sureveyResultsPredicate sectionNameKeyPath:nil cacheName:nil];
-    
-    NSLog(@"Survey: %@, ID: %@, version: %d", self.survey.surveyName, self.survey.ohmID, self.survey.surveyVersionValue);
+    self.fetchedSurveyResponsesController =
+    [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName]
+                                                             sortKey:@"timestamp"
+                                                           predicate:sureveyResultsPredicate
+                                                  sectionNameKeyPath:nil
+                                                           cacheName:nil];
 }
 
 - (void)setupHeaderView
@@ -132,14 +140,8 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)takeSurvey:(id)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)takeSurvey:(id)sender {
-    
     OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:self.survey];
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
@@ -150,6 +152,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
 
 #pragma mark - Table view data source
 
@@ -170,19 +173,6 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     }
     
 }
-
-//- (void)configureReminderCell:(UITableViewCell *)cell forRow:(NSInteger)row
-//{
-//    if (row == 0) {
-//        cell.textLabel.text = @"Add reminder";
-//        cell.detailTextLabel.text = nil;
-//    }
-//    else if ([[self.fetchedRemindersController fetchedObjects] count] >= row - 1) {
-//        OHMReminder *reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];
-//        cell.textLabel.text = [reminder labelText];
-//        cell.detailTextLabel.text = [reminder repeatLabelText];
-//    }
-//}
 
 - (void)configureSurveyResponseCell:(UITableViewCell *)cell forRow:(NSInteger)row
 {
@@ -285,22 +275,6 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
             break;
     }
 }
-//
-//- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-//{
-//    OHMSurvey *survey = [self.surveys objectAtIndex:indexPath.row];
-//    OHMSurveyDetailViewController *vc = [[OHMSurveyDetailViewController alloc] initWithSurvey:survey];
-//    [self.navigationController pushViewController:vc animated:YES];
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    OHMSurvey *survey = self.surveys[indexPath.row];
-//    return [OHMUserInterface heightForSubtitleCellWithTitle:survey.surveyName
-//                                                   subtitle:survey.surveyDescription
-//                                              accessoryType:UITableViewCellAccessoryDetailDisclosureButton
-//                                              fromTableView:tableView];
-//}
 
 
 @end
