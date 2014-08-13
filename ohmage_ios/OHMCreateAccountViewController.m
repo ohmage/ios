@@ -7,6 +7,7 @@
 //
 
 #import "OHMCreateAccountViewController.h"
+#import "NSURL+QueryDictionary.h"
 
 @interface OHMCreateAccountViewController ()
 
@@ -116,6 +117,19 @@
     [super viewDidLoad];
     
     [self.contentBox positionBelowElement:self.topLayoutGuide margin:kUIViewVerticalMargin];
+    
+    if ([OHMClient sharedClient].pendingInvitationURL != nil) {
+        [self handlePendingInvitationURL:[OHMClient sharedClient].pendingInvitationURL];
+    }
+}
+
+- (void)handlePendingInvitationURL:(NSURL *)url
+{
+    if (url.uq_queryDictionary[kUserInvitationIdKey] == nil) return;
+    NSString *email = url.uq_queryDictionary[@"email"];
+    if (email) {
+        self.emailTextField.text = email;
+    }
 }
 
 - (void)dismissRecursive

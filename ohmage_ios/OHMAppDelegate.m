@@ -9,10 +9,13 @@
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
 #import "OHMLoginViewController.h"
+#import "OHMCreateAccountViewController.h"
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
 
 #import <GooglePlus/GooglePlus.h>
+
+#import "NSURL+QueryDictionary.h"
 
 @interface OHMAppDelegate ()
 
@@ -38,7 +41,9 @@
     [self.window makeKeyAndVisible];
     
     if (![[OHMClient sharedClient] hasLoggedInUser]) {
-        [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init] animated:NO completion:nil];
+        [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init]
+                                                     animated:NO
+                                                   completion:nil];
     }
     else {
         
@@ -110,15 +115,55 @@
 }
 
 
-#pragma mark - Google Login
+#pragma mark - URL Handling
 
 - (BOOL)application: (UIApplication *)application
             openURL: (NSURL *)url
   sourceApplication: (NSString *)sourceApplication
-         annotation: (id)annotation {
-    return [GPPURLHandler handleURL:url
-                  sourceApplication:sourceApplication
-                         annotation:annotation];
+         annotation: (id)annotation
+{
+    
+    NSString *scheme = url.scheme;
+    if ([scheme isEqualToString:kGoogleLoginUrlScheme]) {
+        NSLog(@"handle google login url: %@", url);
+        return [GPPURLHandler handleURL:url
+                      sourceApplication:sourceApplication
+                             annotation:annotation];
+    }
+    else if ([scheme isEqualToString:kOhmageUrlScheme]) {
+        return [self handleOhmageURL:url];
+    }
+    
+    return NO;
+}
+
+- (BOOL)handleOhmageURL:(NSURL *)url
+{
+    NSLog(@"handle ohmlet invitation url: %@", url);
+    if (![url.lastPathComponent isEqualToString:@"invitation"]) {
+        return NO;
+    }
+    
+    if (url.uq_queryDictionary[kUserInvitationIdKey] != nil) {
+        [self createUserWithInvitationURL:url];
+    }
+    else {
+        [[OHMClient sharedClient] handleOhmletInvitationURL:url];
+    }
+    
+    return YES;
+}
+
+- (void)createUserWithInvitationURL:(NSURL *)url
+{
+    OHMClient *client = [OHMClient sharedClient];
+    client.pendingInvitationURL = url;
+    if (client.hasLoggedInUser) {
+        [client logout];
+    }
+    [self.window.rootViewController presentViewController:[[OHMCreateAccountViewController alloc] init]
+                                                 animated:NO
+                                               completion:nil];
 }
 
 @end

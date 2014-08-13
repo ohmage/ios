@@ -10,6 +10,10 @@
 
 extern NSString *const kOhmageServerUrlString;
 extern NSString *const kGoogleClientId;
+extern NSString *const kGoogleLoginUrlScheme;
+extern NSString *const kOhmageUrlScheme;
+extern NSString *const kOhmletInvitationIdKey;
+extern NSString *const kUserInvitationIdKey;
 
 extern CGFloat const kUIViewVerticalMargin;
 extern CGFloat const kUIViewHorizontalMargin;

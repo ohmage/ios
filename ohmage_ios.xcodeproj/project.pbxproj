@@ -42,6 +42,7 @@
 		1E25C07B1922F1BC00655CAA /* OHMRegionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */; };
 		1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */; };
 		1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80F1191083DA0088D2D0 /* OHMReminder.m */; };
+		1E450F391999B1A60089B05E /* NSURL+QueryDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E450F381999B1A60089B05E /* NSURL+QueryDictionary.m */; };
 		1E479BB0192DB1DC007611E2 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E479BAF192DB1DC007611E2 /* AFNetworkActivityIndicatorManager.m */; };
 		1E56A3251912D80100384AE9 /* OHMEmailLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */; };
 		1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A327191302F500384AE9 /* OHMBaseViewController.m */; };
@@ -211,6 +212,8 @@
 		1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMReminder.m; sourceTree = "<group>"; };
 		1E3C80F0191083DA0088D2D0 /* OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OHMReminder.h; path = Model/OHMReminder.h; sourceTree = "<group>"; };
 		1E3C80F1191083DA0088D2D0 /* OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMReminder.m; path = Model/OHMReminder.m; sourceTree = "<group>"; };
+		1E450F371999B1A60089B05E /* NSURL+QueryDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+QueryDictionary.h"; sourceTree = "<group>"; };
+		1E450F381999B1A60089B05E /* NSURL+QueryDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+QueryDictionary.m"; sourceTree = "<group>"; };
 		1E479BAE192DB1DC007611E2 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = "external/AFNetworking-master/UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"; sourceTree = SOURCE_ROOT; };
 		1E479BAF192DB1DC007611E2 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = "external/AFNetworking-master/UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"; sourceTree = SOURCE_ROOT; };
 		1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMEmailLoginViewController.h; sourceTree = "<group>"; };
@@ -407,6 +410,8 @@
 		1E1B60FF1908BBF8001046E0 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				1E450F371999B1A60089B05E /* NSURL+QueryDictionary.h */,
+				1E450F381999B1A60089B05E /* NSURL+QueryDictionary.m */,
 				1E1B61001908BC31001046E0 /* UIView+AutoLayoutHelpers.h */,
 				1E1B61011908BC31001046E0 /* UIView+AutoLayoutHelpers.m */,
 				1EAECA5F18EB518B00035BDF /* NSDictionary+Ohmage.h */,
@@ -904,6 +909,7 @@
 				1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */,
 				1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */,
 				1EF693D918EA0F670003E077 /* AFHTTPSessionManager.m in Sources */,
+				1E450F391999B1A60089B05E /* NSURL+QueryDictionary.m in Sources */,
 				1EAECA5918EB3CEF00035BDF /* AFNetworkActivityLogger.m in Sources */,
 				1E1B60F819063392001046E0 /* _OHMSurveyPromptChoice.m in Sources */,
 				1EF693D718EA0F670003E077 /* AFHTTPRequestOperation.m in Sources */,

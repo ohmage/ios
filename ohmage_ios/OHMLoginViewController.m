@@ -14,7 +14,7 @@
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
 
-@interface OHMLoginViewController () <GPPSignInDelegate>
+@interface OHMLoginViewController ()
 
 @property (nonatomic, strong) GPPSignInButton *googleSignInButton;
 @property (nonatomic) BOOL didPressGoogleButton;
@@ -82,14 +82,16 @@
 {
     [super viewDidLoad];
     
-    GPPSignIn *signIn = [GPPSignIn sharedInstance];
-    signIn.shouldFetchGooglePlusUser = YES;
-    signIn.shouldFetchGoogleUserEmail = YES;
-    
-    signIn.clientID = kGoogleClientId;
-    signIn.scopes = @[ @"profile" ];
-    
-    signIn.delegate = self;
+    [[OHMClient sharedClient] gppSignIn]; // make sure shared instance is setup
+    [OHMClient sharedClient].googleSignInCompletionBlock = ^(BOOL success, NSString *errorString) {
+        if (success) {
+            [self dismissRecursive];
+        }
+        else {
+            [self presentLoginError];
+        }
+    };
+
 }
 
 - (void)emailLoginButtonPressed:(id)sender
@@ -125,27 +127,6 @@
         presenter = presenter.presentingViewController;
     }
     [presenter dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-#pragma mark - Google Login Delegate
-
-- (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
-                   error: (NSError *) error
-{
-    if (!error) {
-        [[OHMClient sharedClient] loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
-            if (success) {
-                [self dismissRecursive];
-            }
-            else {
-                [self presentLoginError];
-            }
-        }];
-    }
-    else if (self.didPressGoogleButton) { //don't present error for silent auth failure
-        [self presentLoginError];
-    }
 }
 
 - (void)presentSignInViewController:(UIViewController *)viewController

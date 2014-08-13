@@ -11,6 +11,11 @@
 
 NSString *const kOhmageServerUrlString = @"https://dev.ohmage.org/ohmage";
 NSString *const kGoogleClientId = @"494798802772-jbgdqhjhiodp9m5p1pl4lcrgpobnim7m.apps.googleusercontent.com";
+NSString *const kGoogleLoginUrlScheme = @"org.ohmage.ohmage-ios";
+NSString *const kOhmageUrlScheme = @"ohmage";
+
+NSString *const kOhmletInvitationIdKey = @"ohmlet_invitation_id";
+NSString *const kUserInvitationIdKey = @"user_invitation_id";
 
 CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;
