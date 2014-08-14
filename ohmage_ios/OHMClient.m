@@ -269,13 +269,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self setAuthorizationToken:nil];
     
     NSString *request =  [NSString stringWithFormat:@"people?password=%@", password];
-    NSMutableDictionary *json = [NSMutableDictionary dictionaryWithDictionary:@{@"email": email, @"full_name": name}];
+    NSDictionary *json = @{@"email": email, @"full_name": name};
     
     // add invitation ID if we have an invitation url
     if (self.pendingInvitationURL) {
         NSString *invitationID = self.pendingInvitationURL.uq_queryDictionary[kUserInvitationIdKey];
         if (invitationID != nil) {
-            [json setObject:invitationID forKey:kUserInvitationIdKey];
+            request = [request stringByAppendingFormat:@"&%@=%@", kUserInvitationIdKey, invitationID];
         }
     }
     

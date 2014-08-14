@@ -30,15 +30,7 @@
  */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] initWithOhmletIndex:0];
-    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nav;
-    self.navigationController = nav;
-    
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    [self initializeApplicationState];
     
     if (![[OHMClient sharedClient] hasLoggedInUser]) {
         [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init]
@@ -50,6 +42,7 @@
         // handle reminder notification
         UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
         if (notification != nil) {
+            OHMSurveysViewController *vc = [[(UINavigationController *)self.window.rootViewController viewControllers] firstObject];
             [vc handleSurveyReminderNotification:notification];
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
@@ -114,6 +107,21 @@
     [[OHMReminderManager sharedReminderManager] synchronizeReminders];
 }
 
+/**
+ *  initializeApplicationState
+ */
+- (void)initializeApplicationState {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] initWithOhmletIndex:0];
+    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window.rootViewController = nav;
+    self.navigationController = nav;
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+}
+
 
 #pragma mark - URL Handling
 
@@ -161,6 +169,7 @@
     if (client.hasLoggedInUser) {
         [client logout];
     }
+    [self initializeApplicationState];
     [self.window.rootViewController presentViewController:[[OHMCreateAccountViewController alloc] init]
                                                  animated:NO
                                                completion:nil];
