@@ -9,6 +9,9 @@
 #import "OHMCreateAccountViewController.h"
 #import "NSURL+QueryDictionary.h"
 
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+
 @interface OHMCreateAccountViewController ()
 
 @property (nonatomic, weak) UIView *contentBox;
@@ -17,6 +20,8 @@
 @property (nonatomic, strong) UITextField *passwordTextField;
 @property (nonatomic, strong) UIButton *createAccountButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic, strong) GPPSignInButton *googleSignInButton;
 
 @end
 
@@ -130,6 +135,22 @@
     if (email) {
         self.emailTextField.text = email;
     }
+    
+    GPPSignInButton *googleButton = [[GPPSignInButton alloc] init];
+    googleButton.style = kGPPSignInButtonStyleWide;
+    [self.view addSubview:googleButton];
+    [self.view constrainChildToDefaultHorizontalInsets:googleButton];
+    [googleButton positionBelowElement:self.contentBox margin:kUIViewVerticalMargin];
+    
+    [[OHMClient sharedClient] gppSignIn]; // make sure shared instance is setup
+    [OHMClient sharedClient].googleSignInCompletionBlock = ^(BOOL success, NSString *errorString) {
+        if (success) {
+            [self dismissRecursive];
+        }
+        else {
+            [self presentAccountCreationError:errorString];
+        }
+    };
 }
 
 - (void)dismissRecursive
@@ -141,9 +162,13 @@
     [presenter dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)presentLoginError:(NSString *)errorString
+- (void)presentAccountCreationError:(NSString *)errorString
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Create Account Failed" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Create Account Failed"
+                                                    message:errorString
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     [alert show];
 }
 
@@ -161,7 +186,7 @@
             [UIView animateWithDuration:0.5 animations:^{
                 self.activityIndicator.alpha = 0.0;
             }];
-            [self presentLoginError:errorString];
+            [self presentAccountCreationError:errorString];
         }
     }];
 

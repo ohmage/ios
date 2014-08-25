@@ -31,9 +31,9 @@
 @property (nonatomic, strong) NSURL *pendingInvitationURL;
 @property (nonatomic, strong) GPPSignIn *gppSignIn;
 
-//ohmage://dev.ohmage.org/ohmage/ohmlets/eb1592a3-0bb1-42d6-8fe3-46fb38e24dd0/invitation?ohmlet_invitation_id=9ba4b0e9-1ebd-4159-8a65-9044ed6508c1
-//ohmage://dev.ohmage.org/ohmage/ohmlets/319762c2-8b24-46a9-9a5d-49b797f42b6d/invitation?ohmlet_invitation_id=f978d913-cd18-4654-9d84-1db10d2f8a6f
-//ohmage://dev.ohmage.org/ohmage/ohmlets/beb0bd48-cd9c-49ca-9c12-e751b51dd15b/invitation?user_invitation_id=f95ee405-e64a-4373-9005-350055295a31&email=cforkish%40ccrma.stanford.edu&ohmlet_invitation_id=59b86337-e2c1-48b7-8f74-e543766d7c80
+//http://dev.ohmage.org/ohmage/ohmlets/114ceeab-4476-4e4c-8035-e4f1edf63818/invitation?ohmlet_invitation_id=256ed85f-4177-48d6-b7a9-f8cc159efaee
+
+//http://dev.ohmage.org/ohmage/ohmlets/ad24a132-b4f9-4ba7-bd95-19f318c8d718/invitation?user_invitation_id=b5a12097-1616-487c-b08e-3766dd9668f9&email=forkishsound%40gmail.com&ohmlet_invitation_id=e12b77ff-f6d7-40ff-85af-e68a7e5b99f6
 
 
 // user

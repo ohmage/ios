@@ -341,18 +341,24 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     NSString *ohmletInvitationID = url.uq_queryDictionary[kOhmletInvitationIdKey];
     if (!ohmletInvitationID) return;
     
-    NSLog(@"handle ohmlet url, lastComp: %@\nid: %@\nquery: %@", url.lastPathComponent, ohmletID, url.uq_queryDictionary);
-    
     // make sure auth is current before attempting to join
-    [self refreshLoginWithCompletionBlock:^(BOOL success, NSString *errorString) {
-        NSLog(@"refresh login, success: %d, error: %@, auth: %@", success, errorString, self.authToken);
-        if (success) {
-            [self joinOhmlet:ohmletID withInvitation:ohmletInvitationID];
-        }
-        else if (errorString != nil) {
-            [self presentRequestErrorAlert:errorString];
-        }
-    }];
+    BOOL staleAuth = [self.lastRefresh isBeforeDate:[[NSDate date] dateByAddingTimeInterval:-10]];
+    NSLog(@"handle ohmlet invitation, staleAuth: %d", staleAuth);
+    
+    if (staleAuth) {
+        [self refreshLoginWithCompletionBlock:^(BOOL success, NSString *errorString) {
+            NSLog(@"refresh login, success: %d, error: %@, auth: %@", success, errorString, self.authToken);
+            if (success) {
+                [self joinOhmlet:ohmletID withInvitation:ohmletInvitationID];
+            }
+            else if (errorString != nil) {
+                [self presentRequestErrorAlert:errorString];
+            }
+        }];
+    }
+    else {
+        [self joinOhmlet:ohmletID withInvitation:ohmletInvitationID];
+    }
 
 }
 
@@ -524,11 +530,20 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     NSString *email = auth.parameters[@"email"];
     NSDictionary *json = @{@"email": email, @"full_name": user.displayName};
     
+    // add invitation ID if we have an invitation url
+    if (self.pendingInvitationURL) {
+        NSString *invitationID = self.pendingInvitationURL.uq_queryDictionary[kUserInvitationIdKey];
+        if (invitationID != nil) {
+            request = [request stringByAppendingFormat:@"&%@=%@", kUserInvitationIdKey, invitationID];
+        }
+    }
+    
     [self postRequest:request withParameters:json completionBlock:^(NSDictionary *response, NSError *error) {
-        
+        NSLog(@"create account with google completion, response: %@, error: %@", response, error);
         if (error == nil) {
             // account creation succeeded, setup google user
             [self updateUserWithGoogleAuth:auth userID:response.userID];
+            [self refreshGoogleAuthenticationWithCompletionBlock:self.googleSignInCompletionBlock];
         }
         
         if (completionBlock) {
@@ -546,7 +561,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     GTLPlusPerson *user = self.gppSignIn.googlePlusUser;
     NSString *email = auth.parameters[@"email"];
     
-    NSLog(@"update user with google auth, userID: %@, email: %@, hasLoggedInUser: %d", userID, email, self.hasLoggedInUser);
+    NSLog(@"update user with google auth, hasLoggedInUser: %d", self.hasLoggedInUser);
     
     if (!self.hasLoggedInUser || ![self.user.email isEqualToString:email]) {
         if (userID == nil) userID = email; // temp id
@@ -558,7 +573,6 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     
     // set or clear new account flag
     self.user.isNewAccountValue = [userID isEqualToString:email];
-    NSLog(@"finished updating user with google auth: %@", self.user);
 }
 
 /**
@@ -1449,7 +1463,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     else {
         [self loginWithGoogleAuth:auth completionBlock:^(BOOL success) {
             if (!success) {
-                [self showGoogleLoginFailureAlert];
+//                [self showGoogleLoginFailureAlert];
             }
             if (self.googleSignInCompletionBlock) {
                 self.googleSignInCompletionBlock(success, nil);

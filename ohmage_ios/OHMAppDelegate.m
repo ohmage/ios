@@ -12,6 +12,7 @@
 #import "OHMCreateAccountViewController.h"
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
+#import "OHMUser.h"
 
 #import <GooglePlus/GooglePlus.h>
 
@@ -152,11 +153,20 @@
         return NO;
     }
     
+    OHMClient *client = [OHMClient sharedClient];
+    
     if (url.uq_queryDictionary[kUserInvitationIdKey] != nil) {
-        [self createUserWithInvitationURL:url];
+        if (client.hasLoggedInUser) {
+            if ([url.uq_queryDictionary[@"email"] isEqualToString:client.loggedInUser.email]) {
+                [client handleOhmletInvitationURL:url];
+            }
+            else {
+                [self createUserWithInvitationURL:url];
+            }
+        }
     }
     else {
-        [[OHMClient sharedClient] handleOhmletInvitationURL:url];
+        [client handleOhmletInvitationURL:url];
     }
     
     return YES;
@@ -166,13 +176,24 @@
 {
     OHMClient *client = [OHMClient sharedClient];
     client.pendingInvitationURL = url;
+    
     if (client.hasLoggedInUser) {
-        [client logout];
+        if ([url.uq_queryDictionary[@"email"] isEqualToString:client.loggedInUser.email]) {
+            [client handleOhmletInvitationURL:url];
+            return;
+        }
+        else {
+            [client logout];
+        }
     }
+    
     [self initializeApplicationState];
-    [self.window.rootViewController presentViewController:[[OHMCreateAccountViewController alloc] init]
+    OHMLoginViewController *login = [[OHMLoginViewController alloc] init];
+    OHMCreateAccountViewController *create = [[OHMCreateAccountViewController alloc] init];
+    [self.window.rootViewController presentViewController:login
                                                  animated:NO
                                                completion:nil];
+    [login presentViewController:create animated:NO completion:nil];
 }
 
 @end
