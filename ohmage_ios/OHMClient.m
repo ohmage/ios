@@ -7,7 +7,7 @@
 //
 
 #import "OHMClient.h"
-#import "AFNetworkActivityLogger.h"
+//#import "AFNetworkActivityLogger.h"
 #import "AFNetworkActivityIndicatorManager.h"
 #import "HMFJSONResponseSerializerWithData.h"
 #import "NSURL+QueryDictionary.h"
