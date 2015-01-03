@@ -11,14 +11,14 @@
 #import "OHMSurveyDetailViewController.h"
 #import "OHMSurveyItemViewController.h"
 #import "OHMUserViewController.h"
-#import "OHMClient.h"
+#import "OHMModel.h"
 #import "OHMOhmlet.h"
 #import "OHMSurvey.h"
 #import "OHMReminder.h"
 
-@interface OHMSurveysViewController () <OHMClientDelegate, NSFetchedResultsControllerDelegate>
+@interface OHMSurveysViewController () <OHMModelDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) OHMClient *client;
+@property (nonatomic, strong) OHMModel *client;
 @property (nonatomic, strong) OHMOhmlet *ohmlet;
 @property (nonatomic) NSInteger ohmletIndex;
 
@@ -73,23 +73,23 @@
     NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
     NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
-    self.fetchedResultsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
+    self.fetchedResultsController = [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
                                                                                             sortDescriptors:@[dueDescriptor, indexDescriptor]
                                                                                            predicate:predicate
                                                                                   sectionNameKeyPath:@"isDue"
                                                                                            cacheName:nil];
     self.fetchedResultsController.delegate = self;
     
-    self.client = [OHMClient sharedClient];
+    self.client = [OHMModel sharedModel];
     self.client.delegate = self;
-    [self updateCurrentOhmlet];
+//    [self updateCurrentOhmlet];
     
     [self.tableView registerClass:[OHMSurveyTableViewCell class]
            forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
     
     
     
-    [self setupHeader];
+//    [self setupHeader];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,8 +101,8 @@
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
-    [self setupHeader];
-    [self updateFetchedResultsController];
+//    [self setupHeader];
+//    [self updateFetchedResultsController];
 }
 
 - (void)userButtonPressed:(id)sender
@@ -118,143 +118,9 @@
     [[UIApplication sharedApplication] openURL:url];
 }
 
-
-- (void)setupHeader
-{
-    if (self.client.ohmlets.count < 2) {
-        // only show header if needed for switching ohmlets
-        self.tableView.tableHeaderView = nil;
-        return;
-    }
-    
-    
-    NSString *nameText = nil;
-    NSString *descriptionText = nil;
-    if (self.ohmlet) {
-        nameText = self.ohmlet.ohmletName ? self.ohmlet.ohmletName : self.ohmlet.ohmID;
-        descriptionText = self.ohmlet.ohmletDescription ? self.ohmlet.ohmletDescription : @"...";
-    }
-    else {
-        nameText = @"Loading Data";
-        descriptionText = @"...";
-    }
-    
-    CGFloat contentWidth = self.tableView.bounds.size.width - 2 * kUIViewHorizontalMargin;
-    
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.numberOfPages = MAX([self.client.ohmlets count], 1);
-    pageControl.currentPage = self.ohmletIndex;
-    pageControl.hidesForSinglePage = YES;
-    pageControl.pageIndicatorTintColor = [OHMAppConstants lightOhmageColor];
-    pageControl.currentPageIndicatorTintColor = [OHMAppConstants ohmageColor];
-    [pageControl addTarget:self action:@selector(pageControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [pageControl constrainSize:CGSizeMake(contentWidth, 20)];
-    self.pageControl = pageControl;
-    
-    UILabel *nameLabel = [OHMUserInterface headerTitleLabelWithText:nameText width:contentWidth];
-    self.ohmletNameLabel = nameLabel;
-    
-    UILabel *descriptionLabel = [OHMUserInterface headerDescriptionLabelWithText:descriptionText width:contentWidth];
-    self.ohmletDescriptionLabel = descriptionLabel;
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, [self headerHeight])];
-    
-    [headerView addSubview:nameLabel];
-    [headerView addSubview:descriptionLabel];
-    [headerView addSubview:pageControl];
-    
-    [nameLabel centerHorizontallyInView:headerView];
-    [descriptionLabel centerHorizontallyInView:headerView];
-    [pageControl centerHorizontallyInView:headerView];
-    
-    [pageControl constrainToTopInParentWithMargin:kUIViewSmallTextMargin];
-    [nameLabel positionBelowElement:pageControl margin:kUIViewSmallTextMargin];
-    [descriptionLabel positionBelowElement:nameLabel margin:kUIViewSmallTextMargin];
-    
-    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeRight:)];
-    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(headerDidSwipeLeft:)];
-    leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
-    [headerView addGestureRecognizer:rightSwipe];
-    [headerView addGestureRecognizer:leftSwipe];
-    
-    self.tableView.tableHeaderView = headerView;
-}
-
-- (void)updateCurrentOhmlet
-{
-    if (self.client.ohmlets.count > 0) {
-        self.ohmletIndex = MAX(self.ohmletIndex, MIN(self.client.ohmlets.count - 1, 0) );
-        self.ohmlet = self.client.ohmlets[self.ohmletIndex];
-        __weak __typeof(self) weakSelf = self;
-        self.ohmlet.ohmletUpdatedBlock = ^{
-            [weakSelf setupHeader];
-        };
-    }
-    else {
-        self.ohmletIndex = 0;
-        self.ohmlet = nil;
-    }
-        
-    [self updateFetchedResultsController];
-    [self setupHeader];
-    [self.tableView reloadData];
-}
-
-- (void)updateHeaderAnimated:(BOOL)animated
-{
-    if (self.tableView.tableHeaderView == nil) return;
-    
-    self.pageControl.numberOfPages = [self.client.ohmlets count];
-    self.ohmletNameLabel.text = self.ohmlet.ohmletName;
-    self.ohmletDescriptionLabel.text = self.ohmlet.ohmletDescription;
-}
-
-- (CGFloat)headerHeight
-{
-    CGFloat contentHeight = kUIViewVerticalMargin;
-    contentHeight += self.pageControl.frame.size.height + kUIViewSmallTextMargin;
-    contentHeight += self.ohmletNameLabel.frame.size.height + kUIViewSmallTextMargin;
-    contentHeight += self.ohmletDescriptionLabel.frame.size.height + kUIViewSmallTextMargin;
-    return contentHeight;
-}
-
-- (void)pageControlValueChanged:(id)sender
-{
-    self.ohmletIndex = self.pageControl.currentPage;
-    [self OHMClientDidUpdate:[OHMClient sharedClient]];
-}
-
-- (void)headerDidSwipeRight:(id)sender
-{
-    if (self.pageControl.currentPage > 0) {
-        self.pageControl.currentPage -= 1;
-        [self pageControlValueChanged:self.pageControl];
-    }
-}
-
-- (void)headerDidSwipeLeft:(id)sender
-{
-    if (self.pageControl.currentPage < self.pageControl.numberOfPages) {
-        self.pageControl.currentPage += 1;
-        [self pageControlValueChanged:self.pageControl];
-    }
-}
-
-- (void)updateFetchedResultsController
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@", self.ohmlet];
-    self.fetchedResultsController.fetchRequest.predicate = predicate;
-    
-    NSError *error;
-    BOOL success = [self.fetchedResultsController performFetch:&error];
-    if (!success) {
-        NSLog(@"Error fetching surveys for ohmlet. Error: %@, Ohmlet: %@", [error localizedDescription], self.ohmlet);
-    }
-}
-
 - (void)startSurvey:(OHMSurvey *)survey animated:(BOOL)animated
 {
-    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:survey];
+    OHMSurveyResponse *newResponse = [[OHMModel sharedModel] buildResponseForSurvey:survey];
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:animated];
 }
@@ -262,7 +128,7 @@
 - (void)handleSurveyReminderNotification:(UILocalNotification *)notification
 {
     [self.navigationController popToRootViewControllerAnimated:NO];
-    OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:notification.userInfo.reminderID];
+    OHMReminder *reminder = [[OHMModel sharedModel] reminderWithOhmID:notification.userInfo.reminderID];
     [self startSurvey:reminder.survey animated:NO];
 }
 
@@ -369,9 +235,9 @@
 
 #pragma mark - Client Delegate
 
-- (void)OHMClientDidUpdate:(OHMClient *)client
+- (void)OHMClientDidUpdate:(OHMModel *)client
 {
-    [self updateCurrentOhmlet];
+//    [self updateCurrentOhmlet];
 }
 
 

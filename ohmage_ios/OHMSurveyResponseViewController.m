@@ -76,7 +76,7 @@
 
 - (void)submitButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] submitSurveyResponse:self.response];
+    [[OHMModel sharedModel] submitSurveyResponse:self.response];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

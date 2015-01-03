@@ -8,12 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const kOhmageServerUrlString;
-extern NSString *const kGoogleClientId;
-extern NSString *const kGoogleLoginUrlScheme;
-extern NSString *const kOhmageUrlScheme;
-extern NSString *const kOhmletInvitationIdKey;
-extern NSString *const kUserInvitationIdKey;
+
+extern NSString * const kOhmageGoogleClientID;
+extern NSString * const kOMHServerGoogleClientID;
+extern NSString * const kOhmageDSUClientID;
+extern NSString * const kOhmageDSUClientSecret;
 
 extern CGFloat const kUIViewVerticalMargin;
 extern CGFloat const kUIViewHorizontalMargin;

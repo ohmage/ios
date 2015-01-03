@@ -60,7 +60,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     
     NSPredicate *remindersPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedRemindersController =
-    [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminder entityName]
+    [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMReminder entityName]
                                                              sortKey:@"isLocationReminder"
                                                            predicate:remindersPredicate
                                                   sectionNameKeyPath:nil
@@ -68,7 +68,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
     
     NSPredicate *sureveyResultsPredicate = [NSPredicate predicateWithFormat:@"survey == %@", self.survey];
     self.fetchedSurveyResponsesController =
-    [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName]
+    [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMSurveyResponse entityName]
                                                              sortKey:@"timestamp"
                                                            predicate:sureveyResultsPredicate
                                                   sectionNameKeyPath:nil
@@ -142,7 +142,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 
 - (void)takeSurvey:(id)sender
 {
-    OHMSurveyResponse *newResponse = [[OHMClient sharedClient] buildResponseForSurvey:self.survey];
+    OHMSurveyResponse *newResponse = [[OHMModel sharedModel] buildResponseForSurvey:self.survey];
     OHMSurveyItemViewController *vc = [[OHMSurveyItemViewController alloc] initWithSurveyResponse:newResponse atQuestionIndex:0];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -245,7 +245,7 @@ static const NSInteger kSurveyResponsesSectionIndex = 1;
 {
     OHMReminder *reminder = nil;
     if (row == 0) {
-        reminder = [[OHMClient sharedClient] buildNewReminderForSurvey:self.survey];
+        reminder = [[OHMModel sharedModel] buildNewReminderForSurvey:self.survey];
     }
     else if ([[self.fetchedRemindersController fetchedObjects] count] >= row) {
         reminder = [self.fetchedRemindersController objectAtIndexPath:[NSIndexPath indexPathForRow:row - 1 inSection:0]];

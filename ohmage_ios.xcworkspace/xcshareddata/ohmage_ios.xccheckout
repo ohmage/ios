@@ -14,6 +14,8 @@
 		<string>https://github.com/ohmage/ios.git</string>
 		<key>59BCCFF68011542A051983972F0A0E4EA5C0D708</key>
 		<string>https://github.com/itod/pegkit.git</string>
+		<key>6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C</key>
+		<string>https://github.com/cforkish/OMHClient.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>ohmage_ios.xcworkspace</string>
@@ -23,6 +25,8 @@
 		<string>..</string>
 		<key>59BCCFF68011542A051983972F0A0E4EA5C0D708</key>
 		<string>..external/pegkit</string>
+		<key>6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C</key>
+		<string>../external/OMHClient</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/ohmage/ios.git</string>
@@ -39,6 +43,14 @@
 			<string>32D0EE23FF75A6AAE9A7BD62F74A9F489A24D7EA</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ohmage_ios</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OMHClient</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

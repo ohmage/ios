@@ -9,36 +9,32 @@
 #import "OHMAppDelegate.h"
 #import "OHMSurveysViewController.h"
 #import "OHMLoginViewController.h"
-#import "OHMCreateAccountViewController.h"
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
 #import "OHMUser.h"
 
-#import <GooglePlus/GooglePlus.h>
-
-#import "NSURL+QueryDictionary.h"
+#import "OMHClient.h"
 
 @interface OHMAppDelegate ()
 
+@property (nonatomic, strong) OHMLoginViewController *loginViewController;
 @property (nonatomic, strong) UINavigationController *navigationController;
 
 @end
 
 @implementation OHMAppDelegate
 
-/**
- *  application:didFinishLaunchingWithOptions
- */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [self initializeApplicationState];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    if (![[OHMClient sharedClient] hasLoggedInUser]) {
-        [self.window.rootViewController presentViewController:[[OHMLoginViewController alloc] init]
-                                                     animated:NO
-                                                   completion:nil];
+    [self setupOMHClient];
+    
+    if (![OMHClient sharedClient].isSignedIn) {
+        self.window.rootViewController = self.loginViewController;
     }
     else {
+        self.window.rootViewController = self.navigationController;
         
         // handle reminder notification
         UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -51,9 +47,12 @@
         // start tracking location for reminders and survey response metadata
         if ([CLLocationManager locationServicesEnabled]) {
             OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
-            [appLocationManager.locationManager startUpdatingLocation];
+            [appLocationManager.locationManager startUpdatingLocation]; // TODO: don't track all the time
         }
     }
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -97,7 +96,7 @@
  */
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] saveModelState];
 }
 
 /**
@@ -108,92 +107,53 @@
     [[OHMReminderManager sharedReminderManager] synchronizeReminders];
 }
 
-/**
- *  initializeApplicationState
- */
-- (void)initializeApplicationState {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    OHMSurveysViewController * vc = [[OHMSurveysViewController alloc] initWithOhmletIndex:0];
-    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nav;
-    self.navigationController = nav;
-    
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+- (void)setupOMHClient
+{
+    OMHClient *client = [OMHClient sharedClient];
+    client.appGoogleClientID = kOhmageGoogleClientID;
+    client.serverGoogleClientID = kOMHServerGoogleClientID;
+    client.appDSUClientID = kOhmageDSUClientID;
+    client.appDSUClientSecret = kOhmageDSUClientSecret;
+}
+
+- (OHMLoginViewController *)loginViewController
+{
+    if (_loginViewController == nil) {
+        _loginViewController = [[OHMLoginViewController alloc] init];
+    }
+    return _loginViewController;
+}
+
+- (UINavigationController *)navigationController
+{
+    if (_navigationController == nil) {
+        OHMSurveysViewController *vc = [[OHMSurveysViewController alloc] init];
+        UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
+        _navigationController = navcon;
+    }
+    return _navigationController;
 }
 
 
-#pragma mark - URL Handling
+#pragma mark - Login
 
 - (BOOL)application: (UIApplication *)application
             openURL: (NSURL *)url
   sourceApplication: (NSString *)sourceApplication
-         annotation: (id)annotation
-{
-    
-    NSString *scheme = url.scheme;
-    if ([scheme isEqualToString:kGoogleLoginUrlScheme]) {
-        NSLog(@"handle google login url: %@", url);
-        return [GPPURLHandler handleURL:url
-                      sourceApplication:sourceApplication
-                             annotation:annotation];
-    }
-    else if ([scheme isEqualToString:kOhmageUrlScheme]) {
-        return [self handleOhmageURL:url];
-    }
-    
-    return NO;
+         annotation: (id)annotation {
+    NSLog(@"openURL: %@, source: %@, annotation: %@", url, sourceApplication, annotation);
+    return [[OMHClient sharedClient] handleURL:url
+                             sourceApplication:sourceApplication
+                                    annotation:annotation];
 }
 
-- (BOOL)handleOhmageURL:(NSURL *)url
+- (void)userDidLogin
 {
-    NSLog(@"handle ohmlet invitation url: %@", url);
-    if (![url.lastPathComponent isEqualToString:@"invitation"]) {
-        return NO;
-    }
-    
-    OHMClient *client = [OHMClient sharedClient];
-    
-    if (url.uq_queryDictionary[kUserInvitationIdKey] != nil) {
-        if (client.hasLoggedInUser) {
-            if ([url.uq_queryDictionary[@"email"] isEqualToString:client.loggedInUser.email]) {
-                [client handleOhmletInvitationURL:url];
-            }
-            else {
-                [self createUserWithInvitationURL:url];
-            }
-        }
-    }
-    else {
-        [client handleOhmletInvitationURL:url];
-    }
-    
-    return YES;
-}
-
-- (void)createUserWithInvitationURL:(NSURL *)url
-{
-    OHMClient *client = [OHMClient sharedClient];
-    client.pendingInvitationURL = url;
-    
-    if (client.hasLoggedInUser) {
-        if ([url.uq_queryDictionary[@"email"] isEqualToString:client.loggedInUser.email]) {
-            [client handleOhmletInvitationURL:url];
-            return;
-        }
-        else {
-            [client logout];
-        }
-    }
-    
-    [self initializeApplicationState];
-    OHMLoginViewController *login = [[OHMLoginViewController alloc] init];
-    OHMCreateAccountViewController *create = [[OHMCreateAccountViewController alloc] init];
-    [self.window.rootViewController presentViewController:login
-                                                 animated:NO
-                                               completion:nil];
-    [login presentViewController:create animated:NO completion:nil];
+    UINavigationController *newRoot = self.navigationController;
+    [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+        self.window.rootViewController = newRoot;
+        self.loginViewController = nil;
+    }];
 }
 
 @end

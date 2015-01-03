@@ -41,14 +41,14 @@
 - (void)cancelButtonPressed:(id)sender
 {
     if ([self.location.objectID isTemporaryID]) {
-        [[OHMClient sharedClient] deleteObject:self.location];
+        [[OHMModel sharedModel] deleteObject:self.location];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)saveButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] saveModelState];
     for (UIViewController *vc in self.navigationController.viewControllers) {
         if ([vc isKindOfClass:[OHMReminderViewController class]]) {
             ((OHMReminderViewController *)vc).reminder.reminderLocation = self.location;

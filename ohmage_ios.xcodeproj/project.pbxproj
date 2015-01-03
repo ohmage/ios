@@ -39,11 +39,23 @@
 		1E1B610519099B07001046E0 /* OHMAppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B610419099B07001046E0 /* OHMAppConstants.m */; };
 		1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */; };
 		1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1B610B1909B736001046E0 /* OHMUserInterface.m */; };
+		1E2419EB1A570C80008A9F08 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419CE1A570C80008A9F08 /* AFHTTPRequestOperation.m */; };
+		1E2419EC1A570C80008A9F08 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419D01A570C80008A9F08 /* AFHTTPRequestOperationManager.m */; };
+		1E2419ED1A570C80008A9F08 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419D21A570C80008A9F08 /* AFHTTPSessionManager.m */; };
+		1E2419EE1A570C80008A9F08 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419D41A570C80008A9F08 /* AFNetworkActivityIndicatorManager.m */; };
+		1E2419EF1A570C80008A9F08 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419D71A570C80008A9F08 /* AFNetworkReachabilityManager.m */; };
+		1E2419F01A570C80008A9F08 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419D91A570C80008A9F08 /* AFSecurityPolicy.m */; };
+		1E2419F11A570C80008A9F08 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419DB1A570C80008A9F08 /* AFURLConnectionOperation.m */; };
+		1E2419F21A570C80008A9F08 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419DD1A570C80008A9F08 /* AFURLRequestSerialization.m */; };
+		1E2419F31A570C80008A9F08 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419DF1A570C80008A9F08 /* AFURLResponseSerialization.m */; };
+		1E2419F41A570C80008A9F08 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419E11A570C80008A9F08 /* AFURLSessionManager.m */; };
+		1E2419F61A570C80008A9F08 /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E2419E41A570C80008A9F08 /* GooglePlus.bundle */; };
+		1E2419F81A570C80008A9F08 /* OMHClientDSUConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419E81A570C80008A9F08 /* OMHClientDSUConnector.m */; };
+		1E2419F91A570C80008A9F08 /* OMHDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2419EA1A570C80008A9F08 /* OMHDataPoint.m */; };
 		1E25C07B1922F1BC00655CAA /* OHMRegionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */; };
 		1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80EE191083BB0088D2D0 /* _OHMReminder.m */; };
 		1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C80F1191083DA0088D2D0 /* OHMReminder.m */; };
 		1E450F391999B1A60089B05E /* NSURL+QueryDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E450F381999B1A60089B05E /* NSURL+QueryDictionary.m */; };
-		1E56A3251912D80100384AE9 /* OHMEmailLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */; };
 		1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A327191302F500384AE9 /* OHMBaseViewController.m */; };
 		1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32A191303BC00384AE9 /* OHMViewControllerComposite.m */; };
 		1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56A32E1913043B00384AE9 /* OHMBaseTableViewController.m */; };
@@ -72,7 +84,6 @@
 		1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882585191BF7410034D231 /* NSDate+Ohmage.m */; };
 		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
 		1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */; };
-		1E9081AB1925952A00A0468C /* OHMCreateAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */; };
 		1E9081AD1926834A00A0468C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AC1926834A00A0468C /* AddressBook.framework */; };
 		1E9081AF1926835100A0468C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AE1926835100A0468C /* AssetsLibrary.framework */; };
 		1E9081B11926836600A0468C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B01926836600A0468C /* CoreMotion.framework */; };
@@ -80,10 +91,8 @@
 		1E9081B51926837F00A0468C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B41926837F00A0468C /* MediaPlayer.framework */; };
 		1E9081B71926838A00A0468C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B61926838A00A0468C /* Security.framework */; };
 		1E9081B91926839700A0468C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B81926839700A0468C /* SystemConfiguration.framework */; };
-		1E9081C41926841500A0468C /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081C21926841500A0468C /* GoogleOpenSource.framework */; };
-		1E9081C51926841500A0468C /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081C31926841500A0468C /* GooglePlus.framework */; };
-		1E9081C71926842F00A0468C /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E9081C61926842F00A0468C /* GooglePlus.bundle */; };
-		1E9D07B01975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D07AF1975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.m */; };
+		1EA203D01A584C9600F9C503 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E2419E31A570C80008A9F08 /* GoogleOpenSource.framework */; };
+		1EA203D11A584C9600F9C503 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E2419E51A570C80008A9F08 /* GooglePlus.framework */; };
 		1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7645419118699007768EF /* OHMReminderViewController.m */; };
 		1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA764571912C941007768EF /* OHMLoginViewController.m */; };
 		1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EAD55A418D27B4800B55028 /* MapKit.framework */; };
@@ -92,16 +101,6 @@
 		1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6618EB9C7700035BDF /* OHMObject.m */; };
 		1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */; };
 		1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */; };
-		1EB5A2451A56A47F00E3CD48 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2331A56A47F00E3CD48 /* AFHTTPRequestOperation.m */; };
-		1EB5A2461A56A47F00E3CD48 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2351A56A47F00E3CD48 /* AFHTTPRequestOperationManager.m */; };
-		1EB5A2471A56A47F00E3CD48 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2371A56A47F00E3CD48 /* AFHTTPSessionManager.m */; };
-		1EB5A2481A56A47F00E3CD48 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A23A1A56A47F00E3CD48 /* AFNetworkReachabilityManager.m */; };
-		1EB5A2491A56A47F00E3CD48 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A23C1A56A47F00E3CD48 /* AFSecurityPolicy.m */; };
-		1EB5A24A1A56A47F00E3CD48 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A23E1A56A47F00E3CD48 /* AFURLConnectionOperation.m */; };
-		1EB5A24B1A56A47F00E3CD48 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2401A56A47F00E3CD48 /* AFURLRequestSerialization.m */; };
-		1EB5A24C1A56A47F00E3CD48 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2421A56A47F00E3CD48 /* AFURLResponseSerialization.m */; };
-		1EB5A24D1A56A47F00E3CD48 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2441A56A47F00E3CD48 /* AFURLSessionManager.m */; };
-		1EB5A2541A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5A2531A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.m */; };
 		1ECA87EE190DDE4A00429D5D /* OHMMediaStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ECA87ED190DDE4A00429D5D /* OHMMediaStore.m */; };
 		1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B1C18F4068400C89F91 /* OHMSurveyDetailViewController.m */; };
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
@@ -113,7 +112,7 @@
 		1EF390131921DE9B00CD69BE /* OHMReminderLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF390121921DE9B00CD69BE /* OHMReminderLocationViewController.m */; };
 		1EF390161921E0A600CD69BE /* OHMReminderLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF390151921E0A600CD69BE /* OHMReminderLocation.m */; };
 		1EF390191921E0B500CD69BE /* _OHMReminderLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF390181921E0B500CD69BE /* _OHMReminderLocation.m */; };
-		1EF693E318EA0FE20003E077 /* OHMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693E218EA0FE20003E077 /* OHMClient.m */; };
+		1EF693E318EA0FE20003E077 /* OHMModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF693E218EA0FE20003E077 /* OHMModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +204,35 @@
 		1E1B61081909B3F3001046E0 /* UIColor+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Ohmage.m"; sourceTree = "<group>"; };
 		1E1B610A1909B736001046E0 /* OHMUserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMUserInterface.h; sourceTree = "<group>"; };
 		1E1B610B1909B736001046E0 /* OHMUserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMUserInterface.m; sourceTree = "<group>"; };
+		1E2419CD1A570C80008A9F08 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		1E2419CE1A570C80008A9F08 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		1E2419CF1A570C80008A9F08 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
+		1E2419D01A570C80008A9F08 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
+		1E2419D11A570C80008A9F08 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		1E2419D21A570C80008A9F08 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		1E2419D31A570C80008A9F08 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		1E2419D41A570C80008A9F08 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		1E2419D51A570C80008A9F08 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		1E2419D61A570C80008A9F08 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		1E2419D71A570C80008A9F08 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		1E2419D81A570C80008A9F08 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		1E2419D91A570C80008A9F08 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		1E2419DA1A570C80008A9F08 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		1E2419DB1A570C80008A9F08 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		1E2419DC1A570C80008A9F08 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		1E2419DD1A570C80008A9F08 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		1E2419DE1A570C80008A9F08 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		1E2419DF1A570C80008A9F08 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		1E2419E01A570C80008A9F08 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		1E2419E11A570C80008A9F08 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		1E2419E31A570C80008A9F08 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
+		1E2419E41A570C80008A9F08 /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlus.bundle; sourceTree = "<group>"; };
+		1E2419E51A570C80008A9F08 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
+		1E2419E61A570C80008A9F08 /* OMHClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHClient.h; sourceTree = "<group>"; };
+		1E2419E71A570C80008A9F08 /* OMHClientDSUConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHClientDSUConnector.h; sourceTree = "<group>"; };
+		1E2419E81A570C80008A9F08 /* OMHClientDSUConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHClientDSUConnector.m; sourceTree = "<group>"; };
+		1E2419E91A570C80008A9F08 /* OMHDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHDataPoint.h; sourceTree = "<group>"; };
+		1E2419EA1A570C80008A9F08 /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
 		1E25C0791922F1BC00655CAA /* OHMRegionAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMRegionAnnotationView.h; sourceTree = "<group>"; };
 		1E25C07A1922F1BC00655CAA /* OHMRegionAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMRegionAnnotationView.m; sourceTree = "<group>"; };
 		1E3C80ED191083BB0088D2D0 /* _OHMReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMReminder.h; sourceTree = "<group>"; };
@@ -213,8 +241,6 @@
 		1E3C80F1191083DA0088D2D0 /* OHMReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMReminder.m; path = Model/OHMReminder.m; sourceTree = "<group>"; };
 		1E450F371999B1A60089B05E /* NSURL+QueryDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+QueryDictionary.h"; sourceTree = "<group>"; };
 		1E450F381999B1A60089B05E /* NSURL+QueryDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+QueryDictionary.m"; sourceTree = "<group>"; };
-		1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMEmailLoginViewController.h; sourceTree = "<group>"; };
-		1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMEmailLoginViewController.m; sourceTree = "<group>"; };
 		1E56A326191302F500384AE9 /* OHMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMBaseViewController.h; sourceTree = "<group>"; };
 		1E56A327191302F500384AE9 /* OHMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMBaseViewController.m; sourceTree = "<group>"; };
 		1E56A329191303BC00384AE9 /* OHMViewControllerComposite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMViewControllerComposite.h; sourceTree = "<group>"; };
@@ -263,8 +289,6 @@
 		1E882588191C00370034D231 /* OHMAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMAudioRecorder.m; sourceTree = "<group>"; };
 		1E9081A21925787000A0468C /* OHMManageLocationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMManageLocationsViewController.h; sourceTree = "<group>"; };
 		1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMManageLocationsViewController.m; sourceTree = "<group>"; };
-		1E9081A91925952A00A0468C /* OHMCreateAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMCreateAccountViewController.h; sourceTree = "<group>"; };
-		1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMCreateAccountViewController.m; sourceTree = "<group>"; };
 		1E9081AC1926834A00A0468C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		1E9081AE1926835100A0468C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1E9081B01926836600A0468C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -272,15 +296,6 @@
 		1E9081B41926837F00A0468C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		1E9081B61926838A00A0468C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1E9081B81926839700A0468C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		1E9081BA192683C100A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = "../google-plus-ios-sdk-1.5.1/GoogleOpenSource.framework"; sourceTree = "<group>"; };
-		1E9081BB192683C100A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = "../google-plus-ios-sdk-1.5.1/GooglePlus.framework"; sourceTree = "<group>"; };
-		1E9081BE192683EE00A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = external/GoogleOpenSource.framework; sourceTree = "<group>"; };
-		1E9081BF192683EE00A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = external/GooglePlus.framework; sourceTree = "<group>"; };
-		1E9081C21926841500A0468C /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleOpenSource.framework; path = external/Google/GoogleOpenSource.framework; sourceTree = "<group>"; };
-		1E9081C31926841500A0468C /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = external/Google/GooglePlus.framework; sourceTree = "<group>"; };
-		1E9081C61926842F00A0468C /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = external/Google/GooglePlus.bundle; sourceTree = SOURCE_ROOT; };
-		1E9D07AE1975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HMFJSONResponseSerializerWithData.h; path = "external/HMFJSONResponseSerializerWithData-master/HMFJSONResponseSerializerWithData.h"; sourceTree = SOURCE_ROOT; };
-		1E9D07AF1975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HMFJSONResponseSerializerWithData.m; path = "external/HMFJSONResponseSerializerWithData-master/HMFJSONResponseSerializerWithData.m"; sourceTree = SOURCE_ROOT; };
 		1EA7645319118699007768EF /* OHMReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderViewController.h; sourceTree = "<group>"; };
 		1EA7645419118699007768EF /* OHMReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderViewController.m; sourceTree = "<group>"; };
 		1EA764561912C941007768EF /* OHMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLoginViewController.h; sourceTree = "<group>"; };
@@ -295,27 +310,6 @@
 		1EAECA6918ECB23F00035BDF /* OHMSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveysViewController.m; sourceTree = "<group>"; };
 		1EAECA7118EF508F00035BDF /* OHMSurveyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyTableViewCell.h; sourceTree = "<group>"; };
 		1EAECA7218EF508F00035BDF /* OHMSurveyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyTableViewCell.m; sourceTree = "<group>"; };
-		1EB5A2321A56A47F00E3CD48 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = external/AFNetworking/AFHTTPRequestOperation.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2331A56A47F00E3CD48 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = external/AFNetworking/AFHTTPRequestOperation.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2341A56A47F00E3CD48 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperationManager.h; path = external/AFNetworking/AFHTTPRequestOperationManager.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2351A56A47F00E3CD48 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperationManager.m; path = external/AFNetworking/AFHTTPRequestOperationManager.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2361A56A47F00E3CD48 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPSessionManager.h; path = external/AFNetworking/AFHTTPSessionManager.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2371A56A47F00E3CD48 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPSessionManager.m; path = external/AFNetworking/AFHTTPSessionManager.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2381A56A47F00E3CD48 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworking.h; path = external/AFNetworking/AFNetworking.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2391A56A47F00E3CD48 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = external/AFNetworking/AFNetworkReachabilityManager.h; sourceTree = SOURCE_ROOT; };
-		1EB5A23A1A56A47F00E3CD48 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkReachabilityManager.m; path = external/AFNetworking/AFNetworkReachabilityManager.m; sourceTree = SOURCE_ROOT; };
-		1EB5A23B1A56A47F00E3CD48 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFSecurityPolicy.h; path = external/AFNetworking/AFSecurityPolicy.h; sourceTree = SOURCE_ROOT; };
-		1EB5A23C1A56A47F00E3CD48 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = external/AFNetworking/AFSecurityPolicy.m; sourceTree = SOURCE_ROOT; };
-		1EB5A23D1A56A47F00E3CD48 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = external/AFNetworking/AFURLConnectionOperation.h; sourceTree = SOURCE_ROOT; };
-		1EB5A23E1A56A47F00E3CD48 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = external/AFNetworking/AFURLConnectionOperation.m; sourceTree = SOURCE_ROOT; };
-		1EB5A23F1A56A47F00E3CD48 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLRequestSerialization.h; path = external/AFNetworking/AFURLRequestSerialization.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2401A56A47F00E3CD48 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = external/AFNetworking/AFURLRequestSerialization.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2411A56A47F00E3CD48 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = external/AFNetworking/AFURLResponseSerialization.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2421A56A47F00E3CD48 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = external/AFNetworking/AFURLResponseSerialization.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2431A56A47F00E3CD48 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLSessionManager.h; path = external/AFNetworking/AFURLSessionManager.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2441A56A47F00E3CD48 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = external/AFNetworking/AFURLSessionManager.m; sourceTree = SOURCE_ROOT; };
-		1EB5A2521A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = external/AFNetworking/AFNetworkActivityIndicatorManager.h; sourceTree = SOURCE_ROOT; };
-		1EB5A2531A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = external/AFNetworking/AFNetworkActivityIndicatorManager.m; sourceTree = SOURCE_ROOT; };
 		1ECA87EC190DDE4A00429D5D /* OHMMediaStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMMediaStore.h; sourceTree = "<group>"; };
 		1ECA87ED190DDE4A00429D5D /* OHMMediaStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMMediaStore.m; sourceTree = "<group>"; };
 		1EDA0B1B18F4068400C89F91 /* OHMSurveyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyDetailViewController.h; sourceTree = "<group>"; };
@@ -337,8 +331,8 @@
 		1EF390151921E0A600CD69BE /* OHMReminderLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OHMReminderLocation.m; path = Model/OHMReminderLocation.m; sourceTree = "<group>"; };
 		1EF390171921E0B500CD69BE /* _OHMReminderLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _OHMReminderLocation.h; sourceTree = "<group>"; };
 		1EF390181921E0B500CD69BE /* _OHMReminderLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _OHMReminderLocation.m; sourceTree = "<group>"; };
-		1EF693E118EA0FE20003E077 /* OHMClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMClient.h; sourceTree = "<group>"; };
-		1EF693E218EA0FE20003E077 /* OHMClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMClient.m; sourceTree = "<group>"; };
+		1EF693E118EA0FE20003E077 /* OHMModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMModel.h; sourceTree = "<group>"; };
+		1EF693E218EA0FE20003E077 /* OHMModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -354,9 +348,9 @@
 				1E9081AF1926835100A0468C /* AssetsLibrary.framework in Frameworks */,
 				1E9081AD1926834A00A0468C /* AddressBook.framework in Frameworks */,
 				1E88257A1919C4C90034D231 /* libPEGKitIOS.a in Frameworks */,
+				1EA203D01A584C9600F9C503 /* GoogleOpenSource.framework in Frameworks */,
+				1EA203D11A584C9600F9C503 /* GooglePlus.framework in Frameworks */,
 				1E56A3391913354200384AE9 /* CoreLocation.framework in Frameworks */,
-				1E9081C41926841500A0468C /* GoogleOpenSource.framework in Frameworks */,
-				1E9081C51926841500A0468C /* GooglePlus.framework in Frameworks */,
 				1EAD55A718D27B4F00B55028 /* QuartzCore.framework in Frameworks */,
 				1EAD55A518D27B4800B55028 /* MapKit.framework in Frameworks */,
 				1E70096618CA6F8700203990 /* CoreGraphics.framework in Frameworks */,
@@ -432,6 +426,59 @@
 			name = Application;
 			sourceTree = "<group>";
 		};
+		1E2419CB1A570C80008A9F08 /* OMHClient */ = {
+			isa = PBXGroup;
+			children = (
+				1E2419CC1A570C80008A9F08 /* AFNetworking */,
+				1E2419E21A570C80008A9F08 /* GoogleSDK */,
+				1E2419E61A570C80008A9F08 /* OMHClient.h */,
+				1E2419E71A570C80008A9F08 /* OMHClientDSUConnector.h */,
+				1E2419E81A570C80008A9F08 /* OMHClientDSUConnector.m */,
+				1E2419E91A570C80008A9F08 /* OMHDataPoint.h */,
+				1E2419EA1A570C80008A9F08 /* OMHDataPoint.m */,
+			);
+			name = OMHClient;
+			path = external/OMHClient;
+			sourceTree = SOURCE_ROOT;
+		};
+		1E2419CC1A570C80008A9F08 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				1E2419CD1A570C80008A9F08 /* AFHTTPRequestOperation.h */,
+				1E2419CE1A570C80008A9F08 /* AFHTTPRequestOperation.m */,
+				1E2419CF1A570C80008A9F08 /* AFHTTPRequestOperationManager.h */,
+				1E2419D01A570C80008A9F08 /* AFHTTPRequestOperationManager.m */,
+				1E2419D11A570C80008A9F08 /* AFHTTPSessionManager.h */,
+				1E2419D21A570C80008A9F08 /* AFHTTPSessionManager.m */,
+				1E2419D31A570C80008A9F08 /* AFNetworkActivityIndicatorManager.h */,
+				1E2419D41A570C80008A9F08 /* AFNetworkActivityIndicatorManager.m */,
+				1E2419D51A570C80008A9F08 /* AFNetworking.h */,
+				1E2419D61A570C80008A9F08 /* AFNetworkReachabilityManager.h */,
+				1E2419D71A570C80008A9F08 /* AFNetworkReachabilityManager.m */,
+				1E2419D81A570C80008A9F08 /* AFSecurityPolicy.h */,
+				1E2419D91A570C80008A9F08 /* AFSecurityPolicy.m */,
+				1E2419DA1A570C80008A9F08 /* AFURLConnectionOperation.h */,
+				1E2419DB1A570C80008A9F08 /* AFURLConnectionOperation.m */,
+				1E2419DC1A570C80008A9F08 /* AFURLRequestSerialization.h */,
+				1E2419DD1A570C80008A9F08 /* AFURLRequestSerialization.m */,
+				1E2419DE1A570C80008A9F08 /* AFURLResponseSerialization.h */,
+				1E2419DF1A570C80008A9F08 /* AFURLResponseSerialization.m */,
+				1E2419E01A570C80008A9F08 /* AFURLSessionManager.h */,
+				1E2419E11A570C80008A9F08 /* AFURLSessionManager.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		1E2419E21A570C80008A9F08 /* GoogleSDK */ = {
+			isa = PBXGroup;
+			children = (
+				1E2419E31A570C80008A9F08 /* GoogleOpenSource.framework */,
+				1E2419E41A570C80008A9F08 /* GooglePlus.bundle */,
+				1E2419E51A570C80008A9F08 /* GooglePlus.framework */,
+			);
+			path = GoogleSDK;
+			sourceTree = "<group>";
+		};
 		1E56A3301913065900384AE9 /* Base View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -453,10 +500,6 @@
 				1E56A3331913104D00384AE9 /* OHMUserViewController.m */,
 				1EA764561912C941007768EF /* OHMLoginViewController.h */,
 				1EA764571912C941007768EF /* OHMLoginViewController.m */,
-				1E56A3231912D80100384AE9 /* OHMEmailLoginViewController.h */,
-				1E56A3241912D80100384AE9 /* OHMEmailLoginViewController.m */,
-				1E9081A91925952A00A0468C /* OHMCreateAccountViewController.h */,
-				1E9081AA1925952A00A0468C /* OHMCreateAccountViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -524,12 +567,6 @@
 		1E70096218CA6F8700203990 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1E9081C21926841500A0468C /* GoogleOpenSource.framework */,
-				1E9081C31926841500A0468C /* GooglePlus.framework */,
-				1E9081BE192683EE00A0468C /* GoogleOpenSource.framework */,
-				1E9081BF192683EE00A0468C /* GooglePlus.framework */,
-				1E9081BA192683C100A0468C /* GoogleOpenSource.framework */,
-				1E9081BB192683C100A0468C /* GooglePlus.framework */,
 				1E9081B81926839700A0468C /* SystemConfiguration.framework */,
 				1E9081B61926838A00A0468C /* Security.framework */,
 				1E9081B41926837F00A0468C /* MediaPlayer.framework */,
@@ -553,9 +590,9 @@
 		1E70096918CA6F8700203990 /* ohmage_ios */ = {
 			isa = PBXGroup;
 			children = (
+				1E2419CB1A570C80008A9F08 /* OMHClient */,
 				1E1B610619099B11001046E0 /* Application */,
 				1E1B60FF1908BBF8001046E0 /* Categories */,
-				1EF693C318EA0F670003E077 /* AFNetworking */,
 				1EAD557F18D1567900B55028 /* Shared */,
 				1EDA0B2018F4820100C89F91 /* Model */,
 				1EDA0B2118F4821E00C89F91 /* View Controllers */,
@@ -568,7 +605,6 @@
 		1E70096A18CA6F8700203990 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1E9081C61926842F00A0468C /* GooglePlus.bundle */,
 				1E70096B18CA6F8700203990 /* ohmage_ios-Info.plist */,
 				1E70096C18CA6F8700203990 /* InfoPlist.strings */,
 				1E70096F18CA6F8700203990 /* main.m */,
@@ -634,8 +670,8 @@
 		1EAD557F18D1567900B55028 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				1EF693E118EA0FE20003E077 /* OHMClient.h */,
-				1EF693E218EA0FE20003E077 /* OHMClient.m */,
+				1EF693E118EA0FE20003E077 /* OHMModel.h */,
+				1EF693E218EA0FE20003E077 /* OHMModel.m */,
 				1E1B610A1909B736001046E0 /* OHMUserInterface.h */,
 				1E1B610B1909B736001046E0 /* OHMUserInterface.m */,
 				1EF3900B1921DD3F00CD69BE /* OHMReminderManager.h */,
@@ -680,37 +716,6 @@
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
-		};
-		1EF693C318EA0F670003E077 /* AFNetworking */ = {
-			isa = PBXGroup;
-			children = (
-				1EB5A2321A56A47F00E3CD48 /* AFHTTPRequestOperation.h */,
-				1EB5A2331A56A47F00E3CD48 /* AFHTTPRequestOperation.m */,
-				1EB5A2341A56A47F00E3CD48 /* AFHTTPRequestOperationManager.h */,
-				1EB5A2351A56A47F00E3CD48 /* AFHTTPRequestOperationManager.m */,
-				1EB5A2361A56A47F00E3CD48 /* AFHTTPSessionManager.h */,
-				1EB5A2371A56A47F00E3CD48 /* AFHTTPSessionManager.m */,
-				1EB5A2381A56A47F00E3CD48 /* AFNetworking.h */,
-				1EB5A2391A56A47F00E3CD48 /* AFNetworkReachabilityManager.h */,
-				1EB5A23A1A56A47F00E3CD48 /* AFNetworkReachabilityManager.m */,
-				1EB5A23B1A56A47F00E3CD48 /* AFSecurityPolicy.h */,
-				1EB5A23C1A56A47F00E3CD48 /* AFSecurityPolicy.m */,
-				1EB5A23D1A56A47F00E3CD48 /* AFURLConnectionOperation.h */,
-				1EB5A23E1A56A47F00E3CD48 /* AFURLConnectionOperation.m */,
-				1EB5A23F1A56A47F00E3CD48 /* AFURLRequestSerialization.h */,
-				1EB5A2401A56A47F00E3CD48 /* AFURLRequestSerialization.m */,
-				1EB5A2411A56A47F00E3CD48 /* AFURLResponseSerialization.h */,
-				1EB5A2421A56A47F00E3CD48 /* AFURLResponseSerialization.m */,
-				1EB5A2431A56A47F00E3CD48 /* AFURLSessionManager.h */,
-				1EB5A2441A56A47F00E3CD48 /* AFURLSessionManager.m */,
-				1EB5A2521A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.h */,
-				1EB5A2531A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.m */,
-				1E9D07AE1975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.h */,
-				1E9D07AF1975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.m */,
-			);
-			name = AFNetworking;
-			path = "external/AFNetworking-master/AFNetworking";
-			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -838,7 +843,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E70096E18CA6F8700203990 /* InfoPlist.strings in Resources */,
-				1E9081C71926842F00A0468C /* GooglePlus.bundle in Resources */,
+				1E2419F61A570C80008A9F08 /* GooglePlus.bundle in Resources */,
 				1E70097618CA6F8700203990 /* Images.xcassets in Resources */,
 				1E882580191AE0A80034D231 /* OHMConditionParserGrammer.parsergen in Resources */,
 			);
@@ -878,18 +883,18 @@
 				1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */,
 				1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
-				1EB5A24A1A56A47F00E3CD48 /* AFURLConnectionOperation.m in Sources */,
+				1E2419F11A570C80008A9F08 /* AFURLConnectionOperation.m in Sources */,
 				1E1B60F519063392001046E0 /* _OHMOhmlet.m in Sources */,
 				1E1B60CF19063242001046E0 /* OHMUser.m in Sources */,
 				1EF3900A1921713C00CD69BE /* OHMLocationMapViewController.m in Sources */,
 				1EF390161921E0A600CD69BE /* OHMReminderLocation.m in Sources */,
-				1EB5A2491A56A47F00E3CD48 /* AFSecurityPolicy.m in Sources */,
+				1E2419F01A570C80008A9F08 /* AFSecurityPolicy.m in Sources */,
 				1E88257D1919CC0F0034D231 /* OHMConditionParser.m in Sources */,
+				1E2419ED1A570C80008A9F08 /* AFHTTPSessionManager.m in Sources */,
 				1E882583191AE21E0034D231 /* OHMConditionParserDelegate.m in Sources */,
 				1E5D6DAB1922AB9000991783 /* OHMLocationSearchViewController.m in Sources */,
 				1E1B610519099B07001046E0 /* OHMAppConstants.m in Sources */,
 				1E1B60FA19063392001046E0 /* _OHMSurveyResponse.m in Sources */,
-				1E9D07B01975E5F100EBA3B5 /* HMFJSONResponseSerializerWithData.m in Sources */,
 				1EAECA6A18ECB23F00035BDF /* OHMSurveysViewController.m in Sources */,
 				1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */,
 				1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */,
@@ -898,48 +903,47 @@
 				1E1B60F719063392001046E0 /* _OHMSurveyItem.m in Sources */,
 				1E3C80EF191083BB0088D2D0 /* _OHMReminder.m in Sources */,
 				1EF3900D1921DD3F00CD69BE /* OHMReminderManager.m in Sources */,
-				1EB5A24C1A56A47F00E3CD48 /* AFURLResponseSerialization.m in Sources */,
+				1E2419F31A570C80008A9F08 /* AFURLResponseSerialization.m in Sources */,
 				1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */,
 				1EAECA6118EB518B00035BDF /* NSDictionary+Ohmage.m in Sources */,
 				1EDA0B1E18F4068400C89F91 /* OHMSurveyDetailViewController.m in Sources */,
 				1E1B60CB19063242001046E0 /* OHMSurveyItem.m in Sources */,
-				1EB5A24B1A56A47F00E3CD48 /* AFURLRequestSerialization.m in Sources */,
+				1E2419F21A570C80008A9F08 /* AFURLRequestSerialization.m in Sources */,
 				1EAECA7318EF508F00035BDF /* OHMSurveyTableViewCell.m in Sources */,
 				1EA7645519118699007768EF /* OHMReminderViewController.m in Sources */,
 				1E450F391999B1A60089B05E /* NSURL+QueryDictionary.m in Sources */,
+				1E2419EC1A570C80008A9F08 /* AFHTTPRequestOperationManager.m in Sources */,
 				1E1B60F819063392001046E0 /* _OHMSurveyPromptChoice.m in Sources */,
 				1E1B61021908BC31001046E0 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1B60CD19063242001046E0 /* OHMSurveyPromptResponse.m in Sources */,
 				1E56A341191448E700384AE9 /* OHMSurveyResponseViewController.m in Sources */,
-				1EB5A2471A56A47F00E3CD48 /* AFHTTPSessionManager.m in Sources */,
 				1E56A32F1913043B00384AE9 /* OHMBaseTableViewController.m in Sources */,
 				1E1B60C919063242001046E0 /* OHMOhmlet.m in Sources */,
 				1E25C07B1922F1BC00655CAA /* OHMRegionAnnotationView.m in Sources */,
-				1EB5A2461A56A47F00E3CD48 /* AFHTTPRequestOperationManager.m in Sources */,
 				1EA764581912C941007768EF /* OHMLoginViewController.m in Sources */,
+				1E2419EE1A570C80008A9F08 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				1E1B60F619063392001046E0 /* _OHMSurvey.m in Sources */,
 				1EF390191921E0B500CD69BE /* _OHMReminderLocation.m in Sources */,
+				1E2419F81A570C80008A9F08 /* OMHClientDSUConnector.m in Sources */,
 				1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */,
 				1E56A33C1913643E00384AE9 /* OHMReminderDaysViewController.m in Sources */,
 				1E1B60CC19063242001046E0 /* OHMSurveyPromptChoice.m in Sources */,
 				1E1B60F919063392001046E0 /* _OHMSurveyPromptResponse.m in Sources */,
-				1EF693E318EA0FE20003E077 /* OHMClient.m in Sources */,
+				1E2419EB1A570C80008A9F08 /* AFHTTPRequestOperation.m in Sources */,
+				1EF693E318EA0FE20003E077 /* OHMModel.m in Sources */,
 				1EF390131921DE9B00CD69BE /* OHMReminderLocationViewController.m in Sources */,
-				1EB5A2481A56A47F00E3CD48 /* AFNetworkReachabilityManager.m in Sources */,
 				1E1B60CA19063242001046E0 /* OHMSurvey.m in Sources */,
-				1EB5A2541A56A4D500E3CD48 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				1E2419EF1A570C80008A9F08 /* AFNetworkReachabilityManager.m in Sources */,
 				1EAECA6718EB9C7700035BDF /* OHMObject.m in Sources */,
-				1EB5A24D1A56A47F00E3CD48 /* AFURLSessionManager.m in Sources */,
+				1E2419F41A570C80008A9F08 /* AFURLSessionManager.m in Sources */,
+				1E2419F91A570C80008A9F08 /* OMHDataPoint.m in Sources */,
 				1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */,
 				1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
-				1E56A3251912D80100384AE9 /* OHMEmailLoginViewController.m in Sources */,
 				1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */,
-				1EB5A2451A56A47F00E3CD48 /* AFHTTPRequestOperation.m in Sources */,
 				1E56A32B191303BC00384AE9 /* OHMViewControllerComposite.m in Sources */,
 				1EED8815192557F5004F7C51 /* OHMReminderReentryViewController.m in Sources */,
 				1ECA87EE190DDE4A00429D5D /* OHMMediaStore.m in Sources */,
-				1E9081AB1925952A00A0468C /* OHMCreateAccountViewController.m in Sources */,
 				1E56A3341913104D00384AE9 /* OHMUserViewController.m in Sources */,
 				1E1B610C1909B736001046E0 /* OHMUserInterface.m in Sources */,
 				1E56A337191334EC00384AE9 /* OHMLocationManager.m in Sources */,
@@ -1087,6 +1091,7 @@
 					"$(PROJECT_DIR)/external",
 					"/Users/cforkish/Code/Contracting/ohmage/google-plus-ios-sdk-1.5.1",
 					"$(PROJECT_DIR)/external/Google",
+					"$(PROJECT_DIR)/external/OMHClient/GoogleSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";
@@ -1121,6 +1126,7 @@
 					"$(PROJECT_DIR)/external",
 					"/Users/cforkish/Code/Contracting/ohmage/google-plus-ios-sdk-1.5.1",
 					"$(PROJECT_DIR)/external/Google",
+					"$(PROJECT_DIR)/external/OMHClient/GoogleSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ohmage_ios/ohmage_ios-Prefix.pch";

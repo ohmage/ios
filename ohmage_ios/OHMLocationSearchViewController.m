@@ -98,7 +98,7 @@
         coordinate = mapItem.placemark.coordinate;
     }
     
-    OHMReminderLocation *location = [[OHMClient sharedClient] insertNewReminderLocation];
+    OHMReminderLocation *location = [[OHMModel sharedModel] insertNewReminderLocation];
     location.coordinate = coordinate;
     
     OHMLocationMapViewController *vc = [[OHMLocationMapViewController alloc] initWithLocation:location];

@@ -15,7 +15,7 @@
     #import <Foundation/Foundation.h>
     #import "OHMAppConstants.h"
     #import "OHMObject.h"
-    #import "OHMClient.h"
+    #import "OHMModel.h"
     #import "NSDictionary+Ohmage.h"
     #import "NSDate+Ohmage.h"
     #import "UIView+AutoLayoutHelpers.h"

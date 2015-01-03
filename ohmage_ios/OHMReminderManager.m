@@ -96,7 +96,7 @@
 
 - (void)processFiredLocalNotification:(UILocalNotification *)notification {
     NSString *ohmID = notification.userInfo.reminderID;
-    OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:ohmID];
+    OHMReminder *reminder = [[OHMModel sharedModel] reminderWithOhmID:ohmID];
     reminder.lastFireDate = notification.fireDate;
     [self processFiredReminder:reminder];
 }
@@ -110,7 +110,7 @@
     }
     
     [self updateScheduleForReminder:reminder];
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] saveModelState];
 }
 
 - (void)processArrivalAtLocationForReminder:(OHMReminder *)reminder
@@ -145,7 +145,7 @@
 
 - (void)synchronizeLocationReminders
 {
-    NSArray *locations = [OHMClient sharedClient].reminderLocations;
+    NSArray *locations = [OHMModel sharedModel].reminderLocations;
     NSMutableSet *locationIDs = [NSMutableSet setWithCapacity:locations.count];
     for (OHMReminderLocation *location in locations) {
         [self synchronizeRemindersForLocation:location];
@@ -167,7 +167,7 @@
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
-    NSArray *timeReminders = [[OHMClient sharedClient] timeReminders];
+    NSArray *timeReminders = [[OHMModel sharedModel] timeReminders];
     for (OHMReminder *reminder in timeReminders) {
         if (reminder.nextFireDate != nil && [reminder.nextFireDate isBeforeDate:[NSDate date]]) {
             reminder.lastFireDate = reminder.nextFireDate;
@@ -186,10 +186,10 @@
 - (void)cancelAllNotificationsForLoggedInUser
 {
     UIApplication *application = [UIApplication sharedApplication];
-    OHMUser *user = [[OHMClient sharedClient] loggedInUser];
+    OHMUser *user = [[OHMModel sharedModel] loggedInUser];
     NSArray *scheduledNotifications = [application scheduledLocalNotifications];
     for (UILocalNotification *notification in scheduledNotifications) {
-        OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:notification.userInfo.reminderID];
+        OHMReminder *reminder = [[OHMModel sharedModel] reminderWithOhmID:notification.userInfo.reminderID];
         if (reminder && [reminder.user isEqual:user]) {
             [application cancelLocalNotification:notification];
         }
@@ -207,14 +207,14 @@
     
     [notifications enumerateObjectsUsingBlock:^(UILocalNotification *notification, NSUInteger idx, BOOL *stop) {
         NSString *reminderID = notification.userInfo.reminderID;
-        OHMReminder *reminder = [[OHMClient sharedClient] reminderWithOhmID:reminderID];
+        OHMReminder *reminder = [[OHMModel sharedModel] reminderWithOhmID:reminderID];
         NSDate *fireDate = notification.fireDate;
         NSLog(@"%@", [NSString stringWithFormat:@"%u. %@, %@", idx + 1, reminder.survey.surveyName, [dateFormatter stringFromDate:fireDate]]);
     }];
     
     [[OHMLocationManager sharedLocationManager] debugPrintAllMonitoredRegions];
     
-    NSArray *locations = [[OHMClient sharedClient] reminderLocations];
+    NSArray *locations = [[OHMModel sharedModel] reminderLocations];
     for (OHMReminderLocation *location in locations) {
         NSLog(@"Location: %@ - %@", location.name, location.ohmID);
         for (OHMReminder *reminder in location.reminders) {

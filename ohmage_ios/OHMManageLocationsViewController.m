@@ -26,7 +26,7 @@
     
     self.navigationItem.title = @"Manage";
     
-    self.fetchedLocationsController = [[OHMClient sharedClient] fetchedResultsControllerWithEntityName:[OHMReminderLocation entityName]
+    self.fetchedLocationsController = [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMReminderLocation entityName]
                                                                                                sortKey:@"name"
                                                                                              predicate:nil
                                                                                     sectionNameKeyPath:nil

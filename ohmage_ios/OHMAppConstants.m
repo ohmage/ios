@@ -9,13 +9,10 @@
 #import "OHMAppConstants.h"
 #import "UIColor+Ohmage.h"
 
-NSString *const kOhmageServerUrlString = @"https://dev.ohmage.org/ohmage";
-NSString *const kGoogleClientId = @"494798802772-jbgdqhjhiodp9m5p1pl4lcrgpobnim7m.apps.googleusercontent.com";
-NSString *const kGoogleLoginUrlScheme = @"org.ohmage.ohmage-ios";
-NSString *const kOhmageUrlScheme = @"ohmage";
-
-NSString *const kOhmletInvitationIdKey = @"ohmlet_invitation_id";
-NSString *const kUserInvitationIdKey = @"user_invitation_id";
+NSString * const kOhmageGoogleClientID = @"48636836762-84uv0p5vh2faho7k7fv4230pcgff35d5.apps.googleusercontent.com";
+NSString * const kOMHServerGoogleClientID = @"48636836762-mulldgpmet2r4s3f16s931ea9crcc64m.apps.googleusercontent.com";
+NSString * const kOhmageDSUClientID = @"org.openmhealth.ios.ohmage";
+NSString * const kOhmageDSUClientSecret = @"Rtg43jkLD7z76c";
 
 CGFloat const kUIViewVerticalMargin = 15.0;
 CGFloat const kUIViewHorizontalMargin = 15.0;

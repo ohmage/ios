@@ -126,15 +126,15 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     self.reminder.lastFireDate = nil; // in case it's already fired today
     [[OHMReminderManager sharedReminderManager] updateScheduleForReminder:self.reminder];
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] saveModelState];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)cancelButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] deleteObject:self.reminder];
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] deleteObject:self.reminder];
+    [[OHMModel sharedModel] saveModelState];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -332,7 +332,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 - (void)presentLocationPicker
 {
     UIViewController *vc = nil;
-    NSArray *locations = [[OHMClient sharedClient] reminderLocations];
+    NSArray *locations = [[OHMModel sharedModel] reminderLocations];
     if (locations.count) {
         vc = [[OHMReminderLocationViewController alloc] initWithReminder:self.reminder];
     }

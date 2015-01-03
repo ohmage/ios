@@ -38,7 +38,7 @@ static NSInteger const kSettingsRowCount = 2;
     self.navigationItem.title = @"User Info";
     self.navigationItem.rightBarButtonItem = self.doneButton;
     
-    self.user = [[OHMClient sharedClient] loggedInUser];
+    self.user = [[OHMModel sharedModel] loggedInUser];
     [self setupHeader];
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"survey.surveyName" ascending:YES];
@@ -63,7 +63,7 @@ static NSInteger const kSettingsRowCount = 2;
 
 - (void)logoutButtonPressed:(id)sender
 {
-    [[OHMClient sharedClient] logout];
+    [[OHMModel sharedModel] logout];
     OHMLoginViewController *vc = [[OHMLoginViewController alloc] init];
     [self presentViewController:vc animated:YES completion:nil];
 }
@@ -106,7 +106,7 @@ static NSInteger const kSettingsRowCount = 2;
 
 - (void)confirmationAlertDidConfirm:(UIAlertView *)alert
 {
-    [[OHMClient sharedClient] clearUserData];
+    [[OHMModel sharedModel] clearUserData];
     self.reminders = nil;
     [self.tableView reloadData];
 }
@@ -114,7 +114,7 @@ static NSInteger const kSettingsRowCount = 2;
 - (void)cellularDataSwitchToggled:(id)sender
 {
     self.user.useCellularDataValue = self.cellularDataSwitch.on;
-    [[OHMClient sharedClient] saveClientState];
+    [[OHMModel sharedModel] saveModelState];
 }
 
 

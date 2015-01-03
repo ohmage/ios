@@ -38,6 +38,13 @@
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [self.locationManager setDistanceFilter:20.0f]; //todo: what should this be?
         [self.locationManager setDelegate:self];
+        
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+            if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
+            }
+        }
+        
         [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
         [self setGeocoder:[[CLGeocoder alloc] init]];
@@ -166,7 +173,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)locationManager:(CLLocationManager *)manager
          didEnterRegion:(CLRegion *)region
 {
-    OHMReminderLocation *location = [[OHMClient sharedClient] locationWithOhmID:region.identifier];
+    OHMReminderLocation *location = [[OHMModel sharedModel] locationWithOhmID:region.identifier];
     
     if (location == nil) return;
     
