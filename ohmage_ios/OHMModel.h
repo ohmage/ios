@@ -35,7 +35,7 @@
 - (void)submitSurveyResponse:(OHMSurveyResponse *)response;
 
 // Model
-- (void)fetchSurveys;
+- (void)fetchSurveysWithCompletionBlock:(void (^)())block;
 - (NSArray *)reminders;
 - (NSArray *)timeReminders;
 - (NSArray *)reminderLocations;

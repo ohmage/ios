@@ -232,7 +232,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     NSLog(@"did login");
     // refresh ohmlets
-    [self fetchSurveys];
+    [self fetchSurveysWithCompletionBlock:nil];
     
     // start tracking location for reminders and survey response metadata
     if ([CLLocationManager locationServicesEnabled]) {
@@ -559,18 +559,50 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 #pragma mark - Model (public)
 
-- (void)fetchSurveys
+- (void)fetchSurveysWithCompletionBlock:(void (^)())block
 {
-    NSString *request = @"surveys";
-    [[OMHClient sharedClient] getRequest:request withParameters:nil completionBlock:^(id responseObject, NSError *error) {
-        if (error == nil) {
-            NSLog(@"fetch surveys success: %@", responseObject);
+    [[OMHClient sharedClient] refreshAuthenticationWithCompletionBlock:^(BOOL success) {
+        if (success) {
+            NSString *request = @"surveys";
+            [[OMHClient sharedClient] getRequest:request withParameters:nil completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
+                if (error == nil) {
+                    NSLog(@"fetch surveys success");
+                    [self refreshSurveys:responseObject];
+                }
+                else {
+                    NSLog(@"fetch surveys error: %@", error);
+                }
+            }];
         }
-        else {
-            NSLog(@"fetch surveys error: %@", error);
+        if (block != nil) {
+            block();
         }
     }];
 }
+
+- (void)refreshSurveys:(NSArray *)surveyDefinitions
+{
+    int index = 0;
+    for (NSDictionary *surveyDefinition in surveyDefinitions) {
+        OHMSurvey * survey = [self surveyWithOhmID:[surveyDefinition surveySchemaName] andVersion:1.0];
+        survey.indexValue = index++;
+        if (!survey.isLoadedValue) {
+            [self createSurvey:survey withDefinition:surveyDefinition];
+        }
+    }
+}
+
+- (void)createSurvey:(OHMSurvey *)survey withDefinition:(NSDictionary *)surveyDefinition
+{
+    NSLog(@"creating survey with definition: %@", surveyDefinition);
+    survey.surveyName = [surveyDefinition surveyName];
+    survey.surveyDescription = [surveyDefinition surveyDescription];
+    [self createSurveyItems:[surveyDefinition surveyItems] forSurvey:survey];
+    survey.isLoadedValue = YES;
+    [self saveModelState];
+}
+
+
 
 /**
  *  reminders

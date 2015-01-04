@@ -82,7 +82,7 @@
         return;
     }
     
-    [[OHMModel sharedModel] fetchSurveys];
+    [[OHMModel sharedModel] fetchSurveysWithCompletionBlock:nil];
     
     
     if (self.presentingViewController != nil) {

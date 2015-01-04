@@ -32,23 +32,18 @@
 
 @implementation OHMSurveysViewController
 
-- (instancetype)initWithOhmletIndex:(NSInteger)ohmletIndex
+- (instancetype)init
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    if (self) {
-        self.ohmletIndex = ohmletIndex;
-    }
-    return self;
-}
-
-- (instancetype)initWithStyle:(UITableViewStyle)style
-{
-    return [self init];
+    return [super initWithStyle:UITableViewStyleGrouped];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refreshSurveys) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@""
                                                                        style:UIBarButtonItemStylePlain
@@ -103,6 +98,14 @@
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
 //    [self setupHeader];
 //    [self updateFetchedResultsController];
+}
+
+- (void)refreshSurveys
+{
+    NSLog(@"refresh surveys");
+    [[OHMModel sharedModel] fetchSurveysWithCompletionBlock:^{
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 - (void)userButtonPressed:(id)sender

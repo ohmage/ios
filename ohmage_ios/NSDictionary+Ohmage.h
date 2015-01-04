@@ -30,14 +30,9 @@
 - (NSString *)username;
 - (NSString *)userFullName;
 
-- (NSArray *)ohmlets;
-- (NSString *)ohmletID;
-- (NSString *)ohmletName;
-- (NSString *)ohmletDescription;
-
 - (NSArray *)surveyDefinitions;
-- (NSString *)surveyID;
-- (NSInteger)surveyVersion;
+- (NSString *)surveySchemaName;
+- (NSString *)surveySchemaVersion;
 - (NSString *)surveyName;
 - (NSString *)surveyDescription;
 - (NSArray *)surveyItems;

@@ -76,9 +76,15 @@
     return [self nonNullValueForKey:@"surveys"];
 }
 
-- (NSString *)surveyID
+- (NSString *)surveySchemaName
 {
-    return [self nonNullValueForKey:@"schema_id"];
+    NSDictionary *schemaID = self[@"schema_id"];
+    if (schemaID) {
+        return [self nonNullValueForKey:@"name"];
+    }
+    else {
+        return nil;
+    }
 }
 
 - (NSInteger)surveyVersion

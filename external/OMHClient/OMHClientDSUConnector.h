@@ -31,11 +31,18 @@ sourceApplication:(NSString *)sourceApplication
        annotation:(id)annotation;
 
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-   completionBlock:(void (^)(id responseObject, NSError *error))block;
+   completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
 
 - (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-    completionBlock:(void (^)(id responseObject, NSError *error))block;
+    completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
 
+//- (void)authenticatedGetRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+//                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+//
+//- (void)authenticatedPostRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+//                 completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+
+- (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block;
 - (void)signOut;
 
 - (void)submitDataPoint:(NSDictionary *)dataPoint;

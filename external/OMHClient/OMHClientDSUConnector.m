@@ -9,6 +9,7 @@
 #import "OMHClientDSUConnector.h"
 #import "AFHTTPSessionManager.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import "OMHDataPoint.h"
 
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
@@ -27,6 +28,9 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 @property (nonatomic, assign) NSTimeInterval accessTokenValidDuration;
 
 @property (nonatomic, strong) NSMutableArray *pendingDataPoints;
+
+@property (nonatomic, assign) BOOL isAuthenticated;
+@property (atomic, assign) BOOL isAuthenticating;
 
 @end
 
@@ -60,16 +64,20 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)commonInit
 {
-    //    [self.gppSignIn signOut]; // TODO: remove
+//    if (self.dsuRefreshToken != nil) {
+//        [self refreshAuthentication];
+//    }
+    
+    [self.httpSessionManager.reachabilityManager startMonitoring];
 }
 
 - (instancetype)initPrivate
 {
     self = [super init];
     if (self) {
-        [self commonInit];
         
         self.pendingDataPoints = [NSMutableArray array];
+        [self commonInit];
     }
     return self;
 }
@@ -78,13 +86,14 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 {
     self = [super init];
     if (self != nil) {
+        _appDSUClientID = [decoder decodeObjectForKey:@"client.appDSUClientID"];
+        _appDSUClientSecret = [decoder decodeObjectForKey:@"client.appDSUClientSecret"];
         _dsuAccessToken = [decoder decodeObjectForKey:@"client.dsuAccessToken"];
         _dsuRefreshToken = [decoder decodeObjectForKey:@"client.dsuRefreshToken"];
         _pendingDataPoints = [decoder decodeObjectForKey:@"client.pendingDataPoints"];
-//        if (_pendingDataPoints == nil) _pendingDataPoints = [NSMutableArray array]; // TODO: remove
-        [_pendingDataPoints removeAllObjects];
         _accessTokenDate = [decoder decodeObjectForKey:@"client.accessTokenDate"];
         _accessTokenValidDuration = [decoder decodeDoubleForKey:@"client.accessTokenValidDuration"];
+        [self commonInit];
     }
     
     return self;
@@ -92,6 +101,8 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
+    [encoder encodeObject:self.appDSUClientID forKey:@"client.appDSUClientID"];
+    [encoder encodeObject:self.appDSUClientSecret forKey:@"client.appDSUClientSecret"];
     [encoder encodeObject:self.dsuAccessToken forKey:@"client.dsuAccessToken"];
     [encoder encodeObject:self.dsuRefreshToken forKey:@"client.dsuRefreshToken"];
     [encoder encodeObject:self.pendingDataPoints forKey:@"client.pendingDataPoints"];
@@ -103,7 +114,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)saveClientState
 {
-    NSLog(@"saving client state");
+    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"OMHClient"];
@@ -157,7 +168,6 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
         [_httpSessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             [weakSelf reachabilityStatusDidChange:status];
         }];
-        [_httpSessionManager.reachabilityManager startMonitoring];
         
         // enable network activity indicator
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
@@ -165,38 +175,51 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     return _httpSessionManager;
 }
 
+- (NSInteger)statusCodeFromSessionTask:(NSURLSessionTask *)task
+{
+    NSURLResponse *response = task.response;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        return ((NSHTTPURLResponse *)response).statusCode;
+    }
+    else {
+        return 0;
+    }
+}
+
 - (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-   completionBlock:(void (^)(id responseObject, NSError *error))block
+   completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
 {
     [self.httpSessionManager GET:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         // request succeeded
-        block(responseObject, nil);
+        block(responseObject, nil, [self statusCodeFromSessionTask:task]);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         // request failed
-        block(nil, error);
+        block(nil, error, [self statusCodeFromSessionTask:task]);
     }];
 }
 
 - (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-    completionBlock:(void (^)(id responseObject, NSError *error))block
+    completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
 {
     [self.httpSessionManager POST:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         // request succeeded
-        block(responseObject, nil);
+        block(responseObject, nil, [self statusCodeFromSessionTask:task]);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         // request failed
-        block(nil, error);
+        block(nil, error, [self statusCodeFromSessionTask:task]);
     }];
 }
 
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
 {
+    if (!self.isSignedIn) return;
+    NSLog(@"reachability status changed: %d", (int)status);
     // when network becomes reachable, re-authenticate user
     // and upload any pending survey responses
     if (status > AFNetworkReachabilityStatusNotReachable) {
-        if ([self accessTokenHasExpired]) {
-            [self refreshAuthentication];
+        if ([self accessTokenHasExpired] || !self.isAuthenticated) {
+            [self refreshAuthenticationWithCompletionBlock:nil];
         }
         else {
             [self uploadPendingDataPoints];
@@ -207,6 +230,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 - (void)setDSUSignInHeader
 {
     NSString *token = [self encodedClientIDAndSecret];
+    NSLog(@"setting dsu sign in header with token: %@", token);
     if (token) {
         self.httpSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         NSString *auth = [NSString stringWithFormat:@"Basic %@", token];
@@ -240,24 +264,35 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     return (comp == NSOrderedAscending);
 }
 
-- (void)refreshAuthentication
+- (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block
 {
+    NSLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
+    if (self.isAuthenticating || self.dsuRefreshToken == nil) return;
+    
+    self.isAuthenticating = YES;
     [self setDSUSignInHeader];
     
     NSString *request = @"oauth/token";
     NSDictionary *parameters = @{@"refresh_token" : self.dsuRefreshToken,
                                  @"grant_type" : @"refresh_token"};
     
-    [self postRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error) {
+    [self postRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
             NSLog(@"refresh authentication success: %@", responseObject);
             
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
-            [self uploadPendingDataPoints];
+            self.isAuthenticated = YES;
         }
         else {
             NSLog(@"refresh authentiation failed: %@", error);
+            self.isAuthenticated = NO;
+        }
+        
+        self.isAuthenticating = NO;
+        
+        if (block != nil) {
+            block(error == nil);
         }
     }];
 }
@@ -265,9 +300,12 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 - (void)submitDataPoint:(NSDictionary *)dataPoint
 {
     [self.pendingDataPoints addObject:dataPoint];
+    [self saveClientState];
     
-    if ([self accessTokenHasExpired]) {
-        [self refreshAuthentication];
+    if (self.isAuthenticating) return;
+    
+    if ([self accessTokenHasExpired] || !self.isAuthenticated) {
+        [self refreshAuthenticationWithCompletionBlock:nil];
     }
     else {
         [self uploadDataPoint:dataPoint];
@@ -276,7 +314,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)uploadPendingDataPoints
 {
-    NSLog(@"uploading pending data points: %d", (int)self.pendingDataPoints.count);
+//    NSLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
     
     for (NSDictionary *dataPoint in self.pendingDataPoints) {
         [self uploadDataPoint:dataPoint];
@@ -285,18 +323,25 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)uploadDataPoint:(NSDictionary *)dataPoint
 {
-    NSLog(@"uploading data point: %@", dataPoint);
+//    NSLog(@"uploading data point: %@, isAuthenticating: %d", dataPoint[@"header"][@"id"], self.isAuthenticating);
     
     NSString *request = @"dataPoints";
     
-    [self postRequest:request withParameters:dataPoint completionBlock:^(id responseObject, NSError *error) {
+    __block NSDictionary *blockDataPoint = dataPoint;
+    [self postRequest:request withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-            NSLog(@"upload data point succeeded: %@", responseObject);
-            NSLog(@"array contains data point: %d", [self.pendingDataPoints containsObject:dataPoint]);
+            NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
             [self.pendingDataPoints removeObject:dataPoint];
+            [self saveClientState];
         }
         else {
-            NSLog(@"upload data point failed: %@", error);
+            NSLog(@"upload data point failed: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
+            if (statusCode == 409) {
+                NSLog(@"removing conflicting data point, is pending: %d", [self.pendingDataPoints containsObject:blockDataPoint]);
+                // conflict, data point already uploaded
+                [self.pendingDataPoints removeObject:blockDataPoint];
+                [self saveClientState];
+            }
         }
     }];
 }
@@ -356,11 +401,14 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     NSString *code = [NSString stringWithFormat:@"fromApp_%@", serverCode];
     NSDictionary *parameters = @{@"code": code, @"client_id" : self.appDSUClientID};
     
-    [self getRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error) {
+    self.isAuthenticating = YES;
+    [self getRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
             NSLog(@"DSU login success, response object: %@", responseObject);
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
+            self.isAuthenticated = YES;
+            self.isAuthenticating = NO;
             
             if (self.signInDelegate != nil) {
                 [self.signInDelegate OMHClientSignInFinishedWithError:nil];
@@ -368,6 +416,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
         }
         else {
             NSLog(@"DSU login failure, error: %@", error);
+            self.isAuthenticating = NO;
             
             if (self.signInDelegate != nil) {
                 [self.signInDelegate OMHClientSignInFinishedWithError:error];
@@ -385,12 +434,14 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)signOut
 {
+    NSLog(@"sign out");
     [self.gppSignIn signOut];
     
     self.dsuAccessToken = nil;
     self.dsuRefreshToken = nil;
     self.accessTokenDate = nil;
     self.accessTokenValidDuration = 0;
+    [self saveClientState];
 }
 
 @end
