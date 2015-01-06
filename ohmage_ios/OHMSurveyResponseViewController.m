@@ -152,6 +152,7 @@
     }
     
     cell.detailTextLabel.text = [self detailTextForPromptResponse:promptResponse];
+    cell.detailTextLabel.textColor = [OHMAppConstants colorForSurveyIndex:self.response.survey.indexValue];
     
     return cell;
 }

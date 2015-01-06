@@ -6,19 +6,16 @@
 const struct OHMSurveyPromptResponseAttributes OHMSurveyPromptResponseAttributes = {
 	.notDisplayed = @"notDisplayed",
 	.numberValue = @"numberValue",
-	.ohmID = @"ohmID",
 	.skipped = @"skipped",
 	.stringValue = @"stringValue",
 	.timestampValue = @"timestampValue",
+	.uuid = @"uuid",
 };
 
 const struct OHMSurveyPromptResponseRelationships OHMSurveyPromptResponseRelationships = {
 	.selectedChoices = @"selectedChoices",
 	.surveyItem = @"surveyItem",
 	.surveyResponse = @"surveyResponse",
-};
-
-const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFetchedProperties = {
 };
 
 @implementation OHMSurveyPromptResponseID
@@ -46,7 +43,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"notDisplayedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"notDisplayed"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -66,12 +63,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 	return keyPaths;
 }
 
-
-
-
 @dynamic notDisplayed;
-
-
 
 - (BOOL)notDisplayedValue {
 	NSNumber *result = [self notDisplayed];
@@ -79,7 +71,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setNotDisplayedValue:(BOOL)value_ {
-	[self setNotDisplayed:[NSNumber numberWithBool:value_]];
+	[self setNotDisplayed:@(value_)];
 }
 
 - (BOOL)primitiveNotDisplayedValue {
@@ -88,16 +80,10 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setPrimitiveNotDisplayedValue:(BOOL)value_ {
-	[self setPrimitiveNotDisplayed:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveNotDisplayed:@(value_)];
 }
 
-
-
-
-
 @dynamic numberValue;
-
-
 
 - (double)numberValueValue {
 	NSNumber *result = [self numberValue];
@@ -105,7 +91,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setNumberValueValue:(double)value_ {
-	[self setNumberValue:[NSNumber numberWithDouble:value_]];
+	[self setNumberValue:@(value_)];
 }
 
 - (double)primitiveNumberValueValue {
@@ -114,23 +100,10 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setPrimitiveNumberValueValue:(double)value_ {
-	[self setPrimitiveNumberValue:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveNumberValue:@(value_)];
 }
 
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
-
 @dynamic skipped;
-
-
 
 - (BOOL)skippedValue {
 	NSNumber *result = [self skipped];
@@ -138,7 +111,7 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setSkippedValue:(BOOL)value_ {
-	[self setSkipped:[NSNumber numberWithBool:value_]];
+	[self setSkipped:@(value_)];
 }
 
 - (BOOL)primitiveSkippedValue {
@@ -147,51 +120,29 @@ const struct OHMSurveyPromptResponseFetchedProperties OHMSurveyPromptResponseFet
 }
 
 - (void)setPrimitiveSkippedValue:(BOOL)value_ {
-	[self setPrimitiveSkipped:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveSkipped:@(value_)];
 }
-
-
-
-
 
 @dynamic stringValue;
 
-
-
-
-
-
 @dynamic timestampValue;
 
-
-
-
-
+@dynamic uuid;
 
 @dynamic selectedChoices;
 
-	
 - (NSMutableSet*)selectedChoicesSet {
 	[self willAccessValueForKey:@"selectedChoices"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"selectedChoices"];
-  
+
 	[self didAccessValueForKey:@"selectedChoices"];
 	return result;
 }
-	
 
 @dynamic surveyItem;
 
-	
-
 @dynamic surveyResponse;
 
-	
-
-
-
-
-
-
 @end
+

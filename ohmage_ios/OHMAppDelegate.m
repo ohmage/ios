@@ -11,7 +11,6 @@
 #import "OHMLoginViewController.h"
 #import "OHMReminderManager.h"
 #import "OHMLocationManager.h"
-#import "OHMUser.h"
 
 #import "OMHClient.h"
 

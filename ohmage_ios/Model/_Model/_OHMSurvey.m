@@ -6,21 +6,16 @@
 const struct OHMSurveyAttributes OHMSurveyAttributes = {
 	.index = @"index",
 	.isDue = @"isDue",
-	.isLoaded = @"isLoaded",
-	.ohmID = @"ohmID",
+	.schemaName = @"schemaName",
+	.schemaVersion = @"schemaVersion",
 	.surveyDescription = @"surveyDescription",
 	.surveyName = @"surveyName",
-	.surveyVersion = @"surveyVersion",
 };
 
 const struct OHMSurveyRelationships OHMSurveyRelationships = {
-	.ohmlet = @"ohmlet",
 	.reminders = @"reminders",
 	.surveyItems = @"surveyItems",
 	.surveyResponses = @"surveyResponses",
-};
-
-const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 };
 
 @implementation OHMSurveyID
@@ -48,7 +43,7 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"indexValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"index"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -59,26 +54,11 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"isLoadedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"isLoaded"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"surveyVersionValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"surveyVersion"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic index;
-
-
 
 - (int16_t)indexValue {
 	NSNumber *result = [self index];
@@ -86,7 +66,7 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 }
 
 - (void)setIndexValue:(int16_t)value_ {
-	[self setIndex:[NSNumber numberWithShort:value_]];
+	[self setIndex:@(value_)];
 }
 
 - (int16_t)primitiveIndexValue {
@@ -95,16 +75,10 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 }
 
 - (void)setPrimitiveIndexValue:(int16_t)value_ {
-	[self setPrimitiveIndex:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveIndex:@(value_)];
 }
 
-
-
-
-
 @dynamic isDue;
-
-
 
 - (BOOL)isDueValue {
 	NSNumber *result = [self isDue];
@@ -112,7 +86,7 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 }
 
 - (void)setIsDueValue:(BOOL)value_ {
-	[self setIsDue:[NSNumber numberWithBool:value_]];
+	[self setIsDue:@(value_)];
 }
 
 - (BOOL)primitiveIsDueValue {
@@ -121,132 +95,109 @@ const struct OHMSurveyFetchedProperties OHMSurveyFetchedProperties = {
 }
 
 - (void)setPrimitiveIsDueValue:(BOOL)value_ {
-	[self setPrimitiveIsDue:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveIsDue:@(value_)];
 }
 
+@dynamic schemaName;
 
-
-
-
-@dynamic isLoaded;
-
-
-
-- (BOOL)isLoadedValue {
-	NSNumber *result = [self isLoaded];
-	return [result boolValue];
-}
-
-- (void)setIsLoadedValue:(BOOL)value_ {
-	[self setIsLoaded:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveIsLoadedValue {
-	NSNumber *result = [self primitiveIsLoaded];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveIsLoadedValue:(BOOL)value_ {
-	[self setPrimitiveIsLoaded:[NSNumber numberWithBool:value_]];
-}
-
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
+@dynamic schemaVersion;
 
 @dynamic surveyDescription;
 
-
-
-
-
-
 @dynamic surveyName;
-
-
-
-
-
-
-@dynamic surveyVersion;
-
-
-
-- (int16_t)surveyVersionValue {
-	NSNumber *result = [self surveyVersion];
-	return [result shortValue];
-}
-
-- (void)setSurveyVersionValue:(int16_t)value_ {
-	[self setSurveyVersion:[NSNumber numberWithShort:value_]];
-}
-
-- (int16_t)primitiveSurveyVersionValue {
-	NSNumber *result = [self primitiveSurveyVersion];
-	return [result shortValue];
-}
-
-- (void)setPrimitiveSurveyVersionValue:(int16_t)value_ {
-	[self setPrimitiveSurveyVersion:[NSNumber numberWithShort:value_]];
-}
-
-
-
-
-
-@dynamic ohmlet;
-
-	
 
 @dynamic reminders;
 
-	
 - (NSMutableSet*)remindersSet {
 	[self willAccessValueForKey:@"reminders"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
-  
+
 	[self didAccessValueForKey:@"reminders"];
 	return result;
 }
-	
 
 @dynamic surveyItems;
 
-	
 - (NSMutableOrderedSet*)surveyItemsSet {
 	[self willAccessValueForKey:@"surveyItems"];
-  
+
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"surveyItems"];
-  
+
 	[self didAccessValueForKey:@"surveyItems"];
 	return result;
 }
-	
 
 @dynamic surveyResponses;
 
-	
 - (NSMutableSet*)surveyResponsesSet {
 	[self willAccessValueForKey:@"surveyResponses"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"surveyResponses"];
-  
+
 	[self didAccessValueForKey:@"surveyResponses"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
+@implementation _OHMSurvey (SurveyItemsCoreDataGeneratedAccessors)
+- (void)addSurveyItems:(NSOrderedSet*)value_ {
+	[self.surveyItemsSet unionOrderedSet:value_];
+}
+- (void)removeSurveyItems:(NSOrderedSet*)value_ {
+	[self.surveyItemsSet minusOrderedSet:value_];
+}
+- (void)addSurveyItemsObject:(OHMSurveyItem*)value_ {
+	[self.surveyItemsSet addObject:value_];
+}
+- (void)removeSurveyItemsObject:(OHMSurveyItem*)value_ {
+	[self.surveyItemsSet removeObject:value_];
+}
+- (void)insertObject:(OHMSurveyItem*)value inSurveyItemsAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet insertObject:value atIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+- (void)removeObjectFromSurveyItemsAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+- (void)insertSurveyItems:(NSArray *)value atIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet insertObjects:value atIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+- (void)removeSurveyItemsAtIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+- (void)replaceObjectInSurveyItemsAtIndex:(NSUInteger)idx withObject:(OHMSurveyItem*)value {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+- (void)replaceSurveyItemsAtIndexes:(NSIndexSet *)indexes withSurveyItems:(NSArray *)value {
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"surveyItems"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self surveyItems]];
+    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"surveyItems"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"surveyItems"];
+}
+@end
+

@@ -15,11 +15,7 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
-    
-    // Create an NSUUID object - and get its string representation
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString *key = [uuid UUIDString];
-    self.ohmID = key;
+    self.uuid = [[[NSUUID alloc] init] UUIDString];
 
     self.radiusValue = kDefaultLocationRadius;
     self.name = @"New Location";
@@ -65,7 +61,7 @@
 - (CLRegion *)region
 {
     if (_region == nil) {
-        _region = [[CLCircularRegion alloc] initWithCenter:self.coordinate radius:self.radiusValue identifier:self.ohmID];
+        _region = [[CLCircularRegion alloc] initWithCenter:self.coordinate radius:self.radiusValue identifier:self.uuid];
     }
     return _region;
 }

@@ -4,6 +4,8 @@
 #import "OHMSurveyPromptResponse.h"
 #import "OHMConditionParserDelegate.h"
 
+#import "OMHDataPoint.h"
+
 
 @interface OHMSurveyResponse ()
 
@@ -15,17 +17,13 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
-    
-    // Create an NSUUID object - and get its string representation
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString *key = [uuid UUIDString];
-    self.ohmID = key;
+    self.uuid = [[[NSUUID alloc] init] UUIDString];
 }
 
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID
 {
     for (OHMSurveyPromptResponse *response in self.promptResponses) {
-        if ([response.surveyItem.ohmID isEqualToString:itemID]) {
+        if ([response.surveyItem.itemID isEqualToString:itemID]) {
             return response;
         }
     }
@@ -46,11 +44,9 @@
     return [conditionDelegate evaluateConditionString:condition];
 }
 
-- (NSDictionary *)JSON
+- (NSDictionary *)dataPointBody
 {
-    NSMutableDictionary *metadata = [NSMutableDictionary dictionary];
-    metadata.surveyResponseID = self.ohmID;
-    metadata.surveyResponseTimestamp = self.timestamp.ISO8601String;
+    NSMutableDictionary *body = [NSMutableDictionary dictionary];
     
     if (self.locTimestamp != nil) {
         NSMutableDictionary *location = [NSMutableDictionary dictionary];
@@ -58,26 +54,56 @@
         location.surveyResponseLongitude = self.locLongitude;
         location.surveyResponseLocationAccuracy = self.locAccuracy;
         location.surveyResponseLocationTimestamp = @([self.locTimestamp timeIntervalSince1970]);
-        metadata.surveyResponseMetadataLocation = location;
+        body.surveyResponseMetadataLocation = location;
     }
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     [self.promptResponses enumerateObjectsUsingBlock:^(OHMSurveyPromptResponse *promptResponse, NSUInteger idx, BOOL *stop) {
         id val = [promptResponse jsonVal];
         if (val) {
-            data[promptResponse.surveyItem.ohmID] = (NSArray *)val;
+            data[promptResponse.surveyItem.itemID] = (NSArray *)val;
         }
     }];
     
-    NSMutableDictionary *json = [NSMutableDictionary dictionary];
-    json.surveyResponseMetadata = metadata;
-    json.surveyResponseData = data;
-    return json;
+    body.surveyResponseData = data;
+    return body;
+}
+
+- (NSDictionary *)dataPoint
+{
+    OMHDataPoint *dataPoint = [OMHDataPoint templateDataPoint];
+    dataPoint.header.schemaID = [self schemaID];
+    dataPoint.header.acquisitionProvenance = [OHMSurveyResponse acquisitionProvenance];
+    dataPoint.header.headerID = self.uuid;
+    dataPoint.header.creationDateTime = self.timestamp;
+    dataPoint.body = [self dataPointBody];
+    return dataPoint;
+
+}
+
+- (OMHSchemaID *)schemaID
+{
+    OMHSchemaID *schemdaID = [[OMHSchemaID alloc] init];
+    schemdaID.schemaNamespace = @"ohmage";
+    schemdaID.name = self.survey.schemaName;
+    schemdaID.version = self.survey.schemaVersion;
+    return schemdaID;
+}
+
++ (OMHAcquisitionProvenance *)acquisitionProvenance
+{
+    static OMHAcquisitionProvenance *sProvenance = nil;
+    if (!sProvenance) {
+        sProvenance = [[OMHAcquisitionProvenance alloc] init];
+        sProvenance.sourceName = @"Ohmage-iOS-1.0";
+        sProvenance.modality = OMHAcquisitionProvenanceModalitySelfReported;
+    }
+    return sProvenance;
 }
 
 - (NSString *)uploadRequestUrlString
 {
-    return [NSString stringWithFormat:@"surveys/%@/%d/data", self.survey.ohmID, self.survey.surveyVersionValue];
+    return [NSString stringWithFormat:@"surveys/%@/%@/data", self.survey.schemaName, self.survey.schemaVersion];
 }
 
 - (NSURL *)tempFileURL
@@ -87,7 +113,7 @@
                                         YES);
     
     NSString *cacheDirectory = [cacheDirectories firstObject];
-    NSString *filePath = [cacheDirectory stringByAppendingPathComponent:self.ohmID];
+    NSString *filePath = [cacheDirectory stringByAppendingPathComponent:self.uuid];
     return [NSURL fileURLWithPath:filePath];
 }
 

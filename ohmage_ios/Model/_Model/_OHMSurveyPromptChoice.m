@@ -15,9 +15,6 @@ const struct OHMSurveyPromptChoiceRelationships OHMSurveyPromptChoiceRelationshi
 	.surveyItem = @"surveyItem",
 };
 
-const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetchedProperties = {
-};
-
 @implementation OHMSurveyPromptChoiceID
 @end
 
@@ -43,7 +40,7 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"isDefaultValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"isDefault"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -58,12 +55,7 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 	return keyPaths;
 }
 
-
-
-
 @dynamic isDefault;
-
-
 
 - (BOOL)isDefaultValue {
 	NSNumber *result = [self isDefault];
@@ -71,7 +63,7 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 }
 
 - (void)setIsDefaultValue:(BOOL)value_ {
-	[self setIsDefault:[NSNumber numberWithBool:value_]];
+	[self setIsDefault:@(value_)];
 }
 
 - (BOOL)primitiveIsDefaultValue {
@@ -80,16 +72,10 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 }
 
 - (void)setPrimitiveIsDefaultValue:(BOOL)value_ {
-	[self setPrimitiveIsDefault:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveIsDefault:@(value_)];
 }
 
-
-
-
-
 @dynamic numberValue;
-
-
 
 - (double)numberValueValue {
 	NSNumber *result = [self numberValue];
@@ -97,7 +83,7 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 }
 
 - (void)setNumberValueValue:(double)value_ {
-	[self setNumberValue:[NSNumber numberWithDouble:value_]];
+	[self setNumberValue:@(value_)];
 }
 
 - (double)primitiveNumberValueValue {
@@ -106,47 +92,25 @@ const struct OHMSurveyPromptChoiceFetchedProperties OHMSurveyPromptChoiceFetched
 }
 
 - (void)setPrimitiveNumberValueValue:(double)value_ {
-	[self setPrimitiveNumberValue:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveNumberValue:@(value_)];
 }
-
-
-
-
 
 @dynamic stringValue;
 
-
-
-
-
-
 @dynamic text;
-
-
-
-
-
 
 @dynamic promptResponses;
 
-	
 - (NSMutableSet*)promptResponsesSet {
 	[self willAccessValueForKey:@"promptResponses"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"promptResponses"];
-  
+
 	[self didAccessValueForKey:@"promptResponses"];
 	return result;
 }
-	
 
 @dynamic surveyItem;
 
-	
-
-
-
-
-
-
 @end
+

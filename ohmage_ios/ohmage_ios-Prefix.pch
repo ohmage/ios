@@ -14,7 +14,6 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "OHMAppConstants.h"
-    #import "OHMObject.h"
     #import "OHMModel.h"
     #import "NSDictionary+Ohmage.h"
     #import "NSDate+Ohmage.h"

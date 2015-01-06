@@ -8,17 +8,14 @@ const struct OHMReminderLocationAttributes OHMReminderLocationAttributes = {
 	.latitude = @"latitude",
 	.longitude = @"longitude",
 	.name = @"name",
-	.ohmID = @"ohmID",
 	.radius = @"radius",
 	.streetAddress = @"streetAddress",
+	.uuid = @"uuid",
 };
 
 const struct OHMReminderLocationRelationships OHMReminderLocationRelationships = {
 	.reminders = @"reminders",
 	.user = @"user",
-};
-
-const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProperties = {
 };
 
 @implementation OHMReminderLocationID
@@ -46,7 +43,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"hasCustomNameValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"hasCustomName"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -71,12 +68,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 	return keyPaths;
 }
 
-
-
-
 @dynamic hasCustomName;
-
-
 
 - (BOOL)hasCustomNameValue {
 	NSNumber *result = [self hasCustomName];
@@ -84,7 +76,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setHasCustomNameValue:(BOOL)value_ {
-	[self setHasCustomName:[NSNumber numberWithBool:value_]];
+	[self setHasCustomName:@(value_)];
 }
 
 - (BOOL)primitiveHasCustomNameValue {
@@ -93,16 +85,10 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setPrimitiveHasCustomNameValue:(BOOL)value_ {
-	[self setPrimitiveHasCustomName:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveHasCustomName:@(value_)];
 }
 
-
-
-
-
 @dynamic latitude;
-
-
 
 - (double)latitudeValue {
 	NSNumber *result = [self latitude];
@@ -110,7 +96,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setLatitudeValue:(double)value_ {
-	[self setLatitude:[NSNumber numberWithDouble:value_]];
+	[self setLatitude:@(value_)];
 }
 
 - (double)primitiveLatitudeValue {
@@ -119,16 +105,10 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setPrimitiveLatitudeValue:(double)value_ {
-	[self setPrimitiveLatitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveLatitude:@(value_)];
 }
 
-
-
-
-
 @dynamic longitude;
-
-
 
 - (double)longitudeValue {
 	NSNumber *result = [self longitude];
@@ -136,7 +116,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setLongitudeValue:(double)value_ {
-	[self setLongitude:[NSNumber numberWithDouble:value_]];
+	[self setLongitude:@(value_)];
 }
 
 - (double)primitiveLongitudeValue {
@@ -145,30 +125,12 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setPrimitiveLongitudeValue:(double)value_ {
-	[self setPrimitiveLongitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveLongitude:@(value_)];
 }
-
-
-
-
 
 @dynamic name;
 
-
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
-
 @dynamic radius;
-
-
 
 - (float)radiusValue {
 	NSNumber *result = [self radius];
@@ -176,7 +138,7 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setRadiusValue:(float)value_ {
-	[self setRadius:[NSNumber numberWithFloat:value_]];
+	[self setRadius:@(value_)];
 }
 
 - (float)primitiveRadiusValue {
@@ -185,40 +147,25 @@ const struct OHMReminderLocationFetchedProperties OHMReminderLocationFetchedProp
 }
 
 - (void)setPrimitiveRadiusValue:(float)value_ {
-	[self setPrimitiveRadius:[NSNumber numberWithFloat:value_]];
+	[self setPrimitiveRadius:@(value_)];
 }
-
-
-
-
 
 @dynamic streetAddress;
 
-
-
-
-
+@dynamic uuid;
 
 @dynamic reminders;
 
-	
 - (NSMutableSet*)remindersSet {
 	[self willAccessValueForKey:@"reminders"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"reminders"];
-  
+
 	[self didAccessValueForKey:@"reminders"];
 	return result;
 }
-	
 
 @dynamic user;
 
-	
-
-
-
-
-
-
 @end
+

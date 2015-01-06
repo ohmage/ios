@@ -8,19 +8,16 @@ const struct OHMSurveyResponseAttributes OHMSurveyResponseAttributes = {
 	.locLatitude = @"locLatitude",
 	.locLongitude = @"locLongitude",
 	.locTimestamp = @"locTimestamp",
-	.ohmID = @"ohmID",
 	.submissionConfirmed = @"submissionConfirmed",
 	.timestamp = @"timestamp",
 	.userSubmitted = @"userSubmitted",
+	.uuid = @"uuid",
 };
 
 const struct OHMSurveyResponseRelationships OHMSurveyResponseRelationships = {
 	.promptResponses = @"promptResponses",
 	.survey = @"survey",
 	.user = @"user",
-};
-
-const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperties = {
 };
 
 @implementation OHMSurveyResponseID
@@ -48,7 +45,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"locAccuracyValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"locAccuracy"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -78,12 +75,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 	return keyPaths;
 }
 
-
-
-
 @dynamic locAccuracy;
-
-
 
 - (double)locAccuracyValue {
 	NSNumber *result = [self locAccuracy];
@@ -91,7 +83,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setLocAccuracyValue:(double)value_ {
-	[self setLocAccuracy:[NSNumber numberWithDouble:value_]];
+	[self setLocAccuracy:@(value_)];
 }
 
 - (double)primitiveLocAccuracyValue {
@@ -100,16 +92,10 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setPrimitiveLocAccuracyValue:(double)value_ {
-	[self setPrimitiveLocAccuracy:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveLocAccuracy:@(value_)];
 }
 
-
-
-
-
 @dynamic locLatitude;
-
-
 
 - (double)locLatitudeValue {
 	NSNumber *result = [self locLatitude];
@@ -117,7 +103,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setLocLatitudeValue:(double)value_ {
-	[self setLocLatitude:[NSNumber numberWithDouble:value_]];
+	[self setLocLatitude:@(value_)];
 }
 
 - (double)primitiveLocLatitudeValue {
@@ -126,16 +112,10 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setPrimitiveLocLatitudeValue:(double)value_ {
-	[self setPrimitiveLocLatitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveLocLatitude:@(value_)];
 }
 
-
-
-
-
 @dynamic locLongitude;
-
-
 
 - (double)locLongitudeValue {
 	NSNumber *result = [self locLongitude];
@@ -143,7 +123,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setLocLongitudeValue:(double)value_ {
-	[self setLocLongitude:[NSNumber numberWithDouble:value_]];
+	[self setLocLongitude:@(value_)];
 }
 
 - (double)primitiveLocLongitudeValue {
@@ -152,30 +132,12 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setPrimitiveLocLongitudeValue:(double)value_ {
-	[self setPrimitiveLocLongitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveLocLongitude:@(value_)];
 }
-
-
-
-
 
 @dynamic locTimestamp;
 
-
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
-
 @dynamic submissionConfirmed;
-
-
 
 - (BOOL)submissionConfirmedValue {
 	NSNumber *result = [self submissionConfirmed];
@@ -183,7 +145,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setSubmissionConfirmedValue:(BOOL)value_ {
-	[self setSubmissionConfirmed:[NSNumber numberWithBool:value_]];
+	[self setSubmissionConfirmed:@(value_)];
 }
 
 - (BOOL)primitiveSubmissionConfirmedValue {
@@ -192,23 +154,12 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setPrimitiveSubmissionConfirmedValue:(BOOL)value_ {
-	[self setPrimitiveSubmissionConfirmed:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveSubmissionConfirmed:@(value_)];
 }
-
-
-
-
 
 @dynamic timestamp;
 
-
-
-
-
-
 @dynamic userSubmitted;
-
-
 
 - (BOOL)userSubmittedValue {
 	NSNumber *result = [self userSubmitted];
@@ -216,7 +167,7 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setUserSubmittedValue:(BOOL)value_ {
-	[self setUserSubmitted:[NSNumber numberWithBool:value_]];
+	[self setUserSubmitted:@(value_)];
 }
 
 - (BOOL)primitiveUserSubmittedValue {
@@ -225,37 +176,85 @@ const struct OHMSurveyResponseFetchedProperties OHMSurveyResponseFetchedProperti
 }
 
 - (void)setPrimitiveUserSubmittedValue:(BOOL)value_ {
-	[self setPrimitiveUserSubmitted:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveUserSubmitted:@(value_)];
 }
 
-
-
-
+@dynamic uuid;
 
 @dynamic promptResponses;
 
-	
 - (NSMutableOrderedSet*)promptResponsesSet {
 	[self willAccessValueForKey:@"promptResponses"];
-  
+
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"promptResponses"];
-  
+
 	[self didAccessValueForKey:@"promptResponses"];
 	return result;
 }
-	
 
 @dynamic survey;
 
-	
-
 @dynamic user;
 
-	
-
-
-
-
-
-
 @end
+
+@implementation _OHMSurveyResponse (PromptResponsesCoreDataGeneratedAccessors)
+- (void)addPromptResponses:(NSOrderedSet*)value_ {
+	[self.promptResponsesSet unionOrderedSet:value_];
+}
+- (void)removePromptResponses:(NSOrderedSet*)value_ {
+	[self.promptResponsesSet minusOrderedSet:value_];
+}
+- (void)addPromptResponsesObject:(OHMSurveyPromptResponse*)value_ {
+	[self.promptResponsesSet addObject:value_];
+}
+- (void)removePromptResponsesObject:(OHMSurveyPromptResponse*)value_ {
+	[self.promptResponsesSet removeObject:value_];
+}
+- (void)insertObject:(OHMSurveyPromptResponse*)value inPromptResponsesAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet insertObject:value atIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+- (void)removeObjectFromPromptResponsesAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+- (void)insertPromptResponses:(NSArray *)value atIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet insertObjects:value atIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+- (void)removePromptResponsesAtIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+- (void)replaceObjectInPromptResponsesAtIndex:(NSUInteger)idx withObject:(OHMSurveyPromptResponse*)value {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+- (void)replacePromptResponsesAtIndexes:(NSIndexSet *)indexes withPromptResponses:(NSArray *)value {
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"promptResponses"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self promptResponses]];
+    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"promptResponses"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"promptResponses"];
+}
+@end
+

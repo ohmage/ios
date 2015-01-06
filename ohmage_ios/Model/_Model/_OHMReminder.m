@@ -11,10 +11,10 @@ const struct OHMReminderAttributes OHMReminderAttributes = {
 	.lastFireDate = @"lastFireDate",
 	.minimumReentryInterval = @"minimumReentryInterval",
 	.nextFireDate = @"nextFireDate",
-	.ohmID = @"ohmID",
 	.specificTime = @"specificTime",
 	.startTime = @"startTime",
 	.usesTimeRange = @"usesTimeRange",
+	.uuid = @"uuid",
 	.weekdaysMask = @"weekdaysMask",
 };
 
@@ -22,9 +22,6 @@ const struct OHMReminderRelationships OHMReminderRelationships = {
 	.reminderLocation = @"reminderLocation",
 	.survey = @"survey",
 	.user = @"user",
-};
-
-const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 };
 
 @implementation OHMReminderID
@@ -52,7 +49,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"alwaysShowValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"alwaysShow"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -87,12 +84,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic alwaysShow;
-
-
 
 - (BOOL)alwaysShowValue {
 	NSNumber *result = [self alwaysShow];
@@ -100,7 +92,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setAlwaysShowValue:(BOOL)value_ {
-	[self setAlwaysShow:[NSNumber numberWithBool:value_]];
+	[self setAlwaysShow:@(value_)];
 }
 
 - (BOOL)primitiveAlwaysShowValue {
@@ -109,16 +101,10 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveAlwaysShowValue:(BOOL)value_ {
-	[self setPrimitiveAlwaysShow:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveAlwaysShow:@(value_)];
 }
 
-
-
-
-
 @dynamic enabled;
-
-
 
 - (BOOL)enabledValue {
 	NSNumber *result = [self enabled];
@@ -126,7 +112,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setEnabledValue:(BOOL)value_ {
-	[self setEnabled:[NSNumber numberWithBool:value_]];
+	[self setEnabled:@(value_)];
 }
 
 - (BOOL)primitiveEnabledValue {
@@ -135,23 +121,12 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveEnabledValue:(BOOL)value_ {
-	[self setPrimitiveEnabled:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveEnabled:@(value_)];
 }
-
-
-
-
 
 @dynamic endTime;
 
-
-
-
-
-
 @dynamic isLocationReminder;
-
-
 
 - (BOOL)isLocationReminderValue {
 	NSNumber *result = [self isLocationReminder];
@@ -159,7 +134,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setIsLocationReminderValue:(BOOL)value_ {
-	[self setIsLocationReminder:[NSNumber numberWithBool:value_]];
+	[self setIsLocationReminder:@(value_)];
 }
 
 - (BOOL)primitiveIsLocationReminderValue {
@@ -168,23 +143,12 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveIsLocationReminderValue:(BOOL)value_ {
-	[self setPrimitiveIsLocationReminder:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveIsLocationReminder:@(value_)];
 }
-
-
-
-
 
 @dynamic lastFireDate;
 
-
-
-
-
-
 @dynamic minimumReentryInterval;
-
-
 
 - (int32_t)minimumReentryIntervalValue {
 	NSNumber *result = [self minimumReentryInterval];
@@ -192,7 +156,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setMinimumReentryIntervalValue:(int32_t)value_ {
-	[self setMinimumReentryInterval:[NSNumber numberWithInt:value_]];
+	[self setMinimumReentryInterval:@(value_)];
 }
 
 - (int32_t)primitiveMinimumReentryIntervalValue {
@@ -201,44 +165,16 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveMinimumReentryIntervalValue:(int32_t)value_ {
-	[self setPrimitiveMinimumReentryInterval:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveMinimumReentryInterval:@(value_)];
 }
-
-
-
-
 
 @dynamic nextFireDate;
 
-
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
-
 @dynamic specificTime;
-
-
-
-
-
 
 @dynamic startTime;
 
-
-
-
-
-
 @dynamic usesTimeRange;
-
-
 
 - (BOOL)usesTimeRangeValue {
 	NSNumber *result = [self usesTimeRange];
@@ -246,7 +182,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setUsesTimeRangeValue:(BOOL)value_ {
-	[self setUsesTimeRange:[NSNumber numberWithBool:value_]];
+	[self setUsesTimeRange:@(value_)];
 }
 
 - (BOOL)primitiveUsesTimeRangeValue {
@@ -255,16 +191,12 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveUsesTimeRangeValue:(BOOL)value_ {
-	[self setPrimitiveUsesTimeRange:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveUsesTimeRange:@(value_)];
 }
 
-
-
-
+@dynamic uuid;
 
 @dynamic weekdaysMask;
-
-
 
 - (int16_t)weekdaysMaskValue {
 	NSNumber *result = [self weekdaysMask];
@@ -272,7 +204,7 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setWeekdaysMaskValue:(int16_t)value_ {
-	[self setWeekdaysMask:[NSNumber numberWithShort:value_]];
+	[self setWeekdaysMask:@(value_)];
 }
 
 - (int16_t)primitiveWeekdaysMaskValue {
@@ -281,28 +213,14 @@ const struct OHMReminderFetchedProperties OHMReminderFetchedProperties = {
 }
 
 - (void)setPrimitiveWeekdaysMaskValue:(int16_t)value_ {
-	[self setPrimitiveWeekdaysMask:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveWeekdaysMask:@(value_)];
 }
-
-
-
-
 
 @dynamic reminderLocation;
 
-	
-
 @dynamic survey;
-
-	
 
 @dynamic user;
 
-	
-
-
-
-
-
-
 @end
+

@@ -80,22 +80,28 @@
 {
     NSDictionary *schemaID = self[@"schema_id"];
     if (schemaID) {
-        return [self nonNullValueForKey:@"name"];
+        return [schemaID nonNullValueForKey:@"name"];
     }
     else {
         return nil;
     }
 }
 
-- (NSInteger)surveyVersion
+- (NSString *)surveySchemaVersion
 {
-    NSNumber *versionNumber = [self nonNullValueForKey:@"schema_version"];
-    if (versionNumber != nil) {
-        return [versionNumber integerValue];
+    NSString *version = nil;
+    NSDictionary *schemaID = self[@"schema_id"];
+    if (schemaID != nil) {
+        NSDictionary *schemaVersion = schemaID[@"version"];
+        if (schemaVersion != nil) {
+            NSNumber *major = schemaVersion[@"major"];
+            NSNumber *minor = schemaVersion[@"minor"];
+            if (major && minor) {
+                version = [NSString stringWithFormat:@"%@.%@", major, minor];
+            }
+        }
     }
-    else {
-        return -1;
-    }
+    return version;
 }
 
 - (NSString *)surveyName

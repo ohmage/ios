@@ -9,6 +9,7 @@ const struct OHMSurveyItemAttributes OHMSurveyItemAttributes = {
 	.defaultStringResponse = @"defaultStringResponse",
 	.displayLabel = @"displayLabel",
 	.displayType = @"displayType",
+	.itemID = @"itemID",
 	.itemType = @"itemType",
 	.max = @"max",
 	.maxChoices = @"maxChoices",
@@ -16,7 +17,6 @@ const struct OHMSurveyItemAttributes OHMSurveyItemAttributes = {
 	.maxDuration = @"maxDuration",
 	.min = @"min",
 	.minChoices = @"minChoices",
-	.ohmID = @"ohmID",
 	.skippable = @"skippable",
 	.text = @"text",
 	.wholeNumbersOnly = @"wholeNumbersOnly",
@@ -26,9 +26,6 @@ const struct OHMSurveyItemRelationships OHMSurveyItemRelationships = {
 	.choices = @"choices",
 	.responses = @"responses",
 	.survey = @"survey",
-};
-
-const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 };
 
 @implementation OHMSurveyItemID
@@ -56,7 +53,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"defaultNumberResponseValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"defaultNumberResponse"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -111,19 +108,9 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic condition;
 
-
-
-
-
-
 @dynamic defaultNumberResponse;
-
-
 
 - (double)defaultNumberResponseValue {
 	NSNumber *result = [self defaultNumberResponse];
@@ -131,7 +118,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setDefaultNumberResponseValue:(double)value_ {
-	[self setDefaultNumberResponse:[NSNumber numberWithDouble:value_]];
+	[self setDefaultNumberResponse:@(value_)];
 }
 
 - (double)primitiveDefaultNumberResponseValue {
@@ -140,37 +127,18 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveDefaultNumberResponseValue:(double)value_ {
-	[self setPrimitiveDefaultNumberResponse:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveDefaultNumberResponse:@(value_)];
 }
-
-
-
-
 
 @dynamic defaultStringResponse;
 
-
-
-
-
-
 @dynamic displayLabel;
-
-
-
-
-
 
 @dynamic displayType;
 
-
-
-
-
+@dynamic itemID;
 
 @dynamic itemType;
-
-
 
 - (int16_t)itemTypeValue {
 	NSNumber *result = [self itemType];
@@ -178,7 +146,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setItemTypeValue:(int16_t)value_ {
-	[self setItemType:[NSNumber numberWithShort:value_]];
+	[self setItemType:@(value_)];
 }
 
 - (int16_t)primitiveItemTypeValue {
@@ -187,16 +155,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveItemTypeValue:(int16_t)value_ {
-	[self setPrimitiveItemType:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveItemType:@(value_)];
 }
 
-
-
-
-
 @dynamic max;
-
-
 
 - (double)maxValue {
 	NSNumber *result = [self max];
@@ -204,7 +166,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMaxValue:(double)value_ {
-	[self setMax:[NSNumber numberWithDouble:value_]];
+	[self setMax:@(value_)];
 }
 
 - (double)primitiveMaxValue {
@@ -213,16 +175,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMaxValue:(double)value_ {
-	[self setPrimitiveMax:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveMax:@(value_)];
 }
 
-
-
-
-
 @dynamic maxChoices;
-
-
 
 - (int16_t)maxChoicesValue {
 	NSNumber *result = [self maxChoices];
@@ -230,7 +186,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMaxChoicesValue:(int16_t)value_ {
-	[self setMaxChoices:[NSNumber numberWithShort:value_]];
+	[self setMaxChoices:@(value_)];
 }
 
 - (int16_t)primitiveMaxChoicesValue {
@@ -239,16 +195,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMaxChoicesValue:(int16_t)value_ {
-	[self setPrimitiveMaxChoices:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveMaxChoices:@(value_)];
 }
 
-
-
-
-
 @dynamic maxDimension;
-
-
 
 - (int32_t)maxDimensionValue {
 	NSNumber *result = [self maxDimension];
@@ -256,7 +206,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMaxDimensionValue:(int32_t)value_ {
-	[self setMaxDimension:[NSNumber numberWithInt:value_]];
+	[self setMaxDimension:@(value_)];
 }
 
 - (int32_t)primitiveMaxDimensionValue {
@@ -265,16 +215,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMaxDimensionValue:(int32_t)value_ {
-	[self setPrimitiveMaxDimension:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveMaxDimension:@(value_)];
 }
 
-
-
-
-
 @dynamic maxDuration;
-
-
 
 - (int32_t)maxDurationValue {
 	NSNumber *result = [self maxDuration];
@@ -282,7 +226,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMaxDurationValue:(int32_t)value_ {
-	[self setMaxDuration:[NSNumber numberWithInt:value_]];
+	[self setMaxDuration:@(value_)];
 }
 
 - (int32_t)primitiveMaxDurationValue {
@@ -291,16 +235,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMaxDurationValue:(int32_t)value_ {
-	[self setPrimitiveMaxDuration:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveMaxDuration:@(value_)];
 }
 
-
-
-
-
 @dynamic min;
-
-
 
 - (double)minValue {
 	NSNumber *result = [self min];
@@ -308,7 +246,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMinValue:(double)value_ {
-	[self setMin:[NSNumber numberWithDouble:value_]];
+	[self setMin:@(value_)];
 }
 
 - (double)primitiveMinValue {
@@ -317,16 +255,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMinValue:(double)value_ {
-	[self setPrimitiveMin:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveMin:@(value_)];
 }
 
-
-
-
-
 @dynamic minChoices;
-
-
 
 - (int16_t)minChoicesValue {
 	NSNumber *result = [self minChoices];
@@ -334,7 +266,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setMinChoicesValue:(int16_t)value_ {
-	[self setMinChoices:[NSNumber numberWithShort:value_]];
+	[self setMinChoices:@(value_)];
 }
 
 - (int16_t)primitiveMinChoicesValue {
@@ -343,23 +275,10 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveMinChoicesValue:(int16_t)value_ {
-	[self setPrimitiveMinChoices:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveMinChoices:@(value_)];
 }
 
-
-
-
-
-@dynamic ohmID;
-
-
-
-
-
-
 @dynamic skippable;
-
-
 
 - (BOOL)skippableValue {
 	NSNumber *result = [self skippable];
@@ -367,7 +286,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setSkippableValue:(BOOL)value_ {
-	[self setSkippable:[NSNumber numberWithBool:value_]];
+	[self setSkippable:@(value_)];
 }
 
 - (BOOL)primitiveSkippableValue {
@@ -376,23 +295,12 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveSkippableValue:(BOOL)value_ {
-	[self setPrimitiveSkippable:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveSkippable:@(value_)];
 }
-
-
-
-
 
 @dynamic text;
 
-
-
-
-
-
 @dynamic wholeNumbersOnly;
-
-
 
 - (BOOL)wholeNumbersOnlyValue {
 	NSNumber *result = [self wholeNumbersOnly];
@@ -400,7 +308,7 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setWholeNumbersOnlyValue:(BOOL)value_ {
-	[self setWholeNumbersOnly:[NSNumber numberWithBool:value_]];
+	[self setWholeNumbersOnly:@(value_)];
 }
 
 - (BOOL)primitiveWholeNumbersOnlyValue {
@@ -409,46 +317,92 @@ const struct OHMSurveyItemFetchedProperties OHMSurveyItemFetchedProperties = {
 }
 
 - (void)setPrimitiveWholeNumbersOnlyValue:(BOOL)value_ {
-	[self setPrimitiveWholeNumbersOnly:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveWholeNumbersOnly:@(value_)];
 }
-
-
-
-
 
 @dynamic choices;
 
-	
 - (NSMutableOrderedSet*)choicesSet {
 	[self willAccessValueForKey:@"choices"];
-  
+
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"choices"];
-  
+
 	[self didAccessValueForKey:@"choices"];
 	return result;
 }
-	
 
 @dynamic responses;
 
-	
 - (NSMutableSet*)responsesSet {
 	[self willAccessValueForKey:@"responses"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"responses"];
-  
+
 	[self didAccessValueForKey:@"responses"];
 	return result;
 }
-	
 
 @dynamic survey;
 
-	
-
-
-
-
-
-
 @end
+
+@implementation _OHMSurveyItem (ChoicesCoreDataGeneratedAccessors)
+- (void)addChoices:(NSOrderedSet*)value_ {
+	[self.choicesSet unionOrderedSet:value_];
+}
+- (void)removeChoices:(NSOrderedSet*)value_ {
+	[self.choicesSet minusOrderedSet:value_];
+}
+- (void)addChoicesObject:(OHMSurveyPromptChoice*)value_ {
+	[self.choicesSet addObject:value_];
+}
+- (void)removeChoicesObject:(OHMSurveyPromptChoice*)value_ {
+	[self.choicesSet removeObject:value_];
+}
+- (void)insertObject:(OHMSurveyPromptChoice*)value inChoicesAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet insertObject:value atIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"choices"];
+}
+- (void)removeObjectFromChoicesAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"choices"];
+}
+- (void)insertChoices:(NSArray *)value atIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet insertObjects:value atIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"choices"];
+}
+- (void)removeChoicesAtIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"choices"];
+}
+- (void)replaceObjectInChoicesAtIndex:(NSUInteger)idx withObject:(OHMSurveyPromptChoice*)value {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"choices"];
+}
+- (void)replaceChoicesAtIndexes:(NSIndexSet *)indexes withChoices:(NSArray *)value {
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"choices"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self choices]];
+    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"choices"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"choices"];
+}
+@end
+

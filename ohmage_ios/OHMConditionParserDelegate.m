@@ -271,7 +271,7 @@
         return [self comparePromptResponse:promptResponse toNumber:value withComparison:comparison isRHS:isRHS];
     }
     else if ([value isKindOfClass:[OHMSurveyPromptResponse class]]) {
-        return [((OHMSurveyPromptResponse *)value).ohmID isEqualToString:promptResponse.ohmID];
+        return [((OHMSurveyPromptResponse *)value).uuid isEqualToString:promptResponse.uuid];
     }
     else {
         return NO;

@@ -12,14 +12,12 @@
 #import "OHMSurveyItemViewController.h"
 #import "OHMUserViewController.h"
 #import "OHMModel.h"
-#import "OHMOhmlet.h"
 #import "OHMSurvey.h"
 #import "OHMReminder.h"
 
 @interface OHMSurveysViewController () <OHMModelDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) OHMModel *client;
-@property (nonatomic, strong) OHMOhmlet *ohmlet;
+@property (nonatomic, weak) OHMModel *model;
 @property (nonatomic) NSInteger ohmletIndex;
 
 @property (nonatomic, weak) UIPageControl *pageControl;
@@ -67,24 +65,15 @@
     
     NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
     NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
     self.fetchedResultsController = [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
                                                                                             sortDescriptors:@[dueDescriptor, indexDescriptor]
-                                                                                           predicate:predicate
+                                                                                           predicate:nil
                                                                                   sectionNameKeyPath:@"isDue"
                                                                                            cacheName:nil];
     self.fetchedResultsController.delegate = self;
-    
-    self.client = [OHMModel sharedModel];
-    self.client.delegate = self;
-//    [self updateCurrentOhmlet];
-    
-    [self.tableView registerClass:[OHMSurveyTableViewCell class]
-           forCellReuseIdentifier:@"OHMSurveyTableViewCell"];
-    
-    
-    
-//    [self setupHeader];
+    [self.fetchedResultsController performFetch:nil];
+    self.model.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -96,16 +85,20 @@
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
-//    [self setupHeader];
-//    [self updateFetchedResultsController];
+}
+
+- (OHMModel *)model
+{
+    if (_model == nil) {
+        _model = [OHMModel sharedModel];
+    }
+    return _model;
 }
 
 - (void)refreshSurveys
 {
     NSLog(@"refresh surveys");
-    [[OHMModel sharedModel] fetchSurveysWithCompletionBlock:^{
-        [self.refreshControl endRefreshing];
-    }];
+    [[OHMModel sharedModel] fetchSurveys];
 }
 
 - (void)userButtonPressed:(id)sender
@@ -131,7 +124,7 @@
 - (void)handleSurveyReminderNotification:(UILocalNotification *)notification
 {
     [self.navigationController popToRootViewControllerAnimated:NO];
-    OHMReminder *reminder = [[OHMModel sharedModel] reminderWithOhmID:notification.userInfo.reminderID];
+    OHMReminder *reminder = [[OHMModel sharedModel] reminderWithUUID:notification.userInfo.reminderID];
     [self startSurvey:reminder.survey animated:NO];
 }
 
@@ -184,14 +177,7 @@
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     cell.backgroundColor = [OHMAppConstants lightColorForSurveyIndex:survey.indexValue];
     cell.tintColor = [UIColor darkTextColor];
-    
-    if (survey.isLoaded) {
-        cell.textLabel.text = survey.surveyName;
-    }
-    
-    survey.surveyUpdatedBlock = ^{
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    };
+    cell.textLabel.text = survey.surveyName;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -238,18 +224,42 @@
 
 #pragma mark - Client Delegate
 
-- (void)OHMClientDidUpdate:(OHMModel *)client
+- (void)OHMModelDidFetchSurveys:(OHMModel *)model
 {
-//    [self updateCurrentOhmlet];
+    [self.refreshControl endRefreshing];
 }
 
 
 #pragma mark - NSFetchedResultsController Delegate
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    if (type == NSFetchedResultsChangeInsert) {
+        [self.tableView insertRowsAtIndexPaths:@[newIndexPath]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else if (type == NSFetchedResultsChangeDelete) {
+        [self.tableView deleteRowsAtIndexPaths:@[newIndexPath]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView reloadData];
+    [self.tableView endUpdates];
 }
+
+
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tableView reloadData];
+//}
 
 @end

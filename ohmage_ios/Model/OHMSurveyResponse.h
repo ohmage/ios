@@ -5,7 +5,7 @@
 - (BOOL)shouldShowItemAtIndex:(NSInteger)itemIndex;
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID;
 
-- (NSDictionary *)JSON;
+- (NSDictionary *)dataPoint;
 - (NSString *)uploadRequestUrlString;
 - (NSURL *)tempFileURL;
 - (void)removeTempFile;

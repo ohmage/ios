@@ -79,17 +79,16 @@
         [self presentSignInFailureMessage];
         self.signInButton.userInteractionEnabled = YES;
         self.signInButton.alpha = 1.0;
-        return;
-    }
-    
-    [[OHMModel sharedModel] fetchSurveysWithCompletionBlock:nil];
-    
-    
-    if (self.presentingViewController != nil) {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
     else {
-        [(OHMAppDelegate *)[UIApplication sharedApplication].delegate userDidLogin];
+        [[OHMModel sharedModel] fetchSurveys];
+    
+        if (self.presentingViewController != nil) {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        else {
+            [(OHMAppDelegate *)[UIApplication sharedApplication].delegate userDidLogin];
+        }
     }
 }
 

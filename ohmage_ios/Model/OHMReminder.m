@@ -16,11 +16,7 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
-    
-    // Create an NSUUID object - and get its string representation
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString *key = [uuid UUIDString];
-    self.ohmID = key;
+    self.uuid = [[[NSUUID alloc] init] UUIDString];
     self.minimumReentryIntervalValue = 120;
 }
 

@@ -152,7 +152,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 - (void)logout
 {
     self.user = nil;
-    [self.delegate OHMModelDidUpdate:self];
+//    [self.delegate OHMModelDidUpdate:self];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     [self saveModelState];
@@ -201,6 +201,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
         surveyResponse.locTimestamp = location.timestamp;
     }
     
+    [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+    
     [self saveModelState];
     
     // upload response if we have a network connection
@@ -218,11 +220,11 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
  */
 - (void)setUser:(OHMUser *)user
 {
-    NSLog(@"set user with ID: %@", user.ohmID);
+    NSLog(@"set user with email: %@", user.email);
     _user = user;
     
     // keep track of current logged-in user by ID
-    [self setPersistentStoreMetadataText:user.ohmID forKey:@"loggedInUserID"];
+    [self setPersistentStoreMetadataText:user.email forKey:@"loggedInUserEmail"];
 }
 
 /**
@@ -231,8 +233,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 - (void)didLogin
 {
     NSLog(@"did login");
-    // refresh ohmlets
-    [self fetchSurveysWithCompletionBlock:nil];
+    // refresh surveys
+    [self fetchSurveys];
     
     // start tracking location for reminders and survey response metadata
     if ([CLLocationManager locationServicesEnabled]) {
@@ -559,7 +561,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 #pragma mark - Model (public)
 
-- (void)fetchSurveysWithCompletionBlock:(void (^)())block
+- (void)fetchSurveys
 {
     [[OMHClient sharedClient] refreshAuthenticationWithCompletionBlock:^(BOOL success) {
         if (success) {
@@ -572,10 +574,14 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                 else {
                     NSLog(@"fetch surveys error: %@", error);
                 }
+                
+                if (self.delegate != nil) {
+                    [self.delegate OHMModelDidFetchSurveys:self];
+                }
             }];
         }
-        if (block != nil) {
-            block();
+        else {
+            [self.delegate OHMModelDidFetchSurveys:self];
         }
     }];
 }
@@ -584,12 +590,14 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     int index = 0;
     for (NSDictionary *surveyDefinition in surveyDefinitions) {
-        OHMSurvey * survey = [self surveyWithOhmID:[surveyDefinition surveySchemaName] andVersion:1.0];
+        OHMSurvey * survey = [self surveyWithSchemaName:surveyDefinition.surveySchemaName
+                                                version:surveyDefinition.surveySchemaVersion];
         survey.indexValue = index++;
-        if (!survey.isLoadedValue) {
+        if ([survey.objectID isTemporaryID]) {
             [self createSurvey:survey withDefinition:surveyDefinition];
         }
     }
+    [self saveModelState];
 }
 
 - (void)createSurvey:(OHMSurvey *)survey withDefinition:(NSDictionary *)surveyDefinition
@@ -598,8 +606,6 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     survey.surveyName = [surveyDefinition surveyName];
     survey.surveyDescription = [surveyDefinition surveyDescription];
     [self createSurveyItems:[surveyDefinition surveyItems] forSurvey:survey];
-    survey.isLoadedValue = YES;
-    [self saveModelState];
 }
 
 
@@ -634,9 +640,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  reminderWithOhmID
  */
-- (OHMReminder *)reminderWithOhmID:(NSString *)ohmId
+- (OHMReminder *)reminderWithUUID:(NSString *)uuid
 {
-    return (OHMReminder *)[self fetchObjectForEntityName:[OHMReminder entityName] withUniqueOhmID:ohmId create:NO];
+    return (OHMReminder *)[self fetchObjectForEntityName:[OHMReminder entityName] withUUID:uuid create:NO];
 }
 
 /**
@@ -653,9 +659,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  locationWithOhmID
  */
-- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmId
+- (OHMReminderLocation *)locationWithUUID:(NSString *)uuid
 {
-    return (OHMReminderLocation *)[self fetchObjectForEntityName:[OHMReminderLocation entityName] withUniqueOhmID:ohmId create:NO];
+    return (OHMReminderLocation *)[self fetchObjectForEntityName:[OHMReminderLocation entityName] withUUID:uuid create:NO];
 }
 
 /**
@@ -707,20 +713,21 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  userWithOhmID
  */
-- (OHMUser *)userWithOhmID:(NSString *)ohmID
+- (OHMUser *)userWithEmail:(NSString *)email
 {
-    return (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniqueOhmID:ohmID create:YES];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", email];
+    return (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniquePredicate:predicate create:YES];
 }
 
 /**
  *  surveyWithOhmID:andVersion
  */
-- (OHMSurvey *)surveyWithOhmID:(NSString *)ohmID andVersion:(int16_t)version
+- (OHMSurvey *)surveyWithSchemaName:(NSString *)schemaName version:(NSString *)schemaVersion
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(ohmID == %@) AND (surveyVersion == %d)", ohmID, version];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schemaName == %@) AND (schemaVersion == %@)", schemaName, schemaVersion];
     OHMSurvey *survey = (OHMSurvey *)[self fetchObjectForEntityName:[OHMSurvey entityName] withUniquePredicate:predicate create:YES];
-    survey.ohmID = ohmID;
-    survey.surveyVersionValue = version;
+    survey.schemaVersion = schemaVersion;
+    survey.schemaVersion = schemaVersion;
     return survey;
 }
 
@@ -752,11 +759,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 /**
  *  fetchObjectForEntityName:withUniqueOhmID:create
  */
-- (OHMObject *)fetchObjectForEntityName:(NSString *)entityName withUniqueOhmID:(NSString *)ohmID create:(BOOL)create
+- (NSManagedObject *)fetchObjectForEntityName:(NSString *)entityName withUUID:(NSString *)uuid create:(BOOL)create
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmID == %@", ohmID];
-    OHMObject *object = (OHMObject *)[self fetchObjectForEntityName:entityName withUniquePredicate:predicate create:create];
-    object.ohmID = ohmID;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", uuid];
+    NSManagedObject *object = [self fetchObjectForEntityName:entityName withUniquePredicate:predicate create:create];
+    if (object != nil && [object respondsToSelector:@selector(setUuid:)]) {
+        [object performSelector:@selector(setUuid:) withObject:uuid];
+    }
     return object;
 }
 

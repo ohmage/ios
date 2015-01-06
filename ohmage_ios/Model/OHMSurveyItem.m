@@ -29,7 +29,7 @@
     self.maxDuration = [definition surveyItemMaxDuration];
     self.min = [definition surveyItemMin];
     self.minChoices = [definition surveyItemMinChoices];
-    self.ohmID = [definition surveyItemID];
+    self.itemID = [definition surveyItemID];
     self.skippable = [definition surveyItemIsSkippable];
     self.text = [definition surveyItemText];
     self.wholeNumbersOnly = [definition surveyItemWholeNumbersOnly];

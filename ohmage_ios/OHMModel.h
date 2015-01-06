@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @class OHMUser;
 @class OHMSurvey;
@@ -35,14 +36,13 @@
 - (void)submitSurveyResponse:(OHMSurveyResponse *)response;
 
 // Model
-- (void)fetchSurveysWithCompletionBlock:(void (^)())block;
+- (void)fetchSurveys;
 - (NSArray *)reminders;
 - (NSArray *)timeReminders;
 - (NSArray *)reminderLocations;
-- (NSArray *)surveys;
-- (OHMReminder *)reminderWithOhmID:(NSString *)ohmID;
+- (OHMReminder *)reminderWithUUID:(NSString *)uuid;
 - (OHMReminderLocation *)insertNewReminderLocation;
-- (OHMReminderLocation *)locationWithOhmID:(NSString *)ohmID;
+- (OHMReminderLocation *)locationWithUUID:(NSString *)uuid;
 - (OHMSurveyResponse *)buildResponseForSurvey:(OHMSurvey *)survey;
 - (OHMReminder *)buildNewReminderForSurvey:(OHMSurvey *)survey;
 
@@ -63,6 +63,6 @@
 
 @protocol OHMModelDelegate <NSObject>
 
-- (void)OHMModelDidUpdate:(OHMModel *)model;
+- (void)OHMModelDidFetchSurveys:(OHMModel *)model;
 
 @end

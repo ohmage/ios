@@ -173,7 +173,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 - (void)locationManager:(CLLocationManager *)manager
          didEnterRegion:(CLRegion *)region
 {
-    OHMReminderLocation *location = [[OHMModel sharedModel] locationWithOhmID:region.identifier];
+    OHMReminderLocation *location = [[OHMModel sharedModel] locationWithUUID:region.identifier];
     
     if (location == nil) return;
     

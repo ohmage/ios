@@ -20,11 +20,7 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
-    
-    // Create an NSUUID object - and get its string representation
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString *ohmID = [uuid UUIDString];
-    self.ohmID = ohmID;
+    self.uuid = [[[NSUUID alloc] init] UUIDString];
 }
 
 
@@ -51,13 +47,13 @@
     if (self.skippedValue) return;
     
     if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeImagePrompt) {
-        [[OHMMediaStore sharedStore] deleteImageForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteImageForKey:self.uuid];
     }
     else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeVideoPrompt) {
-        [[OHMMediaStore sharedStore] deleteVideoForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteVideoForKey:self.uuid];
     }
     else if (self.surveyItem.itemTypeValue == OHMSurveyItemTypeAudioPrompt) {
-        [[OHMMediaStore sharedStore] deleteAudioForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteAudioForKey:self.uuid];
     }
 
 }
@@ -105,7 +101,7 @@
 {
     switch (self.surveyItem.itemTypeValue) {
         case OHMSurveyItemTypeImagePrompt:
-            return [[OHMMediaStore sharedStore] imageURLForKey:self.ohmID];
+            return [[OHMMediaStore sharedStore] imageURLForKey:self.uuid];
         case OHMSurveyItemTypeAudioPrompt:
             return self.audioURL;
         case OHMSurveyItemTypeVideoPrompt:
@@ -141,7 +137,7 @@
 - (NSURL *)videoURL
 {
     if (_videoURL == nil) {
-        _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.ohmID];
+        _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.uuid];
         BOOL isFile = [[NSFileManager defaultManager] fileExistsAtPath:[_videoURL path]];
         NSLog(@"file exists at path: %d, %@", isFile, [_videoURL path]);
     }
@@ -153,17 +149,17 @@
     // don't store temp path so media store can return permanent path
     _videoURL = nil;
     if (videoURL) {
-        [[OHMMediaStore sharedStore] setVideoWithURL:videoURL forKey:self.ohmID];
+        [[OHMMediaStore sharedStore] setVideoWithURL:videoURL forKey:self.uuid];
     }
     else {
-        [[OHMMediaStore sharedStore] deleteVideoForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteVideoForKey:self.uuid];
     }
 }
 
 - (NSURL *)audioURL
 {
     if (_audioURL == nil) {
-        NSURL *url = [[OHMMediaStore sharedStore] audioURLForKey:self.ohmID];
+        NSURL *url = [[OHMMediaStore sharedStore] audioURLForKey:self.uuid];
         if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
             _audioURL = url;
         }
@@ -176,17 +172,17 @@
     // don't store temp path so media store can return permanent path
     _audioURL = nil;
     if (audioURL) {
-        [[OHMMediaStore sharedStore] setAudioWithURL:audioURL forKey:self.ohmID];
+        [[OHMMediaStore sharedStore] setAudioWithURL:audioURL forKey:self.uuid];
     }
     else {
-        [[OHMMediaStore sharedStore] deleteAudioForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteAudioForKey:self.uuid];
     }
 }
 
 - (UIImage *)imageValue
 {
     if (_imageValue == nil) {
-        _imageValue = [[OHMMediaStore sharedStore] imageForKey:self.ohmID];
+        _imageValue = [[OHMMediaStore sharedStore] imageForKey:self.uuid];
     }
     return _imageValue;
 }
@@ -195,10 +191,10 @@
 {
     _imageValue = imageValue;
     if (imageValue) {
-        [[OHMMediaStore sharedStore] setImage:imageValue forKey:self.ohmID];
+        [[OHMMediaStore sharedStore] setImage:imageValue forKey:self.uuid];
     }
     else {
-        [[OHMMediaStore sharedStore] deleteImageForKey:self.ohmID];
+        [[OHMMediaStore sharedStore] deleteImageForKey:self.uuid];
     }
 }
 

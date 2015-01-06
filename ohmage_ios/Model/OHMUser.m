@@ -9,9 +9,4 @@
 
 @implementation OHMUser
 
-- (NSString *)definitionRequestUrlString
-{
-    return [NSString stringWithFormat:@"people/%@/current", self.ohmID];
-}
-
 @end
