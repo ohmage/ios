@@ -31,6 +31,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 @property (nonatomic, assign) BOOL isAuthenticated;
 @property (atomic, assign) BOOL isAuthenticating;
+@property (nonatomic, strong) NSMutableArray *authRefreshCompletionBlocks;
 
 @end
 
@@ -137,6 +138,22 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 
 #pragma mark - Property Accessors
+
+- (NSMutableArray *)pendingDataPoints
+{
+    if (_pendingDataPoints == nil) {
+        _pendingDataPoints = [NSMutableArray array];
+    }
+    return _pendingDataPoints;
+}
+
+- (NSMutableArray *)authRefreshCompletionBlocks
+{
+    if (_authRefreshCompletionBlocks == nil) {
+        _authRefreshCompletionBlocks = [NSMutableArray array];
+    }
+    return _authRefreshCompletionBlocks;
+}
 
 - (void)setAppGoogleClientID:(NSString *)appGoogleClientID
 {
@@ -267,6 +284,11 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 - (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block
 {
     NSLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
+    
+    if (block) {
+        [self.authRefreshCompletionBlocks addObject:block];
+    }
+    
     if (self.isAuthenticating || self.dsuRefreshToken == nil) return;
     
     self.isAuthenticating = YES;
@@ -291,9 +313,10 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
         
         self.isAuthenticating = NO;
         
-        if (block != nil) {
-            block(error == nil);
+        for (void (^completionBlock)(BOOL) in self.authRefreshCompletionBlocks) {
+            completionBlock(error == nil);
         }
+        [self.authRefreshCompletionBlocks removeAllObjects];
     }];
 }
 

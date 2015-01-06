@@ -232,34 +232,10 @@
 
 #pragma mark - NSFetchedResultsController Delegate
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView beginUpdates];
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
-    if (type == NSFetchedResultsChangeInsert) {
-        [self.tableView insertRowsAtIndexPaths:@[newIndexPath]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else if (type == NSFetchedResultsChangeDelete) {
-        [self.tableView deleteRowsAtIndexPaths:@[newIndexPath]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
-
-
-//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-//{
-//    [self.tableView reloadData];
-//}
 
 @end

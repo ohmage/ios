@@ -78,47 +78,6 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 }
 
 
-/**
- *  initWithBaseURL
- */
-//- (instancetype)initWithBaseURL:(NSURL *)url
-//{
-//    
-//    if (self) {
-//        // setup serializers
-//        self.responseSerializer = [HMFJSONResponseSerializerWithData serializerWithReadingOptions:NSJSONReadingAllowFragments];
-//        NSMutableSet *contentTypes = [self.responseSerializer.acceptableContentTypes mutableCopy];
-//        [contentTypes addObject:@"text/plain"];
-//        self.responseSerializer.acceptableContentTypes = contentTypes;
-//        self.requestSerializer = [AFJSONRequestSerializer serializer];
-//        
-//        // setup reachability
-//        __weak OHMModel *weakSelf = self;
-//        [self.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-//            [weakSelf reachabilityStatusDidChange:status];
-//        }];
-//        [self.reachabilityManager startMonitoring];
-//        
-//        // enable network activity indicator
-//        [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-//        
-//        // configure background session for survey uploads
-//        NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"OHMBackgroundSessionConfiguration"];
-//        self.backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
-//        self.backgroundSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
-//        
-//        // fetch logged-in user
-//        NSString *userID = [self persistentStoreMetadataTextForKey:@"loggedInUserID"];
-//        NSLog(@"client setup with userID: %@, reachable: %d", userID, self.reachabilityManager.isReachable);
-//        if (userID != nil) {
-//            self.user = [self userWithOhmID:userID];
-//        }
-//    }
-//    
-//    return self;
-//}
-
-
 #pragma mark - User (Public)
 
 /**
@@ -425,6 +384,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
         [item setValuesFromDefinition:itemDefinition];
         [self createChoicesForSurveyItem:item withDefinition:itemDefinition];
         [surveyItems addObject:item];
+        NSLog(@"created item with ID: %@", item.itemID);
     }
     survey.surveyItems = surveyItems;
 }
@@ -564,6 +524,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 - (void)fetchSurveys
 {
     [[OMHClient sharedClient] refreshAuthenticationWithCompletionBlock:^(BOOL success) {
+        NSLog(@"fetch surveys auth refresh success: %d", success);
         if (success) {
             NSString *request = @"surveys";
             [[OMHClient sharedClient] getRequest:request withParameters:nil completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
@@ -580,7 +541,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                 }
             }];
         }
-        else {
+        else if (self.delegate != nil) {
             [self.delegate OHMModelDidFetchSurveys:self];
         }
     }];
@@ -602,7 +563,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 - (void)createSurvey:(OHMSurvey *)survey withDefinition:(NSDictionary *)surveyDefinition
 {
-    NSLog(@"creating survey with definition: %@", surveyDefinition);
+    NSLog(@"creating survey: %@, v%@", surveyDefinition.surveySchemaName, surveyDefinition.surveySchemaVersion);
     survey.surveyName = [surveyDefinition surveyName];
     survey.surveyDescription = [surveyDefinition surveyDescription];
     [self createSurveyItems:[surveyDefinition surveyItems] forSurvey:survey];
@@ -726,7 +687,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schemaName == %@) AND (schemaVersion == %@)", schemaName, schemaVersion];
     OHMSurvey *survey = (OHMSurvey *)[self fetchObjectForEntityName:[OHMSurvey entityName] withUniquePredicate:predicate create:YES];
-    survey.schemaVersion = schemaVersion;
+    survey.schemaName = schemaName;
     survey.schemaVersion = schemaVersion;
     return survey;
 }
@@ -847,10 +808,18 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
  */
 - (void)saveManagedContext
 {
+    if (!self.managedObjectContext.hasChanges) return;
+    
     NSError *error = nil;
     [self.managedObjectContext save:&error];
     if (error) {
         NSLog(@"Error saving context: %@", [error localizedDescription]);
+        NSArray *details = [error.userInfo valueForKey:NSDetailedErrorsKey];
+        if (details) {
+            for (NSError *detail in details) {
+                NSLog(@"Detailed error: %@", [detail debugDescription]);
+            }
+        }
     }
 }
 
