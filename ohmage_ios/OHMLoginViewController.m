@@ -70,7 +70,7 @@
     self.signInFailureLabel = label;
 }
 
-- (void)OMHClientSignInFinishedWithError:(NSError *)error
+- (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
 {
     [self.activityIndicator stopAnimating];
     
@@ -81,7 +81,7 @@
         self.signInButton.alpha = 1.0;
     }
     else {
-        [[OHMModel sharedModel] fetchSurveys];
+        [[OHMModel sharedModel] clientDidLoginWithEmail:client.signedInUserEmail];
     
         if (self.presentingViewController != nil) {
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];

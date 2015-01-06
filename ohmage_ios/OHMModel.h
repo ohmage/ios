@@ -30,6 +30,7 @@
 - (void)saveModelState;
 - (BOOL)hasLoggedInUser;
 - (OHMUser *)loggedInUser;
+- (void)clientDidLoginWithEmail:(NSString *)email;
 - (void)logout;
 
 - (void)clearUserData;

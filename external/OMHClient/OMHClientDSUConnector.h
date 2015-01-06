@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString *appDSUClientID;
 @property (nonatomic, strong) NSString *appDSUClientSecret;
 
+@property (nonatomic, readonly) NSString *signedInUserEmail;
 @property (nonatomic, readonly) BOOL isSignedIn;
 
 
@@ -51,5 +52,5 @@ sourceApplication:(NSString *)sourceApplication
 
 
 @protocol OMHSignInDelegate
-- (void)OMHClientSignInFinishedWithError:(NSError *)error;
+- (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error;
 @end

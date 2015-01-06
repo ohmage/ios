@@ -212,14 +212,32 @@
 {
     if (self.fetchedResultsController.sections.count > 1) {
         if (section == 0) {
-            return @"Due:";
+            return @"Due Surveys:";
         }
         else {
-            return @"Available:";
+            return @"Available Surveys:";
         }
     }
-    return nil;
+    else {
+        return @"Surveys:";
+    }
 }
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 10.0;
+//    if (self.fetchedResultsController.sections.count > 1) {
+//        return UITableViewAutomaticDimension;
+//    }
+//    else {
+//        return 0.0;
+//    }
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 10.0;
+//}
 
 
 #pragma mark - Client Delegate

@@ -22,6 +22,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 @property (nonatomic, strong) GPPSignIn *gppSignIn;
 @property (nonatomic, strong) AFHTTPSessionManager *httpSessionManager;
 
+@property (nonatomic, strong) NSString *signedInUserEmail;
 @property (nonatomic, strong) NSString *dsuAccessToken;
 @property (nonatomic, strong) NSString *dsuRefreshToken;
 @property (nonatomic, strong) NSDate *accessTokenDate;
@@ -322,6 +323,11 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)submitDataPoint:(NSDictionary *)dataPoint
 {
+    if (!self.isSignedIn) {
+        NSLog(@"attempting to submit data point while not signed in");
+        return;
+    }
+    
     [self.pendingDataPoints addObject:dataPoint];
     [self saveClientState];
     
@@ -401,17 +407,23 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     NSLog(@"Client received google error %@ and auth object %@",error, auth);
     if (error) {
         if (self.signInDelegate) {
-            [self.signInDelegate OMHClientSignInFinishedWithError:error];
+            [self.signInDelegate OMHClient:self signInFinishedWithError:error];
         }
     }
     else {
         NSString *serverCode = [GPPSignIn sharedInstance].homeServerAuthorizationCode;
-        NSLog(@"serverCode: %@", serverCode);
         if (serverCode != nil) {
+            NSLog(@"signed in user email: %@", auth.userEmail);
+            self.signedInUserEmail = auth.userEmail;
             [self signInToDSUWithServerCode:serverCode];
         }
         else {
             NSLog(@"failed to receive server code from google auth");
+            if (self.signInDelegate) {
+                NSError *serverCodeError = [NSError errorWithDomain:@"OMHClientError" code:0 userInfo:nil];
+                [self.signInDelegate OMHClient:self signInFinishedWithError:serverCodeError];
+            }
+            
         }
     }
 }
@@ -434,7 +446,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
             self.isAuthenticating = NO;
             
             if (self.signInDelegate != nil) {
-                [self.signInDelegate OMHClientSignInFinishedWithError:nil];
+                [self.signInDelegate OMHClient:self signInFinishedWithError:nil];
             }
         }
         else {
@@ -442,7 +454,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
             self.isAuthenticating = NO;
             
             if (self.signInDelegate != nil) {
-                [self.signInDelegate OMHClientSignInFinishedWithError:error];
+                [self.signInDelegate OMHClient:self signInFinishedWithError:error];
             }
         }
     }];
@@ -459,11 +471,18 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 {
     NSLog(@"sign out");
     [self.gppSignIn signOut];
+    self.isAuthenticated = NO;
+    self.isAuthenticating = NO;
     
+    self.signedInUserEmail = nil;
     self.dsuAccessToken = nil;
     self.dsuRefreshToken = nil;
     self.accessTokenDate = nil;
     self.accessTokenValidDuration = 0;
+    
+    // TODO: once archived client is associated with a user we don't need to remove pending data points
+    [self.pendingDataPoints removeAllObjects];
+    
     [self saveClientState];
 }
 

@@ -105,6 +105,12 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     return self.user;
 }
 
+- (void)clientDidLoginWithEmail:(NSString *)email
+{
+    self.user = [self userWithEmail:email];
+    [self fetchSurveys];
+}
+
 /**
  *  logout
  */
@@ -161,6 +167,8 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     }
     
     [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+    
+    NSLog(@"submitted survey response: %@", surveyResponse);
     
     [self saveModelState];
     
