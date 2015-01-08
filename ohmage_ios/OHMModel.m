@@ -72,7 +72,12 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     self = [super init];
     if (self) {
-        
+        // fetch logged-in user
+        NSString *userEmail = [self persistentStoreMetadataTextForKey:@"loggedInUserEmail"];
+        NSLog(@"client setup with userEmail: %@", userEmail);
+        if (userEmail != nil) {
+            self.user = [self userWithEmail:userEmail];
+        }
     }
     return self;
 }
@@ -118,6 +123,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     self.user = nil;
 //    [self.delegate OHMModelDidUpdate:self];
+    [[OMHClient sharedClient] signOut];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     [self saveModelState];
@@ -685,7 +691,11 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 - (OHMUser *)userWithEmail:(NSString *)email
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email == %@", email];
-    return (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniquePredicate:predicate create:YES];
+    OHMUser *user = (OHMUser *)[self fetchObjectForEntityName:[OHMUser entityName] withUniquePredicate:predicate create:YES];
+    if (user.email == nil) {
+        user.email = email;
+    }
+    return user;
 }
 
 /**

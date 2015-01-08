@@ -46,6 +46,7 @@
 
 - (void)unscheduleNotificationsForReminder:(OHMReminder *)reminder
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     UIApplication *application = [UIApplication sharedApplication];
     NSArray *existingNotifications = application.scheduledLocalNotifications;
     
@@ -61,6 +62,7 @@
 
 - (void)updateScheduleForReminder:(OHMReminder *)reminder
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     [self unscheduleNotificationsForReminder:reminder];
     [self synchronizeLocationReminders];
     
@@ -74,6 +76,7 @@
 
 - (void)scheduleNotificationForReminder:(OHMReminder *)reminder
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     NSString *alertBody = [NSString stringWithFormat:@"Reminder: Take survey '%@'", reminder.survey.surveyName];
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
@@ -94,7 +97,9 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 
-- (void)processFiredLocalNotification:(UILocalNotification *)notification {
+- (void)processFiredLocalNotification:(UILocalNotification *)notification
+{
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     NSString *uuid = notification.userInfo.reminderID;
     OHMReminder *reminder = [[OHMModel sharedModel] reminderWithUUID:uuid];
     reminder.lastFireDate = notification.fireDate;
@@ -103,6 +108,7 @@
 
 - (void)processFiredReminder:(OHMReminder *)reminder
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     reminder.survey.isDueValue = YES;
     
     if (reminder.weekdaysMaskValue == OHMRepeatDayNever) {
@@ -115,6 +121,7 @@
 
 - (void)processArrivalAtLocationForReminder:(OHMReminder *)reminder
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     if ([reminder shouldFireLocationNotification]) {
         reminder.nextFireDate = [NSDate date];
         reminder.survey.isDueValue = YES;
@@ -124,6 +131,7 @@
 
 - (void)synchronizeRemindersForLocation:(OHMReminderLocation *)location
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     BOOL shouldMonitorLocation = NO;
     for (OHMReminder *reminder in location.reminders) {
         if (reminder.isLocationReminderValue && reminder.enabledValue) {
@@ -145,6 +153,7 @@
 
 - (void)synchronizeLocationReminders
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     NSArray *locations = [OHMModel sharedModel].reminderLocations;
     NSMutableSet *locationIDs = [NSMutableSet setWithCapacity:locations.count];
     for (OHMReminderLocation *location in locations) {
@@ -165,6 +174,7 @@
 
 - (void)synchronizeReminders
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     NSArray *timeReminders = [[OHMModel sharedModel] timeReminders];
@@ -185,6 +195,7 @@
 
 - (void)cancelAllNotificationsForLoggedInUser
 {
+    NSLog( @"calling: %s", __PRETTY_FUNCTION__ );
     UIApplication *application = [UIApplication sharedApplication];
     OHMUser *user = [[OHMModel sharedModel] loggedInUser];
     NSArray *scheduledNotifications = [application scheduledLocalNotifications];
