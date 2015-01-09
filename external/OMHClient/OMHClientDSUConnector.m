@@ -16,13 +16,19 @@
 
 NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
+NSString * const kAppGoogleClientIDKey = @"AppGoogleClientID";
+NSString * const kServerGoogleClientIDKey = @"ServerGoogleClientID";
+NSString * const kAppDSUClientIDKey = @"AppDSUClientID";
+NSString * const kAppDSUClientSecretKey = @"AppDSUClientSecret";
+NSString * const kSignedInUserEmailKey = @"SignedInUserEmail";
+
+static OMHClient *_sharedClient = nil;
+
 
 @interface OMHClient () <GPPSignInDelegate>
 
-@property (nonatomic, strong) GPPSignIn *gppSignIn;
 @property (nonatomic, strong) AFHTTPSessionManager *httpSessionManager;
 
-@property (nonatomic, strong) NSString *signedInUserEmail;
 @property (nonatomic, strong) NSString *dsuAccessToken;
 @property (nonatomic, strong) NSString *dsuRefreshToken;
 @property (nonatomic, strong) NSDate *accessTokenDate;
@@ -40,20 +46,43 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 + (instancetype)sharedClient
 {
-    static OMHClient *_sharedClient = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSData *encodedClient = [defaults objectForKey:@"OMHClient"];
-        if (encodedClient != nil) {
-            _sharedClient = (OMHClient *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
-        } else {
-            _sharedClient = [[self alloc] initPrivate];
+    if (_sharedClient == nil) {
+        OMHClient *client = nil;
+        NSString *signedInUserEmail = [self signedInUserEmail];
+        
+        if (signedInUserEmail != nil) {
+            NSData *encodedClient = [self encodedClientForEmail:signedInUserEmail];
+            
+            if (encodedClient != nil) {
+                client = (OMHClient *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
+            }
         }
-    });
+        
+        if (client == nil) {
+            client = [[self alloc] initPrivate];
+        }
+        
+        _sharedClient = client;
+    }
     
     return _sharedClient;
+}
+
++ (void)releaseShared
+{
+    _sharedClient = nil;
+}
+
++ (NSString *)archiveKeyForEmail:(NSString *)email
+{
+    return [NSString stringWithFormat:@"OMHClient_%@", email];
+}
+
++ (NSData *)encodedClientForEmail:(NSString *)email
+{
+    NSLog(@"unarchiving client for email: %@", email);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults objectForKey:[self archiveKeyForEmail:email]];
 }
 
 - (instancetype)init
@@ -66,11 +95,8 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)commonInit
 {
-//    if (self.dsuRefreshToken != nil) {
-//        [self refreshAuthentication];
-//    }
-    
     [self.httpSessionManager.reachabilityManager startMonitoring];
+    [OMHClient gppSignIn].delegate = self;
 }
 
 - (instancetype)initPrivate
@@ -88,8 +114,6 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 {
     self = [super init];
     if (self != nil) {
-        _appDSUClientID = [decoder decodeObjectForKey:@"client.appDSUClientID"];
-        _appDSUClientSecret = [decoder decodeObjectForKey:@"client.appDSUClientSecret"];
         _dsuAccessToken = [decoder decodeObjectForKey:@"client.dsuAccessToken"];
         _dsuRefreshToken = [decoder decodeObjectForKey:@"client.dsuRefreshToken"];
         _pendingDataPoints = [decoder decodeObjectForKey:@"client.pendingDataPoints"];
@@ -103,8 +127,6 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.appDSUClientID forKey:@"client.appDSUClientID"];
-    [encoder encodeObject:self.appDSUClientSecret forKey:@"client.appDSUClientSecret"];
     [encoder encodeObject:self.dsuAccessToken forKey:@"client.dsuAccessToken"];
     [encoder encodeObject:self.dsuRefreshToken forKey:@"client.dsuRefreshToken"];
     [encoder encodeObject:self.pendingDataPoints forKey:@"client.pendingDataPoints"];
@@ -112,33 +134,115 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     [encoder encodeDouble:self.accessTokenValidDuration forKey:@"client.accessTokenValidDuration"];
 }
 
-
+- (void)unarchivePendingDataPointsForEmail:(NSString *)email
+{
+    NSData *encodedClient = [OMHClient encodedClientForEmail:email];
+    if (encodedClient != nil) {
+        OMHClient *archivedClient = (OMHClient *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
+        if (archivedClient != nil) {
+            self.pendingDataPoints = archivedClient.pendingDataPoints;
+            [self uploadPendingDataPoints];
+        }
+    }
+}
 
 - (void)saveClientState
 {
-//    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
+    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
+    NSString *signedInUserEmail = [OMHClient signedInUserEmail];
+    if (signedInUserEmail == nil) {
+        NSLog(@"attempting to save client with no signed-in user");
+        return;
+    }
+    
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:encodedClient forKey:@"OMHClient"];
+    [userDefaults setObject:encodedClient forKey:[OMHClient archiveKeyForEmail:signedInUserEmail]];
     [userDefaults synchronize];
 }
 
 - (NSString *)encodedClientIDAndSecret
 {
-    if (self.appDSUClientID == nil || self.appDSUClientSecret == nil) return nil;
+    static NSString *sEncodedIDAndSecret = nil;
     
-    NSString *string = [NSString stringWithFormat:@"%@:%@",
-                        self.appDSUClientID,
-                        self.appDSUClientSecret];
+    if (sEncodedIDAndSecret == nil) {
+        NSString *appDSUClientID = [OMHClient appDSUClientID];
+        NSString *appDSUClientSecret = [OMHClient appDSUClientSecret];
+        
+        if (appDSUClientID != nil && appDSUClientSecret != nil) {
+            NSString *string = [NSString stringWithFormat:@"%@:%@",
+                                appDSUClientID,
+                                appDSUClientSecret];
+            
+            NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+            NSLog(@"encoded cliend id and secret: %@", [data base64EncodedStringWithOptions:0]);
+            sEncodedIDAndSecret = [data base64EncodedStringWithOptions:0];
+        }
+    }
     
-    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"encoded cliend id and secret: %@", [data base64EncodedStringWithOptions:0]);
-    return [data base64EncodedStringWithOptions:0];
-    
+    return sEncodedIDAndSecret;
 }
 
 
 #pragma mark - Property Accessors
+
++ (NSString *)appGoogleClientID
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kAppGoogleClientIDKey];
+}
+
++ (void)setAppGoogleClientID:(NSString *)appGoogleClientID
+{
+    [self gppSignIn].clientID = appGoogleClientID;
+    [[NSUserDefaults standardUserDefaults] setObject:appGoogleClientID forKey:kAppGoogleClientIDKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)serverGoogleClientID
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kServerGoogleClientIDKey];
+}
+
++ (void)setServerGoogleClientID:(NSString *)serverGoogleClientID
+{
+    [self gppSignIn].homeServerClientID = serverGoogleClientID;
+    [[NSUserDefaults standardUserDefaults] setObject:serverGoogleClientID forKey:kServerGoogleClientIDKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)appDSUClientID
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kAppDSUClientIDKey];
+}
+
++ (void)setAppDSUClientID:(NSString *)appDSUClientID
+{
+    [[NSUserDefaults standardUserDefaults] setObject:appDSUClientID forKey:kAppDSUClientIDKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)appDSUClientSecret
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kAppDSUClientSecretKey];
+}
+
++ (void)setAppDSUClientSecret:(NSString *)appDSUClientSecret
+{
+    [[NSUserDefaults standardUserDefaults] setObject:appDSUClientSecret forKey:kAppDSUClientSecretKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)signedInUserEmail
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kSignedInUserEmailKey];
+}
+
++ (void)setSignedInUserEmail:(NSString *)signedInUserEmail
+{
+    [[NSUserDefaults standardUserDefaults] setObject:signedInUserEmail forKey:kSignedInUserEmailKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 - (NSMutableArray *)pendingDataPoints
 {
@@ -154,18 +258,6 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
         _authRefreshCompletionBlocks = [NSMutableArray array];
     }
     return _authRefreshCompletionBlocks;
-}
-
-- (void)setAppGoogleClientID:(NSString *)appGoogleClientID
-{
-    _appGoogleClientID = appGoogleClientID;
-    self.gppSignIn.clientID = appGoogleClientID;
-}
-
-- (void)setServerGoogleClientID:(NSString *)serverGoogleClientID
-{
-    _serverGoogleClientID = serverGoogleClientID;
-    self.gppSignIn.homeServerClientID = serverGoogleClientID;
 }
 
 - (BOOL)isSignedIn
@@ -312,6 +404,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
             self.isAuthenticated = YES;
+            [self uploadPendingDataPoints];
         }
         else {
             NSLog(@"refresh authentiation failed: %@", error);
@@ -349,7 +442,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)uploadPendingDataPoints
 {
-//    NSLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
+    NSLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
     
     for (NSDictionary *dataPoint in self.pendingDataPoints) {
         [self uploadDataPoint:dataPoint];
@@ -392,17 +485,16 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     return googleButton;
 }
 
-- (GPPSignIn *)gppSignIn
++ (GPPSignIn *)gppSignIn
 {
+    static GPPSignIn *_gppSignIn = nil;
     if (_gppSignIn == nil) {
         GPPSignIn *signIn = [GPPSignIn sharedInstance];
         signIn.shouldFetchGooglePlusUser = YES;
         signIn.shouldFetchGoogleUserEmail = YES;
-        //        signIn.attemptSSO = YES;
         
         signIn.scopes = @[ @"profile" ];
         _gppSignIn = signIn;
-        _gppSignIn.delegate = self;
     }
     return _gppSignIn;
 }
@@ -420,7 +512,8 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
         NSString *serverCode = [GPPSignIn sharedInstance].homeServerAuthorizationCode;
         if (serverCode != nil) {
             NSLog(@"signed in user email: %@", auth.userEmail);
-            self.signedInUserEmail = auth.userEmail;
+            [OMHClient setSignedInUserEmail:auth.userEmail];
+            [self unarchivePendingDataPointsForEmail:auth.userEmail];
             [self signInToDSUWithServerCode:serverCode];
         }
         else {
@@ -436,12 +529,13 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)signInToDSUWithServerCode:(NSString *)serverCode
 {
-    if (serverCode == nil || self.appDSUClientID == nil) return;
+    NSString *appDSUClientID = [OMHClient appDSUClientID];
+    if (serverCode == nil || appDSUClientID == nil) return;
     [self setDSUSignInHeader];
     
     NSString *request =  @"google-signin";
     NSString *code = [NSString stringWithFormat:@"fromApp_%@", serverCode];
-    NSDictionary *parameters = @{@"code": code, @"client_id" : self.appDSUClientID};
+    NSDictionary *parameters = @{@"code": code, @"client_id" : appDSUClientID};
     
     self.isAuthenticating = YES;
     [self getRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
@@ -477,20 +571,11 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 - (void)signOut
 {
     NSLog(@"sign out");
-    [self.gppSignIn signOut];
-    self.isAuthenticated = NO;
-    self.isAuthenticating = NO;
-    
-    self.signedInUserEmail = nil;
-    self.dsuAccessToken = nil;
-    self.dsuRefreshToken = nil;
-    self.accessTokenDate = nil;
-    self.accessTokenValidDuration = 0;
-    
-    // TODO: once archived client is associated with a user we don't need to remove pending data points
-    [self.pendingDataPoints removeAllObjects];
-    
+    [[OMHClient gppSignIn] signOut];
     [self saveClientState];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kSignedInUserEmailKey];
+    
+    [OMHClient releaseShared];
 }
 
 @end

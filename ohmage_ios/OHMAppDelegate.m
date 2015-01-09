@@ -102,11 +102,10 @@
 
 - (void)setupOMHClient
 {
-    OMHClient *client = [OMHClient sharedClient];
-    client.appGoogleClientID = kOhmageGoogleClientID;
-    client.serverGoogleClientID = kOMHServerGoogleClientID;
-    client.appDSUClientID = kOhmageDSUClientID;
-    client.appDSUClientSecret = kOhmageDSUClientSecret;
+    [OMHClient setAppGoogleClientID:kOhmageGoogleClientID];
+    [OMHClient setServerGoogleClientID:kOMHServerGoogleClientID];
+    [OMHClient setAppDSUClientID:kOhmageDSUClientID];
+    [OMHClient setAppDSUClientSecret:kOhmageDSUClientSecret];
 }
 
 - (OHMLoginViewController *)loginViewController

@@ -16,14 +16,19 @@
 
 + (UIButton *)googleSignInButton;
 
+// global properties
++ (NSString *)appGoogleClientID;
++ (void)setAppGoogleClientID:(NSString *)appGoogleClientID;
++ (NSString *)serverGoogleClientID;
++ (void)setServerGoogleClientID:(NSString *)serverGoogleClientID;
++ (NSString *)appDSUClientID;
++ (void)setAppDSUClientID:(NSString *)appDSUClientID;
++ (NSString *)appDSUClientSecret;
++ (void)setAppDSUClientSecret:(NSString *)appDSUClientSecret;
++ (NSString *)signedInUserEmail;
++ (void)setSignedInUserEmail:(NSString *)signedInUserEmail;
+
 @property (nonatomic, weak) id<OMHSignInDelegate> signInDelegate;
-
-@property (nonatomic, strong) NSString *appGoogleClientID;
-@property (nonatomic, strong) NSString *serverGoogleClientID;
-@property (nonatomic, strong) NSString *appDSUClientID;
-@property (nonatomic, strong) NSString *appDSUClientSecret;
-
-@property (nonatomic, readonly) NSString *signedInUserEmail;
 @property (nonatomic, readonly) BOOL isSignedIn;
 @property (nonatomic, readonly) BOOL isReachable;
 

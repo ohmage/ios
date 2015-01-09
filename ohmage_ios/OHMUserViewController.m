@@ -37,9 +37,9 @@ static NSInteger const kSettingsRowCount = 2;
     
     self.navigationItem.title = @"User Info";
     self.navigationItem.rightBarButtonItem = self.doneButton;
-    
-    self.user = [[OHMModel sharedModel] loggedInUser];
-    [self setupHeader];
+//    
+//    self.user = [[OHMModel sharedModel] loggedInUser];
+//    [self setupHeader];
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"survey.surveyName" ascending:YES];
     self.reminders = [self.user.reminders sortedArrayUsingDescriptors:@[sort]];
@@ -54,6 +54,9 @@ static NSInteger const kSettingsRowCount = 2;
                                                                       NSForegroundColorAttributeName : [UIColor whiteColor],
                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:22]}];
     self.navigationController.navigationBar.barTintColor = [OHMAppConstants ohmageColor];
+    
+    self.user = [[OHMModel sharedModel] loggedInUser];
+    [self setupHeader];
 }
 
 - (void)doneButtonPressed:(id)sender

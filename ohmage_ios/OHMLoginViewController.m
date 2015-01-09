@@ -81,7 +81,7 @@
         self.signInButton.alpha = 1.0;
     }
     else {
-        [[OHMModel sharedModel] clientDidLoginWithEmail:client.signedInUserEmail];
+        [[OHMModel sharedModel] clientDidLoginWithEmail:[OMHClient signedInUserEmail]];
     
         if (self.presentingViewController != nil) {
             [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
