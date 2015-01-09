@@ -19,14 +19,17 @@ typedef void (^OHMLocationUpdateCompletionBlock)(CLLocation *location, NSError *
 
 @property (nonatomic, weak) id<OHMLocationManagerDelegate> delegate;
 
-@property (strong, nonatomic) CLLocation *location;
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) BOOL hasLocation;
-@property (nonatomic) BOOL isAuthorized;
+@property (nonatomic, readonly) BOOL isAuthorized;
+@property (nonatomic, readonly) BOOL hasLocation;
+@property (nonatomic, readonly) CLLocation *location;
 @property (nonatomic, strong) NSError *locationError;
 @property (strong, nonatomic) CLGeocoder *geocoder;
 
+- (void)requestAuthorization;
 - (void)getLocationWithCompletionBlock:(OHMLocationUpdateCompletionBlock)block;
+- (void)startUpdatingLocationForMap;
+- (void)stopUpdatingLocationForMap;
 - (void)stopMonitoringAllRegions;
 - (void)debugPrintAllMonitoredRegions;
 

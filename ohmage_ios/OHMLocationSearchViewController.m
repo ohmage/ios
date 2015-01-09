@@ -31,11 +31,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.title = @"Search";
+    self.navigationItem.title = @"New Location";
 //    self.navigationItem.leftBarButtonItem = nil;
 //    self.navigationItem.rightBarButtonItem = self.cancelButton;
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 0, self.tableView.rowHeight)];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
     searchBar.delegate = self;
     searchBar.placeholder = @"Search or Enter Address";
     self.tableView.tableHeaderView = searchBar;
@@ -43,6 +43,25 @@
     
     self.locationManager = [OHMLocationManager sharedLocationManager];
     self.locationManager.delegate = self;
+//    [self.locationManager startUpdatingLocationForMap];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if ([self isMovingToParentViewController]) {
+        NSLog(@"is moving to parent view controller");
+        [self.locationManager startUpdatingLocationForMap];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if ([self isMovingFromParentViewController]) {
+        NSLog(@"is moving from parent view controller");
+        [self.locationManager stopUpdatingLocationForMap];
+    }
 }
 
 - (void)cancelButtonPressed:(id)sender
@@ -55,14 +74,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger rows = self.places.count;
-    if (self.locationManager.hasLocation) rows++;
-    return rows;
+    switch (section) {
+        case 0:
+            return (self.locationManager.hasLocation ? 1 : 0);
+        case 1:
+            return self.places.count;
+        default:
+            return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -186,7 +210,7 @@
             
 //            self.viewAllButton.enabled = self.places != nil ? YES : NO;
             
-            [self.tableView reloadData];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     };
@@ -243,7 +267,7 @@
 
 - (void)OHMLocationManagerDidUpdateLocation:(OHMLocationManager *)locationManager
 {
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 

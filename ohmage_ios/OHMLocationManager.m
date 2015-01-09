@@ -14,6 +14,7 @@
 
 @interface OHMLocationManager ()
 @property (strong, nonatomic) NSMutableArray *completionBlocks;
+@property (nonatomic, assign) BOOL trackingForMap;
 @end
 
 @implementation OHMLocationManager
@@ -36,21 +37,38 @@
     if (self) {
         [self setLocationManager:[[CLLocationManager alloc] init]];
         [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [self.locationManager setDistanceFilter:20.0f]; //todo: what should this be?
+        [self.locationManager setDistanceFilter:kCLDistanceFilterNone]; //todo: what should this be?
         [self.locationManager setDelegate:self];
         
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
-            if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-                [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
-            }
-        }
-        
-        [self.locationManager startUpdatingLocation];
         [self setCompletionBlocks:[[NSMutableArray alloc] initWithCapacity:3.0]];
         [self setGeocoder:[[CLGeocoder alloc] init]];
     }
     
     return self;
+}
+
+- (void)requestAuthorization
+{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
+        }
+    }
+}
+
+- (BOOL)isAuthorized
+{
+    return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized);
+}
+
+- (BOOL)hasLocation
+{
+    return (self.locationManager.location != nil);
+}
+
+- (CLLocation *)location
+{
+    return self.locationManager.location;
 }
 
 - (void)stopMonitoringAllRegions
@@ -78,27 +96,28 @@
         [self.completionBlocks addObject:[block copy]];
     }
     
-    if (self.hasLocation)
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)performCompletionBlocksWithLocation:(CLLocation *)location error:(NSError *)error
+{
+    for (OHMLocationUpdateCompletionBlock completionBlock in self.completionBlocks)
     {
-        for (OHMLocationUpdateCompletionBlock completionBlock in self.completionBlocks)
-        {
-            completionBlock(self.location, nil);
-        }
-        if ([self.completionBlocks count] == 0) {
-            //notify map view of change to location when not requested
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"locationUpdated" object:nil];
-        }
-        
-        [self.completionBlocks removeAllObjects];
+        completionBlock(location, error);
     }
-    
-    if (self.locationError) {
-        for (OHMLocationUpdateCompletionBlock completionBlock in self.completionBlocks)
-        {
-            completionBlock(nil, self.locationError);
-        }
-        [self.completionBlocks removeAllObjects];
-    }
+    [self.completionBlocks removeAllObjects];
+}
+
+- (void)startUpdatingLocationForMap
+{
+    self.trackingForMap = YES;
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)stopUpdatingLocationForMap
+{
+    self.trackingForMap = NO;
+    [self.locationManager stopUpdatingLocation];
 }
 
 #pragma mark - CLLocationManagerDelegate methods
@@ -113,14 +132,17 @@
         return;
     }
     
-    [self setLocation:lastLocation];
-    [self setHasLocation:YES];
-    [self setLocationError:nil];
+    NSLog(@"got location with accuracy: %g, numBlocks: %d", lastLocation.horizontalAccuracy, (int)self.completionBlocks.count);
     
-    [self getLocationWithCompletionBlock:nil];
+    [self setLocationError:nil];
+    [self performCompletionBlocksWithLocation:lastLocation error:nil];
     
     if ([self.delegate respondsToSelector:@selector(OHMLocationManagerDidUpdateLocation:)]) {
         [self.delegate OHMLocationManagerDidUpdateLocation:self];
+    }
+    
+    if (!self.trackingForMap) {
+        [self.locationManager stopUpdatingLocation];
     }
 }
 
@@ -129,7 +151,8 @@
 {
     [self.locationManager stopUpdatingLocation];
     [self setLocationError:error];
-    [self getLocationWithCompletionBlock:nil];
+    
+    [self performCompletionBlocksWithLocation:nil error:error];
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -139,7 +162,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     {
         // Location services are disabled on the device.
         [self.locationManager stopUpdatingLocation];
-        self.isAuthorized = NO;
         
         NSString *errorMessage =
         @"Location Services Permission Denied for this app.  Visit Settings.app to allow.";
@@ -153,14 +175,13 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
                         userInfo:errorInfo];
         
         [self setLocationError:deniedError];
-        [self getLocationWithCompletionBlock:nil];
+        [self performCompletionBlocksWithLocation:nil error:deniedError];
     }
     if (status == kCLAuthorizationStatusAuthorized)
     {
         // Location services have just been authorized on the device, start updating now.
         [self.locationManager startUpdatingLocation];
         [self setLocationError:nil];
-        self.isAuthorized = YES;
     }
     
     if ([self.delegate respondsToSelector:@selector(OHMLocationManagerAuthorizationStatusChanged:)]) {

@@ -53,6 +53,7 @@
         if ([vc isKindOfClass:[OHMReminderViewController class]]) {
             ((OHMReminderViewController *)vc).reminder.reminderLocation = self.location;
             [self.navigationController popToViewController:vc animated:YES];
+            [self.locationManager stopUpdatingLocationForMap];
         }
     }
 }

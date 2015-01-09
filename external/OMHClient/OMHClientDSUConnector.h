@@ -25,6 +25,7 @@
 
 @property (nonatomic, readonly) NSString *signedInUserEmail;
 @property (nonatomic, readonly) BOOL isSignedIn;
+@property (nonatomic, readonly) BOOL isReachable;
 
 
 - (BOOL)handleURL:(NSURL *)url

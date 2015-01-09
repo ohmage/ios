@@ -42,12 +42,6 @@
             [vc handleSurveyReminderNotification:notification];
             [[OHMReminderManager sharedReminderManager] processFiredLocalNotification:notification];
         }
-        
-        // start tracking location for reminders and survey response metadata
-        if ([CLLocationManager locationServicesEnabled]) {
-            OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
-            [appLocationManager.locationManager startUpdatingLocation]; // TODO: don't track all the time
-        }
     }
     
     self.window.backgroundColor = [UIColor whiteColor];
@@ -152,6 +146,7 @@
     [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
         self.window.rootViewController = newRoot;
         self.loginViewController = nil;
+        [[OHMLocationManager sharedLocationManager] requestAuthorization];
     }];
 }
 

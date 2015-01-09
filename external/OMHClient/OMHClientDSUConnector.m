@@ -116,7 +116,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)saveClientState
 {
-    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
+//    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"OMHClient"];
@@ -171,6 +171,12 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 - (BOOL)isSignedIn
 {
     return (self.dsuAccessToken != nil && self.dsuRefreshToken != nil);
+}
+
+- (BOOL)isReachable
+{
+    if (!self.isSignedIn) return NO;
+    return self.httpSessionManager.reachabilityManager.isReachable;
 }
 
 
@@ -287,7 +293,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     NSLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
     
     if (block) {
-        [self.authRefreshCompletionBlocks addObject:block];
+        [self.authRefreshCompletionBlocks addObject:[block copy]];
     }
     
     if (self.isAuthenticating || self.dsuRefreshToken == nil) return;
@@ -301,7 +307,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     
     [self postRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-            NSLog(@"refresh authentication success: %@", responseObject);
+            NSLog(@"refresh authentication success");
             
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
@@ -430,6 +436,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)signInToDSUWithServerCode:(NSString *)serverCode
 {
+    if (serverCode == nil || self.appDSUClientID == nil) return;
     [self setDSUSignInHeader];
     
     NSString *request =  @"google-signin";

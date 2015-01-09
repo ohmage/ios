@@ -7,7 +7,7 @@
 //
 
 #import "OHMReminderLocationViewController.h"
-#import "OHMManageLocationsViewController.h"
+#import "OHMLocationSearchViewController.h"
 #import "OHMReminderLocation.h"
 #import "OHMReminder.h"
 
@@ -33,7 +33,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Select";
+    self.navigationItem.title = @"Select Location";
     
     self.fetchedLocationsController = [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMReminderLocation entityName]
                                                                                                sortKey:@"name"
@@ -67,7 +67,7 @@
     UITableViewCell *cell = nil;
     if (indexPath.row == 0) {
         cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
-        cell.textLabel.text = @"Manage locations";
+        cell.textLabel.text = @"New location";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else {
@@ -75,6 +75,7 @@
         cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
         cell.textLabel.text = location.name;
         cell.detailTextLabel.text = location.streetAddress;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;
@@ -83,7 +84,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        OHMManageLocationsViewController *vc = [[OHMManageLocationsViewController alloc] init];
+        OHMLocationSearchViewController *vc = [[OHMLocationSearchViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {

@@ -81,7 +81,6 @@
 		1E882583191AE21E0034D231 /* OHMConditionParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882582191AE21E0034D231 /* OHMConditionParserDelegate.m */; };
 		1E882586191BF7410034D231 /* NSDate+Ohmage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882585191BF7410034D231 /* NSDate+Ohmage.m */; };
 		1E882589191C00370034D231 /* OHMAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E882588191C00370034D231 /* OHMAudioRecorder.m */; };
-		1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */; };
 		1E9081AD1926834A00A0468C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AC1926834A00A0468C /* AddressBook.framework */; };
 		1E9081AF1926835100A0468C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081AE1926835100A0468C /* AssetsLibrary.framework */; };
 		1E9081B11926836600A0468C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E9081B01926836600A0468C /* CoreMotion.framework */; };
@@ -280,8 +279,6 @@
 		1E882585191BF7410034D231 /* NSDate+Ohmage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Ohmage.m"; sourceTree = "<group>"; };
 		1E882587191C00370034D231 /* OHMAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMAudioRecorder.h; sourceTree = "<group>"; };
 		1E882588191C00370034D231 /* OHMAudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMAudioRecorder.m; sourceTree = "<group>"; };
-		1E9081A21925787000A0468C /* OHMManageLocationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMManageLocationsViewController.h; sourceTree = "<group>"; };
-		1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMManageLocationsViewController.m; sourceTree = "<group>"; };
 		1E9081AC1926834A00A0468C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		1E9081AE1926835100A0468C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1E9081B01926836600A0468C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -504,8 +501,6 @@
 				1EED8814192557F5004F7C51 /* OHMReminderReentryViewController.m */,
 				1EF390111921DE9B00CD69BE /* OHMReminderLocationViewController.h */,
 				1EF390121921DE9B00CD69BE /* OHMReminderLocationViewController.m */,
-				1E9081A21925787000A0468C /* OHMManageLocationsViewController.h */,
-				1E9081A31925787000A0468C /* OHMManageLocationsViewController.m */,
 				1E5D6DA91922AB9000991783 /* OHMLocationSearchViewController.h */,
 				1E5D6DAA1922AB9000991783 /* OHMLocationSearchViewController.m */,
 				1EF390081921713C00CD69BE /* OHMLocationMapViewController.h */,
@@ -919,7 +914,6 @@
 				1E2419EF1A570C80008A9F08 /* AFNetworkReachabilityManager.m in Sources */,
 				1E2419F41A570C80008A9F08 /* AFURLSessionManager.m in Sources */,
 				1E2419F91A570C80008A9F08 /* OMHDataPoint.m in Sources */,
-				1E9081A41925787000A0468C /* OHMManageLocationsViewController.m in Sources */,
 				1E56A328191302F500384AE9 /* OHMBaseViewController.m in Sources */,
 				1E70097418CA6F8700203990 /* OHMAppDelegate.m in Sources */,
 				1E1B60CE19063242001046E0 /* OHMSurveyResponse.m in Sources */,

@@ -398,7 +398,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
         [item setValuesFromDefinition:itemDefinition];
         [self createChoicesForSurveyItem:item withDefinition:itemDefinition];
         [surveyItems addObject:item];
-        NSLog(@"created item with ID: %@", item.itemID);
+//        NSLog(@"created item with ID: %@", item.itemID);
     }
     survey.surveyItems = surveyItems;
 }
