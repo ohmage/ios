@@ -162,27 +162,36 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     surveyResponse.timestamp = [NSDate date];
     surveyResponse.userSubmittedValue = YES;
     surveyResponse.survey.isDueValue = NO;
+    NSLog(@"submitting survey response: %@", surveyResponse);
     
     // add location data if available
-    if ([OHMLocationManager sharedLocationManager].hasLocation) {
-        CLLocation *location = [OHMLocationManager sharedLocationManager].location;
-        surveyResponse.locLongitudeValue = location.coordinate.longitude;
-        surveyResponse.locLatitudeValue = location.coordinate.latitude;
-        surveyResponse.locAccuracyValue = location.horizontalAccuracy;
-        surveyResponse.locTimestamp = location.timestamp;
+    if ([OHMLocationManager sharedLocationManager].isAuthorized) {
+        [[OHMLocationManager sharedLocationManager] getLocationWithCompletionBlock:^(CLLocation *location, NSError *error) {
+            if (location != nil) {
+                [self submitSurveyResponse:surveyResponse withLocation:location];
+            }
+            else {
+                [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+            }
+            [self saveModelState];
+        }];
+    }
+    else {
+        [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+        [self saveModelState];
     }
     
+}
+
+- (void)submitSurveyResponse:(OHMSurveyResponse *)surveyResponse withLocation:(CLLocation *)location
+{
+    NSLog(@"submitting survey response with location: %@", location);
+    surveyResponse.locLongitudeValue = location.coordinate.longitude;
+    surveyResponse.locLatitudeValue = location.coordinate.latitude;
+    surveyResponse.locAccuracyValue = location.horizontalAccuracy;
+    surveyResponse.locTimestamp = location.timestamp;
+    
     [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
-    
-    NSLog(@"submitted survey response: %@", surveyResponse);
-    
-    [self saveModelState];
-    
-    // upload response if we have a network connection
-//    if (self.reachabilityManager.isReachable) {
-//        [self uploadSurveyResponse:surveyResponse];
-//    }
-    
 }
 
 #pragma mark - User (Private)
@@ -208,12 +217,6 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     NSLog(@"did login");
     // refresh surveys
     [self fetchSurveys];
-    
-    // start tracking location for reminders and survey response metadata
-    if ([CLLocationManager locationServicesEnabled]) {
-        OHMLocationManager *appLocationManager = [OHMLocationManager sharedLocationManager];
-        [appLocationManager.locationManager startUpdatingLocation];
-    }
     
     [[OHMReminderManager sharedReminderManager] synchronizeReminders];
 //    [self submitPendingSurveyResponses];

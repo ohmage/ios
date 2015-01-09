@@ -11,6 +11,7 @@
 #import "OHMReminder.h"
 #import "OHMReminderLocation.h"
 
+#define STALE_INTERVAL 60
 
 @interface OHMLocationManager ()
 @property (strong, nonatomic) NSMutableArray *completionBlocks;
@@ -61,14 +62,26 @@
     return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized);
 }
 
+- (BOOL)currentLocationIsStale
+{
+    NSLog(@"current location is stale: %d", (self.locationManager.location == nil || [self.locationManager.location.timestamp timeIntervalSinceNow] < -STALE_INTERVAL));
+    if (self.locationManager.location == nil) return YES;
+    return ([self.locationManager.location.timestamp timeIntervalSinceNow] < -STALE_INTERVAL);
+}
+
 - (BOOL)hasLocation
 {
-    return (self.locationManager.location != nil);
+    return ![self currentLocationIsStale];
 }
 
 - (CLLocation *)location
 {
-    return self.locationManager.location;
+    if ([self currentLocationIsStale]) {
+        return nil;
+    }
+    else {
+        return self.locationManager.location;
+    }
 }
 
 - (void)stopMonitoringAllRegions
@@ -96,7 +109,12 @@
         [self.completionBlocks addObject:[block copy]];
     }
     
-    [self.locationManager startUpdatingLocation];
+    if ([self hasLocation]) {
+        [self performCompletionBlocksWithLocation:self.location error:nil];
+    }
+    else {
+        [self.locationManager startUpdatingLocation];
+    }
 }
 
 - (void)performCompletionBlocksWithLocation:(CLLocation *)location error:(NSError *)error
@@ -179,9 +197,12 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     }
     if (status == kCLAuthorizationStatusAuthorized)
     {
-        // Location services have just been authorized on the device, start updating now.
-        [self.locationManager startUpdatingLocation];
         [self setLocationError:nil];
+        
+        // Location services have just been authorized on the device, start updating if needed.
+        if (self.completionBlocks.count > 0) {
+            [self.locationManager startUpdatingLocation];
+        }
     }
     
     if ([self.delegate respondsToSelector:@selector(OHMLocationManagerAuthorizationStatusChanged:)]) {
