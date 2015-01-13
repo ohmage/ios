@@ -76,6 +76,13 @@
 
 - (void)submitButtonPressed:(id)sender
 {
+    [self presentConfirmationAlertWithTitle:@"Submit Survey?"
+                                    message:@"Are you sure you want to submit this survey?"
+                               confirmTitle:@"Submit"];
+}
+
+- (void)confirmationAlertDidConfirm:(UIAlertView *)alert
+{
     [[OHMModel sharedModel] submitSurveyResponse:self.response];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
