@@ -114,6 +114,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 {
     self.user = [self userWithEmail:email];
     [self fetchSurveys];
+    if (self.delegate) {
+        [self.delegate OHMModelUserDidChange:self];
+    }
 }
 
 /**
@@ -127,6 +130,10 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [[OHMLocationManager sharedLocationManager] stopMonitoringAllRegions];
     [self saveModelState];
+    
+    if (self.delegate) {
+        [self.delegate OHMModelUserDidChange:self];
+    }
 }
 
 /**
@@ -566,6 +573,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 - (void)refreshSurveys:(NSArray *)surveyDefinitions
 {
+    NSMutableSet *surveys = [NSMutableSet setWithCapacity:surveyDefinitions.count];
     int index = 0;
     for (NSDictionary *surveyDefinition in surveyDefinitions) {
         OHMSurvey * survey = [self surveyWithSchemaName:surveyDefinition.surveySchemaName
@@ -574,7 +582,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
         if ([survey.objectID isTemporaryID]) {
             [self createSurvey:survey withDefinition:surveyDefinition];
         }
+        [surveys addObject:survey];
     }
+    self.user.surveys = surveys;
     [self saveModelState];
 }
 

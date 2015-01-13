@@ -16,6 +16,7 @@ const struct OHMSurveyRelationships OHMSurveyRelationships = {
 	.reminders = @"reminders",
 	.surveyItems = @"surveyItems",
 	.surveyResponses = @"surveyResponses",
+	.user = @"user",
 };
 
 @implementation OHMSurveyID
@@ -138,6 +139,8 @@ const struct OHMSurveyRelationships OHMSurveyRelationships = {
 	[self didAccessValueForKey:@"surveyResponses"];
 	return result;
 }
+
+@dynamic user;
 
 @end
 

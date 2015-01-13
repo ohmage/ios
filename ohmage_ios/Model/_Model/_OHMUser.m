@@ -13,6 +13,7 @@ const struct OHMUserRelationships OHMUserRelationships = {
 	.reminderLocations = @"reminderLocations",
 	.reminders = @"reminders",
 	.surveyResponses = @"surveyResponses",
+	.surveys = @"surveys",
 };
 
 @implementation OHMUserID
@@ -104,6 +105,17 @@ const struct OHMUserRelationships OHMUserRelationships = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"surveyResponses"];
 
 	[self didAccessValueForKey:@"surveyResponses"];
+	return result;
+}
+
+@dynamic surveys;
+
+- (NSMutableSet*)surveysSet {
+	[self willAccessValueForKey:@"surveys"];
+
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"surveys"];
+
+	[self didAccessValueForKey:@"surveys"];
 	return result;
 }
 

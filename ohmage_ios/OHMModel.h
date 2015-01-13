@@ -65,5 +65,6 @@
 @protocol OHMModelDelegate <NSObject>
 
 - (void)OHMModelDidFetchSurveys:(OHMModel *)model;
+- (void)OHMModelUserDidChange:(OHMModel *)model;
 
 @end

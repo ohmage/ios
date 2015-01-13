@@ -13,11 +13,13 @@ extern const struct OHMUserRelationships {
 	__unsafe_unretained NSString *reminderLocations;
 	__unsafe_unretained NSString *reminders;
 	__unsafe_unretained NSString *surveyResponses;
+	__unsafe_unretained NSString *surveys;
 } OHMUserRelationships;
 
 @class OHMReminderLocation;
 @class OHMReminder;
 @class OHMSurveyResponse;
+@class OHMSurvey;
 
 @interface OHMUserID : NSManagedObjectID {}
 @end
@@ -56,6 +58,10 @@ extern const struct OHMUserRelationships {
 
 - (NSMutableSet*)surveyResponsesSet;
 
+@property (nonatomic, strong) NSSet *surveys;
+
+- (NSMutableSet*)surveysSet;
+
 @end
 
 @interface _OHMUser (ReminderLocationsCoreDataGeneratedAccessors)
@@ -82,6 +88,14 @@ extern const struct OHMUserRelationships {
 
 @end
 
+@interface _OHMUser (SurveysCoreDataGeneratedAccessors)
+- (void)addSurveys:(NSSet*)value_;
+- (void)removeSurveys:(NSSet*)value_;
+- (void)addSurveysObject:(OHMSurvey*)value_;
+- (void)removeSurveysObject:(OHMSurvey*)value_;
+
+@end
+
 @interface _OHMUser (CoreDataGeneratedPrimitiveAccessors)
 
 - (NSString*)primitiveEmail;
@@ -104,5 +118,8 @@ extern const struct OHMUserRelationships {
 
 - (NSMutableSet*)primitiveSurveyResponses;
 - (void)setPrimitiveSurveyResponses:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveSurveys;
+- (void)setPrimitiveSurveys:(NSMutableSet*)value;
 
 @end

@@ -16,11 +16,13 @@ extern const struct OHMSurveyRelationships {
 	__unsafe_unretained NSString *reminders;
 	__unsafe_unretained NSString *surveyItems;
 	__unsafe_unretained NSString *surveyResponses;
+	__unsafe_unretained NSString *user;
 } OHMSurveyRelationships;
 
 @class OHMReminder;
 @class OHMSurveyItem;
 @class OHMSurveyResponse;
+@class OHMUser;
 
 @interface OHMSurveyID : NSManagedObjectID {}
 @end
@@ -74,6 +76,10 @@ extern const struct OHMSurveyRelationships {
 @property (nonatomic, strong) NSSet *surveyResponses;
 
 - (NSMutableSet*)surveyResponsesSet;
+
+@property (nonatomic, strong) OHMUser *user;
+
+//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
 
 @end
 
@@ -142,5 +148,8 @@ extern const struct OHMSurveyRelationships {
 
 - (NSMutableSet*)primitiveSurveyResponses;
 - (void)setPrimitiveSurveyResponses:(NSMutableSet*)value;
+
+- (OHMUser*)primitiveUser;
+- (void)setPrimitiveUser:(OHMUser*)value;
 
 @end

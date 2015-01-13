@@ -63,16 +63,6 @@
                                                                   action:@selector(helpButtonPressed:)];
     self.navigationItem.rightBarButtonItem = helpButton;
     
-    NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
-    NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ohmlet == %@ AND isLoaded == YES", self.ohmlet];
-    self.fetchedResultsController = [[OHMModel sharedModel] fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
-                                                                                            sortDescriptors:@[dueDescriptor, indexDescriptor]
-                                                                                           predicate:nil
-                                                                                  sectionNameKeyPath:@"isDue"
-                                                                                           cacheName:nil];
-    self.fetchedResultsController.delegate = self;
-    [self.fetchedResultsController performFetch:nil];
     self.model.delegate = self;
 }
 
@@ -93,6 +83,26 @@
         _model = [OHMModel sharedModel];
     }
     return _model;
+}
+
+- (NSFetchedResultsController *)fetchedResultsController
+{
+
+    if (_fetchedResultsController == nil) {
+        NSSortDescriptor *dueDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"isDue" ascending:NO];
+        NSSortDescriptor *indexDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", self.model.loggedInUser];
+        _fetchedResultsController = [self.model fetchedResultsControllerWithEntityName:[OHMSurvey entityName]
+                                                                                       sortDescriptors:@[dueDescriptor, indexDescriptor]
+                                                                                             predicate:predicate
+                                                                                    sectionNameKeyPath:@"isDue"
+                                                                                             cacheName:nil];
+        _fetchedResultsController.delegate = self;
+        [_fetchedResultsController performFetch:nil];
+        
+    }
+    return _fetchedResultsController;
+
 }
 
 - (void)refreshSurveys
@@ -155,7 +165,7 @@
     UITableViewCell *cell = nil;
     if (self.fetchedResultsController.fetchedObjects.count == 0) {
         cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
-        cell.textLabel.text = @"No Surveys";
+        cell.textLabel.text = @"No Surveys (pull to refresh)";
     }
     else {
         cell = [OHMUserInterface cellWithSubtitleStyleFromTableView:tableView];
@@ -245,6 +255,13 @@
 - (void)OHMModelDidFetchSurveys:(OHMModel *)model
 {
     [self.refreshControl endRefreshing];
+}
+
+- (void)OHMModelUserDidChange:(OHMModel *)model
+{
+    self.fetchedResultsController = nil;
+    [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
 }
 
 
