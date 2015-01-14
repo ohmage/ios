@@ -84,7 +84,7 @@
 - (OMHSchemaID *)schemaID
 {
     OMHSchemaID *schemdaID = [[OMHSchemaID alloc] init];
-    schemdaID.schemaNamespace = @"ohmage";
+    schemdaID.schemaNamespace = self.survey.schemaNamespace;
     schemdaID.name = self.survey.schemaName;
     schemdaID.version = self.survey.schemaVersion;
     return schemdaID;

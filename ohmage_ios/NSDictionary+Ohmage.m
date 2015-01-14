@@ -76,6 +76,17 @@
     return [self nonNullValueForKey:@"surveys"];
 }
 
+- (NSString *)surveySchemaNamespace
+{
+    NSDictionary *schemaID = self[@"schema_id"];
+    if (schemaID) {
+        return [schemaID nonNullValueForKey:@"namespace"];
+    }
+    else {
+        return nil;
+    }
+}
+
 - (NSString *)surveySchemaName
 {
     NSDictionary *schemaID = self[@"schema_id"];

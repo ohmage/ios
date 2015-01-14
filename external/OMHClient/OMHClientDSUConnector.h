@@ -1,5 +1,5 @@
 //
-//  OMHClientLibrary.h
+//  OMHClientDSUConnector.h
 //  OMHClient
 //
 //  Created by Charles Forkish on 12/11/14.
@@ -9,8 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @protocol OMHSignInDelegate;
+@protocol OMHUploadDelegate;
 
 @interface OMHClient : NSObject
+
++ (void)setupClientWithAppGoogleClientID:(NSString *)appGooggleClientID
+                    serverGoogleClientID:(NSString *)serverGoogleClientID
+                          appDSUClientID:(NSString *)appDSUClientID
+                      appDSUClientSecret:(NSString *)appDSUClientSecret;
 
 + (instancetype)sharedClient;
 
@@ -28,9 +34,12 @@
 + (NSString *)signedInUserEmail;
 + (void)setSignedInUserEmail:(NSString *)signedInUserEmail;
 
+
 @property (nonatomic, weak) id<OMHSignInDelegate> signInDelegate;
+@property (nonatomic, weak) id<OMHUploadDelegate> uploadDelegate;
 @property (nonatomic, readonly) BOOL isSignedIn;
 @property (nonatomic, readonly) BOOL isReachable;
+@property (nonatomic, readonly) int pendingDataPointCount;
 
 
 - (BOOL)handleURL:(NSURL *)url
@@ -43,13 +52,12 @@ sourceApplication:(NSString *)sourceApplication
 - (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
     completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
 
-//- (void)authenticatedGetRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-//                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
-//
-//- (void)authenticatedPostRequest:(NSString *)request withParameters:(NSDictionary *)parameters
-//                 completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+- (void)authenticatedGetRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
 
-- (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block;
+- (void)authenticatedPostRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+                 completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+
 - (void)signOut;
 
 - (void)submitDataPoint:(NSDictionary *)dataPoint;
@@ -59,4 +67,8 @@ sourceApplication:(NSString *)sourceApplication
 
 @protocol OMHSignInDelegate
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error;
+@end
+
+@protocol OMHUploadDelegate
+- (void)OMHClient:(OMHClient *)client didUploadDataPoint:(NSDictionary *)dataPoint;
 @end

@@ -547,25 +547,17 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 
 - (void)fetchSurveys
 {
-    [[OMHClient sharedClient] refreshAuthenticationWithCompletionBlock:^(BOOL success) {
-        NSLog(@"fetch surveys auth refresh success: %d", success);
-        if (success) {
-            NSString *request = @"surveys";
-            [[OMHClient sharedClient] getRequest:request withParameters:nil completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
-                if (error == nil) {
-                    NSLog(@"fetch surveys success");
-                    [self refreshSurveys:responseObject];
-                }
-                else {
-                    NSLog(@"fetch surveys error: %@", error);
-                }
-                
-                if (self.delegate != nil) {
-                    [self.delegate OHMModelDidFetchSurveys:self];
-                }
-            }];
+    NSString *request = @"surveys";
+    [[OMHClient sharedClient] authenticatedGetRequest:request withParameters:nil completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
+        if (error == nil) {
+            NSLog(@"fetch surveys success");
+            [self refreshSurveys:responseObject];
         }
-        else if (self.delegate != nil) {
+        else {
+            NSLog(@"fetch surveys error: %@", error);
+        }
+        
+        if (self.delegate != nil) {
             [self.delegate OHMModelDidFetchSurveys:self];
         }
     }];
@@ -576,8 +568,9 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     NSMutableSet *surveys = [NSMutableSet setWithCapacity:surveyDefinitions.count];
     int index = 0;
     for (NSDictionary *surveyDefinition in surveyDefinitions) {
-        OHMSurvey * survey = [self surveyWithSchemaName:surveyDefinition.surveySchemaName
-                                                version:surveyDefinition.surveySchemaVersion];
+        OHMSurvey * survey = [self surveyWithSchemaNamespace:surveyDefinition.surveySchemaNamespace
+                                                        name:surveyDefinition.surveySchemaName
+                                                     version:surveyDefinition.surveySchemaVersion];
         survey.indexValue = index++;
         if ([survey.objectID isTemporaryID]) {
             [self createSurvey:survey withDefinition:surveyDefinition];
@@ -712,12 +705,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
 }
 
 /**
- *  surveyWithOhmID:andVersion
+ *  surveyWithSchemaNamespace:andVersion
  */
-- (OHMSurvey *)surveyWithSchemaName:(NSString *)schemaName version:(NSString *)schemaVersion
+- (OHMSurvey *)surveyWithSchemaNamespace:(NSString *)schemaNamespace name:(NSString *)schemaName version:(NSString *)schemaVersion
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schemaName == %@) AND (schemaVersion == %@)", schemaName, schemaVersion];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schemaNamespace == %@) AND (schemaName == %@) AND (schemaVersion == %@)", schemaNamespace, schemaName, schemaVersion];
     OHMSurvey *survey = (OHMSurvey *)[self fetchObjectForEntityName:[OHMSurvey entityName] withUniquePredicate:predicate create:YES];
+    survey.schemaNamespace = schemaNamespace;
     survey.schemaName = schemaName;
     survey.schemaVersion = schemaVersion;
     return survey;

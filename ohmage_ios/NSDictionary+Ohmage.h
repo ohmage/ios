@@ -31,6 +31,7 @@
 - (NSString *)userFullName;
 
 - (NSArray *)surveyDefinitions;
+- (NSString *)surveySchemaNamespace;
 - (NSString *)surveySchemaName;
 - (NSString *)surveySchemaVersion;
 - (NSString *)surveyName;

@@ -16,6 +16,24 @@ typedef NSMutableDictionary OMHAcquisitionProvenance;
 /**
  *  Data Point
  *  http://www.openmhealth.org/developers/schemas/#data-point
+ *
+ * The easiest way to create a new data point conforming to the OmH
+ * data point schema is with a call to [OMHDataPoint templateDataPoint].
+ * That will return a dictionary with the schema structure like this:
+ *
+ *  {
+ *      "header": {
+ *           "id": <a new UUID string>,
+ *           "creation_date_time": <the current date and time>,
+ *           "schema_id": {
+ *               "namespace": "",
+ *               "name": "",
+ *               "version": ""
+ *           }
+ *       },
+ *       "body": {}
+ *   }
+ *
  */
 @interface NSMutableDictionary (OMHDataPoint)
 

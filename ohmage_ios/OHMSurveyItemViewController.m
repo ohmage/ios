@@ -326,8 +326,8 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     UITableView *choiceTable = [[UITableView alloc] init];
     choiceTable.delegate = self;
     choiceTable.dataSource = self;
-    [choiceTable registerClass:[UITableViewCell class]
-           forCellReuseIdentifier:@"UITableViewCell"];
+//    [choiceTable registerClass:[UITableViewCell class]
+//           forCellReuseIdentifier:@"UITableViewCell"];
     [self.view addSubview:choiceTable];
     [self.view constrainChildToDefaultHorizontalInsets:choiceTable];
     [choiceTable positionBelowElementWithDefaultMargin:self.textLabel];
@@ -544,7 +544,7 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    UITableViewCell *cell = [OHMUserInterface cellWithDefaultStyleFromTableView:tableView];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
@@ -552,6 +552,12 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
     cell.accessoryType = ([self.promptResponse.selectedChoices containsObject:choice] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone);
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OHMSurveyPromptChoice *choice = self.item.choices[indexPath.row];
+    return [OHMUserInterface heightForSubtitleCellWithTitle:choice.text subtitle:nil accessoryType:UITableViewCellAccessoryCheckmark fromTableView:tableView];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

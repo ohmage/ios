@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="OHMReminder" representedClassName="OHMReminder" syncable="YES">
         <attribute name="alwaysShow" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="enabled" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -32,6 +32,7 @@
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="isDue" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="schemaName" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="schemaNamespace" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="schemaVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="surveyDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="surveyName" optional="YES" attributeType="String" syncable="YES"/>
@@ -105,7 +106,7 @@
     <elements>
         <element name="OHMReminder" positionX="-54" positionY="-90" width="128" height="270"/>
         <element name="OHMReminderLocation" positionX="-54" positionY="-90" width="128" height="180"/>
-        <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="195"/>
+        <element name="OHMSurvey" positionX="-135" positionY="-99" width="128" height="210"/>
         <element name="OHMSurveyItem" positionX="-207" positionY="143" width="153" height="328"/>
         <element name="OHMSurveyPromptChoice" positionX="-54" positionY="-90" width="128" height="135"/>
         <element name="OHMSurveyPromptResponse" positionX="90" positionY="143" width="128" height="180"/>

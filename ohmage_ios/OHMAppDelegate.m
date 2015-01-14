@@ -27,7 +27,13 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    [self setupOMHClient];
+    [OMHClient setupClientWithAppGoogleClientID:kOhmageGoogleClientID
+                           serverGoogleClientID:kOMHServerGoogleClientID
+                                 appDSUClientID:kOhmageDSUClientID
+                             appDSUClientSecret:kOhmageDSUClientSecret];
+    
+    OMHDataPoint *dat = [OMHDataPoint templateDataPoint];
+    NSLog(@"data point: %@", dat);
     
     if (![OMHClient sharedClient].isSignedIn) {
         self.window.rootViewController = self.loginViewController;
@@ -98,14 +104,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [[OHMReminderManager sharedReminderManager] synchronizeReminders];
-}
-
-- (void)setupOMHClient
-{
-    [OMHClient setAppGoogleClientID:kOhmageGoogleClientID];
-    [OMHClient setServerGoogleClientID:kOMHServerGoogleClientID];
-    [OMHClient setAppDSUClientID:kOhmageDSUClientID];
-    [OMHClient setAppDSUClientSecret:kOhmageDSUClientSecret];
 }
 
 - (OHMLoginViewController *)loginViewController

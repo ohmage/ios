@@ -12,5 +12,18 @@
 #import "OMHClientDSUConnector.h"
 #import "OMHDataPoint.h"
 
+/**
+ * Setup the OMHClient with in your app delegate's applicationDidFinishLaunching with a call to
+ *
+ * [OMHClient setupClientWithAppGoogleClientID:<your app's Google client ID>
+ *                        serverGoogleClientID:<a DSU server Google client ID>
+ *                              appDSUClientID:<your app's DSU client ID>
+ *                          appDSUClientSecret:<your app's DSU client secret>];
+ */
+
+/**
+ * Use preprocessor macro OMHDEBUG=1 to enable debug logging
+ */
+
 
 #endif

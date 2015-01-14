@@ -104,7 +104,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     [self updateDoneButtonEnabledState];
     
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        [self requestNotificationPermissions];
+        if ([self respondsToSelector:@selector(requestNotificationPermissions)]) {
+            [self performSelector:@selector(requestNotificationPermissions) withObject:nil];
+        }
     }
 }
 

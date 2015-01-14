@@ -14,6 +14,12 @@
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
 
+#ifdef OMHDEBUG
+#   define OMHLog(fmt, ...) NSLog((@"%s " fmt), __PRETTY_FUNCTION__, ##__VA_ARGS__)
+#else
+#   define OMHLog(...)
+#endif
+
 NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 NSString * const kAppGoogleClientIDKey = @"AppGoogleClientID";
@@ -21,6 +27,7 @@ NSString * const kServerGoogleClientIDKey = @"ServerGoogleClientID";
 NSString * const kAppDSUClientIDKey = @"AppDSUClientID";
 NSString * const kAppDSUClientSecretKey = @"AppDSUClientSecret";
 NSString * const kSignedInUserEmailKey = @"SignedInUserEmail";
+NSString * const kHomeServerCodeKey = @"HomeServerCode";
 
 static OMHClient *_sharedClient = nil;
 
@@ -43,6 +50,17 @@ static OMHClient *_sharedClient = nil;
 @end
 
 @implementation OMHClient
+
++ (void)setupClientWithAppGoogleClientID:(NSString *)appGooggleClientID
+                    serverGoogleClientID:(NSString *)serverGoogleClientID
+                          appDSUClientID:(NSString *)appDSUClientID
+                      appDSUClientSecret:(NSString *)appDSUClientSecret
+{
+    [self setAppGoogleClientID:kOhmageGoogleClientID];
+    [self setServerGoogleClientID:kOMHServerGoogleClientID];
+    [self setAppDSUClientID:kOhmageDSUClientID];
+    [self setAppDSUClientSecret:kOhmageDSUClientSecret];
+}
 
 + (instancetype)sharedClient
 {
@@ -80,7 +98,7 @@ static OMHClient *_sharedClient = nil;
 
 + (NSData *)encodedClientForEmail:(NSString *)email
 {
-    NSLog(@"unarchiving client for email: %@", email);
+    OMHLog(@"unarchiving client for email: %@", email);
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     return [defaults objectForKey:[self archiveKeyForEmail:email]];
 }
@@ -148,10 +166,10 @@ static OMHClient *_sharedClient = nil;
 
 - (void)saveClientState
 {
-    NSLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
+    OMHLog(@"saving client state, pending: %d", (int)self.pendingDataPoints.count);
     NSString *signedInUserEmail = [OMHClient signedInUserEmail];
     if (signedInUserEmail == nil) {
-        NSLog(@"attempting to save client with no signed-in user");
+        OMHLog(@"attempting to save client with no signed-in user");
         return;
     }
     
@@ -175,7 +193,6 @@ static OMHClient *_sharedClient = nil;
                                 appDSUClientSecret];
             
             NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"encoded cliend id and secret: %@", [data base64EncodedStringWithOptions:0]);
             sEncodedIDAndSecret = [data base64EncodedStringWithOptions:0];
         }
     }
@@ -243,6 +260,17 @@ static OMHClient *_sharedClient = nil;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
++ (NSString *)homeServerAuthorizationCode
+{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:kHomeServerCodeKey];
+}
+
++ (void)setHomeServerAuthorizationCode:(NSString *)serverCode
+{
+    [[NSUserDefaults standardUserDefaults] setObject:serverCode forKey:kHomeServerCodeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 - (NSMutableArray *)pendingDataPoints
 {
@@ -269,6 +297,11 @@ static OMHClient *_sharedClient = nil;
 {
     if (!self.isSignedIn) return NO;
     return self.httpSessionManager.reachabilityManager.isReachable;
+}
+
+- (int)pendingDataPointCount
+{
+    return (int)self.pendingDataPoints.count;
 }
 
 
@@ -302,7 +335,8 @@ static OMHClient *_sharedClient = nil;
     }
 }
 
-- (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+- (void)getRequest:(NSString *)request
+    withParameters:(NSDictionary *)parameters
    completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
 {
     [self.httpSessionManager GET:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -315,7 +349,8 @@ static OMHClient *_sharedClient = nil;
     }];
 }
 
-- (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+- (void)postRequest:(NSString *)request
+     withParameters:(NSDictionary *)parameters
     completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
 {
     [self.httpSessionManager POST:request parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -327,10 +362,43 @@ static OMHClient *_sharedClient = nil;
     }];
 }
 
+- (void)authenticatedGetRequest:(NSString *)request
+                 withParameters:(NSDictionary *)parameters
+                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
+{
+    __block NSString *blockRequest = [request copy];
+    __block NSDictionary *blockParameters = [parameters copy];
+    __block void (^blockCompletionBlock)(id responseObject, NSError *error, NSInteger statusCode) = [block copy];
+    [self refreshAuthenticationWithCompletionBlock:^(NSError *error) {
+        if (error == nil) {
+            [self getRequest:blockRequest withParameters:blockParameters completionBlock:blockCompletionBlock];
+        }
+        else {
+            blockCompletionBlock(nil, error, 0);
+        }
+    }];
+}
+
+- (void)authenticatedPostRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block
+{
+    __block NSString *blockRequest = [request copy];
+    __block NSDictionary *blockParameters = [parameters copy];
+    __block void (^blockCompletionBlock)(id responseObject, NSError *error, NSInteger statusCode) = [block copy];
+    [self refreshAuthenticationWithCompletionBlock:^(NSError *error) {
+        if (error == nil) {
+            [self postRequest:blockRequest withParameters:blockParameters completionBlock:blockCompletionBlock];
+        }
+        else {
+            blockCompletionBlock(nil, error, 0);
+        }
+    }];
+}
+
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status
 {
     if (!self.isSignedIn) return;
-    NSLog(@"reachability status changed: %d", (int)status);
+    OMHLog(@"reachability status changed: %d", (int)status);
     // when network becomes reachable, re-authenticate user
     // and upload any pending survey responses
     if (status > AFNetworkReachabilityStatusNotReachable) {
@@ -346,7 +414,7 @@ static OMHClient *_sharedClient = nil;
 - (void)setDSUSignInHeader
 {
     NSString *token = [self encodedClientIDAndSecret];
-    NSLog(@"setting dsu sign in header with token: %@", token);
+    OMHLog(@"setting dsu sign in header with token: %@", token);
     if (token) {
         self.httpSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         NSString *auth = [NSString stringWithFormat:@"Basic %@", token];
@@ -356,7 +424,7 @@ static OMHClient *_sharedClient = nil;
 
 - (void)setDSUUploadHeader
 {
-    NSLog(@"setting dsu upload header: %@", self.dsuAccessToken);
+    OMHLog(@"setting dsu upload header: %@", self.dsuAccessToken);
     if (self.dsuAccessToken) {
         self.httpSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         NSString *auth = [NSString stringWithFormat:@"Bearer %@", self.dsuAccessToken];
@@ -380,9 +448,9 @@ static OMHClient *_sharedClient = nil;
     return (comp == NSOrderedAscending);
 }
 
-- (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block
+- (void)refreshAuthenticationWithCompletionBlock:(void (^)(NSError *error))block
 {
-    NSLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
+    OMHLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
     
     if (block) {
         [self.authRefreshCompletionBlocks addObject:[block copy]];
@@ -399,7 +467,7 @@ static OMHClient *_sharedClient = nil;
     
     [self postRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-            NSLog(@"refresh authentication success");
+            OMHLog(@"refresh authentication success");
             
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
@@ -407,14 +475,14 @@ static OMHClient *_sharedClient = nil;
             [self uploadPendingDataPoints];
         }
         else {
-            NSLog(@"refresh authentiation failed: %@", error);
+            OMHLog(@"refresh authentiation failed: %@", error);
             self.isAuthenticated = NO;
         }
         
         self.isAuthenticating = NO;
         
-        for (void (^completionBlock)(BOOL) in self.authRefreshCompletionBlocks) {
-            completionBlock(error == nil);
+        for (void (^completionBlock)(NSError *) in self.authRefreshCompletionBlocks) {
+            completionBlock(error);
         }
         [self.authRefreshCompletionBlocks removeAllObjects];
     }];
@@ -423,7 +491,7 @@ static OMHClient *_sharedClient = nil;
 - (void)submitDataPoint:(NSDictionary *)dataPoint
 {
     if (!self.isSignedIn) {
-        NSLog(@"attempting to submit data point while not signed in");
+        OMHLog(@"attempting to submit data point while not signed in");
         return;
     }
     
@@ -442,7 +510,7 @@ static OMHClient *_sharedClient = nil;
 
 - (void)uploadPendingDataPoints
 {
-    NSLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
+    OMHLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
     
     for (NSDictionary *dataPoint in self.pendingDataPoints) {
         [self uploadDataPoint:dataPoint];
@@ -451,21 +519,22 @@ static OMHClient *_sharedClient = nil;
 
 - (void)uploadDataPoint:(NSDictionary *)dataPoint
 {
-//    NSLog(@"uploading data point: %@, isAuthenticating: %d", dataPoint[@"header"][@"id"], self.isAuthenticating);
-    
     NSString *request = @"dataPoints";
     
     __block NSDictionary *blockDataPoint = dataPoint;
     [self postRequest:request withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-            NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
+            OMHLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
             [self.pendingDataPoints removeObject:dataPoint];
             [self saveClientState];
+            if (self.uploadDelegate) {
+                [self.uploadDelegate OMHClient:self didUploadDataPoint:blockDataPoint];
+            }
         }
         else {
-            NSLog(@"upload data point failed: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
+            OMHLog(@"upload data point failed: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
             if (statusCode == 409) {
-                NSLog(@"removing conflicting data point, is pending: %d", [self.pendingDataPoints containsObject:blockDataPoint]);
+                OMHLog(@"removing conflicting data point, is pending: %d", [self.pendingDataPoints containsObject:blockDataPoint]);
                 // conflict, data point already uploaded
                 [self.pendingDataPoints removeObject:blockDataPoint];
                 [self saveClientState];
@@ -502,7 +571,7 @@ static OMHClient *_sharedClient = nil;
 - (void)finishedWithAuth: (GTMOAuth2Authentication *)auth
                    error: (NSError *) error
 {
-    NSLog(@"Client received google error %@ and auth object %@",error, auth);
+    OMHLog(@"Client received google error %@ and auth object %@",error, auth);
     if (error) {
         if (self.signInDelegate) {
             [self.signInDelegate OMHClient:self signInFinishedWithError:error];
@@ -510,16 +579,19 @@ static OMHClient *_sharedClient = nil;
     }
     else {
         NSString *serverCode = [GPPSignIn sharedInstance].homeServerAuthorizationCode;
+        if (serverCode == nil) serverCode = [OMHClient homeServerAuthorizationCode];
+        
         if (serverCode != nil) {
-            NSLog(@"signed in user email: %@", auth.userEmail);
+            OMHLog(@"signed in user email: %@", auth.userEmail);
             [OMHClient setSignedInUserEmail:auth.userEmail];
+            [OMHClient setHomeServerAuthorizationCode:serverCode];
             [self unarchivePendingDataPointsForEmail:auth.userEmail];
             [self signInToDSUWithServerCode:serverCode];
         }
         else {
-            NSLog(@"failed to receive server code from google auth");
+            OMHLog(@"failed to receive server code from google auth");
             if (self.signInDelegate) {
-                NSError *serverCodeError = [NSError errorWithDomain:@"OMHClientError" code:0 userInfo:nil];
+                NSError *serverCodeError = [NSError errorWithDomain:@"OMHClientServerCodeError" code:0 userInfo:nil];
                 [self.signInDelegate OMHClient:self signInFinishedWithError:serverCodeError];
             }
             
@@ -540,7 +612,7 @@ static OMHClient *_sharedClient = nil;
     self.isAuthenticating = YES;
     [self getRequest:request withParameters:parameters completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-            NSLog(@"DSU login success, response object: %@", responseObject);
+            OMHLog(@"DSU login success, response object: %@", responseObject);
             [self storeAuthenticationResponse:(NSDictionary *)responseObject];
             [self setDSUUploadHeader];
             self.isAuthenticated = YES;
@@ -551,7 +623,7 @@ static OMHClient *_sharedClient = nil;
             }
         }
         else {
-            NSLog(@"DSU login failure, error: %@", error);
+            OMHLog(@"DSU login failure, error: %@", error);
             self.isAuthenticating = NO;
             
             if (self.signInDelegate != nil) {
@@ -570,7 +642,7 @@ static OMHClient *_sharedClient = nil;
 
 - (void)signOut
 {
-    NSLog(@"sign out");
+    OMHLog(@"sign out");
     [[OMHClient gppSignIn] signOut];
     [self saveClientState];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kSignedInUserEmailKey];

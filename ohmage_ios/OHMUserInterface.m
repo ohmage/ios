@@ -112,6 +112,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.font = [OHMAppConstants cellTextFont];
+        cell.textLabel.numberOfLines = 0;
     }
     
     return cell;
