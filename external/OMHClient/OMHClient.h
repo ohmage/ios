@@ -11,6 +11,7 @@
 
 #import "OMHClientDSUConnector.h"
 #import "OMHDataPoint.h"
+#import "OMHApplication.h"
 
 /**
  * Setup the OMHClient with in your app delegate's applicationDidFinishLaunching with a call to

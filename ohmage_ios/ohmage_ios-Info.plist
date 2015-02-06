@@ -39,6 +39,8 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Ohmage needs permission to always use your location in order to provide location-based reminders.</string>
+	<key>NSPrincipalClass</key>
+	<string>OMHApplication</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

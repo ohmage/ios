@@ -102,6 +102,7 @@
 		1EDA0B2718F4948200C89F91 /* OHMSurveyItemTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2618F4948200C89F91 /* OHMSurveyItemTypes.m */; };
 		1EDA0B3118F59C7E00C89F91 /* OHMSurveyItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */; };
 		1EDA0B3518F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0B3318F5A4DD00C89F91 /* ohmage_ios.xcdatamodeld */; };
+		1EE737F01A852AEC008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737EF1A852AEC008913E0 /* OMHApplication.m */; };
 		1EED8815192557F5004F7C51 /* OHMReminderReentryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EED8814192557F5004F7C51 /* OHMReminderReentryViewController.m */; };
 		1EF3900A1921713C00CD69BE /* OHMLocationMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF390091921713C00CD69BE /* OHMLocationMapViewController.m */; };
 		1EF3900D1921DD3F00CD69BE /* OHMReminderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF3900C1921DD3F00CD69BE /* OHMReminderManager.m */; };
@@ -307,6 +308,8 @@
 		1EDA0B2E18F59C7E00C89F91 /* OHMSurveyItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMSurveyItemViewController.h; sourceTree = "<group>"; };
 		1EDA0B2F18F59C7E00C89F91 /* OHMSurveyItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMSurveyItemViewController.m; sourceTree = "<group>"; };
 		1EDA0B3418F5A4DD00C89F91 /* ohmage_ios.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ohmage_ios.xcdatamodel; sourceTree = "<group>"; };
+		1EE737EE1A852AEC008913E0 /* OMHApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHApplication.h; sourceTree = "<group>"; };
+		1EE737EF1A852AEC008913E0 /* OMHApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHApplication.m; sourceTree = "<group>"; };
 		1EED8813192557F5004F7C51 /* OHMReminderReentryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMReminderReentryViewController.h; sourceTree = "<group>"; };
 		1EED8814192557F5004F7C51 /* OHMReminderReentryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHMReminderReentryViewController.m; sourceTree = "<group>"; };
 		1EF390081921713C00CD69BE /* OHMLocationMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHMLocationMapViewController.h; sourceTree = "<group>"; };
@@ -422,6 +425,8 @@
 				1E2419E81A570C80008A9F08 /* OMHClientDSUConnector.m */,
 				1E2419E91A570C80008A9F08 /* OMHDataPoint.h */,
 				1E2419EA1A570C80008A9F08 /* OMHDataPoint.m */,
+				1EE737EE1A852AEC008913E0 /* OMHApplication.h */,
+				1EE737EF1A852AEC008913E0 /* OMHApplication.m */,
 			);
 			name = OMHClient;
 			path = external/OMHClient;
@@ -863,6 +868,7 @@
 				1E1B61091909B3F3001046E0 /* UIColor+Ohmage.m in Sources */,
 				1E3C80F2191083DA0088D2D0 /* OHMReminder.m in Sources */,
 				1E70097018CA6F8700203990 /* main.m in Sources */,
+				1EE737F01A852AEC008913E0 /* OMHApplication.m in Sources */,
 				1E2419F11A570C80008A9F08 /* AFURLConnectionOperation.m in Sources */,
 				1E1B60CF19063242001046E0 /* OHMUser.m in Sources */,
 				1EF3900A1921713C00CD69BE /* OHMLocationMapViewController.m in Sources */,
