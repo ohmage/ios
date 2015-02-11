@@ -31,6 +31,7 @@ NSString * const kSignedInUserEmailKey = @"SignedInUserEmail";
 NSString * const kHomeServerCodeKey = @"HomeServerCode";
 
 static OMHClient *_sharedClient = nil;
+static GPPSignIn *_gppSignIn = nil;
 
 
 @interface OMHClient () <GPPSignInDelegate, UIWebViewDelegate>
@@ -47,6 +48,8 @@ static OMHClient *_sharedClient = nil;
 @property (nonatomic, assign) BOOL isAuthenticated;
 @property (atomic, assign) BOOL isAuthenticating;
 @property (nonatomic, strong) NSMutableArray *authRefreshCompletionBlocks;
+
+@property (nonatomic, weak) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -90,6 +93,7 @@ static OMHClient *_sharedClient = nil;
 + (void)releaseShared
 {
     _sharedClient = nil;
+    _gppSignIn = nil;
 }
 
 + (NSString *)archiveKeyForEmail:(NSString *)email
@@ -567,7 +571,6 @@ static OMHClient *_sharedClient = nil;
 
 + (GPPSignIn *)gppSignIn
 {
-    static GPPSignIn *_gppSignIn = nil;
     if (_gppSignIn == nil) {
         GPPSignIn *signIn = [GPPSignIn sharedInstance];
         signIn.shouldFetchGooglePlusUser = YES;
@@ -638,6 +641,7 @@ static OMHClient *_sharedClient = nil;
         else {
             OMHLog(@"DSU login failure, error: %@", error);
             self.isAuthenticating = NO;
+            [self signOut];
             
             if (self.signInDelegate != nil) {
                 [self.signInDelegate OMHClient:self signInFinishedWithError:error];
@@ -679,6 +683,12 @@ static OMHClient *_sharedClient = nil;
     webview.delegate = self;
     [webview loadRequest:[NSURLRequest requestWithURL:url]];
     
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [webview addSubview:activityIndicator];
+    [activityIndicator centerInView:webview];
+    [activityIndicator startAnimating];
+    self.activityIndicator = activityIndicator;
+    
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view = webview;
     vc.title = @"Sign In";
@@ -702,6 +712,21 @@ static OMHClient *_sharedClient = nil;
         return NO;
     }
     return YES;
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self.activityIndicator removeFromSuperview];
+    self.activityIndicator = nil;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    if (self.signInDelegate != nil) {
+        [self.signInDelegate dismissViewControllerAnimated:YES completion:^{
+            [self.signInDelegate OMHClient:self signInFinishedWithError:error];
+        }];
+    }
 }
 
 @end

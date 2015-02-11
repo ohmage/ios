@@ -31,6 +31,15 @@
     [self.view addSubview:background];
     [self.view constrainChildToEqualSize:background];
     
+    [self setupSignInButton];
+}
+
+- (void)setupSignInButton
+{
+    if (self.signInButton) {
+        [self.signInButton removeFromSuperview];
+        self.signInButton = nil;
+    }
     
     UIButton *googleButton = [OMHClient googleSignInButton];
     [googleButton addTarget:self action:@selector(signInButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -55,7 +64,8 @@
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.view addSubview:indicator];
-    [indicator centerInView:self.view];
+    [indicator centerHorizontallyInView:self.view];
+    [indicator positionAboveElement:self.signInButton withMargin:self.signInButton.frame.size.height];
     [indicator startAnimating];
     self.activityIndicator = indicator;
 }
@@ -66,7 +76,8 @@
     label.text = @"Sign in failed";
     [label sizeToFit];
     [self.view addSubview:label];
-    [label centerInView:self.view];
+    [label centerHorizontallyInView:self.view];
+    [label positionAboveElement:self.signInButton withMargin:self.signInButton.frame.size.height];
     self.signInFailureLabel = label;
 }
 
@@ -76,9 +87,8 @@
     
     if (error != nil) {
         NSLog(@"OMHClientLoginFinishedWithError: %@", error);
+        [self setupSignInButton];
         [self presentSignInFailureMessage];
-        self.signInButton.userInteractionEnabled = YES;
-        self.signInButton.alpha = 1.0;
     }
     else {
         [[OHMModel sharedModel] clientDidLoginWithEmail:[OMHClient signedInUserEmail]];
