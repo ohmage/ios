@@ -21,7 +21,7 @@
 #   define OMHLog(...)
 #endif
 
-NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
+NSString * const kDSUBaseURL = @"https://ohmage-omh.smalldata.io/dsu";
 
 NSString * const kAppGoogleClientIDKey = @"AppGoogleClientID";
 NSString * const kServerGoogleClientIDKey = @"ServerGoogleClientID";
@@ -685,7 +685,7 @@ static GPPSignIn *_gppSignIn = nil;
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [webview addSubview:activityIndicator];
-    [activityIndicator centerInView:webview];
+    [self centerViewInParent:activityIndicator];
     [activityIndicator startAnimating];
     self.activityIndicator = activityIndicator;
     
@@ -727,6 +727,28 @@ static GPPSignIn *_gppSignIn = nil;
             [self.signInDelegate OMHClient:self signInFinishedWithError:error];
         }];
     }
+}
+
+#pragma mark - Layout Helpers
+
+- (void)centerViewInParent:(UIView *)aView
+{
+    UIView *parent = aView.superview;
+    if (parent == nil) return;
+    
+    aView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [parent addConstraint:[NSLayoutConstraint
+                           constraintWithItem:aView attribute:NSLayoutAttributeCenterX
+                           relatedBy:NSLayoutRelationEqual
+                           toItem:parent attribute:NSLayoutAttributeCenterX
+                           multiplier:1.0f constant:0.0f]];
+    
+    [parent addConstraint:[NSLayoutConstraint
+                           constraintWithItem:aView attribute:NSLayoutAttributeCenterY
+                           relatedBy:NSLayoutRelationEqual
+                           toItem:parent attribute:NSLayoutAttributeCenterY
+                           multiplier:1.0f constant:0.0f]];
 }
 
 @end
