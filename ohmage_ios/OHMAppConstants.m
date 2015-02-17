@@ -9,7 +9,7 @@
 #import "OHMAppConstants.h"
 #import "UIColor+Ohmage.h"
 
-NSString * const kOhmageGoogleClientID = @"48636836762-84uv0p5vh2faho7k7fv4230pcgff35d5.apps.googleusercontent.com";
+NSString * const kOhmageGoogleClientID = @"48636836762-detevr4602jd0isb7evsrniklh7q9e6m.apps.googleusercontent.com";
 NSString * const kOMHServerGoogleClientID = @"48636836762-mulldgpmet2r4s3f16s931ea9crcc64m.apps.googleusercontent.com";
 NSString * const kOhmageDSUClientID = @"org.openmhealth.ios.ohmage";
 NSString * const kOhmageDSUClientSecret = @"Rtg43jkLD7z76c";
