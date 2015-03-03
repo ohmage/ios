@@ -9,4 +9,9 @@
 
 @implementation OHMUser
 
+- (void)setUseCellularDataValue:(BOOL)value_
+{
+    
+}
+
 @end

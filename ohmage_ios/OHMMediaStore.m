@@ -131,7 +131,7 @@
         return nil;
     }
     
-    NSString *fileName = [key stringByAppendingPathExtension:@"mp4"];
+    NSString *fileName = [key stringByAppendingPathExtension:@"jpg"];
     return [imagesFolderUrl URLByAppendingPathComponent:fileName];
 }
 

@@ -10,7 +10,7 @@
 
 @interface NSDictionary (Ohmage)
 
-@property (nonatomic, readonly) NSArray *jsonArray;
+//@property (nonatomic, readonly) NSArray *jsonArray;
 
 @property (nonatomic, readonly) NSDictionary *surveyResponseMetadata;
 @property (nonatomic, readonly) NSDictionary *surveyResponseMetadataLocation;

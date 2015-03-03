@@ -10,10 +10,11 @@
 - (id)jsonVal;
 
 - (BOOL)hasValue;
-- (BOOL)hasMediaAttachment;
-- (NSURL *)mediaAttachmentURL;
-- (NSString *)mediaAttachmentName;
-- (NSString *)mimeType;
+//- (BOOL)hasMediaAttachment;
+- (NSDictionary *)mediaAttachment;
+//- (NSURL *)mediaAttachmentURL;
+//- (NSString *)mediaAttachmentName;
+//- (NSString *)mimeType;
 
 - (void)clearValues;
 

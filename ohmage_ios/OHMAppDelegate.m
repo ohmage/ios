@@ -32,8 +32,8 @@
                                  appDSUClientID:kOhmageDSUClientID
                              appDSUClientSecret:kOhmageDSUClientSecret];
     
-    OMHDataPoint *dat = [OMHDataPoint templateDataPoint];
-    NSLog(@"data point: %@", dat);
+    //TODO: remove
+    [OMHClient setDSUBaseURL:@"https://lifestreams.smalldata.io/dsu"];
     
     if (![OMHClient sharedClient].isSignedIn) {
         self.window.rootViewController = self.loginViewController;

@@ -6,9 +6,10 @@
 - (OHMSurveyPromptResponse *)promptResponseForItemID:(NSString *)itemID;
 
 - (NSDictionary *)dataPoint;
-- (NSString *)uploadRequestUrlString;
-- (NSURL *)tempFileURL;
-- (void)removeTempFile;
+- (NSArray *)mediaAttachments;
+//- (NSString *)uploadRequestUrlString;
+//- (NSURL *)tempFileURL;
+//- (void)removeTempFile;
 
 - (NSArray *)displayedPromptResponses;
 

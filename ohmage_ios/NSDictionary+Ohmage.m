@@ -10,10 +10,10 @@
 
 @implementation NSDictionary (Ohmage)
 
-- (NSArray *)jsonArray
-{
-    return @[self];
-}
+//- (NSArray *)jsonArray
+//{
+//    return @[self];
+//}
 
 - (id)nonNullValueForKey:(NSString *)key
 {

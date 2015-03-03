@@ -227,5 +227,95 @@
 }
 
 
+#pragma mark - Rich Media Data Points
+
++ (OMHRichMediaDataPoint *)richMediaDataPointWithDataPoint:(OMHDataPoint *)dataPoint
+                                          mediaAttachments:(NSArray *)mediaAttachments
+{
+    OMHRichMediaDataPoint *rmdp = [[OMHRichMediaDataPoint alloc] init];
+    rmdp.dataPoint = dataPoint;
+    rmdp.mediaAttachments = mediaAttachments;
+    return rmdp;
+}
+
++ (NSString *)cacheDirectoryPath
+{
+    static NSString *sCacheDirectoryPath = nil;
+    if (sCacheDirectoryPath == nil) {
+        NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
+                                                                        NSUserDomainMask,
+                                                                        YES);
+        
+        sCacheDirectoryPath = [cacheDirectories firstObject];
+    }
+    return sCacheDirectoryPath;
+}
+
+- (void)setDataPoint:(OMHDataPoint *)dataPoint
+{
+    self[@"dataPoint"] = dataPoint;
+}
+
+- (OMHDataPoint *)dataPoint
+{
+    return self[@"dataPoint"];
+}
+
+- (NSArray *)jsonArray
+{
+    return @[self.dataPoint];
+}
+
+- (void)setMediaAttachments:(NSArray *)mediaAttachments
+{
+    self[@"mediaAttachments"] = mediaAttachments;
+}
+
+- (NSArray *)mediaAttachments
+{
+    return self[@"mediaAttachments"];
+}
+
+- (NSURL *)tempFileURL
+{
+    NSString *filePath = [[OMHRichMediaDataPoint cacheDirectoryPath]
+                          stringByAppendingPathComponent:self.dataPoint.header.headerID];
+    return [NSURL fileURLWithPath:filePath];
+}
+
+- (void)removeTempFile
+{
+    [[NSFileManager defaultManager] removeItemAtURL:self.tempFileURL error:nil];
+}
+
+
+#pragma mark - Media Attachments
+
+- (void)setMediaAttachmentFileURL:(NSURL *)mediaAttachmentFileURL
+{
+    self[@"fileURL"] = mediaAttachmentFileURL;
+}
+
+- (NSURL *)mediaAttachmentFileURL
+{
+    return self[@"fileURL"];
+}
+
+- (NSString *)mediaAttachmentFileName
+{
+    return [self.mediaAttachmentFileURL lastPathComponent];
+}
+
+- (void)setMediaAttachmentMimeType:(NSString *)mediaAttachmentMimeType
+{
+    self[@"attachmentMimeType"] = mediaAttachmentMimeType;
+}
+
+- (NSString *)mediaAttachmentMimeType
+{
+    return self[@"attachmentMimeType"];
+}
+
+
 
 @end

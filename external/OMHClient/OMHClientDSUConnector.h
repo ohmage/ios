@@ -23,6 +23,9 @@
 + (UIButton *)googleSignInButton;
 
 // global properties
++ (NSString *)defaultDSUBaseURL;
++ (NSString *)DSUBaseURL;
++ (void)setDSUBaseURL:(NSString *)DSUBaseURL;
 + (NSString *)appGoogleClientID;
 + (void)setAppGoogleClientID:(NSString *)appGoogleClientID;
 + (NSString *)serverGoogleClientID;
@@ -40,6 +43,7 @@
 @property (nonatomic, readonly) BOOL isSignedIn;
 @property (nonatomic, readonly) BOOL isReachable;
 @property (nonatomic, readonly) int pendingDataPointCount;
+@property (nonatomic, assign) BOOL allowsCellularAccess;
 
 
 - (BOOL)handleURL:(NSURL *)url
@@ -61,6 +65,8 @@ sourceApplication:(NSString *)sourceApplication
 - (void)signOut;
 
 - (void)submitDataPoint:(NSDictionary *)dataPoint;
+- (void)submitDataPoint:(NSDictionary *)dataPoint
+   withMediaAttachments:(NSArray *)mediaAttachments;
 
 @end
 

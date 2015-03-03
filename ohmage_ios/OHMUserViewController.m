@@ -116,7 +116,7 @@ static NSInteger const kSettingsRowCount = 2;
 
 - (void)cellularDataSwitchToggled:(id)sender
 {
-    self.user.useCellularDataValue = self.cellularDataSwitch.on;
+    [OHMModel sharedModel].useCellularData = self.cellularDataSwitch.on;
     [[OHMModel sharedModel] saveModelState];
 }
 
@@ -150,7 +150,7 @@ static NSInteger const kSettingsRowCount = 2;
             case kSettingsRowCellularData:
             {
                 cell = [OHMUserInterface cellWithSwitchFromTableView:tableView setupBlock:^(UISwitch *sw) {
-                    sw.on = self.user.useCellularDataValue;
+                    sw.on = [OHMModel sharedModel].useCellularData;
                     [sw addTarget:self action:@selector(cellularDataSwitchToggled:) forControlEvents:UIControlEventValueChanged];
                     self.cellularDataSwitch = sw;
                 }];

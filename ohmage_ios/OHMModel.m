@@ -94,6 +94,17 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     [self saveManagedContext];
 }
 
+- (BOOL)useCellularData
+{
+    return self.user.useCellularDataValue;
+}
+
+- (void)setUseCellularData:(BOOL)useCellularData
+{
+    self.user.useCellularDataValue = useCellularData;
+    [OMHClient sharedClient].allowsCellularAccess = useCellularData;
+}
+
 /**
  *  hasLoggedInUser
  */
@@ -178,13 +189,13 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
                 [self submitSurveyResponse:surveyResponse withLocation:location];
             }
             else {
-                [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+                [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint withMediaAttachments:surveyResponse.mediaAttachments];
             }
             [self saveModelState];
         }];
     }
     else {
-        [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+        [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint withMediaAttachments:surveyResponse.mediaAttachments];
         [self saveModelState];
     }
     
@@ -198,7 +209,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     surveyResponse.locAccuracyValue = location.horizontalAccuracy;
     surveyResponse.locTimestamp = location.timestamp;
     
-    [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint];
+    [[OMHClient sharedClient] submitDataPoint:surveyResponse.dataPoint withMediaAttachments:surveyResponse.mediaAttachments];
 }
 
 #pragma mark - User (Private)

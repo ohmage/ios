@@ -81,6 +81,20 @@
 
 }
 
+- (NSArray *)mediaAttachments
+{
+    NSMutableArray *attachments = [NSMutableArray array];
+    for (OHMSurveyPromptResponse *promptResponse in self.promptResponses) {
+        NSDictionary *attachment = promptResponse.mediaAttachment;
+        if (attachment != nil) {
+            [attachments addObject:promptResponse.mediaAttachment];
+        }
+    }
+    
+    if (attachments.count > 0) return attachments;
+    else return nil;
+}
+
 - (OMHSchemaID *)schemaID
 {
     OMHSchemaID *schemdaID = [[OMHSchemaID alloc] init];
@@ -101,26 +115,26 @@
     return sProvenance;
 }
 
-- (NSString *)uploadRequestUrlString
-{
-    return [NSString stringWithFormat:@"surveys/%@/%@/data", self.survey.schemaName, self.survey.schemaVersion];
-}
-
-- (NSURL *)tempFileURL
-{
-    NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
-                                        NSUserDomainMask,
-                                        YES);
-    
-    NSString *cacheDirectory = [cacheDirectories firstObject];
-    NSString *filePath = [cacheDirectory stringByAppendingPathComponent:self.uuid];
-    return [NSURL fileURLWithPath:filePath];
-}
-
-- (void)removeTempFile
-{
-    [[NSFileManager defaultManager] removeItemAtURL:[self tempFileURL] error:nil];
-}
+//- (NSString *)uploadRequestUrlString
+//{
+//    return [NSString stringWithFormat:@"surveys/%@/%@/data", self.survey.schemaName, self.survey.schemaVersion];
+//}
+//
+//- (NSURL *)tempFileURL
+//{
+//    NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
+//                                        NSUserDomainMask,
+//                                        YES);
+//    
+//    NSString *cacheDirectory = [cacheDirectories firstObject];
+//    NSString *filePath = [cacheDirectory stringByAppendingPathComponent:self.uuid];
+//    return [NSURL fileURLWithPath:filePath];
+//}
+//
+//- (void)removeTempFile
+//{
+//    [[NSFileManager defaultManager] removeItemAtURL:[self tempFileURL] error:nil];
+//}
 
 - (NSArray *)displayedPromptResponses
 {

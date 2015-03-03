@@ -22,6 +22,8 @@
 
 + (OHMModel*)sharedModel;
 
+@property (nonatomic, assign) BOOL useCellularData;
+
 @property (nonatomic, weak) id<OHMModelDelegate> delegate;
 @property (copy) void (^backgroundSessionCompletionHandler)();
 

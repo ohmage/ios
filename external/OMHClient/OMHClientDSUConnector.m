@@ -21,8 +21,9 @@
 #   define OMHLog(...)
 #endif
 
-NSString * const kDSUBaseURL = @"https://ohmage-omh.smalldata.io/dsu";
+NSString * const kDefaultDSUBaseURL = @"https://ohmage-omh.smalldata.io/dsu";
 
+NSString * const kDSUBaseURLKey = @"DSUBaseURLKey";
 NSString * const kAppGoogleClientIDKey = @"AppGoogleClientID";
 NSString * const kServerGoogleClientIDKey = @"ServerGoogleClientID";
 NSString * const kAppDSUClientIDKey = @"AppDSUClientID";
@@ -37,6 +38,7 @@ static GPPSignIn *_gppSignIn = nil;
 @interface OMHClient () <GPPSignInDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) AFHTTPSessionManager *httpSessionManager;
+@property (nonatomic, strong) AFHTTPSessionManager *backgroundSessionManager;
 
 @property (nonatomic, strong) NSString *dsuAccessToken;
 @property (nonatomic, strong) NSString *dsuRefreshToken;
@@ -44,6 +46,7 @@ static GPPSignIn *_gppSignIn = nil;
 @property (nonatomic, assign) NSTimeInterval accessTokenValidDuration;
 
 @property (nonatomic, strong) NSMutableArray *pendingDataPoints;
+@property (nonatomic, strong) NSMutableArray *pendingRichMediaDataPoints;
 
 @property (nonatomic, assign) BOOL isAuthenticated;
 @property (atomic, assign) BOOL isAuthenticating;
@@ -151,8 +154,11 @@ static GPPSignIn *_gppSignIn = nil;
         _dsuAccessToken = [decoder decodeObjectForKey:@"client.dsuAccessToken"];
         _dsuRefreshToken = [decoder decodeObjectForKey:@"client.dsuRefreshToken"];
         _pendingDataPoints = [decoder decodeObjectForKey:@"client.pendingDataPoints"];
+        _pendingRichMediaDataPoints = [decoder decodeObjectForKey:@"client.pendingRichMediaDataPoints"];
+        if (_pendingRichMediaDataPoints == nil) _pendingRichMediaDataPoints = [NSMutableArray array];
         _accessTokenDate = [decoder decodeObjectForKey:@"client.accessTokenDate"];
         _accessTokenValidDuration = [decoder decodeDoubleForKey:@"client.accessTokenValidDuration"];
+        _allowsCellularAccess = [decoder decodeBoolForKey:@"client.allowsCellularAccess"];
         [self commonInit];
     }
     
@@ -164,8 +170,10 @@ static GPPSignIn *_gppSignIn = nil;
     [encoder encodeObject:self.dsuAccessToken forKey:@"client.dsuAccessToken"];
     [encoder encodeObject:self.dsuRefreshToken forKey:@"client.dsuRefreshToken"];
     [encoder encodeObject:self.pendingDataPoints forKey:@"client.pendingDataPoints"];
+    [encoder encodeObject:self.pendingRichMediaDataPoints forKey:@"client.pendingRichMediaDataPoints"];
     [encoder encodeObject:self.accessTokenDate forKey:@"client.accessTokenDate"];
     [encoder encodeDouble:self.accessTokenValidDuration forKey:@"client.accessTokenValidDuration"];
+    [encoder encodeBool:self.allowsCellularAccess forKey:@"client.allowsCellularAccess"];
 }
 
 - (void)unarchivePendingDataPointsForEmail:(NSString *)email
@@ -217,6 +225,29 @@ static GPPSignIn *_gppSignIn = nil;
 
 
 #pragma mark - Property Accessors
+
++ (NSString *)defaultDSUBaseURL
+{
+    return kDefaultDSUBaseURL;
+}
+
++ (NSString *)DSUBaseURL
+{
+    NSString * url = [[NSUserDefaults standardUserDefaults] stringForKey:kDSUBaseURLKey];
+    if (url.length > 0) return url;
+    else return kDefaultDSUBaseURL;
+}
+
++ (void)setDSUBaseURL:(NSString *)DSUBaseURL
+{
+    if (DSUBaseURL.length > 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:DSUBaseURL forKey:kDSUBaseURLKey];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefaultDSUBaseURL];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 + (NSString *)appGoogleClientID
 {
@@ -322,10 +353,15 @@ static GPPSignIn *_gppSignIn = nil;
 
 #pragma mark - HTTP Session Manager
 
+- (NSURL *)baseURL
+{
+    return [NSURL URLWithString:[OMHClient DSUBaseURL]];
+}
+
 - (AFHTTPSessionManager *)httpSessionManager
 {
     if (_httpSessionManager == nil) {
-        _httpSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kDSUBaseURL]];
+        _httpSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
         
         // setup reachability
         __weak OMHClient *weakSelf = self;
@@ -337,6 +373,16 @@ static GPPSignIn *_gppSignIn = nil;
         [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     }
     return _httpSessionManager;
+}
+
+- (AFHTTPSessionManager *)backgroundSessionManager
+{
+    if (_backgroundSessionManager == nil) {
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"OMHBackgroundSessionConfiguration"];
+        _backgroundSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL sessionConfiguration:config];
+        _backgroundSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    }
+    return _backgroundSessionManager;
 }
 
 - (NSInteger)statusCodeFromSessionTask:(NSURLSessionTask *)task
@@ -444,6 +490,7 @@ static GPPSignIn *_gppSignIn = nil;
         self.httpSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         NSString *auth = [NSString stringWithFormat:@"Bearer %@", self.dsuAccessToken];
         [self.httpSessionManager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
+        [self.backgroundSessionManager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
     }
 }
 
@@ -503,14 +550,28 @@ static GPPSignIn *_gppSignIn = nil;
     }];
 }
 
-- (void)submitDataPoint:(NSDictionary *)dataPoint
+- (void)submitDataPoint:(OMHDataPoint *)dataPoint
+{
+    [self submitDataPoint:dataPoint withMediaAttachments:nil];
+}
+
+- (void)submitDataPoint:(OMHDataPoint *)dataPoint withMediaAttachments:(NSArray *)mediaAttachments
 {
     if (!self.isSignedIn) {
         OMHLog(@"attempting to submit data point while not signed in");
         return;
     }
     
-    [self.pendingDataPoints addObject:dataPoint];
+    OMHRichMediaDataPoint *rmdp = nil;
+    if (mediaAttachments == nil) {
+        [self.pendingDataPoints addObject:dataPoint];\
+    }
+    else {
+        rmdp = [OMHRichMediaDataPoint richMediaDataPointWithDataPoint:dataPoint mediaAttachments:mediaAttachments];
+        [self.pendingRichMediaDataPoints addObject:rmdp];
+    }
+    
+
     [self saveClientState];
     
     if (self.isAuthenticating) return;
@@ -519,28 +580,36 @@ static GPPSignIn *_gppSignIn = nil;
         [self refreshAuthenticationWithCompletionBlock:nil];
     }
     else {
-        [self uploadDataPoint:dataPoint];
+        if (mediaAttachments == nil) {
+            [self uploadDataPoint:dataPoint];
+        }
+        else {
+            [self uploadRichMediaDataPoint:rmdp];
+        }
     }
+    
 }
 
 - (void)uploadPendingDataPoints
 {
-    OMHLog(@"uploading pending data points: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, self.isAuthenticating);
+    OMHLog(@"uploading pending data points: %d, rich media: %d, isAuthenticating: %d", (int)self.pendingDataPoints.count, (int)self.pendingRichMediaDataPoints.count, self.isAuthenticating);
     
-    for (NSDictionary *dataPoint in self.pendingDataPoints) {
+    for (OMHDataPoint *dataPoint in self.pendingDataPoints) {
         [self uploadDataPoint:dataPoint];
+    }
+    
+    for (OMHRichMediaDataPoint *rmdp in self.pendingRichMediaDataPoints) {
+        [self uploadRichMediaDataPoint:rmdp];
     }
 }
 
-- (void)uploadDataPoint:(NSDictionary *)dataPoint
+- (void)uploadDataPoint:(OMHDataPoint *)dataPoint
 {
-    NSString *request = @"dataPoints";
-    
     __block NSDictionary *blockDataPoint = dataPoint;
-    [self postRequest:request withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
-        if (error == nil) {
-            OMHLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
-            [self.pendingDataPoints removeObject:dataPoint];
+    [self postRequest:[self dataPointsRequestString] withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
+        if (error == nil || statusCode == 409) {
+            OMHLog(@"upload data point succeeded: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
+            [self.pendingDataPoints removeObject:blockDataPoint];
             [self saveClientState];
             if (self.uploadDelegate) {
                 [self.uploadDelegate OMHClient:self didUploadDataPoint:blockDataPoint];
@@ -548,16 +617,103 @@ static GPPSignIn *_gppSignIn = nil;
         }
         else {
             OMHLog(@"upload data point failed: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
-            if (statusCode == 409) {
-                OMHLog(@"removing conflicting data point, is pending: %d", [self.pendingDataPoints containsObject:blockDataPoint]);
-                // conflict, data point already uploaded
-                [self.pendingDataPoints removeObject:blockDataPoint];
-                [self saveClientState];
-            }
         }
     }];
 }
 
+- (void)uploadRichMediaDataPoint:(OMHRichMediaDataPoint *)rmdp
+{
+    NSError *requestError = nil;
+    NSString *requestString = [[OMHClient DSUBaseURL] stringByAppendingPathComponent:[self dataPointsRequestString]];
+    
+    NSMutableURLRequest *request =
+    [self.backgroundSessionManager.requestSerializer multipartFormRequestWithMethod:@"POST"
+                                                 URLString:requestString
+                                                parameters:nil
+                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData)
+     {
+         [self buildResponseBodyForRichMediaDataPoint:rmdp formData:formData];
+     }
+                                                     error:&requestError];
+    
+    if (requestError != nil) {
+        OMHLog(@"Failed to create upload request for rich media data point: %@", rmdp);
+        return;
+    }
+    
+    request.allowsCellularAccess = self.allowsCellularAccess;
+    request = [self.backgroundSessionManager.requestSerializer requestWithMultipartFormRequest:request
+                                                                   writingStreamContentsToFile:rmdp.tempFileURL
+                                                                             completionHandler:^(NSError *error)
+               {
+                   if (error == nil) {
+                       [self submitUploadRequest:request forRichMediaDataPoint:rmdp];
+                   }
+               }];
+}
+
+- (void)buildResponseBodyForRichMediaDataPoint:(OMHRichMediaDataPoint *)rmdp
+                                      formData:(id<AFMultipartFormData>)formData
+{
+    NSLog(@"build response for rmdp: %@", rmdp);
+    NSDictionary *dataHeaders = @{@"Content-Disposition" :@"form-data; name=\"data\"",
+                                  @"Content-Type" : @"application/json"};
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:rmdp.jsonArray
+                                                       options:0
+                                                         error:nil];
+    
+    [formData appendPartWithHeaders:dataHeaders body:jsonData];
+    
+    for (OMHMediaAttachment *mediaAttachment in rmdp.mediaAttachments) {
+        NSLog(@"media attachment url: %@, name: %@, mime: %@", mediaAttachment.mediaAttachmentFileURL, mediaAttachment.mediaAttachmentFileName, mediaAttachment.mediaAttachmentMimeType);
+        NSError *error = nil;
+        [formData appendPartWithFileURL:mediaAttachment.mediaAttachmentFileURL
+                                   name:@"media"
+                               fileName:mediaAttachment.mediaAttachmentFileName
+                               mimeType:mediaAttachment.mediaAttachmentMimeType
+                                  error:&error];
+        if (error != nil) {
+            OMHLog(@"Error appending form part for media attachment: %@, error: %@", mediaAttachment, error);
+        }
+    }
+}
+
+- (void)submitUploadRequest:(NSMutableURLRequest *)request forRichMediaDataPoint:(OMHRichMediaDataPoint *)rmdp
+{
+    NSURLSessionUploadTask *task =
+    [self.backgroundSessionManager uploadTaskWithRequest:request
+                                                fromFile:rmdp.tempFileURL
+                                                progress:nil
+                                       completionHandler:^(NSURLResponse *response, id responseObject, NSError *error)
+     {
+         NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+         OMHLog(@"Upload task completed with status code: %d", (int)statusCode);
+         
+         if (error == nil || statusCode == 409) {
+             OMHLog(@"upload rich media data point succeeded: %@, status code: %d", rmdp.dataPoint.header.headerID, (int)statusCode);
+             [rmdp removeTempFile];
+             [self.pendingRichMediaDataPoints removeObject:rmdp];
+             [self saveClientState];
+             if (self.uploadDelegate) {
+                 [self.uploadDelegate OMHClient:self didUploadDataPoint:rmdp.dataPoint];
+             }
+         }
+         else {
+             OMHLog(@"upload rich media data point failed: %@, status code: %d", rmdp.dataPoint.header.headerID, (int)statusCode);
+         }
+
+     }];
+    
+    [task resume];
+    
+    [self saveClientState];
+}
+
+- (NSString *)dataPointsRequestString
+{
+    return @"dataPoints";
+}
 
 
 #pragma mark - Google Login
@@ -676,7 +832,6 @@ static GPPSignIn *_gppSignIn = nil;
 - (void)handleOpenGoogleAuthNotification:(NSNotification *)notification
 {
     NSURL *url = (NSURL *)notification.object;
-    OMHLog(@"handle google auth notification with URL: %@", url);
     if (url == nil || self.signInDelegate == nil) return;
     
     UIWebView *webview = [[UIWebView alloc] init];
@@ -700,7 +855,6 @@ static GPPSignIn *_gppSignIn = nil;
 {
     NSURL *url = [request URL];
     NSString *bundleID = [[NSBundle mainBundle].bundleIdentifier lowercaseString];
-    OMHLog(@"webview should load url: %@\nBundle ID: %@", url, bundleID);
     NSString *appPrefix = [bundleID stringByAppendingString:@":/oauth2callback"];
     if ([[url absoluteString] hasPrefix:appPrefix]) {
         [GPPURLHandler handleURL:url sourceApplication:@"com.google.chrome.ios" annotation:nil];

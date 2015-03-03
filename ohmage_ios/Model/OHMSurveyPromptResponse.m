@@ -2,6 +2,7 @@
 #import "OHMSurveyItem.h"
 #import "OHMSurveyPromptChoice.h"
 #import "OHMMediaStore.h"
+#import "OMHDataPoint.h"
 
 
 @interface OHMSurveyPromptResponse ()
@@ -95,6 +96,19 @@
     }
     
     return NO;
+}
+
+- (NSDictionary *)mediaAttachment
+{
+    if ([self hasMediaAttachment]) {
+        OMHMediaAttachment *attachment = [[OMHMediaAttachment alloc] init];
+        attachment.mediaAttachmentFileURL = [self mediaAttachmentURL];
+        attachment.mediaAttachmentMimeType = [self mimeType];
+        return attachment;
+    }
+    else {
+        return nil;
+    }
 }
 
 - (NSURL *)mediaAttachmentURL
