@@ -225,6 +225,7 @@ static NSString * const kResponseErrorStringKey = @"ResponseErrorString";
     
     // keep track of current logged-in user by ID
     [self setPersistentStoreMetadataText:user.email forKey:@"loggedInUserEmail"];
+    [self saveModelState];
 }
 
 /**

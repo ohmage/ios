@@ -68,6 +68,8 @@ sourceApplication:(NSString *)sourceApplication
 - (void)submitDataPoint:(NSDictionary *)dataPoint
    withMediaAttachments:(NSArray *)mediaAttachments;
 
+- (void)resetSessionManagers;
+
 @end
 
 

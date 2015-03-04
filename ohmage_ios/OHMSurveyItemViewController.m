@@ -17,6 +17,7 @@
 #import "OHMSurveyPromptChoice.h"
 #import "OHMAudioRecorder.h"
 #import <AVFoundation/AVFoundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @interface OHMSurveyItemViewController () <UITextFieldDelegate,
 UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate,
@@ -763,31 +764,32 @@ UIImagePickerControllerDelegate, OHMAudioRecorderDelegate>
 
 - (void)recordVideo
 {
-//    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-//    
-//    if ([UIImagePickerController
-//         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-//        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-//        
-//        NSArray *availableTypes = [UIImagePickerController
-//                                   availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
-//        
-//        if ([availableTypes containsObject:(__bridge NSString *)kUTTypeMovie]) {
-//            [imagePicker setMediaTypes:@[(__bridge NSString *)kUTTypeMovie]];
-//            if (self.promptResponse.surveyItem.maxDuration != nil) {
-//                imagePicker.videoMaximumDuration = self.promptResponse.surveyItem.maxDurationValue;
-//            }
-//        }
-//        else {
-//            return;
-//        }
-//    } else {
-//        return;
-//    }
-//    
-//    imagePicker.delegate = self;
-//    self.videoPicker = imagePicker;
-//    [self presentViewController:imagePicker animated:YES completion:nil];
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    if ([UIImagePickerController
+         isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        NSArray *availableTypes = [UIImagePickerController
+                                   availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        
+        if ([availableTypes containsObject:(__bridge NSString *)kUTTypeMovie]) {
+            [imagePicker setMediaTypes:@[(__bridge NSString *)kUTTypeMovie]];
+            if (self.promptResponse.surveyItem.maxDuration != nil) {
+                imagePicker.videoMaximumDuration = self.promptResponse.surveyItem.maxDurationValue;
+            }
+            imagePicker.videoQuality = UIImagePickerControllerQualityTypeLow;
+        }
+        else {
+            return;
+        }
+    } else {
+        return;
+    }
+    
+    imagePicker.delegate = self;
+    self.videoPicker = imagePicker;
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (UIImage *)thumbnailFromVideoURL:(NSURL *)videoURL

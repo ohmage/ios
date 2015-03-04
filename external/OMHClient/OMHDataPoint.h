@@ -85,7 +85,7 @@ typedef enum {
                                           mediaAttachments:(NSArray *)mediaAttachments;
 
 @property (nonatomic, copy) OMHDataPoint *dataPoint;
-@property (nonatomic, readonly) NSArray *jsonArray;
+//@property (nonatomic, readonly) NSArray *jsonArray;
 @property (nonatomic, copy) NSArray *mediaAttachments;
 
 - (void)removeTempFile;

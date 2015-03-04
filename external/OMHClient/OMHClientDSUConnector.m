@@ -247,6 +247,8 @@ static GPPSignIn *_gppSignIn = nil;
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefaultDSUBaseURL];
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[self sharedClient] resetSessionManagers];
 }
 
 + (NSString *)appGoogleClientID
@@ -383,6 +385,12 @@ static GPPSignIn *_gppSignIn = nil;
         _backgroundSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     }
     return _backgroundSessionManager;
+}
+
+- (void)resetSessionManagers
+{
+    _httpSessionManager = nil;
+    _backgroundSessionManager = nil;
 }
 
 - (NSInteger)statusCodeFromSessionTask:(NSURLSessionTask *)task
@@ -655,18 +663,16 @@ static GPPSignIn *_gppSignIn = nil;
 - (void)buildResponseBodyForRichMediaDataPoint:(OMHRichMediaDataPoint *)rmdp
                                       formData:(id<AFMultipartFormData>)formData
 {
-    NSLog(@"build response for rmdp: %@", rmdp);
     NSDictionary *dataHeaders = @{@"Content-Disposition" :@"form-data; name=\"data\"",
                                   @"Content-Type" : @"application/json"};
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:rmdp.jsonArray
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:rmdp.dataPoint
                                                        options:0
                                                          error:nil];
     
     [formData appendPartWithHeaders:dataHeaders body:jsonData];
     
     for (OMHMediaAttachment *mediaAttachment in rmdp.mediaAttachments) {
-        NSLog(@"media attachment url: %@, name: %@, mime: %@", mediaAttachment.mediaAttachmentFileURL, mediaAttachment.mediaAttachmentFileName, mediaAttachment.mediaAttachmentMimeType);
         NSError *error = nil;
         [formData appendPartWithFileURL:mediaAttachment.mediaAttachmentFileURL
                                    name:@"media"

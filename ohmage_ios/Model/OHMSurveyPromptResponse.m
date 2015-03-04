@@ -154,6 +154,7 @@
         _videoURL = [[OHMMediaStore sharedStore] videoURLForKey:self.uuid];
         BOOL isFile = [[NSFileManager defaultManager] fileExistsAtPath:[_videoURL path]];
         NSLog(@"file exists at path: %d, %@", isFile, [_videoURL path]);
+        if (!isFile) _videoURL = nil;
     }
     return _videoURL;
 }
