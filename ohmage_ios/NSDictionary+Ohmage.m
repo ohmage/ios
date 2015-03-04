@@ -102,15 +102,25 @@
 {
     NSString *version = nil;
     NSDictionary *schemaID = self[@"schema_id"];
+
     if (schemaID != nil) {
-        NSDictionary *schemaVersion = schemaID[@"version"];
-        if (schemaVersion != nil) {
-            NSNumber *major = schemaVersion[@"major"];
-            NSNumber *minor = schemaVersion[@"minor"];
+        id schemaVersion = schemaID[@"version"];
+        if ([schemaVersion isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *versionDictionary = (NSDictionary *)schemaVersion;
+            NSNumber *major = versionDictionary[@"major"];
+            NSNumber *minor = versionDictionary[@"minor"];
             if (major && minor) {
                 version = [NSString stringWithFormat:@"%@.%@", major, minor];
             }
         }
+        else if ([schemaVersion isKindOfClass:[NSNumber class]]) {
+            NSNumber *versionNumber = (NSNumber *)schemaVersion;
+            version = [NSString stringWithFormat:@"%g", [versionNumber floatValue]];
+        }
+        else if ([schemaVersion isKindOfClass:[NSString class]]) {
+            version = schemaVersion;
+        }
+
     }
     return version;
 }

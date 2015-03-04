@@ -613,10 +613,10 @@ static GPPSignIn *_gppSignIn = nil;
 
 - (void)uploadDataPoint:(OMHDataPoint *)dataPoint
 {
-    __block NSDictionary *blockDataPoint = dataPoint;
+    __block OMHDataPoint *blockDataPoint = dataPoint;
     [self postRequest:[self dataPointsRequestString] withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil || statusCode == 409) {
-            OMHLog(@"upload data point succeeded: %@, status code: %d", blockDataPoint[@"header"][@"id"], (int)statusCode);
+            OMHLog(@"upload data point succeeded: %@, status code: %d", blockDataPoint.header.headerID, (int)statusCode);
             [self.pendingDataPoints removeObject:blockDataPoint];
             [self saveClientState];
             if (self.uploadDelegate) {
