@@ -32,7 +32,6 @@
                                  appDSUClientID:kOhmageDSUClientID
                              appDSUClientSecret:kOhmageDSUClientSecret];
     
-    //TODO: remove
 #ifdef OMHDEBUG
     [OMHClient setDSUBaseURL:@"https://lifestreams.smalldata.io/dsu"];
 #else

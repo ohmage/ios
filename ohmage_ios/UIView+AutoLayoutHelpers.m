@@ -342,6 +342,26 @@
                                     views:NSDictionaryOfVariableBindings(self)]];
 }
 
+- (void)constrainToLeftInParentWithMargin:(CGFloat)margin
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.superview addConstraints:[NSLayoutConstraint
+                                    constraintsWithVisualFormat:@"H:|-margin-[self]" options:0
+                                    metrics:@{@"margin":@(margin)}
+                                    views:NSDictionaryOfVariableBindings(self)]];
+}
+
+- (void)constrainToRightInParentWithMargin:(CGFloat)margin
+{
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.superview addConstraints:[NSLayoutConstraint
+                                    constraintsWithVisualFormat:@"H:[self]-margin-|" options:0
+                                    metrics:@{@"margin":@(margin)}
+                                    views:NSDictionaryOfVariableBindings(self)]];
+}
+
 - (void)positionBelowElement:(id)layoutElement margin:(CGFloat)margin
 {
   self.translatesAutoresizingMaskIntoConstraints = NO;

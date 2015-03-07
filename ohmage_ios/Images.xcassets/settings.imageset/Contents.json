@@ -3,12 +3,11 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "ohmage_toolbar.png"
+      "filename" : "settings2-64.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "ohmage_toolbar@2x.png"
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",

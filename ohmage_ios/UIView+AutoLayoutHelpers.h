@@ -37,6 +37,8 @@
 - (void)centerInView:(UIView *)view;
 - (void)constrainToTopInParentWithMargin:(CGFloat)margin;
 - (void)constrainToBottomInParentWithMargin:(CGFloat)margin;
+- (void)constrainToLeftInParentWithMargin:(CGFloat)margin;
+- (void)constrainToRightInParentWithMargin:(CGFloat)margin;
 - (void)positionBelowElement:(id)layoutElement margin:(CGFloat)margin;
 - (void)positionBelowElementWithDefaultMargin:(id)layoutElement;
 - (void)positionAboveElement:(id)layoutElement withMargin:(CGFloat)margin;

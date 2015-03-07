@@ -10,6 +10,7 @@
 #import "OHMAppDelegate.h"
 #import "OMHClient.h"
 #import "OHMModel.h"
+#import "DSUURLViewController.h"
 
 @interface OHMLoginViewController () <OMHSignInDelegate>
 
@@ -30,6 +31,15 @@
     UIImageView *background = [[UIImageView alloc] initWithImage:launchImage];
     [self.view addSubview:background];
     [self.view constrainChildToEqualSize:background];
+    
+    UIButton *settings = [UIButton buttonWithType:UIButtonTypeSystem];
+    settings.tintColor = [UIColor whiteColor];
+    [settings setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
+    [settings addTarget:self action:@selector(presentSettingsViewController) forControlEvents:UIControlEventTouchUpInside];
+    [settings constrainSize:CGSizeMake(25, 25)];
+    [self.view addSubview:settings];
+    [settings constrainToLeftInParentWithMargin:10];
+    [settings constrainToBottomInParentWithMargin:10];
     
     [self setupSignInButton];
 }
@@ -79,6 +89,13 @@
     [label centerHorizontallyInView:self.view];
     [label positionAboveElement:self.signInButton withMargin:self.signInButton.frame.size.height];
     self.signInFailureLabel = label;
+}
+
+- (void)presentSettingsViewController
+{
+    DSUURLViewController *vc = [[DSUURLViewController alloc] init];
+    UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:navcon animated:YES completion:nil];
 }
 
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
